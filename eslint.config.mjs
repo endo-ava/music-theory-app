@@ -49,5 +49,5 @@ export default tseslint.config(
       // テストファイルでは特定のLinterルールを無効にするなど
       // 'no-unused-expressions': 'off',
     },
-  },
+  }
 );
