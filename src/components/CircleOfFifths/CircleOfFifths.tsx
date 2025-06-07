@@ -1,33 +1,27 @@
 'use client';
 
-import { FC, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { useCallback } from 'react';
+import { motion, Variants } from 'framer-motion';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 import KeyButton from './KeyButton';
-import KeyInfo from './KeyInfo';
-import { Key } from '@/types/circleOfFifths';
-import '@/components/CircleOfFifths/styles/circleOfFifths.css';
+import KeyInfoDisplay from './KeyInfoDisplay';
+import { KEYS } from './constants';
+import { calculateKeyPosition } from './utils';
+import { circleVariants } from './animations';
+import { STYLES, Key } from '@/types/circleOfFifths';
+import './styles/circleOfFifths.css';
 
-// 五度圏のキー定義
-const keys: Key[] = [
-  { name: 'C', isMajor: true, position: 0 },
-  { name: 'G', isMajor: true, position: 1 },
-  { name: 'D', isMajor: true, position: 2 },
-  { name: 'A', isMajor: true, position: 3 },
-  { name: 'E', isMajor: true, position: 4 },
-  { name: 'B', isMajor: true, position: 5 },
-  { name: 'F#', isMajor: true, position: 6 },
-  { name: 'C#', isMajor: true, position: 7 },
-  { name: 'G#', isMajor: true, position: 8 },
-  { name: 'D#', isMajor: true, position: 9 },
-  { name: 'A#', isMajor: true, position: 10 },
-  { name: 'F', isMajor: true, position: 11 },
-];
-
-const CircleOfFifths: FC = () => {
+/**
+ * 五度圏表示コンポーネント
+ *
+ * 五度圏を円形に表示し、各キーのホバー時に情報を表示します。
+ * キーの配置は円周上に均等に配置され、メジャーキーは外側、マイナーキーは内側に表示されます。
+ */
+export const CircleOfFifths = () => {
   const { state, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
+  const { selectedKey, hoveredKey } = state;
 
-  // メモ化されたコールバック関数
+  // キークリック時のハンドラー
   const handleKeyClick = useCallback(
     (key: Key) => {
       setSelectedKey(key);
@@ -35,6 +29,7 @@ const CircleOfFifths: FC = () => {
     [setSelectedKey]
   );
 
+  // キーホバー時のハンドラー
   const handleKeyHover = useCallback(
     (key: Key) => {
       setHoveredKey(key);
@@ -42,53 +37,49 @@ const CircleOfFifths: FC = () => {
     [setHoveredKey]
   );
 
+  // キーからマウスが離れた時のハンドラー
   const handleKeyLeave = useCallback(() => {
     setHoveredKey(null);
   }, [setHoveredKey]);
 
-  // キーの位置を計算する関数
-  const calculateKeyPosition = (position: number, totalKeys: number) => {
-    const angle = (position * 2 * Math.PI) / totalKeys - Math.PI / 2;
-    const radius = 40; // 円の半径（%）
-    return {
-      left: `${50 + radius * Math.cos(angle)}%`,
-      top: `${50 + radius * Math.sin(angle)}%`,
-    };
-  };
-
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative w-[70%] max-w-[800px] aspect-square circle-of-fifths"
-      >
-        {keys.map(keyData => {
-          const position = calculateKeyPosition(keyData.position, keys.length);
+    <motion.div
+      className="circle-of-fifths"
+      style={{
+        width: STYLES.CIRCLE.WIDTH,
+        maxWidth: STYLES.CIRCLE.MAX_WIDTH,
+        background: `linear-gradient(135deg, ${STYLES.CIRCLE.BACKGROUND.FROM}, ${STYLES.CIRCLE.BACKGROUND.TO})`,
+        overflow: 'visible',
+      }}
+      variants={circleVariants as Variants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* キーボタンの配置エリア */}
+      <div className="circle">
+        {KEYS.map(keyData => {
+          const position = calculateKeyPosition(keyData);
           return (
             <KeyButton
               key={keyData.name}
               keyData={keyData}
-              isSelected={state.selectedKey?.name === keyData.name}
-              isHovered={state.hoveredKey?.name === keyData.name}
+              isSelected={selectedKey?.name === keyData.name}
               onClick={handleKeyClick}
               onMouseEnter={handleKeyHover}
               onMouseLeave={handleKeyLeave}
               style={{
                 position: 'absolute',
+                left: `calc(50% + ${position.x}px)`,
+                top: `calc(50% + ${position.y}px)`,
                 transform: 'translate(-50%, -50%)',
-                ...position,
               }}
             />
           );
         })}
-      </motion.div>
-      <div className="mt-8">
-        <KeyInfo selectedKey={state.selectedKey} />
       </div>
-    </div>
+
+      {/* キー情報表示エリア */}
+      <KeyInfoDisplay hoveredKey={hoveredKey} />
+    </motion.div>
   );
 };
-
-export default CircleOfFifths;

@@ -1,11 +1,13 @@
-// キーの型定義
-export type Key = {
-  name: string; // キー名（例: "C", "G", "D"）
-  isMajor: boolean; // メジャーキーかどうか
-  position: number; // 五度圏上の位置（0-11）
-};
+import { Variants } from 'framer-motion';
 
-// 五度圏の状態管理用の型定義
+// キーの型定義
+export interface Key {
+  name: string;
+  isMajor: boolean;
+  position: number;
+}
+
+// 五度圏の状態管理の型定義
 export interface CircleOfFifthsState {
   selectedKey: Key | null;
   hoveredKey: Key | null;
@@ -20,17 +22,42 @@ export interface CircleOfFifthsStore {
   setIsPlaying: (isPlaying: boolean) => void;
 }
 
-// キーボタンのProps型定義
+// コンポーネントのProps型定義
 export interface KeyButtonProps {
-  key: Key;
+  keyData: Key;
   isSelected: boolean;
   isHovered: boolean;
   onClick: (key: Key) => void;
   onMouseEnter: (key: Key) => void;
   onMouseLeave: () => void;
+  style: React.CSSProperties;
 }
 
-// キー情報表示用のProps型定義
 export interface KeyInfoProps {
   selectedKey: Key | null;
 }
+
+// アニメーションの型定義
+export type AnimationVariants = Variants;
+
+// スタイルの定数
+export const STYLES = {
+  CIRCLE: {
+    WIDTH: '70%',
+    MAX_WIDTH: '800px',
+    BACKGROUND: {
+      FROM: '#1a1a1a',
+      TO: '#2a2a2a',
+    },
+  },
+  KEY_BUTTON: {
+    FONT_SIZE: '1.2rem',
+    PADDING: '1rem',
+    BORDER_RADIUS: '8px',
+    BACKGROUND: {
+      DEFAULT: 'rgba(255, 255, 255, 0.05)',
+      HOVER: 'rgba(255, 255, 255, 0.1)',
+      ACTIVE: 'rgba(255, 255, 255, 0.15)',
+    },
+  },
+} as const;
