@@ -1,0 +1,35 @@
+/* 五度圏の基本スタイル */
+.circle-of-fifths {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* キーボタンの基本スタイル */
+.key-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* キーボタンのホバー効果 */
+.key-button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* キーボタンのアクティブ状態 */
+.key-button.active {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  border: 2px solid #ffffff;
+}
+
+/* キー情報パネルのスタイル */
+.key-info {
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
