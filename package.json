@@ -12,9 +12,14 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@shadcn/ui": "^0.0.4",
+    "framer-motion": "^12.16.0",
     "next": "15.3.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwindcss-animate": "^1.0.7",
+    "tone": "^15.1.22",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -29,7 +34,7 @@
     "globals": "^16.2.0",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.33.1"
   }
