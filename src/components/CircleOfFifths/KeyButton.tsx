@@ -66,19 +66,19 @@ const KeyButton: FC<KeyButtonProps> = ({
       animate={
         isSelected
           ? {
-            scale: 1.15,
-            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 6px 12px rgba(0, 0, 0, 0.4)',
-            border: '2px solid #ffffff',
-            transition: { duration: 0.2, ease: 'easeOut' },
-          }
+              scale: 1.15,
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 6px 12px rgba(0, 0, 0, 0.4)',
+              border: '2px solid #ffffff',
+              transition: { duration: 0.2, ease: 'easeOut' },
+            }
           : {
-            scale: 1,
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-            border: 'none',
-            transition: { duration: 0.3, ease: 'easeInOut' },
-          }
+              scale: 1,
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+              border: 'none',
+              transition: { duration: 0.3, ease: 'easeInOut' },
+            }
       }
       onClick={() => onClick(keyData)}
       onMouseEnter={() => onMouseEnter(keyData)}
