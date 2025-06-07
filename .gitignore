@@ -39,3 +39,26 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal
+.bashrc
+.bash_history
+.zsh_history
+.zshrc
+
+# Note: The following files are typically committed in team projects
+# but you can uncomment them if you want to ignore them
+# .nvmrc
+# .prettierrc
+# eslint.config.mjs
+# package-lock.json
