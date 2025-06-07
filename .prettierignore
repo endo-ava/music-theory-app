@@ -1,0 +1,19 @@
+# ビルド出力
+.next/
+out/
+build/
+dist/
+
+# 依存関係
+node_modules/
+
+# キャッシュ
+.cache/
+
+# その他
+.git/
+.DS_Store
+*.log
+package-lock.json
+yarn.lock
+pnpm-lock.yaml 
