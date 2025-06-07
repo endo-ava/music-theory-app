@@ -1,0 +1,5 @@
+# ステージングされたファイルをフォーマット
+npx prettier --write .
+
+# リントチェックを実行
+npm run lint
