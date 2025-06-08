@@ -13,6 +13,7 @@
   overflow: hidden;
 }
 
+/* 円の内部配置用コンテナ */
 .circle {
   position: relative;
   width: 100%;
@@ -22,83 +23,31 @@
   justify-content: center;
 }
 
-/* キーボタンの基本スタイル */
+/* キーボタンの基本スタイル（Framer Motionでアニメーションしない部分） */
 .circle-of-fifths button {
+  /* 位置決めは親コンポーネントのstyle propとこのabsoluteで行う */
+  position: absolute; 
   font-family: 'Inter', sans-serif;
   font-size: 1.2rem;
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff; 
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: none;
+  border: none; /* デフォルトの境界線を削除 */
   cursor: pointer;
-  user-select: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, background-color, box-shadow;
+  user-select: none; /* テキスト選択不可 */
+  backdrop-filter: blur(4px); /* ガラスのようなぼかし効果 */
+  -webkit-backdrop-filter: blur(4px); /* Safari対応 */
+
+  /* ここにあったアニメーション関連のプロパティ（transition, will-change, transform, background-color, box-shadow, borderなど）はFramer Motionに移行するため削除 */
 }
 
-/* キーボタンのホバー状態 */
-.circle-of-fifths button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: scale(1.1) translate(-50%, -50%);
-}
-
-/* キーボタンのアクティブ状態 */
-.circle-of-fifths button.active {
-  background-color: rgba(255, 255, 255, 0.15);
-  border: 2px solid #ffffff;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-  transform: scale(1.15) translate(-50%, -50%);
-}
-
-/* キーボタンのフォーカス状態 */
+/* キーボタンのフォーカス状態（アクセシビリティのためCSSに残す） */
 .circle-of-fifths button:focus-visible {
-  outline: none;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
   box-shadow:
     0 0 0 2px #ffffff,
     0 0 0 4px rgba(255, 255, 255, 0.3);
-}
-
-/* キーボタンのアクティブ（押下）状態 */
-.circle-of-fifths button:active {
-  transform: scale(0.95) translate(-50%, -50%);
-  transition-duration: 0.1s;
-}
-
-/* アニメーションの最適化 */
-@media (prefers-reduced-motion: no-preference) {
-  .circle-of-fifths button {
-    transition:
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      background-color 0.3s ease,
-      box-shadow 0.3s ease;
-  }
-}
-
-/* スクリーンリーダー対応 */
-@media (prefers-reduced-motion: reduce) {
-  .circle-of-fifths button {
-    transition: none;
-  }
-}
-
-/* ダークモード対応 */
-@media (prefers-color-scheme: dark) {
-  .circle-of-fifths button {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .circle-of-fifths button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .circle-of-fifths button.active {
-    background-color: rgba(255, 255, 255, 0.15);
-  }
 }
 
 /* キー情報パネルのスタイル */
@@ -106,28 +55,4 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* キーボタンのホバーエフェクト */
-.circle-of-fifths button {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-/* アニメーション用のトランジション */
-.circle-of-fifths button {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* フォーカス状態のスタイル */
-.circle-of-fifths button:focus-visible {
-  outline: 2px solid #ffffff;
-  outline-offset: 2px;
-}
-
-/* スクリーンリーダー用のスタイル */
-@media (prefers-reduced-motion: reduce) {
-  .circle-of-fifths button {
-    transition: none;
-  }
 }

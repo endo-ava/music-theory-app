@@ -13,7 +13,7 @@ interface KeyButtonProps {
   onClick: (key: Key) => void; // クリックハンドラー
   onMouseEnter: (key: Key) => void; // マウスエンターハンドラー
   onMouseLeave: () => void; // マウスリーブハンドラー
-  style: React.CSSProperties; // スタイル
+  style: React.CSSProperties; // 位置決めスタイル (absoluteの位置情報など)
 }
 
 /**
@@ -33,15 +33,12 @@ const KeyButton: FC<KeyButtonProps> = ({
   return (
     <motion.button
       className={`
-        absolute
         font-inter
         text-[1.2rem]
         text-white
-        bg-white/5
         px-4
         py-2
         rounded-lg
-        shadow-md
         backdrop-blur-sm
         select-none
         focus:outline-none
@@ -49,20 +46,34 @@ const KeyButton: FC<KeyButtonProps> = ({
         focus-visible:ring-white
         focus-visible:ring-offset-2
         focus-visible:ring-offset-gray-900
-        ${isSelected ? 'active' : ''}
       `}
-      style={style}
-      initial={{ scale: 1 }}
+      // style propはabsoluteの位置情報などをCSS側から受け取る
+      style={style} 
+      
+      // 初期状態のスタイル定義
+      initial={{ 
+        scale: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+        border: 'none',
+      }}
+      
+      // ホバー時のスタイル定義
       whileHover={{
         scale: 1.1,
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
         transition: { duration: 0.3, ease: 'easeInOut' },
       }}
+      
+      // クリック（タップ）時のスタイル定義
       whileTap={{
         scale: 0.95,
         transition: { duration: 0.1, ease: 'easeInOut' },
       }}
+      
+      // isSelectedプロップに基づいた動的なスタイル定義
+      // isSelectedがtrueなら選択状態のスタイル、falseならデフォルト状態のスタイルにアニメーション
       animate={
         isSelected
           ? {
@@ -74,9 +85,9 @@ const KeyButton: FC<KeyButtonProps> = ({
             }
           : {
               scale: 1,
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-              border: 'none',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)', // デフォルトの背景色
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // デフォルトの影
+              border: 'none', // デフォルトの境界線
               transition: { duration: 0.3, ease: 'easeInOut' },
             }
       }
