@@ -45,8 +45,8 @@ export const STYLES = {
     },
   },
   KEY_BUTTON: {
-    WIDTH: '70',
-    HEIGHT: '70',
+    WIDTH: 70,
+    HEIGHT: 70,
     FONT_SIZE: '1.2rem',
     PADDING: '1rem',
     BORDER_RADIUS: '8px',
