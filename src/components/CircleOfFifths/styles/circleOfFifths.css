@@ -1,0 +1,58 @@
+/* 五度圏の基本スタイル */
+.circle-of-fifths {
+  position: relative;
+  width: 70%;
+  max-width: 800px;
+  aspect-ratio: 1;
+  margin: 2rem auto;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border-radius: 50%;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* 円の内部配置用コンテナ */
+.circle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* キーボタンの基本スタイル（Framer Motionでアニメーションしない部分） */
+.circle-of-fifths button {
+  /* 位置決めは親コンポーネントのstyle propとこのabsoluteで行う */
+  position: absolute; 
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  color: #ffffff; 
+  padding: 1rem;
+  border-radius: 8px;
+  border: none; /* デフォルトの境界線を削除 */
+  cursor: pointer;
+  user-select: none; /* テキスト選択不可 */
+  backdrop-filter: blur(4px); /* ガラスのようなぼかし効果 */
+  -webkit-backdrop-filter: blur(4px); /* Safari対応 */
+
+  /* ここにあったアニメーション関連のプロパティ（transition, will-change, transform, background-color, box-shadow, borderなど）はFramer Motionに移行するため削除 */
+}
+
+/* キーボタンのフォーカス状態（アクセシビリティのためCSSに残す） */
+.circle-of-fifths button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 2px #ffffff,
+    0 0 0 4px rgba(255, 255, 255, 0.3);
+}
+
+/* キー情報パネルのスタイル */
+.key-info {
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
