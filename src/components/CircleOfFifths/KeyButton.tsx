@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { motion } from 'framer-motion';
-import { Key, KeyButtonProps } from '@/types/circleOfFifths';
+import { KeyButtonProps } from '@/types/circleOfFifths';
 
 /**
  * 五度圏上の個別のキーを表示するボタンコンポーネント

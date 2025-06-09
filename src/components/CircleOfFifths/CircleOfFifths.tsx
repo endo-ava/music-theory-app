@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 import KeyButton from './KeyButton';
 import KeyInfoDisplay from './KeyInfoDisplay';
