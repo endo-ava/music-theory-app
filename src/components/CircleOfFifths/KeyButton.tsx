@@ -2,19 +2,7 @@
 
 import { FC } from 'react';
 import { motion } from 'framer-motion';
-import { Key } from '@/types/circleOfFifths';
-
-/**
- * キーボタンのProps型定義
- */
-interface KeyButtonProps {
-  keyData: Key; // キー情報
-  isSelected: boolean; // 選択状態
-  onClick: (key: Key) => void; // クリックハンドラー
-  onMouseEnter: (key: Key) => void; // マウスエンターハンドラー
-  onMouseLeave: () => void; // マウスリーブハンドラー
-  style: React.CSSProperties; // 位置決めスタイル (absoluteの位置情報など)
-}
+import { Key, KeyButtonProps } from '@/types/circleOfFifths';
 
 /**
  * 五度圏上の個別のキーを表示するボタンコンポーネント
@@ -95,7 +83,6 @@ const KeyButton: FC<KeyButtonProps> = ({
       onMouseEnter={() => onMouseEnter(keyData)}
       onMouseLeave={onMouseLeave}
       aria-label={`${keyData.name}${keyData.isMajor ? 'メジャー' : 'マイナー'}キー`}
-      role="button"
       tabIndex={0}
     >
       {keyData.name}

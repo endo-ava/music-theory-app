@@ -34,7 +34,7 @@ const KeyInfoDisplay: FC<KeyInfoDisplayProps> = ({ hoveredKey }) => {
         animate="visible"
         exit="exit"
         className="
-          absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full mt-4
+          absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2
           bg-white/10 backdrop-blur-sm rounded-lg p-6 shadow-lg border border-white/20
           z-50 transition-all duration-300
         "

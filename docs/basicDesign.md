@@ -88,7 +88,7 @@ components/
   └── CircleOfFifths/
       ├── CircleOfFifths.tsx        # メインコンポーネント
       ├── KeyButton.tsx            # 個別のキーボタン
-      ├── KeyInfo.tsx              # 選択キー情報表示
+      ├── KeyInfoDisplay.tsx              # 選択キー情報表示
       └── styles/
           └── circleOfFifths.css   # カスタムスタイル
 ```
@@ -97,8 +97,8 @@ components/
 
 ```typescript
 interface CircleOfFifthsState {
-  selectedKey: string | null;
-  hoveredKey: string | null;
+  selectedKey: Key | null;
+  hoveredKey: Key | null;
   isPlaying: boolean;
 }
 

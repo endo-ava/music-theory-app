@@ -18,8 +18,7 @@ import './styles/circleOfFifths.css';
  * キーの配置は円周上に均等に配置され、メジャーキーは外側、マイナーキーは内側に表示されます。
  */
 export const CircleOfFifths = () => {
-  const { state, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
-  const { selectedKey, hoveredKey } = state;
+  const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
 
   // キークリック時のハンドラー
   const handleKeyClick = useCallback(
@@ -51,7 +50,7 @@ export const CircleOfFifths = () => {
         background: `linear-gradient(135deg, ${STYLES.CIRCLE.BACKGROUND.FROM}, ${STYLES.CIRCLE.BACKGROUND.TO})`,
         overflow: 'visible',
       }}
-      variants={circleVariants as Variants}
+      variants={circleVariants}
       initial="hidden"
       animate="visible"
     >
@@ -72,6 +71,8 @@ export const CircleOfFifths = () => {
                 left: `calc(50% + ${position.x}px)`,
                 top: `calc(50% + ${position.y}px)`,
                 transform: 'translate(-50%, -50%)',
+                width: `${STYLES.KEY_BUTTON.WIDTH}px`,
+                height: `${STYLES.KEY_BUTTON.HEIGHT}px`,
               }}
             />
           );

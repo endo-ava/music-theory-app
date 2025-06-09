@@ -1,37 +1,23 @@
 import { create } from 'zustand';
-import { CircleOfFifthsState, CircleOfFifthsStore, Key } from '@/types/circleOfFifths';
-
-// 初期状態
-const initialState: CircleOfFifthsState = {
-  selectedKey: null,
-  hoveredKey: null,
-  isPlaying: false,
-};
+import { CircleOfFifthsStore, Key } from '@/types/circleOfFifths';
 
 // ストアの作成
 export const useCircleOfFifthsStore = create<CircleOfFifthsStore>(set => ({
-  state: initialState,
+  // 初期状態
+  selectedKey: null,
+  hoveredKey: null,
+  isPlaying: false,
+
   setSelectedKey: (key: Key | null) =>
-    set(state => ({
-      state: {
-        ...state.state,
-        selectedKey: key,
-        isPlaying: false,
-      },
+    set(() => ({
+      selectedKey: key,
+      isPlaying: false,
     })),
   setHoveredKey: (key: Key | null) =>
-    set(state => ({
-      state: {
-        ...state.state,
-        hoveredKey: key,
-        isPlaying: key !== null,
-      },
+    set(() => ({
+      hoveredKey: key,
+      isPlaying: key !== null,
     })),
   setIsPlaying: (isPlaying: boolean) =>
-    set(state => ({
-      state: {
-        ...state.state,
-        isPlaying,
-      },
-    })),
+    set(() => ({ isPlaying })),
 }));

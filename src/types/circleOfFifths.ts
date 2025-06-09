@@ -7,16 +7,11 @@ export interface Key {
   position: number;
 }
 
-// 五度圏の状態管理の型定義
-export interface CircleOfFifthsState {
+// 五度圏の状態のZustandストア型定義
+export interface CircleOfFifthsStore {
   selectedKey: Key | null;
   hoveredKey: Key | null;
   isPlaying: boolean;
-}
-
-// Zustandストアの型定義
-export interface CircleOfFifthsStore {
-  state: CircleOfFifthsState;
   setSelectedKey: (key: Key | null) => void;
   setHoveredKey: (key: Key | null) => void;
   setIsPlaying: (isPlaying: boolean) => void;
@@ -26,7 +21,6 @@ export interface CircleOfFifthsStore {
 export interface KeyButtonProps {
   keyData: Key;
   isSelected: boolean;
-  isHovered: boolean;
   onClick: (key: Key) => void;
   onMouseEnter: (key: Key) => void;
   onMouseLeave: () => void;
@@ -51,6 +45,8 @@ export const STYLES = {
     },
   },
   KEY_BUTTON: {
+    WIDTH: '70',
+    HEIGHT: '70',
     FONT_SIZE: '1.2rem',
     PADDING: '1rem',
     BORDER_RADIUS: '8px',
