@@ -7,7 +7,7 @@ import { CircleSegment } from './CircleSegment';
 import KeyInfoDisplay from './KeyInfoDisplay';
 import { CIRCLE_SEGMENTS } from './constants';
 import { circleVariants } from './animations';
-import { STYLES, CircleSegment as CircleSegmentType } from '@/types/circleOfFifths';
+import { STYLES, Key } from '@/types/circleOfFifths';
 import './styles/circleOfFifths.css';
 
 /**
@@ -15,40 +15,39 @@ import './styles/circleOfFifths.css';
  *
  * 五度圏を円形に表示し、各セグメントのホバー時に情報を表示します。
  * 円形を12分割し、各セグメントは3分割されて内側からマイナーキー、メジャーキー、調号を表示します。
+ * メジャーキーとマイナーキーは個別にクリック可能です。
  */
 export const CircleOfFifths = () => {
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
 
-  // セグメントクリック時のハンドラー
-  const handleSegmentClick = useCallback(
-    (segment: CircleSegmentType) => {
-      // メジャーキーを選択状態として設定
-      const keyData = {
-        name: segment.majorKey,
-        isMajor: true,
-        position: segment.position,
+  // キークリック時のハンドラー
+  const handleKeyClick = useCallback(
+    (keyName: string, isMajor: boolean, position: number) => {
+      const keyData: Key = {
+        name: keyName,
+        isMajor,
+        position,
       };
       setSelectedKey(keyData);
     },
     [setSelectedKey]
   );
 
-  // セグメントホバー時のハンドラー
-  const handleSegmentHover = useCallback(
-    (segment: CircleSegmentType) => {
-      // メジャーキーをホバー状態として設定
-      const keyData = {
-        name: segment.majorKey,
-        isMajor: true,
-        position: segment.position,
+  // キーホバー時のハンドラー
+  const handleKeyHover = useCallback(
+    (keyName: string, isMajor: boolean, position: number) => {
+      const keyData: Key = {
+        name: keyName,
+        isMajor,
+        position,
       };
       setHoveredKey(keyData);
     },
     [setHoveredKey]
   );
 
-  // セグメントからマウスが離れた時のハンドラー
-  const handleSegmentLeave = useCallback(() => {
+  // キーからマウスが離れた時のハンドラー
+  const handleKeyLeave = useCallback(() => {
     setHoveredKey(null);
   }, [setHoveredKey]);
 
@@ -108,10 +107,11 @@ export const CircleOfFifths = () => {
             <CircleSegment
               key={segment.position}
               segment={segment}
-              isSelected={selectedKey?.name === segment.majorKey}
-              onClick={handleSegmentClick}
-              onMouseEnter={handleSegmentHover}
-              onMouseLeave={handleSegmentLeave}
+              selectedKey={selectedKey}
+              hoveredKey={hoveredKey}
+              onKeyClick={handleKeyClick}
+              onKeyHover={handleKeyHover}
+              onKeyLeave={handleKeyLeave}
             />
           ))}
         </svg>
