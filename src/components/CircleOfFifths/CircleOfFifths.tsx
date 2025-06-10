@@ -3,41 +3,52 @@
 import { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
-import KeyButton from './KeyButton';
+import { CircleSegment } from './CircleSegment';
 import KeyInfoDisplay from './KeyInfoDisplay';
-import { KEYS } from './constants';
-import { calculateKeyPosition } from './utils';
+import { CIRCLE_SEGMENTS } from './constants';
 import { circleVariants } from './animations';
-import { STYLES, Key } from '@/types/circleOfFifths';
+import { STYLES, CircleSegment as CircleSegmentType } from '@/types/circleOfFifths';
 import './styles/circleOfFifths.css';
 
 /**
  * 五度圏表示コンポーネント
  *
- * 五度圏を円形に表示し、各キーのホバー時に情報を表示します。
- * キーの配置は円周上に均等に配置され、メジャーキーは外側、マイナーキーは内側に表示されます。
+ * 五度圏を円形に表示し、各セグメントのホバー時に情報を表示します。
+ * 円形を12分割し、各セグメントは3分割されて内側からマイナーキー、メジャーキー、調号を表示します。
  */
 export const CircleOfFifths = () => {
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
 
-  // キークリック時のハンドラー
-  const handleKeyClick = useCallback(
-    (key: Key) => {
-      setSelectedKey(key);
+  // セグメントクリック時のハンドラー
+  const handleSegmentClick = useCallback(
+    (segment: CircleSegmentType) => {
+      // メジャーキーを選択状態として設定
+      const keyData = {
+        name: segment.majorKey,
+        isMajor: true,
+        position: segment.position,
+      };
+      setSelectedKey(keyData);
     },
     [setSelectedKey]
   );
 
-  // キーホバー時のハンドラー
-  const handleKeyHover = useCallback(
-    (key: Key) => {
-      setHoveredKey(key);
+  // セグメントホバー時のハンドラー
+  const handleSegmentHover = useCallback(
+    (segment: CircleSegmentType) => {
+      // メジャーキーをホバー状態として設定
+      const keyData = {
+        name: segment.majorKey,
+        isMajor: true,
+        position: segment.position,
+      };
+      setHoveredKey(keyData);
     },
     [setHoveredKey]
   );
 
-  // キーからマウスが離れた時のハンドラー
-  const handleKeyLeave = useCallback(() => {
+  // セグメントからマウスが離れた時のハンドラー
+  const handleSegmentLeave = useCallback(() => {
     setHoveredKey(null);
   }, [setHoveredKey]);
 
@@ -54,29 +65,56 @@ export const CircleOfFifths = () => {
       initial="hidden"
       animate="visible"
     >
-      {/* キーボタンの配置エリア */}
-      <div className="circle">
-        {KEYS.map(keyData => {
-          const position = calculateKeyPosition(keyData);
-          return (
-            <KeyButton
-              key={keyData.name}
-              keyData={keyData}
-              isSelected={selectedKey?.name === keyData.name}
-              onClick={handleKeyClick}
-              onMouseEnter={handleKeyHover}
-              onMouseLeave={handleKeyLeave}
-              style={{
-                position: 'absolute',
-                left: `calc(50% + ${position.x}px)`,
-                top: `calc(50% + ${position.y}px)`,
-                transform: 'translate(-50%, -50%)',
-                width: `${STYLES.KEY_BUTTON.WIDTH}px`,
-                height: `${STYLES.KEY_BUTTON.HEIGHT}px`,
-              }}
+      {/* SVG円形表示エリア */}
+      <div className="circle-svg-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <svg
+          width="100%"
+          height="100%"
+          viewBox={`-${STYLES.CIRCLE_SEGMENT.RADIUS} -${STYLES.CIRCLE_SEGMENT.RADIUS} ${STYLES.CIRCLE_SEGMENT.RADIUS * 2} ${STYLES.CIRCLE_SEGMENT.RADIUS * 2}`}
+          style={{ display: 'block' }}
+        >
+          {/* 背景円 */}
+          <circle
+            cx="0"
+            cy="0"
+            r={STYLES.CIRCLE_SEGMENT.RADIUS}
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth="2"
+          />
+
+          {/* 内側の円（マイナーキーエリア境界） */}
+          <circle
+            cx="0"
+            cy="0"
+            r={STYLES.CIRCLE_SEGMENT.INNER_RADIUS}
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth="1"
+          />
+
+          {/* 中間の円（メジャーキーエリア境界） */}
+          <circle
+            cx="0"
+            cy="0"
+            r={STYLES.CIRCLE_SEGMENT.MIDDLE_RADIUS}
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.1)"
+            strokeWidth="1"
+          />
+
+          {/* 各セグメントを描画 */}
+          {CIRCLE_SEGMENTS.map(segment => (
+            <CircleSegment
+              key={segment.position}
+              segment={segment}
+              isSelected={selectedKey?.name === segment.majorKey}
+              onClick={handleSegmentClick}
+              onMouseEnter={handleSegmentHover}
+              onMouseLeave={handleSegmentLeave}
             />
-          );
-        })}
+          ))}
+        </svg>
       </div>
 
       {/* キー情報表示エリア */}
