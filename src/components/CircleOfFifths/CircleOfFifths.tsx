@@ -1,14 +1,25 @@
+/**
+ * 五度圏メインコンポーネント
+ * 
+ * 五度圏を円形に表示し、各セグメントのホバー時に情報を表示します。
+ * 円形を12分割し、各セグメントは3分割されて内側からマイナーキー、メジャーキー、調号を表示します。
+ * メジャーキーとマイナーキーは個別にクリック可能です。
+ * 
+ * @fileoverview 五度圏のメインコンポーネント
+ */
+
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
-import { CircleSegment } from './CircleSegment';
-import KeyInfoDisplay from './KeyInfoDisplay';
-import { CIRCLE_SEGMENTS } from './constants';
+import { CircleSegment } from './components/CircleSegment';
+import KeyInfoDisplay from './components/KeyInfoDisplay';
+import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT, COLORS, SVG, CONTAINER_STYLES } from './constants/index';
 import { circleVariants } from './animations';
-import { STYLES, Key } from '@/types/circleOfFifths';
-import './styles/circleOfFifths.css';
+import { CircleOfFifthsProps } from './types';
+import { Key } from '@/types/circleOfFifths';
+import './styles/circleOfFifths.module.css';
 
 /**
  * 五度圏表示コンポーネント
@@ -16,11 +27,14 @@ import './styles/circleOfFifths.css';
  * 五度圏を円形に表示し、各セグメントのホバー時に情報を表示します。
  * 円形を12分割し、各セグメントは3分割されて内側からマイナーキー、メジャーキー、調号を表示します。
  * メジャーキーとマイナーキーは個別にクリック可能です。
+ * 
+ * @param props - コンポーネントのプロパティ
+ * @returns 五度圏のJSX要素
  */
-export const CircleOfFifths = () => {
+export const CircleOfFifths = ({ className, style }: CircleOfFifthsProps) => {
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
 
-  // キークリック時のハンドラー
+  // キークリック時のハンドラー（メモ化）
   const handleKeyClick = useCallback(
     (keyName: string, isMajor: boolean, position: number) => {
       const keyData: Key = {
@@ -33,7 +47,7 @@ export const CircleOfFifths = () => {
     [setSelectedKey]
   );
 
-  // キーホバー時のハンドラー
+  // キーホバー時のハンドラー（メモ化）
   const handleKeyHover = useCallback(
     (keyName: string, isMajor: boolean, position: number) => {
       const keyData: Key = {
@@ -46,60 +60,76 @@ export const CircleOfFifths = () => {
     [setHoveredKey]
   );
 
-  // キーからマウスが離れた時のハンドラー
+  // キーからマウスが離れた時のハンドラー（メモ化）
   const handleKeyLeave = useCallback(() => {
     setHoveredKey(null);
   }, [setHoveredKey]);
 
+  // SVGビューボックスの計算（メモ化）
+  const viewBox = useMemo(() => {
+    const size = CIRCLE_LAYOUT.RADIUS * 2;
+    return `-${CIRCLE_LAYOUT.RADIUS} -${CIRCLE_LAYOUT.RADIUS} ${size} ${size}`;
+  }, []);
+
+  // コンテナスタイルの計算（メモ化）
+  const containerStyle = useMemo(() => {
+    return {
+      position: CONTAINER_STYLES.POSITION,
+      width: CONTAINER_STYLES.CONTAINER_WIDTH,
+      height: CONTAINER_STYLES.CONTAINER_HEIGHT,
+      ...style,
+    };
+  }, [style]);
+
   return (
     <motion.div
-      className="circle-of-fifths"
-      style={{
-        width: STYLES.CIRCLE.WIDTH,
-        maxWidth: STYLES.CIRCLE.MAX_WIDTH,
-        background: `linear-gradient(135deg, ${STYLES.CIRCLE.BACKGROUND.FROM}, ${STYLES.CIRCLE.BACKGROUND.TO})`,
-        overflow: 'visible',
-      }}
+      className={`circle-of-fifths ${className || ''}`.trim()}
+      style={containerStyle}
       variants={circleVariants}
       initial="hidden"
       animate="visible"
     >
       {/* SVG円形表示エリア */}
-      <div className="circle-svg-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div className="circle-svg-container">
         <svg
-          width="100%"
-          height="100%"
-          viewBox={`-${STYLES.CIRCLE_SEGMENT.RADIUS} -${STYLES.CIRCLE_SEGMENT.RADIUS} ${STYLES.CIRCLE_SEGMENT.RADIUS * 2} ${STYLES.CIRCLE_SEGMENT.RADIUS * 2}`}
-          style={{ display: 'block' }}
+          width="70%"
+          height="70%"
+          viewBox={viewBox}
+          style={{ display: SVG.DISPLAY }}
+          aria-label="五度圏"
+          role="img"
         >
           {/* 背景円 */}
           <circle
-            cx="0"
-            cy="0"
-            r={STYLES.CIRCLE_SEGMENT.RADIUS}
+            cx={SVG.CENTER_X}
+            cy={SVG.CENTER_Y}
+            r={CIRCLE_LAYOUT.RADIUS}
             fill="none"
-            stroke="rgba(255, 255, 255, 0.1)"
-            strokeWidth="2"
+            stroke={COLORS.BORDER}
+            strokeWidth={SVG.BACKGROUND_STROKE_WIDTH}
+            aria-hidden="true"
           />
 
           {/* 内側の円（マイナーキーエリア境界） */}
           <circle
-            cx="0"
-            cy="0"
-            r={STYLES.CIRCLE_SEGMENT.INNER_RADIUS}
+            cx={SVG.CENTER_X}
+            cy={SVG.CENTER_Y}
+            r={CIRCLE_LAYOUT.INNER_RADIUS}
             fill="none"
-            stroke="rgba(255, 255, 255, 0.1)"
-            strokeWidth="1"
+            stroke={COLORS.BORDER}
+            strokeWidth={SVG.BORDER_STROKE_WIDTH}
+            aria-hidden="true"
           />
 
           {/* 中間の円（メジャーキーエリア境界） */}
           <circle
-            cx="0"
-            cy="0"
-            r={STYLES.CIRCLE_SEGMENT.MIDDLE_RADIUS}
+            cx={SVG.CENTER_X}
+            cy={SVG.CENTER_Y}
+            r={CIRCLE_LAYOUT.MIDDLE_RADIUS}
             fill="none"
-            stroke="rgba(255, 255, 255, 0.1)"
-            strokeWidth="1"
+            stroke={COLORS.BORDER}
+            strokeWidth={SVG.BORDER_STROKE_WIDTH}
+            aria-hidden="true"
           />
 
           {/* 各セグメントを描画 */}
@@ -122,3 +152,6 @@ export const CircleOfFifths = () => {
     </motion.div>
   );
 };
+
+// コンポーネントの表示名を設定（デバッグ用）
+CircleOfFifths.displayName = 'CircleOfFifths';
