@@ -166,9 +166,9 @@ export const calculateTextPosition = (position: number, radius: number) => {
 /**
  * テキストの回転角度を計算
  * @param position 0-11の位置
- * @returns 回転角度（度）
+ * @returns 回転角度（度）- 常に0度（垂直）を返す
  */
 export const calculateTextRotation = (position: number): number => {
-  const angleInDegrees = (position * 360) / 12 - 90 + 15; // セグメントの中心 + 15度
-  return angleInDegrees;
+  // テキストを常に垂直に表示
+  return 0;
 };
