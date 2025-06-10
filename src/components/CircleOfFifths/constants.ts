@@ -1,4 +1,4 @@
-import { Key } from '@/types/circleOfFifths';
+import { Key, CircleSegment } from '@/types/circleOfFifths';
 
 // 五度圏のキー定義
 export const KEYS: Key[] = [
@@ -26,6 +26,22 @@ export const KEYS: Key[] = [
   { name: 'Cm', isMajor: false, position: 9 },
   { name: 'Gm', isMajor: false, position: 10 },
   { name: 'Dm', isMajor: false, position: 11 },
+];
+
+// 新しい五度圏のセグメント定義（Cが一番上に来るように配置）
+export const CIRCLE_SEGMENTS: CircleSegment[] = [
+  { position: 0, minorKey: 'Am', majorKey: 'C', keySignature: '' }, // C（調号なし）
+  { position: 1, minorKey: 'Em', majorKey: 'G', keySignature: '#' }, // G（シャープ1つ）
+  { position: 2, minorKey: 'Bm', majorKey: 'D', keySignature: '##' }, // D（シャープ2つ）
+  { position: 3, minorKey: 'F#m', majorKey: 'A', keySignature: '###' }, // A（シャープ3つ）
+  { position: 4, minorKey: 'C#m', majorKey: 'E', keySignature: '####' }, // E（シャープ4つ）
+  { position: 5, minorKey: 'G#m', majorKey: 'B', keySignature: '#####' }, // B（シャープ5つ）
+  { position: 6, minorKey: 'D#m', majorKey: 'F#/G♭', keySignature: '######\n♭♭♭♭♭♭' }, // F#（シャープ6つ）
+  { position: 7, minorKey: 'A#m', majorKey: 'D♭', keySignature: '♭♭♭♭♭' }, // C#（シャープ7つ）
+  { position: 8, minorKey: 'Fm', majorKey: 'A♭', keySignature: '♭♭♭♭' }, // G#（シャープ8つ）
+  { position: 9, minorKey: 'Cm', majorKey: 'E♭', keySignature: '♭♭♭' }, // D#（シャープ9つ）
+  { position: 10, minorKey: 'Gm', majorKey: 'B♭', keySignature: '♭♭' }, // A#（シャープ10つ）
+  { position: 11, minorKey: 'Dm', majorKey: 'F', keySignature: '♭' }, // F（フラット1つ）
 ];
 
 // キーの位置計算用の定数

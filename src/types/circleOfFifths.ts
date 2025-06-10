@@ -7,6 +7,14 @@ export interface Key {
   position: number;
 }
 
+// 新しい五度圏の構造用の型定義
+export interface CircleSegment {
+  position: number; // 0-11の位置
+  minorKey: string; // マイナーキー名
+  majorKey: string; // メジャーキー名
+  keySignature: string; // 調号（現在は文字列、後でSVGに変更予定）
+}
+
 // 五度圏の状態のZustandストア型定義
 export interface CircleOfFifthsStore {
   selectedKey: Key | null;
@@ -29,6 +37,15 @@ export interface KeyButtonProps {
 
 export interface KeyInfoProps {
   selectedKey: Key | null;
+}
+
+// 新しいピザ型ブロック用のProps型定義
+export interface CircleSegmentProps {
+  segment: CircleSegment;
+  isSelected: boolean;
+  onClick: (segment: CircleSegment) => void;
+  onMouseEnter: (segment: CircleSegment) => void;
+  onMouseLeave: () => void;
 }
 
 // アニメーションの型定義
@@ -54,6 +71,24 @@ export const STYLES = {
       DEFAULT: 'rgba(255, 255, 255, 0.05)',
       HOVER: 'rgba(255, 255, 255, 0.1)',
       ACTIVE: 'rgba(255, 255, 255, 0.15)',
+    },
+  },
+  // 新しいピザ型ブロック用のスタイル
+  CIRCLE_SEGMENT: {
+    RADIUS: 300, // 外側の半径
+    INNER_RADIUS: 170, // 内側の半径（マイナーキーエリア）
+    MIDDLE_RADIUS: 250, // 中間の半径（メジャーキーエリア）
+    FONT_SIZE: {
+      MINOR: '1rem',
+      MAJOR: '1.2rem',
+      SIGNATURE: '0.7rem',
+    },
+    COLORS: {
+      MINOR: 'rgba(255, 255, 255, 0.1)',
+      MAJOR: 'rgba(255, 255, 255, 0.15)',
+      SIGNATURE: 'rgba(255, 255, 255, 0.2)',
+      HOVER: 'rgba(255, 255, 255, 0.25)',
+      SELECTED: 'rgba(255, 255, 255, 0.3)',
     },
   },
 } as const;
