@@ -42,9 +42,26 @@ export interface KeyInfoProps {
 // 新しいピザ型ブロック用のProps型定義
 export interface CircleSegmentProps {
   segment: CircleSegment;
+  selectedKey: Key | null;
+  hoveredKey: Key | null;
+  onKeyClick: (keyName: string, isMajor: boolean, position: number) => void;
+  onKeyHover: (keyName: string, isMajor: boolean, position: number) => void;
+  onKeyLeave: () => void;
+}
+
+// 個別のキーエリア用のProps型定義
+export interface KeyAreaProps {
+  keyName: string;
+  isMajor: boolean;
+  position: number;
+  path: string;
+  textPosition: { x: number; y: number };
+  textRotation: number;
+  fontSize: string;
   isSelected: boolean;
-  onClick: (segment: CircleSegment) => void;
-  onMouseEnter: (segment: CircleSegment) => void;
+  isHovered: boolean;
+  onClick: (keyName: string, isMajor: boolean, position: number) => void;
+  onMouseEnter: (keyName: string, isMajor: boolean, position: number) => void;
   onMouseLeave: () => void;
 }
 
