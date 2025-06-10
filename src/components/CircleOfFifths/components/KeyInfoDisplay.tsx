@@ -3,8 +3,8 @@
 import { FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Key } from '@/types/circleOfFifths';
-import { getKeyInfo } from './utils';
-import { keyInfoVariants, keyInfoItemVariants } from './animations';
+import { getKeyInfo } from '../utils/index';
+import { keyInfoVariants, keyInfoItemVariants } from '../animations';
 
 /**
  * キー情報表示のProps型定義

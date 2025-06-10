@@ -1,111 +1,109 @@
+/**
+ * 五度圏関連のグローバル型定義
+ * 
+ * このファイルには、アプリケーション全体で使用される
+ * 五度圏関連の型定義が含まれています。
+ */
+
 import { Variants } from 'framer-motion';
 
-// キーの型定義
+// ============================================================================
+// 基本型定義（グローバルで使用）
+// ============================================================================
+
+/**
+ * キーの基本情報
+ * 
+ * アプリケーション全体で使用される基本的なキー情報
+ */
 export interface Key {
+  /** キー名（例: 'C', 'Am'） */
   name: string;
+  /** メジャーキーかどうか */
   isMajor: boolean;
+  /** 五度圏上の位置（0-11） */
   position: number;
 }
 
-// 新しい五度圏の構造用の型定義
+/**
+ * 五度圏のセグメント情報
+ * 
+ * アプリケーション全体で使用されるセグメント情報
+ */
 export interface CircleSegment {
-  position: number; // 0-11の位置
-  minorKey: string; // マイナーキー名
-  majorKey: string; // メジャーキー名
-  keySignature: string; // 調号（現在は文字列、後でSVGに変更予定）
+  /** セグメントの位置（0-11） */
+  position: number;
+  /** マイナーキー名 */
+  minorKey: string;
+  /** メジャーキー名 */
+  majorKey: string;
+  /** 調号（現在は文字列、後でSVGに変更予定） */
+  keySignature: string;
 }
 
-// 五度圏の状態のZustandストア型定義
+// ============================================================================
+// 状態管理型定義（Zustandストア）
+// ============================================================================
+
+/**
+ * 五度圏の状態のZustandストア型定義
+ * 
+ * アプリケーション全体で共有される状態
+ */
 export interface CircleOfFifthsStore {
+  /** 現在選択されているキー */
   selectedKey: Key | null;
+  /** 現在ホバーされているキー */
   hoveredKey: Key | null;
+  /** 再生状態 */
   isPlaying: boolean;
+  /** キー選択のセッター */
   setSelectedKey: (key: Key | null) => void;
+  /** キーホバーのセッター */
   setHoveredKey: (key: Key | null) => void;
+  /** 再生状態のセッター */
   setIsPlaying: (isPlaying: boolean) => void;
 }
 
-// コンポーネントのProps型定義
-export interface KeyButtonProps {
-  keyData: Key;
-  isSelected: boolean;
-  onClick: (key: Key) => void;
-  onMouseEnter: (key: Key) => void;
-  onMouseLeave: () => void;
-  style: React.CSSProperties;
+// ============================================================================
+// ユーティリティ型定義（グローバルで使用）
+// ============================================================================
+
+/**
+ * 座標情報
+ */
+export interface Point {
+  x: number;
+  y: number;
 }
 
-export interface KeyInfoProps {
-  selectedKey: Key | null;
+/**
+ * SVGパス情報
+ */
+export interface SegmentPaths {
+  /** マイナーキーエリアのパス */
+  minorPath: string;
+  /** メジャーキーエリアのパス */
+  majorPath: string;
+  /** 調号エリアのパス */
+  signaturePath: string;
 }
 
-// 新しいピザ型ブロック用のProps型定義
-export interface CircleSegmentProps {
-  segment: CircleSegment;
-  selectedKey: Key | null;
-  hoveredKey: Key | null;
-  onKeyClick: (keyName: string, isMajor: boolean, position: number) => void;
-  onKeyHover: (keyName: string, isMajor: boolean, position: number) => void;
-  onKeyLeave: () => void;
-}
-
-// 個別のキーエリア用のProps型定義
-export interface KeyAreaProps {
-  keyName: string;
-  isMajor: boolean;
-  position: number;
-  path: string;
-  textPosition: { x: number; y: number };
-  textRotation: number;
-  fontSize: string;
-  isSelected: boolean;
-  isHovered: boolean;
-  onClick: (keyName: string, isMajor: boolean, position: number) => void;
-  onMouseEnter: (keyName: string, isMajor: boolean, position: number) => void;
-  onMouseLeave: () => void;
-}
-
-// アニメーションの型定義
+/**
+ * アニメーション変数の型
+ */
 export type AnimationVariants = Variants;
 
-// スタイルの定数
-export const STYLES = {
-  CIRCLE: {
-    WIDTH: '70%',
-    MAX_WIDTH: '800px',
-    BACKGROUND: {
-      FROM: '#1a1a1a',
-      TO: '#2a2a2a',
-    },
-  },
-  KEY_BUTTON: {
-    WIDTH: 70,
-    HEIGHT: 70,
-    FONT_SIZE: '1.2rem',
-    PADDING: '1rem',
-    BORDER_RADIUS: '8px',
-    BACKGROUND: {
-      DEFAULT: 'rgba(255, 255, 255, 0.05)',
-      HOVER: 'rgba(255, 255, 255, 0.1)',
-      ACTIVE: 'rgba(255, 255, 255, 0.15)',
-    },
-  },
-  // 新しいピザ型ブロック用のスタイル
-  CIRCLE_SEGMENT: {
-    RADIUS: 300, // 外側の半径
-    INNER_RADIUS: 170, // 内側の半径（マイナーキーエリア）
-    MIDDLE_RADIUS: 250, // 中間の半径（メジャーキーエリア）
-    FONT_SIZE: {
-      MINOR: '1rem',
-      MAJOR: '1.2rem',
-      SIGNATURE: '0.7rem',
-    },
-    COLORS: {
-      MINOR: 'rgba(255, 255, 255, 0.1)',
-      MAJOR: 'rgba(255, 255, 255, 0.15)',
-      SIGNATURE: 'rgba(255, 255, 255, 0.2)',
-      HOVER: 'rgba(255, 255, 255, 0.25)',
-      SELECTED: 'rgba(255, 255, 255, 0.3)',
-    },
-  },
-} as const;
+// ============================================================================
+// エラー型定義（グローバルで使用）
+// ============================================================================
+
+/**
+ * 五度圏関連のエラー
+ */
+export class CircleOfFifthsError extends Error {
+  constructor(message: string, public code: string) {
+    super(message);
+    this.name = 'CircleOfFifthsError';
+  }
+}
