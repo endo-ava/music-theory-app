@@ -41,12 +41,11 @@ const KeyInfoDisplay: FC<KeyInfoDisplayProps> = ({ hoveredKey }) => {
       >
         {/* キー名と調性 */}
         <motion.h2 variants={keyInfoItemVariants} className="text-2xl font-bold text-white mb-4">
-          {keyInfo.name} {keyInfo.type}
+          {keyInfo.name}
         </motion.h2>
 
         {/* キーの詳細情報 */}
         <motion.div variants={keyInfoItemVariants} className="space-y-2 text-white/80">
-          <p>五度圏上の位置: {keyInfo.position}</p>
           <p>調性: {keyInfo.scale}</p>
           {keyInfo.relativeKey && <p>平行調: {keyInfo.relativeKey}</p>}
           <motion.div variants={keyInfoItemVariants} className="mt-4 p-3 bg-white/5 rounded-md">
