@@ -99,34 +99,6 @@ export const calculateTextRotation = (): number => {
 // ============================================================================
 
 /**
- * 円弧のSVGパスを生成
- * @param centerX 中心X座標
- * @param centerY 中心Y座標
- * @param radius 半径
- * @param startAngle 開始角度（ラジアン）
- * @param endAngle 終了角度（ラジアン）
- * @returns SVGパス文字列
- */
-export const generateArcPath = (
-    centerX: number,
-    centerY: number,
-    radius: number,
-    startAngle: number,
-    endAngle: number
-): string => {
-    const start = polarToCartesian(radius, startAngle);
-    const end = polarToCartesian(radius, endAngle);
-
-    const angleDiff = normalizeAngle(endAngle - startAngle);
-    const largeArcFlag = angleDiff > Math.PI ? 1 : 0;
-
-    return [
-        `M ${centerX + start.x} ${centerY + start.y}`,
-        `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${centerX + end.x} ${centerY + end.y}`,
-    ].join(' ');
-};
-
-/**
  * ピザ型ブロックのパスを生成
  * @param position 0-11の位置
  * @param innerRadius 内側の半径
@@ -213,16 +185,8 @@ export const generateThreeSegmentPaths = (
     const angleDiff = normalizeAngle(endAngle - startAngle);
     const largeArcFlag = angleDiff > Math.PI ? 1 : 0;
 
-    // マイナーキーエリア（内側）- 中心点から始まる扇形
-    const minorStart = polarToCartesian(innerRadius, startAngle);
-    const minorEnd = polarToCartesian(innerRadius, endAngle);
-
-    const minorPath = [
-        'M 0 0', // 中心点から開始
-        `L ${minorStart.x} ${minorStart.y}`,
-        `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 1 ${minorEnd.x} ${minorEnd.y}`,
-        'Z',
-    ].join(' ');
+    // マイナーキーエリア（内側）- 内側の半径から始まるドーナツ型
+    const minorPath = generatePizzaSlicePath(position, CIRCLE_LAYOUT.CENTER_RADIUS, innerRadius);
 
     // メジャーキーエリア（中間）
     const majorPath = generatePizzaSlicePath(position, innerRadius, middleRadius);
@@ -240,24 +204,6 @@ export const generateThreeSegmentPaths = (
 // ============================================================================
 // キー情報ユーティリティ
 // ============================================================================
-
-/**
- * キーの位置を計算（レガシー関数 - 後方互換性のため）
- * @param key キー情報
- * @returns キーの位置（x, y座標）
- * @throws {CircleOfFifthsError} キーが無効な場合
- * @deprecated 新しいコンポーネントでは使用しない
- */
-export const calculateKeyPosition = (key: Key): Point => {
-    if (!isValidKey(key)) {
-        throw new CircleOfFifthsError(`Invalid key: ${JSON.stringify(key)}`, 'INVALID_KEY');
-    }
-
-    const radius = key.isMajor ? CIRCLE_LAYOUT.RADIUS : CIRCLE_LAYOUT.INNER_RADIUS;
-    const angle = calculateAngle(key.position);
-
-    return polarToCartesian(radius, angle);
-};
 
 /**
  * キーの詳細情報を取得
@@ -282,34 +228,3 @@ export const getKeyInfo = (key: Key) => {
         scale: key.isMajor ? '長調' : '短調',
     };
 };
-
-// ============================================================================
-// パフォーマンス最適化ユーティリティ
-// ============================================================================
-
-/**
- * 角度計算のキャッシュ（パフォーマンス向上のため）
- */
-const angleCache = new Map<number, number>();
-
-/**
- * キャッシュ付き角度計算
- * @param position 0-11の位置
- * @returns 角度（ラジアン）
- */
-export const calculateAngleCached = (position: number): number => {
-    if (angleCache.has(position)) {
-        return angleCache.get(position)!;
-    }
-
-    const angle = calculateAngle(position);
-    angleCache.set(position, angle);
-    return angle;
-};
-
-/**
- * キャッシュをクリア
- */
-export const clearAngleCache = (): void => {
-    angleCache.clear();
-}; 

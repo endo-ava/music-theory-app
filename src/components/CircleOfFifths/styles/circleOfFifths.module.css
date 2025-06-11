@@ -1,7 +1,7 @@
 /* 五度圏の基本スタイル */
 .circle-of-fifths {
   position: relative;
-  width: 60%;
+  width: 70%;
   max-width: 600px;
   aspect-ratio: 1;
   margin: 1.5rem auto;

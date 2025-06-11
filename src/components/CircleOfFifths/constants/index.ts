@@ -5,7 +5,7 @@
  * すべての定数が含まれています。
  */
 
-import { Key, CircleOfFifthsError, CircleSegment } from '@/types/circleOfFifths';
+import { Key, CircleSegment } from '@/types/circleOfFifths';
 
 // ============================================================================
 // 基本定数
@@ -89,9 +89,11 @@ export const CIRCLE_LAYOUT = {
     /** 外側の半径（ピクセル） */
     RADIUS: 200,
     /** 内側の半径（マイナーキーエリア） */
-    INNER_RADIUS: 110,
+    INNER_RADIUS: 120,
     /** 中間の半径（メジャーキーエリア） */
-    MIDDLE_RADIUS: 165,
+    MIDDLE_RADIUS: 170,
+    /** 中心の半径（調号エリア） */
+    CENTER_RADIUS: 80,
 } as const;
 
 /**
@@ -139,62 +141,6 @@ export const COLORS = {
 } as const;
 
 // ============================================================================
-// スタイル定数
-// ============================================================================
-
-/**
- * コンテナスタイル定数
- */
-export const CONTAINER_STYLES = {
-    /** 円の最大幅 */
-    MAX_WIDTH: '600px',
-    /** 円の幅（パーセンテージ） */
-    WIDTH: '60%',
-    /** 円のマージン */
-    MARGIN: '1.5rem auto',
-    /** 背景グラデーション開始色 */
-    BG_GRADIENT_START: '#1a1a1a',
-    /** 背景グラデーション終了色 */
-    BG_GRADIENT_END: '#2a2a2a',
-    /** ボックスシャドウの色 */
-    SHADOW_COLOR: 'rgba(0, 0, 0, 0.1)',
-    /** ボックスシャドウの色（薄い） */
-    SHADOW_COLOR_LIGHT: 'rgba(0, 0, 0, 0.06)',
-    /** コンテナの位置 */
-    POSITION: 'relative',
-    /** コンテナの幅 */
-    CONTAINER_WIDTH: '70%',
-    /** コンテナの高さ */
-    CONTAINER_HEIGHT: '100%',
-} as const;
-
-/**
- * フォーカススタイル定数
- */
-export const FOCUS_STYLES = {
-    /** フォーカス時のアウトライン色 */
-    OUTLINE_COLOR: '#ffffff',
-    /** フォーカス時のアウトライン幅 */
-    OUTLINE_WIDTH: '2px',
-    /** フォーカス時のオフセット */
-    OUTLINE_OFFSET: '2px',
-    /** フォーカス時のボックスシャドウ色 */
-    SHADOW_COLOR: 'rgba(255, 255, 255, 0.3)',
-} as const;
-
-/**
- * キー情報パネルスタイル定数
- */
-export const KEY_INFO_STYLES = {
-    /** 背景ぼかし効果 */
-    BACKDROP_BLUR: '8px',
-    /** 境界線の色 */
-    BORDER_COLOR: 'rgba(255, 255, 255, 0.1)',
-    /** ボックスシャドウの色 */
-    SHADOW_COLOR: 'rgba(0, 0, 0, 0.1)',
-} as const;
-
-// ============================================================================
 // アニメーション定数
 // ============================================================================
 
@@ -239,53 +185,6 @@ export const isValidKey = (key: Key): boolean => {
     );
 };
 
-/**
- * セグメントが有効かどうかをチェック
- * @param segment チェックするセグメント
- * @returns 有効なセグメントかどうか
- */
-export const isValidSegment = (segment: CircleSegment): boolean => {
-    return (
-        isValidPosition(segment.position) &&
-        typeof segment.minorKey === 'string' &&
-        segment.minorKey.length > 0 &&
-        typeof segment.majorKey === 'string' &&
-        segment.majorKey.length > 0 &&
-        typeof segment.keySignature === 'string'
-    );
-};
-
-// ============================================================================
-// ユーティリティ関数
-// ============================================================================
-
-/**
- * 位置からキーを取得
- * @param position 位置
- * @param isMajor メジャーキーかどうか
- * @returns キー情報、見つからない場合はnull
- */
-export const getKeyByPosition = (position: number, isMajor: boolean): Key | null => {
-    if (!isValidPosition(position)) {
-        throw new CircleOfFifthsError(`Invalid position: ${position}`, 'INVALID_POSITION');
-    }
-
-    return KEYS.find(key => key.position === position && key.isMajor === isMajor) || null;
-};
-
-/**
- * キー名からキーを取得
- * @param keyName キー名
- * @returns キー情報、見つからない場合はnull
- */
-export const getKeyByName = (keyName: string): Key | null => {
-    if (!keyName || typeof keyName !== 'string') {
-        throw new CircleOfFifthsError(`Invalid key name: ${keyName}`, 'INVALID_KEY_NAME');
-    }
-
-    return KEYS.find(key => key.name === keyName) || null;
-};
-
 // ============================================================================
 // SVG定数
 // ============================================================================
@@ -304,4 +203,6 @@ export const SVG = {
     CENTER_X: '0',
     /** 円の中心Y座標 */
     CENTER_Y: '0',
+    /** SVGの表示スタイル */
+    DISPLAY_MODE: 'block',
 } as const; 

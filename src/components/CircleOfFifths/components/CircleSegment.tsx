@@ -53,7 +53,7 @@ export const CircleSegment = memo<CircleSegmentProps>(({
 
     // テキスト位置を計算（メモ化）
     const textPositions = useMemo(() => {
-        const minorTextPos = calculateTextPosition(position, CIRCLE_LAYOUT.INNER_RADIUS / 2);
+        const minorTextPos = calculateTextPosition(position, CIRCLE_LAYOUT.INNER_RADIUS / 1.2);
         const majorTextPos = calculateTextPosition(
             position,
             (CIRCLE_LAYOUT.INNER_RADIUS + CIRCLE_LAYOUT.MIDDLE_RADIUS) / 2

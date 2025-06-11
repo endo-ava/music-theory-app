@@ -25,6 +25,21 @@ export interface CircleOfFifthsProps {
 }
 
 /**
+ * SVG描画コンポーネント
+ */
+export interface CircleSvgCanvasProps {
+    radius: number;
+    innerRadius: number;
+    middleRadius: number;
+    segments: CircleSegment[];
+    selectedKey: Key | null;
+    hoveredKey: Key | null;
+    onKeyClick: (keyName: string, isMajor: boolean, position: number) => void;
+    onKeyHover: (keyName: string, isMajor: boolean, position: number) => void;
+    onKeyLeave: () => void;
+  }
+
+/**
  * セグメントコンポーネントのProps
  */
 export interface CircleSegmentProps {
@@ -76,9 +91,8 @@ export interface KeyAreaProps {
  * キー情報表示コンポーネントのProps
  */
 export interface KeyInfoDisplayProps {
-    /** ホバーされているキー */
     hoveredKey: Key | null;
-}
+  }
 
 // ============================================================================
 // グローバル型の再エクスポート（コンポーネント内での使用のため）
