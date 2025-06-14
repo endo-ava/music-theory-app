@@ -1,82 +1,113 @@
+/**
+ * 五度圏メインコンポーネント
+ *
+ * 五度圏を円形に表示し、各セグメントのホバー時に情報を表示します。
+ * 円形を12分割し、各セグメントは3分割されて内側からマイナーキー、メジャーキー、調号を表示します。
+ * メジャーキーとマイナーキーは個別にクリック可能です。
+ *
+ * @fileoverview 五度圏のメインコンポーネント
+ */
+
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
-import KeyButton from './KeyButton';
-import KeyInfoDisplay from './KeyInfoDisplay';
-import { KEYS } from './constants';
-import { calculateKeyPosition } from './utils';
+import KeyInfoDisplay from './components/KeyInfoDisplay';
+import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT } from './constants/index';
 import { circleVariants } from './animations';
-import { STYLES, Key } from '@/types/circleOfFifths';
-import './styles/circleOfFifths.css';
+import { CircleOfFifthsProps } from './types';
+import { Key } from '@/types/circleOfFifths';
+import { CircleSvgCanvas } from './components/CircleSvgCanvas';
 
 /**
  * 五度圏表示コンポーネント
  *
- * 五度圏を円形に表示し、各キーのホバー時に情報を表示します。
- * キーの配置は円周上に均等に配置され、メジャーキーは外側、マイナーキーは内側に表示されます。
+ * 五度圏を円形に表示し、各セグメントのホバー時に情報を表示します。
+ * 円形を12分割し、各セグメントは3分割されて内側からマイナーキー、メジャーキー、調号を表示します。
+ * メジャーキーとマイナーキーは個別にクリック可能です。
+ *
+ * @param props - コンポーネントのプロパティ
+ * @returns 五度圏のJSX要素
  */
-export const CircleOfFifths = () => {
+export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
+  className,
+  style,
+}) => {
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
+  const [isMounted, setIsMounted] = useState(false);
 
-  // キークリック時のハンドラー
+  // クライアントでの初回レンダリング後にisMountedをtrueにする
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // キークリック時のハンドラー（メモ化）
   const handleKeyClick = useCallback(
-    (key: Key) => {
-      setSelectedKey(key);
+    (keyName: string, isMajor: boolean, position: number) => {
+      const keyData: Key = {
+        name: keyName,
+        isMajor,
+        position,
+      };
+      setSelectedKey(keyData);
     },
     [setSelectedKey]
   );
 
-  // キーホバー時のハンドラー
+  // キーホバー時のハンドラー（メモ化）
   const handleKeyHover = useCallback(
-    (key: Key) => {
-      setHoveredKey(key);
+    (keyName: string, isMajor: boolean, position: number) => {
+      const keyData: Key = {
+        name: keyName,
+        isMajor,
+        position,
+      };
+      setHoveredKey(keyData);
     },
     [setHoveredKey]
   );
 
-  // キーからマウスが離れた時のハンドラー
+  // キーからマウスが離れた時のハンドラー（メモ化）
   const handleKeyLeave = useCallback(() => {
     setHoveredKey(null);
   }, [setHoveredKey]);
 
+  // マウントされるまでは何も表示しない（ちらつき防止）
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <motion.div
-      className="circle-of-fifths"
-      style={{
-        width: STYLES.CIRCLE.WIDTH,
-        maxWidth: STYLES.CIRCLE.MAX_WIDTH,
-        background: `linear-gradient(135deg, ${STYLES.CIRCLE.BACKGROUND.FROM}, ${STYLES.CIRCLE.BACKGROUND.TO})`,
-        overflow: 'visible',
-      }}
+      // twMergeとclsxでクラス名を管理。propsで渡されたclassNameを安全にマージする
+      className={twMerge(
+        clsx(
+          'relative flex items-center justify-center',
+          'w-[80vw] h-[80vw] max-w-[800px] max-h-[800px]'
+        ),
+        className // 外部から渡されたクラスで上書き可能にする
+      )}
+      style={style} // 外部からのstyleも適用できるように残しておく
       variants={circleVariants}
       initial="hidden"
       animate="visible"
     >
-      {/* キーボタンの配置エリア */}
-      <div className="circle">
-        {KEYS.map(keyData => {
-          const position = calculateKeyPosition(keyData);
-          return (
-            <KeyButton
-              key={keyData.name}
-              keyData={keyData}
-              isSelected={selectedKey?.name === keyData.name}
-              onClick={handleKeyClick}
-              onMouseEnter={handleKeyHover}
-              onMouseLeave={handleKeyLeave}
-              style={{
-                position: 'absolute',
-                left: `calc(50% + ${position.x}px)`,
-                top: `calc(50% + ${position.y}px)`,
-                transform: 'translate(-50%, -50%)',
-                width: `${STYLES.KEY_BUTTON.WIDTH}px`,
-                height: `${STYLES.KEY_BUTTON.HEIGHT}px`,
-              }}
-            />
-          );
-        })}
+      {/* SVG円形表示エリアを独立したコンポーネントとして呼び出す */}
+      <div className="w-full h-full">
+        <CircleSvgCanvas
+          radius={CIRCLE_LAYOUT.RADIUS}
+          innerRadius={CIRCLE_LAYOUT.INNER_RADIUS}
+          middleRadius={CIRCLE_LAYOUT.MIDDLE_RADIUS}
+          segments={CIRCLE_SEGMENTS}
+          selectedKey={selectedKey}
+          hoveredKey={hoveredKey}
+          onKeyClick={handleKeyClick}
+          onKeyHover={handleKeyHover}
+          onKeyLeave={handleKeyLeave}
+        />
       </div>
 
       {/* キー情報表示エリア */}

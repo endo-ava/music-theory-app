@@ -1,59 +1,109 @@
+/**
+ * 五度圏関連のグローバル型定義
+ * 
+ * このファイルには、アプリケーション全体で使用される
+ * 五度圏関連の型定義が含まれています。
+ */
+
 import { Variants } from 'framer-motion';
 
-// キーの型定義
+// ============================================================================
+// 基本型定義（グローバルで使用）
+// ============================================================================
+
+/**
+ * キーの基本情報
+ * 
+ * アプリケーション全体で使用される基本的なキー情報
+ */
 export interface Key {
+  /** キー名（例: 'C', 'Am'） */
   name: string;
+  /** メジャーキーかどうか */
   isMajor: boolean;
+  /** 五度圏上の位置（0-11） */
   position: number;
 }
 
-// 五度圏の状態のZustandストア型定義
+/**
+ * 五度圏のセグメント情報
+ * 
+ * アプリケーション全体で使用されるセグメント情報
+ */
+export interface CircleSegment {
+  /** セグメントの位置（0-11） */
+  position: number;
+  /** マイナーキー名 */
+  minorKey: string;
+  /** メジャーキー名 */
+  majorKey: string;
+  /** 調号（現在は文字列、後でSVGに変更予定） */
+  keySignature: string;
+}
+
+// ============================================================================
+// 状態管理型定義（Zustandストア）
+// ============================================================================
+
+/**
+ * 五度圏の状態のZustandストア型定義
+ * 
+ * アプリケーション全体で共有される状態
+ */
 export interface CircleOfFifthsStore {
+  /** 現在選択されているキー */
   selectedKey: Key | null;
+  /** 現在ホバーされているキー */
   hoveredKey: Key | null;
+  /** 再生状態 */
   isPlaying: boolean;
+  /** キー選択のセッター */
   setSelectedKey: (key: Key | null) => void;
+  /** キーホバーのセッター */
   setHoveredKey: (key: Key | null) => void;
+  /** 再生状態のセッター */
   setIsPlaying: (isPlaying: boolean) => void;
 }
 
-// コンポーネントのProps型定義
-export interface KeyButtonProps {
-  keyData: Key;
-  isSelected: boolean;
-  onClick: (key: Key) => void;
-  onMouseEnter: (key: Key) => void;
-  onMouseLeave: () => void;
-  style: React.CSSProperties;
+// ============================================================================
+// ユーティリティ型定義（グローバルで使用）
+// ============================================================================
+
+/**
+ * 座標情報
+ */
+export interface Point {
+  x: number;
+  y: number;
 }
 
-export interface KeyInfoProps {
-  selectedKey: Key | null;
+/**
+ * SVGパス情報
+ */
+export interface SegmentPaths {
+  /** マイナーキーエリアのパス */
+  minorPath: string;
+  /** メジャーキーエリアのパス */
+  majorPath: string;
+  /** 調号エリアのパス */
+  signaturePath: string;
 }
 
-// アニメーションの型定義
+/**
+ * アニメーション変数の型
+ */
 export type AnimationVariants = Variants;
 
-// スタイルの定数
-export const STYLES = {
-  CIRCLE: {
-    WIDTH: '70%',
-    MAX_WIDTH: '800px',
-    BACKGROUND: {
-      FROM: '#1a1a1a',
-      TO: '#2a2a2a',
-    },
-  },
-  KEY_BUTTON: {
-    WIDTH: 70,
-    HEIGHT: 70,
-    FONT_SIZE: '1.2rem',
-    PADDING: '1rem',
-    BORDER_RADIUS: '8px',
-    BACKGROUND: {
-      DEFAULT: 'rgba(255, 255, 255, 0.05)',
-      HOVER: 'rgba(255, 255, 255, 0.1)',
-      ACTIVE: 'rgba(255, 255, 255, 0.15)',
-    },
-  },
-} as const;
+// ============================================================================
+// エラー型定義（グローバルで使用）
+// ============================================================================
+
+/**
+ * 五度圏関連のエラー
+ */
+export class CircleOfFifthsError extends Error {
+  constructor(message: string, public code: string) {
+    super(message);
+    this.name = 'CircleOfFifthsError';
+  }
+}
