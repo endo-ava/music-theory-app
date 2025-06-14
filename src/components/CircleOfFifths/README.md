@@ -22,8 +22,6 @@ src/components/CircleOfFifths/
 ├── README.md                 # このファイル
 ├── CircleOfFifths.tsx        # メインコンポーネント
 ├── animations.ts             # アニメーション定義
-├── styles/
-│   └── circleOfFifths.module.css    # スタイルシート
 ├── components/               # 子コンポーネント
 │   ├── CircleSegment.tsx     # セグメントコンポーネント
 │   ├── KeyArea.tsx          # キーエリアコンポーネント
@@ -128,7 +126,7 @@ TypeScriptを使用して型安全性を確保し、コンパイル時のエラ�
 
 ```typescript
 export const CIRCLE_LAYOUT = {
-  RADIUS: 300,           // 外側の半径
+  RADIUS: 200,           // 外側の半径
   INNER_RADIUS: 170,     // 内側の半径（マイナーキーエリア）
   MIDDLE_RADIUS: 250,    // 中間の半径（メジャーキーエリア）
 } as const;

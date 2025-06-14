@@ -148,46 +148,43 @@ export const generatePizzaSlicePath = (
 };
 
 /**
- * 3分割されたピザ型ブロックの各セグメントのパスを生成
- * @param position 0-11の位置
- * @param innerRadius 内側の半径（マイナーキーエリア）
- * @param middleRadius 中間の半径（メジャーキーエリア）
- * @param outerRadius 外側の半径（調号エリア）
+ * 3分割されたブロックの各セグメントのパスを生成
+ * @param minorOuterRadius マイナーキーエリアの外側の半径
+ * @param majorOuterRadius メジャーキーエリアの外側の半径
+ * @param signatureOuterRadius 調号エリアの外側の半径
  * @returns 各セグメントのパス文字列のオブジェクト
  * @throws {CircleOfFifthsError} パラメータが無効な場合
  */
 export const generateThreeSegmentPaths = (
     position: number,
-    innerRadius: number,
-    middleRadius: number,
-    outerRadius: number
+    minorOuterRadius: number,
+    majorOuterRadius: number,
+    signatureOuterRadius: number
 ): SegmentPaths => {
     if (!isValidPosition(position)) {
         throw new CircleOfFifthsError(`Invalid position: ${position}`, 'INVALID_POSITION');
     }
-
-    if (innerRadius < 0 || middleRadius < 0 || outerRadius < 0) {
+    if (minorOuterRadius < 0 || majorOuterRadius < 0 || signatureOuterRadius < 0) {
         throw new CircleOfFifthsError(
-            `Invalid radii: inner=${innerRadius}, middle=${middleRadius}, outer=${outerRadius}`,
+            `Invalid radii: minor=${minorOuterRadius}, major=${majorOuterRadius}, signature=${signatureOuterRadius}`,
             'INVALID_RADII'
         );
     }
-
-    if (innerRadius >= middleRadius || middleRadius >= outerRadius) {
+    if (minorOuterRadius >= majorOuterRadius || majorOuterRadius >= signatureOuterRadius) {
         throw new CircleOfFifthsError(
-            `Radii must be in ascending order: inner < middle < outer`,
+            `Radii must be in ascending order: minor < major < signature`,
             'INVALID_RADII_ORDER'
         );
     }
 
     // マイナーキーエリア（内側）- 内側の半径から始まるドーナツ型
-    const minorPath = generatePizzaSlicePath(position, CIRCLE_LAYOUT.CENTER_RADIUS, innerRadius);
+    const minorPath = generatePizzaSlicePath(position, CIRCLE_LAYOUT.CENTER_RADIUS, minorOuterRadius);
 
     // メジャーキーエリア（中間）
-    const majorPath = generatePizzaSlicePath(position, innerRadius, middleRadius);
+    const majorPath = generatePizzaSlicePath(position, minorOuterRadius, majorOuterRadius);
 
     // 調号エリア（外側）
-    const signaturePath = generatePizzaSlicePath(position, middleRadius, outerRadius);
+    const signaturePath = generatePizzaSlicePath(position, majorOuterRadius, signatureOuterRadius);
 
     return {
         minorPath,
