@@ -42,3 +42,5 @@ https://music-theory-app-phi.vercel.app/
 ## Documents
 
 - [要件定義書](./docs/requirements.md)
+- [画面設計書](./docs/screenDesign.md)
+- [コンポーネント設計書](./docs/componentsDesign.md)
