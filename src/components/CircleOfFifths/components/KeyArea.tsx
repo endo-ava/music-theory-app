@@ -12,7 +12,7 @@
 import { memo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { KeyAreaProps } from '../types';
-import { COLORS, ANIMATION, FONT_WEIGHTS } from '../constants/index';
+import { ANIMATION } from '../constants/index';
 
 /**
  * 個別のキーエリアコンポーネント
@@ -31,6 +31,7 @@ export const KeyArea = memo<KeyAreaProps>(({
     textPosition,
     textRotation,
     fontSize,
+    fontWeight,
     isSelected,
     isHovered,
     onClick,
@@ -39,9 +40,9 @@ export const KeyArea = memo<KeyAreaProps>(({
 }) => {
     // エリアの色を決定する関数
     const getAreaColor = useCallback((): string => {
-        if (isSelected) return COLORS.SELECTED;
-        if (isHovered) return COLORS.HOVER;
-        return isMajor ? COLORS.MAJOR : COLORS.MINOR;
+        if (isSelected) return 'rgba(255, 255, 255, 0.3)';
+        if (isHovered) return 'rgba(255, 255, 255, 0.25)';
+        return isMajor ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.1)';
     }, [isSelected, isHovered, isMajor]);
 
     // イベントハンドラー
@@ -77,7 +78,7 @@ export const KeyArea = memo<KeyAreaProps>(({
             <motion.path
                 d={path}
                 fill={getAreaColor()}
-                stroke={COLORS.BORDER}
+                stroke="rgba(255, 255, 255, 0.1)"
                 strokeWidth="1"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -90,9 +91,9 @@ export const KeyArea = memo<KeyAreaProps>(({
                 y={textPosition.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize={fontSize}
-                fill={COLORS.TEXT}
-                fontWeight={isMajor ? FONT_WEIGHTS.MAJOR : FONT_WEIGHTS.MINOR}
+                fontSize={fontSize === 'text-key-minor' ? '0.8rem' : '1rem'}
+                fill="white"
+                fontWeight={fontWeight === 'font-key-minor' ? '50' : '80'}
                 transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

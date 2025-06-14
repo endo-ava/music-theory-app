@@ -15,11 +15,10 @@ import { motion } from 'framer-motion';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 import { CircleSegment } from './components/CircleSegment';
 import KeyInfoDisplay from './components/KeyInfoDisplay';
-import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT, COLORS, SVG } from './constants/index';
+import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT, SVG } from './constants/index';
 import { circleVariants } from './animations';
 import { CircleOfFifthsProps } from './types';
 import { Key } from '@/types/circleOfFifths';
-import './styles/circleOfFifths.module.css';
 import { CircleSvgCanvas } from './components/CircleSvgCanvas';
 
 /**
