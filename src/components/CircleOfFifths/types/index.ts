@@ -37,7 +37,7 @@ export interface CircleSvgCanvasProps {
     onKeyClick: (keyName: string, isMajor: boolean, position: number) => void;
     onKeyHover: (keyName: string, isMajor: boolean, position: number) => void;
     onKeyLeave: () => void;
-  }
+}
 
 /**
  * セグメントコンポーネントのProps
@@ -75,6 +75,8 @@ export interface KeyAreaProps {
     textRotation: number;
     /** フォントサイズ */
     fontSize: string;
+    /** フォントウェイト */
+    fontWeight: string;
     /** 選択状態かどうか */
     isSelected: boolean;
     /** ホバー状態かどうか */
@@ -92,7 +94,7 @@ export interface KeyAreaProps {
  */
 export interface KeyInfoDisplayProps {
     hoveredKey: Key | null;
-  }
+}
 
 // ============================================================================
 // グローバル型の再エクスポート（コンポーネント内での使用のため）

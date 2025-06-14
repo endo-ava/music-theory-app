@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { CircleSegmentProps, CircleSvgCanvasProps } from '../types';
-import { SVG, FONT_SIZES, COLORS, ANIMATION, FONT_WEIGHTS } from '../constants/index';
+import { SVG } from '../constants/index';
 import { CircleSegment } from './CircleSegment';
 
 export const CircleSvgCanvas: React.FC<CircleSvgCanvasProps> = ({
@@ -18,7 +18,7 @@ export const CircleSvgCanvas: React.FC<CircleSvgCanvasProps> = ({
       width="100%"
       height="100%"
       viewBox={viewBox}
-      style={{ display: SVG.DISPLAY_MODE }} // ここも定数化
+      className="block"
       aria-label="五度圏"
       role="img"
     >
@@ -28,7 +28,7 @@ export const CircleSvgCanvas: React.FC<CircleSvgCanvasProps> = ({
         cy={SVG.CENTER_Y}
         r={radius}
         fill="none"
-        stroke={COLORS.BORDER}
+        stroke="rgba(255, 255, 255, 0.1)"
         strokeWidth={SVG.BACKGROUND_STROKE_WIDTH}
         aria-hidden="true"
       />
@@ -39,7 +39,7 @@ export const CircleSvgCanvas: React.FC<CircleSvgCanvasProps> = ({
         cy={SVG.CENTER_Y}
         r={innerRadius}
         fill="none"
-        stroke={COLORS.BORDER}
+        stroke="rgba(255, 255, 255, 0.1)"
         strokeWidth={SVG.BORDER_STROKE_WIDTH}
         aria-hidden="true"
       />
@@ -50,7 +50,7 @@ export const CircleSvgCanvas: React.FC<CircleSvgCanvasProps> = ({
         cy={SVG.CENTER_Y}
         r={middleRadius}
         fill="none"
-        stroke={COLORS.BORDER}
+        stroke="rgba(255, 255, 255, 0.1)"
         strokeWidth={SVG.BORDER_STROKE_WIDTH}
         aria-hidden="true"
       />

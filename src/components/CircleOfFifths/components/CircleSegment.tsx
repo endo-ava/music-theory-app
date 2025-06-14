@@ -15,7 +15,7 @@
 import { memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { CircleSegmentProps } from '../types';
-import { CIRCLE_LAYOUT, FONT_SIZES, COLORS, ANIMATION, FONT_WEIGHTS } from '../constants/index';
+import { CIRCLE_LAYOUT, ANIMATION } from '../constants/index';
 import { generateThreeSegmentPaths, calculateTextPosition, calculateTextRotation } from '../utils';
 import { KeyArea } from './KeyArea';
 
@@ -99,7 +99,8 @@ export const CircleSegment = memo<CircleSegmentProps>(({
                 path={paths.minorPath}
                 textPosition={textPositions.minorTextPos}
                 textRotation={textRotation}
-                fontSize={FONT_SIZES.MINOR}
+                fontSize="text-key-minor"
+                fontWeight="font-key-minor"
                 isSelected={keyStates.isMinorSelected}
                 isHovered={keyStates.isMinorHovered}
                 onClick={onKeyClick}
@@ -115,7 +116,8 @@ export const CircleSegment = memo<CircleSegmentProps>(({
                 path={paths.majorPath}
                 textPosition={textPositions.majorTextPos}
                 textRotation={textRotation}
-                fontSize={FONT_SIZES.MAJOR}
+                fontSize="text-key-major"
+                fontWeight="font-key-major"
                 isSelected={keyStates.isMajorSelected}
                 isHovered={keyStates.isMajorHovered}
                 onClick={onKeyClick}
@@ -126,8 +128,8 @@ export const CircleSegment = memo<CircleSegmentProps>(({
             {/* 調号エリア（表示のみ） */}
             <motion.path
                 d={paths.signaturePath}
-                fill={COLORS.SIGNATURE}
-                stroke={COLORS.BORDER}
+                fill="rgba(255, 255, 255, 0.2)"
+                stroke="rgba(255, 255, 255, 0.1)"
                 strokeWidth="1"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -140,9 +142,9 @@ export const CircleSegment = memo<CircleSegmentProps>(({
                 y={textPositions.signatureTextPos.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize={FONT_SIZES.SIGNATURE}
-                fill={COLORS.TEXT}
-                fontWeight={FONT_WEIGHTS.SIGNATURE}
+                fontSize="0.5rem"
+                fill="white"
+                fontWeight="50"
                 transform={`rotate(${textRotation} ${textPositions.signatureTextPos.x} ${textPositions.signatureTextPos.y})`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
