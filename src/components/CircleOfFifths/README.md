@@ -9,11 +9,12 @@
 ## 特徴
 
 - **24個のクリック可能なキー**: メジャーキーとマイナーキーを個別に選択可能
-- **垂直テキスト表示**: 読みやすい垂直方向のテキスト配置
+- **3層構造**: 内側（マイナーキー）、中間（メジャーキー）、外側（調号）
 - **インタラクティブなホバー効果**: キー情報の動的表示
 - **レスポンシブデザイン**: 様々な画面サイズに対応
 - **アクセシビリティ対応**: ARIA属性とキーボードナビゲーション
 - **パフォーマンス最適化**: メモ化とキャッシュ機能
+- **型安全性**: TypeScriptによる完全な型定義
 
 ## ファイル構造
 
@@ -23,6 +24,7 @@ src/components/CircleOfFifths/
 ├── CircleOfFifths.tsx        # メインコンポーネント
 ├── animations.ts             # アニメーション定義
 ├── components/               # 子コンポーネント
+│   ├── CircleSvgCanvas.tsx   # SVG描画コンテナ
 │   ├── CircleSegment.tsx     # セグメントコンポーネント
 │   ├── KeyArea.tsx          # キーエリアコンポーネント
 │   └── KeyInfoDisplay.tsx   # キー情報表示コンポーネント
@@ -35,6 +37,9 @@ src/components/CircleOfFifths/
 
 src/types/
 └── circleOfFifths.ts        # グローバル型定義
+
+src/store/
+└── circleOfFifthsStore.ts   # Zustand状態管理
 ```
 
 ## 使用方法
@@ -80,6 +85,10 @@ function App() {
 - `className?: string` - カスタムクラス名
 - `style?: React.CSSProperties` - カスタムスタイル
 
+### CircleSvgCanvas（SVG描画コンテナ）
+
+SVG要素の描画を管理するコンポーネント。背景円と境界線を描画し、各セグメントを配置します。
+
 ### CircleSegment（セグメントコンポーネント）
 
 各セグメントを表現するコンポーネント。3つのエリア（マイナーキー、メジャーキー、調号）を含みます。
@@ -102,7 +111,7 @@ TypeScriptを使用して型安全性を確保し、コンパイル時のエラ�
 
 - `React.memo`による不要な再レンダリングの防止
 - `useMemo`と`useCallback`による計算結果のキャッシュ
-- 角度計算のキャッシュ機能
+- 角度計算の最適化
 
 ### 3. エラーハンドリング
 
@@ -127,22 +136,9 @@ TypeScriptを使用して型安全性を確保し、コンパイル時のエラ�
 ```typescript
 export const CIRCLE_LAYOUT = {
   RADIUS: 200,           // 外側の半径
-  INNER_RADIUS: 170,     // 内側の半径（マイナーキーエリア）
-  MIDDLE_RADIUS: 250,    // 中間の半径（メジャーキーエリア）
-} as const;
-```
-
-### 色定数
-
-```typescript
-export const COLORS = {
-  MINOR: 'rgba(255, 255, 255, 0.1)',      // マイナーキーエリア
-  MAJOR: 'rgba(255, 255, 255, 0.15)',     // メジャーキーエリア
-  SIGNATURE: 'rgba(255, 255, 255, 0.2)',  // 調号エリア
-  HOVER: 'rgba(255, 255, 255, 0.25)',     // ホバー時
-  SELECTED: 'rgba(255, 255, 255, 0.3)',   // 選択時
-  BORDER: 'rgba(255, 255, 255, 0.1)',     // 境界線
-  TEXT: 'white',                          // テキスト
+  INNER_RADIUS: 120,     // 内側の半径（マイナーキーエリア）
+  MIDDLE_RADIUS: 170,    // 中間の半径（メジャーキーエリア）
+  CENTER_RADIUS: 80,     // 中心の半径（調号エリア）
 } as const;
 ```
 
@@ -157,50 +153,64 @@ export const ANIMATION = {
 } as const;
 ```
 
+### SVG定数
+
+```typescript
+export const SVG = {
+  BACKGROUND_STROKE_WIDTH: '2',  // 背景円のストローク幅
+  BORDER_STROKE_WIDTH: '1',      // 境界円のストローク幅
+  CENTER_X: '0',                 // 円の中心X座標
+  CENTER_Y: '0',                 // 円の中心Y座標
+} as const;
+```
+
 ## ユーティリティ関数
 
 ### 角度計算
 
 - `calculateAngle(position: number): number` - 指定位置の角度を計算
 - `normalizeAngle(angle: number): number` - 角度を正規化
-- `calculateAngleCached(position: number): number` - キャッシュ付き角度計算
 
 ### 座標計算
 
 - `polarToCartesian(radius: number, angle: number): Point` - 極座標から直交座標に変換
 - `calculateTextPosition(position: number, radius: number): Point` - テキスト位置を計算
+- `calculateTextRotation(): number` - テキストの回転角度を計算（常に0度）
 
 ### SVGパス生成
 
 - `generatePizzaSlicePath(position: number, innerRadius: number, outerRadius: number): string` - ピザ型パス生成
 - `generateThreeSegmentPaths(position: number, innerRadius: number, middleRadius: number, outerRadius: number): SegmentPaths` - 3分割パス生成
 
+### キー情報
+
+- `getKeyInfo(key: Key)` - キーの詳細情報を取得
+
 ## バリデーション
 
 - `isValidPosition(position: number): boolean` - 位置の有効性チェック
 - `isValidKey(key: Key): boolean` - キーの有効性チェック
-- `isValidSegment(segment: CircleSegment): boolean` - セグメントの有効性チェック
+
+## 状態管理
+
+Zustandを使用した状態管理を実装しています：
+
+```typescript
+interface CircleOfFifthsStore {
+  selectedKey: Key | null;
+  hoveredKey: Key | null;
+  isPlaying: boolean;
+  setSelectedKey: (key: Key | null) => void;
+  setHoveredKey: (key: Key | null) => void;
+  setIsPlaying: (isPlaying: boolean) => void;
+}
+```
 
 ## 今後の拡張予定
 
-1. **SVG調号**: 文字列からSVG画像への変更
-2. **テーマ対応**: ダーク/ライトテーマの切り替え
-3. **アニメーション強化**: より豊富なアニメーション効果
-4. **音声機能**: キーの音声再生機能
+1. **音声機能**: Tone.jsによるキーの音声再生機能
+2. **SVG調号**: 文字列からSVG画像への変更
+3. **テーマ対応**: ダーク/ライトテーマの切り替え
+4. **アニメーション強化**: より豊富なアニメーション効果
 5. **国際化**: 多言語対応
-
-## トラブルシューティング
-
-### よくある問題
-
-1. **インポートエラー**: パスが正しいことを確認してください
-2. **型エラー**: TypeScriptの型定義が最新であることを確認してください
-3. **パフォーマンス問題**: キャッシュ機能が有効になっていることを確認してください
-
-### デバッグ
-
-コンポーネントの表示名が設定されているため、React DevToolsでデバッグが容易です。
-
-## ライセンス
-
-このプロジェクトはMITライセンスの下で公開されています。 
+6. **テスト実装**: ユニットテストとインタラクションテスト

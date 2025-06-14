@@ -13,7 +13,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
-import { clsx } from 'clsx';
+import clsx from 'clsx';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 import KeyInfoDisplay from './components/KeyInfoDisplay';
 import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT } from './constants/index';
@@ -85,7 +85,6 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
       // twMergeとclsxでクラス名を管理。propsで渡されたclassNameを安全にマージする
       className={twMerge(
         clsx(
-          'circle-of-fifths',
           'relative flex items-center justify-center',
           'w-[80vw] h-[80vw] max-w-[800px] max-h-[800px]'
         ),

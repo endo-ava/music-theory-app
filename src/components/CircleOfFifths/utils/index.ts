@@ -214,7 +214,6 @@ export const getKeyInfo = (key: Key) => {
 
     return {
         name: key.name,
-        type: key.isMajor ? 'メジャー' : 'マイナー',
         relativeKey,
         position: key.position + 1,
         scale: key.isMajor ? '長調' : '短調',
