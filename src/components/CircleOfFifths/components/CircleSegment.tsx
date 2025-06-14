@@ -150,9 +150,18 @@ export const CircleSegment = memo<CircleSegmentProps>(({
                 animate={{ opacity: 1 }}
                 transition={{ duration: ANIMATION.FADE_DURATION, delay: baseDelay + 0.5 }}
                 style={{ pointerEvents: 'none' }} // テキストのクリックイベントを無効化
-            >
-                {keySignature}
-            </motion.text>
+                >
+                {/* keySignatureの文字列を'\n'で分割して、各行を<tspan>で描画する */}
+                {keySignature.split('\n').map((line, index) => (
+                    <tspan
+                    key={index}
+                    x={textPositions.signatureTextPos.x} // 各行のx座標をリセット
+                    dy={index === 0 ? 0 : '1.2em'}     // 2行目以降はdyで下にずらす
+                    >
+                    {line}
+                    </tspan>
+                ))}
+                </motion.text>
         </g>
     );
 });
