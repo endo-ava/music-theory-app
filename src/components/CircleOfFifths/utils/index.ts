@@ -180,11 +180,6 @@ export const generateThreeSegmentPaths = (
         );
     }
 
-    const startAngle = calculateAngle(position);
-    const endAngle = calculateAngle((position + 1) % SEGMENT_COUNT);
-    const angleDiff = normalizeAngle(endAngle - startAngle);
-    const largeArcFlag = angleDiff > Math.PI ? 1 : 0;
-
     // マイナーキーエリア（内側）- 内側の半径から始まるドーナツ型
     const minorPath = generatePizzaSlicePath(position, CIRCLE_LAYOUT.CENTER_RADIUS, innerRadius);
 

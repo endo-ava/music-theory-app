@@ -1,5 +1,5 @@
-import React, { useMemo, useCallback } from 'react';
-import { CircleSegmentProps, CircleSvgCanvasProps } from '../types';
+import React, { useMemo } from 'react';
+import { CircleSvgCanvasProps } from '../types';
 import { SVG } from '../constants/index';
 import { CircleSegment } from './CircleSegment';
 

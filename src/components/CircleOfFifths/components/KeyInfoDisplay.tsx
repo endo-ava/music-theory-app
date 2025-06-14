@@ -2,7 +2,6 @@
 
 import { FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Key } from '@/types/circleOfFifths';
 import { getKeyInfo } from '../utils/index';
 import { keyInfoVariants, keyInfoItemVariants } from '../animations';
 import { KeyInfoDisplayProps } from '../types';
