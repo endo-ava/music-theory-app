@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 import KeyInfoDisplay from './components/KeyInfoDisplay';
@@ -35,6 +35,12 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
   style,
 }) => {
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // クライアントでの初回レンダリング後にisMountedをtrueにする
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // キークリック時のハンドラー（メモ化）
   const handleKeyClick = useCallback(
@@ -82,6 +88,11 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
       ...style,
     };
   }, [style]);
+
+  // マウントされるまでは何も表示しない（またはローディング表示など）
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <motion.div
