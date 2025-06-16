@@ -1,15 +1,3 @@
-/**
- * 五度圏セグメントコンポーネント
- * 
- * 各セグメントは3分割されており、内側から：
- * - マイナーキー（クリック可能）
- * - メジャーキー（クリック可能）
- * - 調号（表示のみ）
- * が表示されます。
- * 
- * @fileoverview 五度圏の各セグメントを表現するコンポーネント
- */
-
 'use client';
 
 import { memo, useMemo } from 'react';
@@ -20,7 +8,7 @@ import { generateThreeSegmentPaths, calculateTextPosition, calculateTextRotation
 import { KeyArea } from './KeyArea';
 
 /**
- * 五度圏のピザ型セグメントコンポーネント
+ * 五度圏のセグメントコンポーネント
  * 
  * 各セグメントは3分割されており、内側から：
  * - マイナーキー（クリック可能）
@@ -99,8 +87,6 @@ export const CircleSegment = memo<CircleSegmentProps>(({
                 path={paths.minorPath}
                 textPosition={textPositions.minorTextPos}
                 textRotation={textRotation}
-                fontSize="text-key-minor"
-                fontWeight="font-key-minor"
                 isSelected={keyStates.isMinorSelected}
                 isHovered={keyStates.isMinorHovered}
                 onClick={onKeyClick}
@@ -116,8 +102,6 @@ export const CircleSegment = memo<CircleSegmentProps>(({
                 path={paths.majorPath}
                 textPosition={textPositions.majorTextPos}
                 textRotation={textRotation}
-                fontSize="text-key-major"
-                fontWeight="font-key-major"
                 isSelected={keyStates.isMajorSelected}
                 isHovered={keyStates.isMajorHovered}
                 onClick={onKeyClick}
@@ -128,9 +112,7 @@ export const CircleSegment = memo<CircleSegmentProps>(({
             {/* 調号エリア（表示のみ） */}
             <motion.path
                 d={paths.signaturePath}
-                fill="rgba(255, 255, 255, 0.2)"
-                stroke="rgba(255, 255, 255, 0.1)"
-                strokeWidth="1"
+                className={"fill-key-area-signature stroke-border border"}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: ANIMATION.FADE_DURATION, delay: baseDelay + 0.2 }}
@@ -138,30 +120,28 @@ export const CircleSegment = memo<CircleSegmentProps>(({
 
             {/* 調号テキスト */}
             <motion.text
+                className={" fill-text-primary text-key-signature font-key-signature stroke-border border"}
                 x={textPositions.signatureTextPos.x}
                 y={textPositions.signatureTextPos.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize="0.5rem"
-                fill="white"
-                fontWeight="50"
                 transform={`rotate(${textRotation} ${textPositions.signatureTextPos.x} ${textPositions.signatureTextPos.y})`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: ANIMATION.FADE_DURATION, delay: baseDelay + 0.5 }}
                 style={{ pointerEvents: 'none' }} // テキストのクリックイベントを無効化
-                >
+            >
                 {/* keySignatureの文字列を'\n'で分割して、各行を<tspan>で描画する */}
                 {keySignature.split('\n').map((line, index) => (
                     <tspan
-                    key={index}
-                    x={textPositions.signatureTextPos.x} // 各行のx座標をリセット
-                    dy={index === 0 ? 0 : '1.2em'}     // 2行目以降はdyで下にずらす
+                        key={index}
+                        x={textPositions.signatureTextPos.x} // 各行のx座標をリセット
+                        dy={index === 0 ? 0 : '1.2em'}     // 2行目以降はdyで下にずらす
                     >
-                    {line}
+                        {line}
                     </tspan>
                 ))}
-                </motion.text>
+            </motion.text>
         </g>
     );
 });
