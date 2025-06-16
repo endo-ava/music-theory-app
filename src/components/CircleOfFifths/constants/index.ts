@@ -109,13 +109,13 @@ export const CIRCLE_LAYOUT = {
  */
 export const ANIMATION = {
     /** 基本の遅延時間（秒） */
-    BASE_DELAY: 0.05,
+    BASE_DELAY: 0.02,
     /** フェードイン時間（秒） */
     FADE_DURATION: 0.3,
     /** ホバー時のスケール */
-    HOVER_SCALE: 1.02,
+    HOVER_SCALE: 1.03,
     /** タップ時のスケール */
-    TAP_SCALE: 0.98,
+    TAP_SCALE: 0.9,
 } as const;
 
 // ============================================================================
@@ -144,23 +144,3 @@ export const isValidKey = (key: Key): boolean => {
         isValidPosition(key.position)
     );
 };
-
-// ============================================================================
-// SVG定数（SVG属性に必要な値のみ）
-// ============================================================================
-
-/**
- * SVG関連の定数
- */
-export const SVG = {
-    /** 背景円のストローク幅 */
-    BACKGROUND_STROKE_WIDTH: '2',
-    /** 境界円のストローク幅 */
-    BORDER_STROKE_WIDTH: '1',
-    /** SVGの表示スタイル */
-    DISPLAY: 'block',
-    /** 円の中心X座標 */
-    CENTER_X: '0',
-    /** 円の中心Y座標 */
-    CENTER_Y: '0',
-} as const; 

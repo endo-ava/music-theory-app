@@ -86,7 +86,7 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
       className={twMerge(
         clsx(
           'relative flex items-center justify-center',
-          'w-[80vw] h-[80vw] max-w-[800px] max-h-[800px]'
+          'w-[70vw] h-[70vw] max-w-[700px] max-h-[700px]'
         ),
         className // 外部から渡されたクラスで上書き可能にする
       )}
@@ -99,8 +99,6 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
       <div className="w-full h-full">
         <CircleSvgCanvas
           radius={CIRCLE_LAYOUT.RADIUS}
-          innerRadius={CIRCLE_LAYOUT.INNER_RADIUS}
-          middleRadius={CIRCLE_LAYOUT.MIDDLE_RADIUS}
           segments={CIRCLE_SEGMENTS}
           selectedKey={selectedKey}
           hoveredKey={hoveredKey}
@@ -111,7 +109,7 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
       </div>
 
       {/* キー情報表示エリア */}
-      <KeyInfoDisplay hoveredKey={hoveredKey} />
+      <KeyInfoDisplay selectedKey={selectedKey} />
     </motion.div>
   );
 };

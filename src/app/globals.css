@@ -1,28 +1,85 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import "tailwindcss";
+
+/* ---------------------------------- */
+/* 1. テーマ設定                      */
+/* ---------------------------------- */
+@theme {
+  /* フォントファミリー (font-family) */
+  --font-family-sans: 'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Arial', 'Yu Gothic', 'Meiryo', sans-serif;
+  --font-family-serif: 'Times New Roman', 'YuMincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'serif';
+
+  /* カラーパレット (colors) */
+  --color-circle-bg-from: #111827;
+  --color-circle-bg-to: #0a0a0a;
+  --color-key-area-minor: rgba(255, 255, 255, 0.1);
+  --color-key-area-major: rgba(255, 255, 255, 0.15);
+  --color-key-area-signature: rgba(255, 255, 255, 0.2);
+  --color-key-area-hover: rgba(255, 255, 255, 0.25);
+  --color-key-area-selected: rgba(255, 255, 255, 0.3);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-text-primary: white;
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+  --color-background-muted: rgba(255, 255, 255, 0.05);
+  --color-title: white;
+  --color-title-background: rgba(255, 255, 255, 0.1);
+
+  /* スペーシング (spacing) - サイズをspacingとして登録 */
+  --spacing-circle-radius: 200px;
+  --spacing-circle-inner-radius: 120px;
+  --spacing-circle-middle-radius: 170px;
+  --spacing-circle-center-radius: 80px;
+
+  /* フォントサイズ (fontSize) */
+  --text-key-minor: 0.8rem;
+  --text-key-major: 1rem;
+  --text-key-signature: 0.5rem;
+  --text-title: 2.5rem;
+
+  /* フォントウェイト (fontWeight) */
+  --font-weight-key-minor: 50;
+  --font-weight-key-major: 80;
+  --font-weight-key-signature: 50;
+  --font-weight-title: 500;
+
+  /* ボーダー幅 (borderWidth) */
+  --border-width-default: 1px;
+  --border-width-background: 2px;
+
+  /* ボックスシャドウ (boxShadow) */
+  --shadow-circle: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-key-info: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* バックドロップブラー (backdropBlur) */
+  --backdrop-blur-key-info: 8px;
+  --backdrop-blur-sm: 4px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ---------------------------------- */
+/* 2. ベーススタイルの定義            */
+/* ---------------------------------- */
+@layer base {
+  body {
+    font-family: theme('font-family.sans');
+    color: theme('colors.text-primary');
+    /* グラデーションが読み込めない場合のフォールバック色 */
+    background-color: theme('colors.circle-bg-to');
+    /* グラデーションの方向を to bottom (上から下へ) に統一 */
+    background-image: linear-gradient(to bottom,
+        theme('colors.circle-bg-from'),
+        theme('colors.circle-bg-to'));
+    /* グラデーションが繰り返されないようにするおまじない */
+    background-repeat: no-repeat;
+    /* 高さを画面全体に合わせる */
+    min-height: 100vh;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* 他にもh1やaタグなどのデフォルトスタイルをここで定義できる */
+  h1 {
+    font-family: theme('fontFamily.sans');
+    font-size: theme('text-title');
+    font-weight: var(--font-weight-title);
+    color: var(--color-title);
   }
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;

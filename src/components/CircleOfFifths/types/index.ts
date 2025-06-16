@@ -29,8 +29,6 @@ export interface CircleOfFifthsProps {
  */
 export interface CircleSvgCanvasProps {
     radius: number;
-    innerRadius: number;
-    middleRadius: number;
     segments: CircleSegment[];
     selectedKey: Key | null;
     hoveredKey: Key | null;
@@ -73,10 +71,6 @@ export interface KeyAreaProps {
     textPosition: Point;
     /** テキスト回転角度 */
     textRotation: number;
-    /** フォントサイズ */
-    fontSize: string;
-    /** フォントウェイト */
-    fontWeight: string;
     /** 選択状態かどうか */
     isSelected: boolean;
     /** ホバー状態かどうか */
@@ -93,7 +87,7 @@ export interface KeyAreaProps {
  * キー情報表示コンポーネントのProps
  */
 export interface KeyInfoDisplayProps {
-    hoveredKey: Key | null;
+    selectedKey: Key | null;
 }
 
 // ============================================================================
