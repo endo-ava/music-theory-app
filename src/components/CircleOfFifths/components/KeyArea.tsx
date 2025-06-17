@@ -1,12 +1,3 @@
-/**
- * 個別キーエリアコンポーネント
- * 
- * メジャーキーまたはマイナーキーの個別エリアを表示し、
- * クリックとホバーイベントを処理します。
- * 
- * @fileoverview 五度圏の各キーエリアを表現するコンポーネント
- */
-
 'use client';
 
 import { memo, useCallback } from 'react';
@@ -30,20 +21,20 @@ export const KeyArea = memo<KeyAreaProps>(({
     path,
     textPosition,
     textRotation,
-    fontSize,
-    fontWeight,
     isSelected,
     isHovered,
     onClick,
     onMouseEnter,
     onMouseLeave,
 }) => {
-    // エリアの色を決定する関数
-    const getAreaColor = useCallback((): string => {
-        if (isSelected) return 'rgba(255, 255, 255, 0.3)';
-        if (isHovered) return 'rgba(255, 255, 255, 0.25)';
-        return isMajor ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.1)';
-    }, [isSelected, isHovered, isMajor]);
+    // 状態に応じてCSS変数の名前を返す関数
+    const getAreaColorClassName = useCallback((): string => {
+        if (isSelected) return 'fill-key-area-selected';
+        if (isHovered) return 'fill-key-area-hover';
+        return isMajor
+          ? 'fill-key-area-major'
+          : 'fill-key-area-minor';
+      }, [isSelected, isHovered, isMajor]);
 
     // イベントハンドラー
     const handleClick = useCallback(() => {
@@ -76,10 +67,8 @@ export const KeyArea = memo<KeyAreaProps>(({
         >
             {/* キーエリアのパス */}
             <motion.path
+                className={`stroke-border border ${getAreaColorClassName()}`}
                 d={path}
-                fill={getAreaColor()}
-                stroke="rgba(255, 255, 255, 0.1)"
-                strokeWidth="1"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: ANIMATION.FADE_DURATION, delay: animationDelay }}
@@ -87,13 +76,17 @@ export const KeyArea = memo<KeyAreaProps>(({
 
             {/* キーテキスト */}
             <motion.text
+                className={`
+                    fill-text-primary
+                    ${isMajor
+                      ? 'text-key-major font-key-major'
+                      : 'text-key-minor font-key-minor'
+                    }
+                  `}
                 x={textPosition.x}
                 y={textPosition.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize={fontSize === 'text-key-minor' ? '0.8rem' : '1rem'}
-                fill="white"
-                fontWeight={fontWeight === 'font-key-minor' ? '50' : '80'}
                 transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
