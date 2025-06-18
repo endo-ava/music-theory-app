@@ -1,5 +1,3 @@
-'use client';
-
 import { CircleOfFifths } from '@/components/CircleOfFifths/CircleOfFifths';
 
 export default function Home() {
