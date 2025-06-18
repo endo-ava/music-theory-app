@@ -8,7 +8,7 @@
  */
 
 // グローバル型をインポート
-import type { Key, CircleSegment, Point } from '@/types/circleOfFifths';
+import type { CircleSegment, Point, SegmentPaths } from '@/types/circleOfFifths';
 
 // ============================================================================
 // コンポーネントProps型定義
@@ -30,11 +30,6 @@ export interface CircleOfFifthsProps {
 export interface CircleSvgCanvasProps {
     radius: number;
     segments: CircleSegment[];
-    selectedKey: Key | null;
-    hoveredKey: Key | null;
-    onKeyClick: (keyName: string, isMajor: boolean, position: number) => void;
-    onKeyHover: (keyName: string, isMajor: boolean, position: number) => void;
-    onKeyLeave: () => void;
 }
 
 /**
@@ -43,16 +38,13 @@ export interface CircleSvgCanvasProps {
 export interface CircleSegmentProps {
     /** セグメントの情報 */
     segment: CircleSegment;
-    /** 現在選択されているキー */
-    selectedKey: Key | null;
-    /** 現在ホバーされているキー */
-    hoveredKey: Key | null;
-    /** キークリック時のコールバック */
-    onKeyClick: (keyName: string, isMajor: boolean, position: number) => void;
-    /** キーホバー時のコールバック */
-    onKeyHover: (keyName: string, isMajor: boolean, position: number) => void;
-    /** キーからマウスが離れた時のコールバック */
-    onKeyLeave: () => void;
+    paths: SegmentPaths;
+    textPositions: {
+      minorTextPos: Point;
+      majorTextPos: Point;
+      signatureTextPos: Point;
+    }
+    textRotation: number
 }
 
 /**
@@ -63,31 +55,14 @@ export interface KeyAreaProps {
     keyName: string;
     /** メジャーキーかどうか */
     isMajor: boolean;
-    /** 位置 */
-    position: number;
+    /** セグメントの情報 */
+    segment: CircleSegment;
     /** SVGパス */
     path: string;
     /** テキスト位置 */
     textPosition: Point;
     /** テキスト回転角度 */
     textRotation: number;
-    /** 選択状態かどうか */
-    isSelected: boolean;
-    /** ホバー状態かどうか */
-    isHovered: boolean;
-    /** クリック時のコールバック */
-    onClick: (keyName: string, isMajor: boolean, position: number) => void;
-    /** ホバー時のコールバック */
-    onMouseEnter: (keyName: string, isMajor: boolean, position: number) => void;
-    /** マウスが離れた時のコールバック */
-    onMouseLeave: () => void;
-}
-
-/**
- * キー情報表示コンポーネントのProps
- */
-export interface KeyInfoDisplayProps {
-    selectedKey: Key | null;
 }
 
 // ============================================================================
