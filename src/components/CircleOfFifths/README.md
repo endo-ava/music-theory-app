@@ -15,6 +15,8 @@
 - **アクセシビリティ対応**: ARIA属性とキーボードナビゲーション
 - **パフォーマンス最適化**: メモ化とキャッシュ機能
 - **型安全性**: TypeScriptによる完全な型定義
+- **Framer Motion**: スムーズなアニメーション効果
+- **Tailwind CSS**: モダンなスタイリングシステム
 
 ## ファイル構造
 
@@ -22,18 +24,20 @@
 src/components/CircleOfFifths/
 ├── README.md                 # このファイル
 ├── CircleOfFifths.tsx        # メインコンポーネント
-├── animations.ts             # アニメーション定義
+├── animations.ts             # Framer Motionアニメーション定義
 ├── components/               # 子コンポーネント
-│   ├── CircleSvgCanvas.tsx   # SVG描画コンテナ
 │   ├── CircleSegment.tsx     # セグメントコンポーネント
 │   ├── KeyArea.tsx          # キーエリアコンポーネント
 │   └── KeyInfoDisplay.tsx   # キー情報表示コンポーネント
 ├── constants/                # 定数定義
 │   └── index.ts             # すべての定数
+├── hooks/                    # カスタムフック
+│   ├── useCircleOfFifths.ts  # CircleOfFifths用フック
+│   └── useKeyArea.ts         # KeyArea用フック
 ├── utils/                    # ユーティリティ関数
 │   └── index.ts             # すべてのユーティリティ
 └── types/                    # コンポーネント固有の型定義
-    └── index.ts             # コンポーネントProps型
+    └── props.ts             # コンポーネントProps型
 
 src/types/
 └── circleOfFifths.ts        # グローバル型定義
@@ -85,9 +89,10 @@ function App() {
 - `className?: string` - カスタムクラス名
 - `style?: React.CSSProperties` - カスタムスタイル
 
-### CircleSvgCanvas（SVG描画コンテナ）
-
-SVG要素の描画を管理するコンポーネント。背景円と境界線を描画し、各セグメントを配置します。
+**特徴:**
+- レスポンシブデザイン（70vw、最大700px）
+- Tailwind CSSによるスタイリング
+- SVGビューポートの自動計算
 
 ### CircleSegment（セグメントコンポーネント）
 
@@ -101,6 +106,16 @@ SVG要素の描画を管理するコンポーネント。背景円と境界線�
 
 選択されたキーの詳細情報を表示するコンポーネント。
 
+## カスタムフック
+
+### useCircleOfFifths
+
+五度圏の描画に必要な計算ロジックを提供するカスタムフック。
+
+### useKeyArea
+
+KeyAreaの描画に必要な計算ロジックを提供するカスタムフック。
+
 ## 設計思想
 
 ### 1. 型安全性
@@ -111,7 +126,7 @@ TypeScriptを使用して型安全性を確保し、コンパイル時のエラ�
 
 - `React.memo`による不要な再レンダリングの防止
 - `useMemo`と`useCallback`による計算結果のキャッシュ
-- 角度計算の最適化
+- カスタムフックによる計算ロジックの分離
 
 ### 3. エラーハンドリング
 
@@ -146,22 +161,19 @@ export const CIRCLE_LAYOUT = {
 
 ```typescript
 export const ANIMATION = {
-  BASE_DELAY: 0.05,      // 基本の遅延時間
+  BASE_DELAY: 0.02,      // 基本の遅延時間
   FADE_DURATION: 0.3,    // フェードイン時間
-  HOVER_SCALE: 1.02,     // ホバー時のスケール
-  TAP_SCALE: 0.98,       // タップ時のスケール
+  HOVER_SCALE: 1.03,     // ホバー時のスケール
+  TAP_SCALE: 0.9,        // タップ時のスケール
 } as const;
 ```
 
-### SVG定数
+### 基本定数
 
 ```typescript
-export const SVG = {
-  BACKGROUND_STROKE_WIDTH: '2',  // 背景円のストローク幅
-  BORDER_STROKE_WIDTH: '1',      // 境界円のストローク幅
-  CENTER_X: '0',                 // 円の中心X座標
-  CENTER_Y: '0',                 // 円の中心Y座標
-} as const;
+export const SEGMENT_COUNT = 12;           // セグメント数
+export const ANGLE_OFFSET = -105;          // 角度オフセット
+export const ANGLE_PER_SEGMENT = 30;       // セグメントあたりの角度
 ```
 
 ## ユーティリティ関数
@@ -186,7 +198,7 @@ export const SVG = {
 
 - `getKeyInfo(key: Key)` - キーの詳細情報を取得
 
-## バリデーション
+### バリデーション
 
 - `isValidPosition(position: number): boolean` - 位置の有効性チェック
 - `isValidKey(key: Key): boolean` - キーの有効性チェック
@@ -206,6 +218,54 @@ interface CircleOfFifthsStore {
 }
 ```
 
+## アニメーション
+
+Framer Motionを使用したアニメーションシステム：
+
+### キー情報アニメーション
+
+```typescript
+export const keyInfoVariants: AnimationVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { duration: 0.3, ease: 'easeOut', staggerChildren: 0.1 }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20, 
+    scale: 0.95,
+    transition: { duration: 0.2, ease: 'easeIn' }
+  }
+};
+```
+
+### セグメントアニメーション
+
+- 段階的なフェードイン
+- ホバー時のスケール変更
+- タップ時のフィードバック
+
+## スタイリング
+
+Tailwind CSSを使用したモダンなスタイリングシステム：
+
+### カラーパレット
+
+- `fill-key-area-major` - メジャーキーエリアの色
+- `fill-key-area-minor` - マイナーキーエリアの色
+- `fill-key-area-selected` - 選択されたキーの色
+- `fill-key-area-hover` - ホバー時の色
+- `fill-key-area-signature` - 調号エリアの色
+
+### テキストスタイル
+
+- `text-key-major` - メジャーキーテキスト
+- `text-key-minor` - マイナーキーテキスト
+- `text-key-signature` - 調号テキスト
+
 ## 今後の拡張予定
 
 1. **音声機能**: Tone.jsによるキーの音声再生機能
@@ -214,3 +274,5 @@ interface CircleOfFifthsStore {
 4. **アニメーション強化**: より豊富なアニメーション効果
 5. **国際化**: 多言語対応
 6. **テスト実装**: ユニットテストとインタラクションテスト
+7. **キーボードナビゲーション**: より詳細なキーボード操作対応
+8. **スクリーンリーダー対応**: より詳細なアクセシビリティ改善

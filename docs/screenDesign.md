@@ -93,12 +93,14 @@ src/
   │   └── CircleOfFifths/
   │       ├── CircleOfFifths.tsx        # メインコンポーネント
   │       ├── components/
-  │       │   ├── CircleSvgCanvas.tsx   # SVG描画コンテナ
   │       │   ├── CircleSegment.tsx     # セグメント描画
   │       │   ├── KeyArea.tsx           # 個別のキーエリア
   │       │   └── KeyInfoDisplay.tsx    # 選択キー情報表示
+  │       ├── hooks/                    # カスタムフック
+  │       │   ├── useCircleOfFifths.ts  # CircleOfFifths用フック
+  │       │   └── useKeyArea.ts         # KeyArea用フック
   │       ├── types/
-  │       │   └── index.ts              # コンポーネント型定義
+  │       │   └── props.ts              # コンポーネント型定義
   │       ├── constants/
   │       │   └── index.ts              # 定数定義
   │       ├── utils/

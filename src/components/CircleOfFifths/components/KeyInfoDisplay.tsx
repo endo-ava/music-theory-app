@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getKeyInfo } from '../utils/index';
 import { keyInfoVariants, keyInfoItemVariants } from '../animations';
-import { KeyInfoDisplayProps } from '../types';
+import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 
 /**
  * キー情報表示コンポーネント
@@ -13,7 +13,8 @@ import { KeyInfoDisplayProps } from '../types';
  * キーの名前、調性、五度圏上の位置、平行調などの情報を表示します。
  * アニメーション効果として、表示/非表示時のフェードとスケール変更を実装しています。
  */
-const KeyInfoDisplay: FC<KeyInfoDisplayProps> = ({ selectedKey } ) => {
+const KeyInfoDisplay: FC = () => {
+  const selectedKey = useCircleOfFifthsStore((state) => state.selectedKey);
   if (!selectedKey) return null;
 
   const keyInfo = getKeyInfo(selectedKey);
