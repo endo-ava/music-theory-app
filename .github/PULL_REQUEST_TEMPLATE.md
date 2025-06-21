@@ -1,27 +1,28 @@
-# プルリクエストの概要
+# Overview
 
-## 変更内容
-<!-- このPRで実装した機能や修正した内容を箇条書きで記載してください -->
+## Related Issues
 
-## 関連するIssue
-<!-- 関連するIssue番号を記載してください（例: #1） -->
-- 
+- Closes #
 
-## 変更の種類
-<!-- 該当するものにチェックを入れてください -->
-- [ ] 新機能の追加
-- [ ] バグ修正
-- [ ] リファクタリング
-- [ ] ドキュメントの更新
-- [ ] その他（具体的に: ）
+## Changes
 
-## 動作確認
-<!-- どのように動作確認を行ったか記載してください -->
-- 
+-
 
-## スクリーンショット
-<!-- 変更に関連するスクリーンショットがあれば添付してください -->
+## Type of Change
 
-## その他
-<!-- レビュアーへの注意点や補足情報があれば記載してください -->
-- 
+- [ ] ✨ New feature (a non-breaking change which adds functionality)
+- [ ] 🐛 Bug fix (a non-breaking change which fixes an issue)
+- [ ] ♻️ Refactoring (a code change that neither fixes a bug nor adds a feature)
+- [ ] 📚 Documentation update
+- [ ] ⚙️ Other (please describe):
+
+## Screenshots
+
+## Self-Review Checklist
+
+- [ ] I have performed a self-review of my own code.
+- [ ] I have commented my code, particularly in hard-to-understand areas.
+- [ ] I have made corresponding changes to the documentation.
+- [ ] My changes generate no new warnings.
+
+## Additional Comments
