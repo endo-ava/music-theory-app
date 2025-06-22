@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { CircleSegmentProps } from '../types/props';
 import { ANIMATION } from '../constants/index';
 import { KeyArea } from './KeyArea';
