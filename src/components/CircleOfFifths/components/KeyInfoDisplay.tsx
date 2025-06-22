@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { getKeyInfo } from '../utils/index';
 import { keyInfoVariants, keyInfoItemVariants } from '../animations';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
