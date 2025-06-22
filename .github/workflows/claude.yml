@@ -48,7 +48,8 @@ jobs:
           # allowed_tools: "Bash(npm install),Bash(npm run build),Bash(npm run test:*),Bash(npm run lint:*)"
           
           # Optional: Add custom instructions for Claude to customize its behavior for your project
-          # custom_instructions: |
+          custom_instructions:
+           - Always respond in Japanese
           #   Follow our coding standards
           #   Ensure all new code has tests
           #   Use TypeScript for new files

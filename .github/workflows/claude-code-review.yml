@@ -43,6 +43,7 @@ jobs:
           # Direct prompt for automated review (no @claude mention needed)
           direct_prompt: |
             Please review this pull request and provide feedback on:
+            - Always respond in Japanese, including code comments
             - Code quality and best practices
             - Potential bugs or issues
             - Performance considerations
