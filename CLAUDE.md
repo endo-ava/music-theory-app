@@ -83,7 +83,9 @@ src/
 
 ## 注意点
 
-- コメント、PR、Issue等は日本語で記述。Commit messageは英語で記述。
-- PR作成前に、必ずドキュメント(./docs)との整合性を確認し、ずれがあればドキュメントを修正する。
+- コード内のコメント、PR、Issue、Reviewなどは日本語で記述すること
+- commit messageは英語で記述すること
+- PRやIssueは必ずテンプレートを使うこと
+- PR作成前に、必要に応じてドキュメント(./docs)との整合性を確認し、ドキュメントを更新すること
   - 基本ドキュメントはこちら: `./docs`
   - 主要なコンポーネントのドキュメントはsrcの各階層に保存: 例. `./src/components/CircleOfFifths/README.md`
