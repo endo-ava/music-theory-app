@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 import { GlobalHeaderProps, NavigationLink } from './types';
+import { useActiveLink } from './hooks/useActiveLink';
 
 /**
  * ナビゲーションリンクの定義
@@ -26,6 +27,8 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = ({
   className,
   style,
 }) => {
+  // アクティブリンク判定フック
+  const { isActiveLink } = useActiveLink();
   return (
     <header
       className={twMerge(
@@ -70,27 +73,34 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = ({
         // デスクトップレイアウト - 水平方向に配置
         'hidden md:flex items-center space-x-8 lg:space-x-10'
       )}>
-        {navigationLinks.map((link) => (
-          <Link
-            key={link.id}
-            href={link.href}
-            className={clsx(
-              // フォントスタイリング - 統一感のある読みやすさ
-              'text-header-nav font-header-nav',
-              // カラー - 通常時とホバー時の明確な差別化
-              'text-header-nav-link hover:text-header-nav-link-hover',
-              // トランジション - スムーズなインタラクション
-              'transition-colors duration-200',
-              // アクセシビリティ - キーボードナビゲーション対応
-              'focus:outline-none focus:ring-2 focus:ring-header-border focus:ring-offset-2',
-              'focus:ring-offset-transparent rounded-sm',
-              // パディング - クリック領域の拡大
-              'px-2 py-1'
-            )}
-          >
-            {link.label}
-          </Link>
-        ))}
+        {navigationLinks.map((link) => {
+          const isActive = isActiveLink(link);
+          
+          return (
+            <Link
+              key={link.id}
+              href={link.href}
+              className={clsx(
+                // フォントスタイリング - 統一感のある読みやすさ
+                'text-header-nav font-header-nav',
+                // カラー - アクティブ状態に応じた色分け
+                isActive 
+                  ? 'text-header-nav-link-active bg-header-nav-link-active-bg'
+                  : 'text-header-nav-link hover:text-header-nav-link-hover',
+                // トランジション - スムーズなインタラクション
+                'transition-colors duration-200',
+                // アクセシビリティ - キーボードナビゲーション対応
+                'focus:outline-none focus:ring-2 focus:ring-header-border focus:ring-offset-2',
+                'focus:ring-offset-transparent rounded-sm',
+                // パディング - クリック領域の拡大
+                'px-2 py-1'
+              )}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* モバイルメニューボタン - 768px以下で表示 */}
