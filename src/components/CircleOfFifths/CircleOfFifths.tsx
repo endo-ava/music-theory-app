@@ -15,10 +15,7 @@ import { useCircleOfFifths } from './hooks/useCircleOfFifths';
  * @param props - コンポーネントのプロパティ
  * @returns 五度圏のJSX要素
  */
-export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
-  className,
-  style,
-}) => {
+export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({ className, style }) => {
   // カスタムフックからサークルセグメント絵画情報を取得
   const { viewBox, segments, textRotation } = useCircleOfFifths();
 
@@ -34,12 +31,7 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({
       style={style}
     >
       <div className="w-full h-full">
-        <svg
-          viewBox={viewBox}
-          className="block"
-          aria-label="五度圏"
-          role="img"
-        >
+        <svg viewBox={viewBox} className="block" aria-label="五度圏" role="img">
           {/* 各セグメント絵画をループで呼び出す */}
           {segments.map(({ segment, paths, textPositions }) => (
             <CircleSegment
