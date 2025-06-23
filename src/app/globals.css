@@ -24,11 +24,23 @@
   --color-title: white;
   --color-title-background: rgba(255, 255, 255, 0.1);
 
+  /* ヘッダー専用カラー */
+  --color-header-logo: white;
+  --color-header-logo-hover: rgba(255, 255, 255, 0.9);
+  --color-header-nav-link: rgba(255, 255, 255, 0.9);
+  --color-header-nav-link-hover: rgba(255, 255, 255, 0.7);
+  --color-header-border: rgba(255, 255, 255, 0.1);
+
   /* スペーシング (spacing) - サイズをspacingとして登録 */
   --spacing-circle-radius: 200px;
   --spacing-circle-inner-radius: 120px;
   --spacing-circle-middle-radius: 170px;
   --spacing-circle-center-radius: 80px;
+
+  /* ヘッダー専用スペーシング */
+  --spacing-header-padding-x: 1.5rem;
+  --spacing-header-padding-y: 1rem;
+  --spacing-header-gap: 2rem;
 
   /* フォントサイズ (fontSize) */
   --text-key-minor: 0.8rem;
@@ -36,11 +48,19 @@
   --text-key-signature: 0.5rem;
   --text-title: 2.5rem;
 
+  /* ヘッダー専用フォントサイズ */
+  --text-header-logo: 1.5rem;
+  --text-header-nav: 1rem;
+
   /* フォントウェイト (fontWeight) */
   --font-weight-key-minor: 50;
   --font-weight-key-major: 80;
   --font-weight-key-signature: 50;
   --font-weight-title: 500;
+
+  /* ヘッダー専用フォントウェイト */
+  --font-weight-header-logo: 600;
+  --font-weight-header-nav: 500;
 
   /* ボーダー幅 (borderWidth) */
   --border-width-default: 1px;
