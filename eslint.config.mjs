@@ -16,13 +16,14 @@ export default tseslint.config(
     rules: {
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,
-      
+
       // 元のルールはオフにする
-      '@typescript-eslint/no-unused-vars': 'off', 
-      
+      '@typescript-eslint/no-unused-vars': 'off',
+
       // 新しいプラグインのルールを設定
       'unused-imports/no-unused-imports': 'error', // 未使用のimportをエラーに
-      'unused-imports/no-unused-vars': [ // 未使用の変数もチェック
+      'unused-imports/no-unused-vars': [
+        // 未使用の変数もチェック
         'warn',
         {
           vars: 'all',
@@ -32,6 +33,6 @@ export default tseslint.config(
         },
       ],
     },
-  },
+  }
   // ...（以下省略）
 );
