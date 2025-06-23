@@ -1,6 +1,6 @@
 /**
  * 五度圏関連のグローバル型定義
- * 
+ *
  * このファイルには、アプリケーション全体で使用される
  * 五度圏関連の型定義が含まれています。
  */
@@ -13,7 +13,7 @@ import { Variants } from 'motion/react';
 
 /**
  * キーの基本情報
- * 
+ *
  * アプリケーション全体で使用される基本的なキー情報
  */
 export interface Key {
@@ -27,7 +27,7 @@ export interface Key {
 
 /**
  * 五度圏のセグメント情報
- * 
+ *
  * アプリケーション全体で使用されるセグメント情報
  */
 export interface CircleSegment {
@@ -47,7 +47,7 @@ export interface CircleSegment {
 
 /**
  * 五度圏の状態のZustandストア型定義
- * 
+ *
  * アプリケーション全体で共有される状態
  */
 export interface CircleOfFifthsStore {
@@ -102,7 +102,10 @@ export type AnimationVariants = Variants;
  * 五度圏関連のエラー
  */
 export class CircleOfFifthsError extends Error {
-  constructor(message: string, public code: string) {
+  constructor(
+    message: string,
+    public code: string
+  ) {
     super(message);
     this.name = 'CircleOfFifthsError';
   }

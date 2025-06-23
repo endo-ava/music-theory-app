@@ -1,6 +1,6 @@
 /**
  * 五度圏コンポーネントのユーティリティ関数
- * 
+ *
  * このファイルには、五度圏コンポーネントで使用される
  * すべてのユーティリティ関数が含まれています。
  */
@@ -79,7 +79,7 @@ export const calculateTextPosition = (position: number, radius: number): Point =
     throw new CircleOfFifthsError(`Invalid radius: ${radius}`, 'INVALID_RADIUS');
   }
 
-  const angle = calculateAngle(position) + (Math.PI / SEGMENT_COUNT); // セグメントの中心
+  const angle = calculateAngle(position) + Math.PI / SEGMENT_COUNT; // セグメントの中心
   return polarToCartesian(radius, angle);
 };
 
@@ -232,15 +232,15 @@ export const isValidPosition = (position: number): boolean => {
 };
 
 /**
-* キーが有効かどうかをチェック
-* @param key チェックするキー
-* @returns 有効なキーかどうか
-*/
+ * キーが有効かどうかをチェック
+ * @param key チェックするキー
+ * @returns 有効なキーかどうか
+ */
 export const isValidKey = (key: Key): boolean => {
   return (
-      typeof key.name === 'string' &&
-      key.name.length > 0 &&
-      typeof key.isMajor === 'boolean' &&
-      isValidPosition(key.position)
+    typeof key.name === 'string' &&
+    key.name.length > 0 &&
+    typeof key.isMajor === 'boolean' &&
+    isValidPosition(key.position)
   );
 };

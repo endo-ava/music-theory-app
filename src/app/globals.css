@@ -1,11 +1,13 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ---------------------------------- */
 /* 1. テーマ設定                      */
 /* ---------------------------------- */
 @theme {
   /* フォントファミリー (font-family) */
-  --font-family-sans: 'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Arial', 'Yu Gothic', 'Meiryo', sans-serif;
+  --font-family-sans:
+    'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Arial',
+    'Yu Gothic', 'Meiryo', sans-serif;
   --font-family-serif: 'Times New Roman', 'YuMincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'serif';
 
   /* カラーパレット (colors) */
@@ -38,11 +40,6 @@
   --spacing-circle-inner-radius: 120px;
   --spacing-circle-middle-radius: 170px;
   --spacing-circle-center-radius: 80px;
-
-  /* ヘッダー専用スペーシング */
-  --spacing-header-padding-x: 1.5rem;
-  --spacing-header-padding-y: 1rem;
-  --spacing-header-gap: 2rem;
 
   /* フォントサイズ (fontSize) */
   --text-key-minor: 0.8rem;
@@ -88,9 +85,11 @@
     /* グラデーションが読み込めない場合のフォールバック色 */
     background-color: theme('colors.circle-bg-to');
     /* グラデーションの方向を to bottom (上から下へ) に統一 */
-    background-image: linear-gradient(to bottom,
-        theme('colors.circle-bg-from'),
-        theme('colors.circle-bg-to'));
+    background-image: linear-gradient(
+      to bottom,
+      theme('colors.circle-bg-from'),
+      theme('colors.circle-bg-to')
+    );
     /* グラデーションが繰り返されないようにするおまじない */
     background-repeat: no-repeat;
     /* 高さを画面全体に合わせる */
