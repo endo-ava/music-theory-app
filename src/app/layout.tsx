@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
+import { GlobalHeader } from '@/components/GlobalHeader/GlobalHeader';
 
 export const metadata: Metadata = {
-  title: "音楽理論学習アプリ",
-  description: "音楽理論学習アプリ",
+  title: '音楽理論学習アプリ',
+  description: '音楽理論学習アプリ',
 };
 
 export default function RootLayout({
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        <GlobalHeader />
+        {children}
+      </body>
     </html>
   );
 }
