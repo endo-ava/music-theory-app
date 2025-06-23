@@ -18,6 +18,5 @@ export const useCircleOfFifthsStore = create<CircleOfFifthsStore>(set => ({
       hoveredKey: key,
       isPlaying: key !== null,
     })),
-  setIsPlaying: (isPlaying: boolean) =>
-    set(() => ({ isPlaying })),
+  setIsPlaying: (isPlaying: boolean) => set(() => ({ isPlaying })),
 }));

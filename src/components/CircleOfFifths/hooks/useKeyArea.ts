@@ -27,7 +27,9 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
       fillClassName = 'fill-key-area-hover';
     }
 
-    const textClassName = isMajor ? 'text-key-major font-key-major' : 'text-key-minor font-key-minor';
+    const textClassName = isMajor
+      ? 'text-key-major font-key-major'
+      : 'text-key-minor font-key-minor';
 
     return {
       isSelected,
@@ -47,13 +49,13 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
       handleMouseLeave: () => setHoveredKey(null),
     };
   }, [keyName, isMajor, position, setSelectedKey, setHoveredKey]);
-  
+
   // handleClick等は不変なので、useCallbackでラップする
   const memoizedHandlers = {
     handleClick: useCallback(handlers.handleClick, [handlers.handleClick]),
     handleMouseEnter: useCallback(handlers.handleMouseEnter, [handlers.handleMouseEnter]),
     handleMouseLeave: useCallback(handlers.handleMouseLeave, [handlers.handleMouseLeave]),
-  }
+  };
 
   return {
     states,

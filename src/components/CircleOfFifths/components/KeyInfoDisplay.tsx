@@ -14,7 +14,7 @@ import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
  * アニメーション効果として、表示/非表示時のフェードとスケール変更を実装しています。
  */
 const KeyInfoDisplay: FC = () => {
-  const selectedKey = useCircleOfFifthsStore((state) => state.selectedKey);
+  const selectedKey = useCircleOfFifthsStore(state => state.selectedKey);
   if (!selectedKey) return null;
 
   const keyInfo = getKeyInfo(selectedKey);
@@ -34,7 +34,10 @@ const KeyInfoDisplay: FC = () => {
         "
       >
         {/* キー名と調性 */}
-        <motion.h2 variants={keyInfoItemVariants} className="text-2xl font-bold text-text-primary mb-4">
+        <motion.h2
+          variants={keyInfoItemVariants}
+          className="text-2xl font-bold text-text-primary mb-4"
+        >
           {keyInfo.name}
         </motion.h2>
 
@@ -42,8 +45,13 @@ const KeyInfoDisplay: FC = () => {
         <motion.div variants={keyInfoItemVariants} className="space-y-2 text-text-secondary">
           <p>調性: {keyInfo.scale}</p>
           {keyInfo.relativeKey && <p>平行調: {keyInfo.relativeKey}</p>}
-          <motion.div variants={keyInfoItemVariants} className="mt-4 p-3 bg-background-muted rounded-md">
-            <p className="text-sm text-text-muted">関連するコードやスケール情報は今後追加予定です</p>
+          <motion.div
+            variants={keyInfoItemVariants}
+            className="mt-4 p-3 bg-background-muted rounded-md"
+          >
+            <p className="text-sm text-text-muted">
+              関連するコードやスケール情報は今後追加予定です
+            </p>
           </motion.div>
         </motion.div>
       </motion.div>

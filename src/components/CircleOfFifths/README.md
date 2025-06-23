@@ -72,10 +72,7 @@ import { CircleOfFifths } from '@/components/CircleOfFifths';
 function App() {
   return (
     <div className="app">
-      <CircleOfFifths 
-        className="custom-circle"
-        style={{ width: '600px', height: '600px' }}
-      />
+      <CircleOfFifths className="custom-circle" style={{ width: '600px', height: '600px' }} />
     </div>
   );
 }
@@ -88,10 +85,12 @@ function App() {
 五度圏のメインコンポーネント。全体のレイアウトとイベントハンドリングを管理します。
 
 **Props:**
+
 - `className?: string` - カスタムクラス名
 - `style?: React.CSSProperties` - カスタムスタイル
 
 **特徴:**
+
 - レスポンシブデザイン（70vw、最大700px）
 - Tailwind CSSによるスタイリング
 - SVGビューポートの自動計算
@@ -152,10 +151,10 @@ TypeScriptを使用して型安全性を確保し、コンパイル時のエラ�
 
 ```typescript
 export const CIRCLE_LAYOUT = {
-  RADIUS: 200,           // 外側の半径
-  INNER_RADIUS: 120,     // 内側の半径（マイナーキーエリア）
-  MIDDLE_RADIUS: 170,    // 中間の半径（メジャーキーエリア）
-  CENTER_RADIUS: 80,     // 中心の半径（調号エリア）
+  RADIUS: 200, // 外側の半径
+  INNER_RADIUS: 120, // 内側の半径（マイナーキーエリア）
+  MIDDLE_RADIUS: 170, // 中間の半径（メジャーキーエリア）
+  CENTER_RADIUS: 80, // 中心の半径（調号エリア）
 } as const;
 ```
 
@@ -163,19 +162,19 @@ export const CIRCLE_LAYOUT = {
 
 ```typescript
 export const ANIMATION = {
-  BASE_DELAY: 0.02,      // 基本の遅延時間
-  FADE_DURATION: 0.3,    // フェードイン時間
-  HOVER_SCALE: 1.03,     // ホバー時のスケール
-  TAP_SCALE: 0.9,        // タップ時のスケール
+  BASE_DELAY: 0.02, // 基本の遅延時間
+  FADE_DURATION: 0.3, // フェードイン時間
+  HOVER_SCALE: 1.03, // ホバー時のスケール
+  TAP_SCALE: 0.9, // タップ時のスケール
 } as const;
 ```
 
 ### 基本定数
 
 ```typescript
-export const SEGMENT_COUNT = 12;           // セグメント数
-export const ANGLE_OFFSET = -105;          // 角度オフセット
-export const ANGLE_PER_SEGMENT = 30;       // セグメントあたりの角度
+export const SEGMENT_COUNT = 12; // セグメント数
+export const ANGLE_OFFSET = -105; // 角度オフセット
+export const ANGLE_PER_SEGMENT = 30; // セグメントあたりの角度
 ```
 
 ## ユーティリティ関数
@@ -229,18 +228,18 @@ Framer Motionを使用したアニメーションシステム：
 ```typescript
 export const keyInfoVariants: AnimationVariants = {
   hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
+  visible: {
+    opacity: 1,
+    y: 0,
     scale: 1,
-    transition: { duration: 0.3, ease: 'easeOut', staggerChildren: 0.1 }
+    transition: { duration: 0.3, ease: 'easeOut', staggerChildren: 0.1 },
   },
-  exit: { 
-    opacity: 0, 
-    y: -20, 
+  exit: {
+    opacity: 0,
+    y: -20,
     scale: 0.95,
-    transition: { duration: 0.2, ease: 'easeIn' }
-  }
+    transition: { duration: 0.2, ease: 'easeIn' },
+  },
 };
 ```
 

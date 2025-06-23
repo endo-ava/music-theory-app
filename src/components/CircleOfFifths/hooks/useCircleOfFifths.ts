@@ -52,10 +52,7 @@ export const useCircleOfFifths = () => {
 
       // 各領域の中心にテキストを配置するための座標を計算
       const textPositions = {
-        minorTextPos: calculateTextPosition(
-          position,
-          CIRCLE_LAYOUT.INNER_RADIUS / 1.2
-        ),
+        minorTextPos: calculateTextPosition(position, CIRCLE_LAYOUT.INNER_RADIUS / 1.2),
         majorTextPos: calculateTextPosition(
           position,
           (CIRCLE_LAYOUT.INNER_RADIUS + CIRCLE_LAYOUT.MIDDLE_RADIUS) / 2
