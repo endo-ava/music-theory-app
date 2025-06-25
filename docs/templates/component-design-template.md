@@ -30,7 +30,7 @@
 ### 主要機能
 
 - **機能1**: 機能の説明
-- **機能2**: 機能の説明  
+- **機能2**: 機能の説明
 - **機能3**: 機能の説明
 
 ### ビジネス価値
@@ -109,16 +109,16 @@ src/components/[ComponentName]/
 interface [ComponentName]Props {
   /** 必須プロパティの説明 */
   requiredProp: string;
-  
+
   /** オプショナルプロパティの説明 */
   optionalProp?: number;
-  
+
   /** カスタムクラス名 */
   className?: string;
-  
+
   /** カスタムスタイル */
   style?: React.CSSProperties;
-  
+
   /** イベントハンドラー */
   onEvent?: (value: string) => void;
 }
@@ -148,7 +148,7 @@ const [localState, setLocalState] = useState<StateType>(initialValue);
 interface [ComponentName]Store {
   // 状態プロパティ
   state: StateType;
-  
+
   // アクション
   setState: (state: StateType) => void;
   resetState: () => void;
@@ -159,16 +159,16 @@ interface [ComponentName]Store {
 
 #### 公開メソッド
 
-| メソッド名 | 引数 | 戻り値 | 説明 |
-|-----------|------|--------|------|
-| `method1` | `param: Type` | `ReturnType` | メソッドの説明 |
-| `method2` | `param: Type` | `void` | メソッドの説明 |
+| メソッド名 | 引数          | 戻り値       | 説明           |
+| ---------- | ------------- | ------------ | -------------- |
+| `method1`  | `param: Type` | `ReturnType` | メソッドの説明 |
+| `method2`  | `param: Type` | `void`       | メソッドの説明 |
 
 #### イベント
 
-| イベント名 | ペイロード | 説明 |
-|-----------|-----------|------|
-| `onEvent1` | `{ data: Type }` | イベントの説明 |
+| イベント名 | ペイロード          | 説明           |
+| ---------- | ------------------- | -------------- |
+| `onEvent1` | `{ data: Type }`    | イベントの説明 |
 | `onEvent2` | `{ value: string }` | イベントの説明 |
 
 ## 使用方法
@@ -181,7 +181,7 @@ import { [ComponentName] } from '@/components/[ComponentName]';
 function App() {
   return (
     <div>
-      <[ComponentName] 
+      <[ComponentName]
         requiredProp="value"
         optionalProp={42}
         onEvent={(value) => console.log(value)}
@@ -201,9 +201,9 @@ function CustomExample() {
     <[ComponentName]
       requiredProp="custom-value"
       className="custom-styles"
-      style={{ 
+      style={{
         width: '100%',
-        height: '400px' 
+        height: '400px'
       }}
       onEvent={handleCustomEvent}
     />
@@ -219,7 +219,7 @@ import { use[ComponentName] } from '@/components/[ComponentName]/hooks';
 
 function AdvancedExample() {
   const { state, actions } = use[ComponentName]();
-  
+
   return (
     <[ComponentName]
       requiredProp={state.value}
@@ -262,11 +262,11 @@ function AdvancedExample() {
 
 ### パフォーマンス指標
 
-| 指標 | 目標値 | 現在値 | 測定方法 |
-|------|--------|--------|----------|
-| 初期レンダリング時間 | < 100ms | [測定値] | Performance API |
-| バンドルサイズ | < 50KB | [測定値] | webpack-bundle-analyzer |
-| メモリ使用量 | < 10MB | [測定値] | Chrome DevTools |
+| 指標                 | 目標値  | 現在値   | 測定方法                |
+| -------------------- | ------- | -------- | ----------------------- |
+| 初期レンダリング時間 | < 100ms | [測定値] | Performance API         |
+| バンドルサイズ       | < 50KB  | [測定値] | webpack-bundle-analyzer |
+| メモリ使用量         | < 10MB  | [測定値] | Chrome DevTools         |
 
 ### 大量データでの考慮事項
 
@@ -287,20 +287,20 @@ function AdvancedExample() {
 
 ### ARIA属性
 
-| 属性 | 値 | 用途 |
-|------|-----|------|
-| `aria-label` | "説明文" | 要素の説明 |
-| `aria-expanded` | `true/false` | 展開状態 |
-| `aria-current` | `page` | 現在の状態 |
+| 属性            | 値           | 用途       |
+| --------------- | ------------ | ---------- |
+| `aria-label`    | "説明文"     | 要素の説明 |
+| `aria-expanded` | `true/false` | 展開状態   |
+| `aria-current`  | `page`       | 現在の状態 |
 
 ### キーボード操作
 
-| キー | 動作 |
-|------|------|
-| `Tab` | 次の要素にフォーカス移動 |
-| `Shift + Tab` | 前の要素にフォーカス移動 |
-| `Enter/Space` | 要素の実行 |
-| `Escape` | モーダル・メニューを閉じる |
+| キー          | 動作                       |
+| ------------- | -------------------------- |
+| `Tab`         | 次の要素にフォーカス移動   |
+| `Shift + Tab` | 前の要素にフォーカス移動   |
+| `Enter/Space` | 要素の実行                 |
+| `Escape`      | モーダル・メニューを閉じる |
 
 ## テスト戦略
 
@@ -311,11 +311,11 @@ describe('[ComponentName]', () => {
   it('正常にレンダリングされること', () => {
     // テストコード
   });
-  
+
   it('Propsが正しく反映されること', () => {
     // テストコード
   });
-  
+
   it('イベントが正しく発火すること', () => {
     // テストコード
   });
@@ -354,10 +354,10 @@ describe('[ComponentName] Visual', () => {
 
 ### テストカバレッジ目標
 
-| 種類 | 目標 | 現在 |
-|------|------|------|
-| Line Coverage | > 90% | [現在値]% |
-| Branch Coverage | > 85% | [現在値]% |
+| 種類              | 目標  | 現在      |
+| ----------------- | ----- | --------- |
+| Line Coverage     | > 90% | [現在値]% |
+| Branch Coverage   | > 85% | [現在値]% |
 | Function Coverage | > 95% | [現在値]% |
 
 ## 開発・保守
@@ -391,10 +391,10 @@ console.groupEnd();
 
 ### 既知の問題・制限事項
 
-| 問題 | 影響度 | 対応予定 | 回避方法 |
-|------|--------|----------|----------|
-| 問題1 | 高 | v2.0.0 | 回避方法の説明 |
-| 問題2 | 中 | 検討中 | 回避方法の説明 |
+| 問題  | 影響度 | 対応予定 | 回避方法       |
+| ----- | ------ | -------- | -------------- |
+| 問題1 | 高     | v2.0.0   | 回避方法の説明 |
+| 問題2 | 中     | 検討中   | 回避方法の説明 |
 
 ### 今後の拡張予定
 
@@ -406,7 +406,7 @@ console.groupEnd();
 
 #### 中期 (3ヶ月以内)
 
-- [ ] 機能B の追加  
+- [ ] 機能B の追加
 - [ ] 他コンポーネントとの統合
 - [ ] テストカバレッジ向上
 
@@ -426,8 +426,8 @@ console.groupEnd();
 
 ### 用語集
 
-| 用語 | 定義 |
-|------|------|
+| 用語  | 定義  |
+| ----- | ----- |
 | 用語1 | 定義1 |
 | 用語2 | 定義2 |
 

@@ -55,7 +55,7 @@ graph TD
     E --> G[MobileMenuButton]
     E --> H[MobileMenu]
     H --> F
-    
+
     style A fill:#e1f5fe
     style B fill:#f3e5f5
     style C fill:#fff3e0
@@ -78,7 +78,7 @@ flowchart LR
     F -->|useMobileMenu| G[State Management]
     G -->|state| H[MobileMenuButton]
     G -->|state| I[MobileMenu]
-    
+
     style B fill:#e1f5fe
     style C fill:#fff3e0
     style D fill:#ffebee
@@ -116,7 +116,7 @@ src/components/GlobalHeader/
 #### 外部依存
 
 - `react` - Reactフレームワーク (v19)
-- `next/navigation` - Next.jsナビゲーション (v15) 
+- `next/navigation` - Next.jsナビゲーション (v15)
 - `motion/react` - Framer Motionアニメーション (v12)
 - `clsx` - 条件付きクラス名結合
 - `tailwind-merge` - Tailwindクラス最適化
@@ -131,7 +131,7 @@ src/components/GlobalHeader/
 interface GlobalHeaderProps {
   /** カスタムクラス名 */
   className?: string;
-  
+
   /** カスタムスタイル */
   style?: React.CSSProperties;
 }
@@ -143,13 +143,13 @@ interface GlobalHeaderProps {
 interface NavigationLinkProps {
   /** ナビゲーションリンクの情報 */
   link: NavigationLink;
-  
+
   /** アクティブ状態かどうか */
   isActive: boolean;
-  
+
   /** クリック時のハンドラー（モバイルメニューを閉じるなど） */
   onClick?: () => void;
-  
+
   /** モバイル表示用のスタイルを適用するかどうか */
   isMobile?: boolean;
 }
@@ -161,9 +161,9 @@ interface NavigationLinkProps {
 
 ```typescript
 const {
-  isMobileMenuOpen,    // メニュー開閉状態
-  closeMobileMenu,     // メニューを閉じる
-  toggleMobileMenu,    // メニュー開閉切り替え
+  isMobileMenuOpen, // メニュー開閉状態
+  closeMobileMenu, // メニューを閉じる
+  toggleMobileMenu, // メニュー開閉切り替え
 } = useMobileMenu();
 ```
 
@@ -171,7 +171,7 @@ const {
 
 ```typescript
 const {
-  isActiveLink,        // リンクのアクティブ状態判定関数
+  isActiveLink, // リンクのアクティブ状態判定関数
 } = useActiveLink();
 ```
 
@@ -179,18 +179,18 @@ const {
 
 #### 公開メソッド
 
-| メソッド名 | 引数 | 戻り値 | 説明 |
-|-----------|------|--------|------|
-| `isActiveLink` | `link: NavigationLink` | `boolean` | リンクがアクティブかどうかを判定 |
-| `toggleMobileMenu` | なし | `void` | モバイルメニューの開閉を切り替え |
-| `closeMobileMenu` | なし | `void` | モバイルメニューを閉じる |
+| メソッド名         | 引数                   | 戻り値    | 説明                             |
+| ------------------ | ---------------------- | --------- | -------------------------------- |
+| `isActiveLink`     | `link: NavigationLink` | `boolean` | リンクがアクティブかどうかを判定 |
+| `toggleMobileMenu` | なし                   | `void`    | モバイルメニューの開閉を切り替え |
+| `closeMobileMenu`  | なし                   | `void`    | モバイルメニューを閉じる         |
 
 #### イベント
 
-| イベント名 | ペイロード | 説明 |
-|-----------|-----------|------|
-| `onClick (Navigation)` | `MouseEvent` | ナビゲーションリンククリック |
-| `onKeyDown (Escape)` | `KeyboardEvent` | Escapeキーでメニュー閉じ |
+| イベント名             | ペイロード      | 説明                         |
+| ---------------------- | --------------- | ---------------------------- |
+| `onClick (Navigation)` | `MouseEvent`    | ナビゲーションリンククリック |
+| `onKeyDown (Escape)`   | `KeyboardEvent` | Escapeキーでメニュー閉じ     |
 
 ## 使用方法
 
@@ -219,11 +219,11 @@ import { GlobalHeader } from '@/components/GlobalHeader';
 function CustomLayout() {
   return (
     <>
-      <GlobalHeader 
+      <GlobalHeader
         className="shadow-lg border-b-2"
-        style={{ 
+        style={{
           background: 'linear-gradient(to right, #1e3a8a, #3b82f6)',
-          minHeight: '80px'
+          minHeight: '80px',
         }}
       />
       {/* rest of layout */}
@@ -249,6 +249,7 @@ const customNavigationLinks = [
 ### 1. 単一責任原則
 
 各コンポーネントは明確に分離された責任を持ちます：
+
 - **GlobalHeader**: レイアウトコンテナとしての責任
 - **Logo**: ブランド表示の責任
 - **DesktopNavigation**: デスクトップナビゲーション表示の責任
@@ -257,6 +258,7 @@ const customNavigationLinks = [
 ### 2. Push Client Components to the Leaves
 
 Next.js 15の最適化原則に従い、サーバーコンポーネントを最大化：
+
 - **サーバーコンポーネント**: GlobalHeader、Logo
 - **クライアントコンポーネント**: インタラクティブな機能のみに限定
 
@@ -285,11 +287,11 @@ WCAG 2.1 AAレベルの準拠を目指した設計。
 
 ### パフォーマンス指標
 
-| 指標 | 目標値 | 現在値 | 測定方法 |
-|------|--------|--------|----------|
-| 初期レンダリング時間 | < 50ms | 25ms | Performance API |
-| クライアントJS | < 15KB | 12KB | webpack-bundle-analyzer |
-| CLS (Layout Shift) | < 0.1 | 0.05 | Core Web Vitals |
+| 指標                 | 目標値 | 現在値 | 測定方法                |
+| -------------------- | ------ | ------ | ----------------------- |
+| 初期レンダリング時間 | < 50ms | 25ms   | Performance API         |
+| クライアントJS       | < 15KB | 12KB   | webpack-bundle-analyzer |
+| CLS (Layout Shift)   | < 0.1  | 0.05   | Core Web Vitals         |
 
 ### 大量データでの考慮事項
 
@@ -310,21 +312,21 @@ WCAG 2.1 AAレベルの準拠を目指した設計。
 
 ### ARIA属性
 
-| 属性 | 値 | 用途 |
-|------|-----|------|
-| `aria-label` | "メニューを開く/閉じる" | ハンバーガーボタンの説明 |
-| `aria-expanded` | `true/false` | モバイルメニューの展開状態 |
-| `aria-controls` | `mobile-menu` | 制御対象の要素ID |
-| `aria-current` | `page` | 現在のページ表示 |
+| 属性            | 値                      | 用途                       |
+| --------------- | ----------------------- | -------------------------- |
+| `aria-label`    | "メニューを開く/閉じる" | ハンバーガーボタンの説明   |
+| `aria-expanded` | `true/false`            | モバイルメニューの展開状態 |
+| `aria-controls` | `mobile-menu`           | 制御対象の要素ID           |
+| `aria-current`  | `page`                  | 現在のページ表示           |
 
 ### キーボード操作
 
-| キー | 動作 |
-|------|------|
-| `Tab` | 次のナビゲーション要素にフォーカス移動 |
+| キー          | 動作                                   |
+| ------------- | -------------------------------------- |
+| `Tab`         | 次のナビゲーション要素にフォーカス移動 |
 | `Shift + Tab` | 前のナビゲーション要素にフォーカス移動 |
-| `Enter/Space` | リンクの実行・メニューの開閉 |
-| `Escape` | モバイルメニューを閉じる |
+| `Enter/Space` | リンクの実行・メニューの開閉           |
+| `Escape`      | モバイルメニューを閉じる               |
 
 ## テスト戦略
 
@@ -336,13 +338,13 @@ describe('GlobalHeader', () => {
     render(<GlobalHeader />);
     expect(screen.getByText('Music Theory App')).toBeInTheDocument();
   });
-  
+
   it('アクティブリンクが正しく表示されること', () => {
     mockUsePathname('/library');
     render(<GlobalHeader />);
     expect(screen.getByText('Library')).toHaveClass('text-header-nav-link-active');
   });
-  
+
   it('モバイルメニューが正しく動作すること', () => {
     render(<GlobalHeader />);
     const menuButton = screen.getByLabelText('メニューを開く');
@@ -392,11 +394,11 @@ describe('GlobalHeader A11y', () => {
 
 ### テストカバレッジ目標
 
-| 種類 | 目標 | 現在 |
-|------|------|------|
-| Line Coverage | > 95% | 98% |
-| Branch Coverage | > 90% | 94% |
-| Function Coverage | > 95% | 97% |
+| 種類              | 目標  | 現在 |
+| ----------------- | ----- | ---- |
+| Line Coverage     | > 95% | 98%  |
+| Branch Coverage   | > 90% | 94%  |
+| Function Coverage | > 95% | 97%  |
 
 ## 開発・保守
 
@@ -431,10 +433,10 @@ if (process.env.NODE_ENV === 'development') {
 
 ### 既知の問題・制限事項
 
-| 問題 | 影響度 | 対応予定 | 回避方法 |
-|------|--------|----------|----------|
-| iOS Safari でのフォーカス表示 | 低 | v2.1.0 | CSS調整で部分対応済み |
-| 古いブラウザでのバックドロップフィルタ | 低 | 検討中 | グレースフルデグラデーション |
+| 問題                                   | 影響度 | 対応予定 | 回避方法                     |
+| -------------------------------------- | ------ | -------- | ---------------------------- |
+| iOS Safari でのフォーカス表示          | 低     | v2.1.0   | CSS調整で部分対応済み        |
+| 古いブラウザでのバックドロップフィルタ | 低     | 検討中   | グレースフルデグラデーション |
 
 ### 今後の拡張予定
 
@@ -465,12 +467,12 @@ if (process.env.NODE_ENV === 'development') {
 
 ### 用語集
 
-| 用語 | 定義 |
-|------|------|
-| Server Component | サーバーサイドでレンダリングされるReactコンポーネント |
+| 用語             | 定義                                                      |
+| ---------------- | --------------------------------------------------------- |
+| Server Component | サーバーサイドでレンダリングされるReactコンポーネント     |
 | Client Component | クライアントサイドでレンダリングされるReactコンポーネント |
-| Global Header | アプリケーション全体で共通のナビゲーションヘッダー |
-| Active Link | 現在のページに対応するナビゲーションリンク |
+| Global Header    | アプリケーション全体で共通のナビゲーションヘッダー        |
+| Active Link      | 現在のページに対応するナビゲーションリンク                |
 
 ---
 
