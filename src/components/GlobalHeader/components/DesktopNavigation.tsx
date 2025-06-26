@@ -20,7 +20,7 @@ interface DesktopNavigationProps {
  *
  * デスクトップ画面（768px以上）で表示される水平ナビゲーション。
  * NavigationLinkコンポーネントを使用してリンクを表示する。
- * サーバーコンポーネントとして実装され、静的な表示のみを担当する。
+ * クライアントコンポーネントとして実装され、インタラクティブな表示を担当する。
  *
  * @param props - コンポーネントのプロパティ
  * @returns DesktopNavigationのJSX要素

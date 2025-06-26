@@ -24,7 +24,7 @@ interface NavigationLinkProps {
  *
  * デスクトップ・モバイル両方のナビゲーションで使用される共通のリンクコンポーネント。
  * アクティブ状態に応じたスタイリングとアクセシビリティ対応を行う。
- * サーバーコンポーネントとして実装され、静的な表示のみを担当する。
+ * クライアントコンポーネントとして実装され、インタラクティブな表示を担当する。
  *
  * @param props - コンポーネントのプロパティ
  * @returns NavigationLinkのJSX要素
@@ -37,7 +37,6 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
 }) => {
   return (
     <Link
-      key={link.id}
       href={link.href}
       onClick={onClick}
       className={clsx(

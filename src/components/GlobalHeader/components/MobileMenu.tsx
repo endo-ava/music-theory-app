@@ -42,6 +42,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
       {isOpen && (
         <motion.nav
           id="mobile-menu"
+          role="navigation"
+          aria-label="モバイルメニュー"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
