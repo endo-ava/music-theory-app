@@ -1,11 +1,9 @@
-'use client';
-
 import React from 'react';
-import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 import { GlobalHeaderProps, NavigationLink } from './types';
-import { useActiveLink } from './hooks/useActiveLink';
+import { Logo } from './components/Logo';
+import { ActiveLinkProvider } from './components/ActiveLinkProvider';
 
 /**
  * ナビゲーションリンクの定義
@@ -26,14 +24,14 @@ const navigationLinks: NavigationLink[] = [
  * @returns GlobalHeaderのJSX要素
  */
 export const GlobalHeader: React.FC<GlobalHeaderProps> = ({ className, style }) => {
-  // アクティブリンク判定フック
-  const { isActiveLink } = useActiveLink();
   return (
     <header
       className={twMerge(
         clsx(
           // 基本レイアウト - 全幅でクリーンな背景
           'w-full bg-transparent',
+          // 位置設定 - モバイルメニューの絶対配置のための基準
+          'relative',
           // フレックスレイアウト - ロゴ左端、ナビゲーション右端
           'flex items-center justify-between',
           // パディング - レスポンシブ対応
@@ -48,88 +46,10 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = ({ className, style }) 
       style={style}
     >
       {/* ロゴエリア - 左端配置、Hubページへのリンク */}
-      <div className="flex-shrink-0">
-        <Link
-          href="/"
-          className={clsx(
-            // フォントスタイリング - ブランドロゴとして視認性重視
-            'text-header-logo font-header-logo',
-            // カラー - ベース色とホバー時の変化
-            'text-header-logo hover:text-header-logo-hover',
-            // トランジション - スムーズな色変化
-            'transition-colors duration-200',
-            // アクセシビリティ - フォーカス状態の視覚化（控えめに）
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-header-border focus-visible:ring-offset-1',
-            'focus-visible:ring-offset-transparent rounded-sm'
-          )}
-        >
-          Music Theory App
-        </Link>
-      </div>
+      <Logo />
 
-      {/* ナビゲーションエリア - 右端配置、レスポンシブ対応 */}
-      <nav
-        className={clsx(
-          // デスクトップレイアウト - 水平方向に配置
-          'hidden md:flex items-center space-x-8 lg:space-x-10'
-        )}
-      >
-        {navigationLinks.map(link => {
-          const isActive = isActiveLink(link);
-
-          return (
-            <Link
-              key={link.id}
-              href={link.href}
-              className={clsx(
-                // フォントスタイリング - 統一感のある読みやすさ
-                'text-header-nav font-header-nav',
-                // カラー - アクティブ状態に応じた色分け
-                isActive
-                  ? 'text-header-nav-link-active bg-header-nav-link-active-bg'
-                  : 'text-header-nav-link hover:text-header-nav-link-hover hover:bg-header-nav-link-active-bg',
-                // トランジション - スムーズなインタラクション
-                'transition-colors duration-200',
-                // アクセシビリティ - キーボードナビゲーション対応（視覚的に控えめに）
-                'focus:outline-none focus-visible:ring-2 focus-visible:ring-header-border focus-visible:ring-offset-1',
-                'focus-visible:ring-offset-transparent rounded-sm',
-                // パディング - クリック領域の拡大
-                'px-2 py-1'
-              )}
-              aria-current={isActive ? 'page' : undefined}
-            >
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      {/* モバイルメニューボタン - 768px以下で表示 */}
-      <div className="md:hidden">
-        <button
-          className={clsx(
-            // サイズとパディング
-            'p-2',
-            // カラー
-            'text-header-nav-link hover:text-header-nav-link-hover hover:bg-header-nav-link-active-bg',
-            // トランジション
-            'transition-colors duration-150',
-            // アクセシビリティ
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-header-border focus-visible:ring-offset-1',
-            'focus-visible:ring-offset-transparent rounded-sm'
-          )}
-          aria-label="メニューを開く"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
-      </div>
+      {/* アクティブリンクプロバイダー - ナビゲーション要素を統合 */}
+      <ActiveLinkProvider navigationLinks={navigationLinks} />
     </header>
   );
 };
