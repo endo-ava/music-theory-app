@@ -36,10 +36,12 @@ src/components/CircleOfFifths/
 ├── hooks/                    # カスタムフック
 │   ├── useCircleOfFifths.ts  # CircleOfFifths用フック
 │   └── useKeyArea.ts         # KeyArea用フック
-├── utils/                    # ユーティリティ関数
-│   └── index.ts             # すべてのユーティリティ
-└── types/                    # コンポーネント固有の型定義
-    └── props.ts             # コンポーネントProps型
+└── utils/                    # ユーティリティ関数
+    ├── index.ts             # 統合エクスポート
+    ├── validation.ts        # バリデーション
+    ├── geometry.ts         # 幾何学計算
+    ├── pathGeneration.ts   # パス生成
+    └── dataOperations.ts   # データ操作
 
 src/types/
 └── circleOfFifths.ts        # グローバル型定義
@@ -84,10 +86,12 @@ function App() {
 
 五度圏のメインコンポーネント。全体のレイアウトとイベントハンドリングを管理します。
 
-**Props:**
+**Props（CircleOfFifthsProps）:**
 
 - `className?: string` - カスタムクラス名
 - `style?: React.CSSProperties` - カスタムスタイル
+
+※ Props型定義はコンポーネントファイルの冒頭に定義されています
 
 **特徴:**
 
@@ -99,9 +103,15 @@ function App() {
 
 各セグメントを表現するコンポーネント。3つのエリア（マイナーキー、メジャーキー、調号）を含みます。
 
+**Props（CircleSegmentProps）:** セグメント情報、SVGパス、テキスト位置、回転角度などを受け取ります。
+※ Props型定義はコンポーネントファイルの冒頭に定義されています
+
 ### KeyArea（キーエリアコンポーネント）
 
 個別のキーエリアを表現するコンポーネント。クリックとホバーイベントを処理します。
+
+**Props（KeyAreaProps）:** キー名、調性、セグメント情報、SVGパス、テキスト位置、回転角度などを受け取ります。
+※ Props型定義はコンポーネントファイルの冒頭に定義されています
 
 ### KeyInfoDisplay（キー情報表示コンポーネント）
 

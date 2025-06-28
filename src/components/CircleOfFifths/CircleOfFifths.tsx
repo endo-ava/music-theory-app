@@ -1,9 +1,18 @@
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 import KeyInfoDisplay from './components/KeyInfoDisplay';
-import { CircleOfFifthsProps } from './types/props';
 import { CircleSegment } from './components/CircleSegment';
 import { useCircleOfFifths } from './hooks/useCircleOfFifths';
+
+/**
+ * 五度圏メインコンポーネントのProps
+ */
+export interface CircleOfFifthsProps {
+  /** カスタムクラス名 */
+  className?: string;
+  /** カスタムスタイル */
+  style?: React.CSSProperties;
+}
 
 /**
  * 五度圏表示コンポーネント

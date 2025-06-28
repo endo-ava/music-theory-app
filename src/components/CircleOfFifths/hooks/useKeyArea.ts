@@ -1,9 +1,13 @@
 import { useCallback, useMemo } from 'react';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
-import { Key, KeyAreaProps } from '../types/props';
+import { Key, CircleSegment as CircleSegmentType } from '@/types/circleOfFifths';
 
 // フックが必要とするProps
-type UseKeyAreaProps = Pick<KeyAreaProps, 'keyName' | 'isMajor' | 'segment'>;
+export interface UseKeyAreaProps {
+  keyName: string;
+  isMajor: boolean;
+  segment: CircleSegmentType;
+}
 
 /**
  * KeyAreaコンポーネントのロジックを集約したカスタムフック。
@@ -17,8 +21,8 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
 
   // 派生状態（選択、ホバー）をまとめて計算し、メモ化
   const states = useMemo(() => {
-    const isSelected = selectedKey?.name === keyName && selectedKey.isMajor === isMajor;
-    const isHovered = hoveredKey?.name === keyName && hoveredKey.isMajor === isMajor;
+    const isSelected = selectedKey?.name === keyName && selectedKey?.isMajor === isMajor;
+    const isHovered = hoveredKey?.name === keyName && hoveredKey?.isMajor === isMajor;
 
     let fillClassName = isMajor ? 'fill-key-area-major' : 'fill-key-area-minor';
     if (isSelected) {

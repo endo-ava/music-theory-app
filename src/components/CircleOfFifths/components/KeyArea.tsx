@@ -2,9 +2,27 @@
 
 import { memo } from 'react';
 import { motion } from 'motion/react';
-import { KeyAreaProps } from '../types/props';
 import { ANIMATION } from '../constants/index';
 import { useKeyArea } from '../hooks/useKeyArea';
+import type { CircleSegment as CircleSegmentType, Point } from '@/types/circleOfFifths';
+
+/**
+ * 個別キーエリアコンポーネントのProps
+ */
+export interface KeyAreaProps {
+  /** キー名 */
+  keyName: string;
+  /** メジャーキーかどうか */
+  isMajor: boolean;
+  /** セグメントの情報 */
+  segment: CircleSegmentType;
+  /** SVGパス */
+  path: string;
+  /** テキスト位置 */
+  textPosition: Point;
+  /** テキスト回転角度 */
+  textRotation: number;
+}
 
 /**
  * 個別のキーエリアコンポーネント
