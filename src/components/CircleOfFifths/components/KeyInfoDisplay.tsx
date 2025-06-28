@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { getKeyInfo } from '../utils/index';
+import { getKeyInfo } from '../utils/dataOperations';
 import { keyInfoVariants, keyInfoItemVariants } from '../animations';
 import { useCircleOfFifthsStore } from '@/store/circleOfFifthsStore';
 

@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT } from '../constants';
-import { generateThreeSegmentPaths, calculateTextPosition, calculateTextRotation } from '../utils';
 import { CircleSegment, Point, SegmentPaths } from '@/types/circleOfFifths';
+import { calculateTextPosition, calculateTextRotation } from '../utils/geometry';
+import { generateThreeSegmentPaths } from '../utils/pathGeneration';
 
 /**
  * 五度圏の単一セグメントを描画するためのデータセット。
