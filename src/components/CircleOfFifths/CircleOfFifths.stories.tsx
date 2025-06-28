@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { CircleOfFifths } from './CircleOfFifths'
+import type { Meta, StoryObj } from '@storybook/react';
+import { CircleOfFifths } from './CircleOfFifths';
 
 const meta: Meta<typeof CircleOfFifths> = {
   title: 'Components/CircleOfFifths',
@@ -8,11 +8,11 @@ const meta: Meta<typeof CircleOfFifths> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
-}
+};
