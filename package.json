@@ -16,6 +16,7 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:storybook": "test-storybook",
+    "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"http-server storybook-static --port 6006 --silent\" \"wait-on http://127.0.0.1:6006 && test-storybook\"",
     "test:all": "npm run test:run && npm run test:storybook",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -53,11 +54,13 @@
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
+    "concurrently": "^9.2.0",
     "eslint": "^9.28.0",
     "eslint-config-next": "15.3.3",
     "eslint-plugin-storybook": "^0.11.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.2.0",
+    "http-server": "^14.1.1",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.0",
@@ -66,7 +69,8 @@
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.33.1",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wait-on": "^8.0.3"
   },
   "lint-staged": {
     "**/*.{js,ts,jsx,tsx}": [

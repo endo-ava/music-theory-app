@@ -185,8 +185,8 @@ jobs:
       - name: Build Storybook
         run: npm run build-storybook
 
-      - name: Run Storybook tests
-        run: npm run test:storybook
+      - name: Serve Storybook and run tests
+        run: npm run test:storybook:ci
 
       - name: Upload Storybook build
         uses: actions/upload-artifact@v4
