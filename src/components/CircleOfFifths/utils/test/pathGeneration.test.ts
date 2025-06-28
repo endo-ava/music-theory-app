@@ -7,13 +7,13 @@ describe('pathGeneration utils', () => {
   describe('generatePizzaSlicePath', () => {
     test('正常ケース: 有効なパラメータで正しいSVGパスを生成', () => {
       const path = generatePizzaSlicePath(0, 50, 100);
-      
+
       // SVGパスの基本構造をチェック
       expect(path).toMatch(/^M\s+[\d.-]+\s+[\d.-]+/); // M (move to) で始まる
       expect(path).toContain('L'); // L (line to) を含む
       expect(path).toContain('A'); // A (arc) を含む
       expect(path).toContain('Z'); // Z (close path) で終わる
-      
+
       // パスが文字列として適切に生成されているか
       expect(typeof path).toBe('string');
       expect(path.length).toBeGreaterThan(0);
@@ -22,7 +22,7 @@ describe('pathGeneration utils', () => {
     test('正常ケース: 複数の位置で一貫したパス構造を生成', () => {
       for (let position = 0; position < 12; position++) {
         const path = generatePizzaSlicePath(position, 80, 150);
-        
+
         // 各パスが適切な構造を持つことを確認
         expect(path).toMatch(/^M\s+[\d.-]+\s+[\d.-]+.*Z$/);
         expect(path.split('M').length).toBe(2); // M は1回のみ
@@ -34,11 +34,11 @@ describe('pathGeneration utils', () => {
     test('境界値ケース: large-arc-flagの計算が正しい', () => {
       // 角度差が180度より大きい場合と小さい場合をテスト
       const path = generatePizzaSlicePath(0, 50, 100);
-      
+
       // 五度圏では各セグメントが30度なので、large-arc-flagは常に0になる
       const arcCommands = path.match(/A\s+[\d.-]+\s+[\d.-]+\s+\d+\s+(\d+)/g);
       expect(arcCommands).not.toBeNull();
-      
+
       if (arcCommands) {
         arcCommands.forEach(arcCommand => {
           const flagMatch = arcCommand.match(/A\s+[\d.-]+\s+[\d.-]+\s+\d+\s+(\d+)/);
@@ -54,7 +54,7 @@ describe('pathGeneration utils', () => {
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => generatePizzaSlicePath(-1, 50, 100)).toThrow(CircleOfFifthsError);
       expect(() => generatePizzaSlicePath(12, 50, 100)).toThrow(CircleOfFifthsError);
-      
+
       try {
         generatePizzaSlicePath(-1, 50, 100);
       } catch (error) {
@@ -66,7 +66,7 @@ describe('pathGeneration utils', () => {
     test('異常ケース: 負の半径でCircleOfFifthsErrorをスロー', () => {
       expect(() => generatePizzaSlicePath(0, -50, 100)).toThrow(CircleOfFifthsError);
       expect(() => generatePizzaSlicePath(0, 50, -100)).toThrow(CircleOfFifthsError);
-      
+
       try {
         generatePizzaSlicePath(0, -50, 100);
       } catch (error) {
@@ -78,7 +78,7 @@ describe('pathGeneration utils', () => {
     test('異常ケース: 内側半径≥外側半径でCircleOfFifthsErrorをスロー', () => {
       expect(() => generatePizzaSlicePath(0, 100, 100)).toThrow(CircleOfFifthsError);
       expect(() => generatePizzaSlicePath(0, 150, 100)).toThrow(CircleOfFifthsError);
-      
+
       try {
         generatePizzaSlicePath(0, 100, 100);
       } catch (error) {
@@ -92,17 +92,17 @@ describe('pathGeneration utils', () => {
   describe('generateThreeSegmentPaths', () => {
     test('正常ケース: 有効なパラメータで3つのパスを正しく生成', () => {
       const result = generateThreeSegmentPaths(0, 120, 170, 200);
-      
+
       // 3つのパスが生成されることを確認
       expect(result).toHaveProperty('minorPath');
       expect(result).toHaveProperty('majorPath');
       expect(result).toHaveProperty('signaturePath');
-      
+
       // 各パスが有効なSVGパス文字列であることを確認
       expect(typeof result.minorPath).toBe('string');
       expect(typeof result.majorPath).toBe('string');
       expect(typeof result.signaturePath).toBe('string');
-      
+
       expect(result.minorPath).toMatch(/^M.*Z$/);
       expect(result.majorPath).toMatch(/^M.*Z$/);
       expect(result.signaturePath).toMatch(/^M.*Z$/);
@@ -115,12 +115,12 @@ describe('pathGeneration utils', () => {
         CIRCLE_LAYOUT.MIDDLE_RADIUS,
         CIRCLE_LAYOUT.RADIUS
       );
-      
+
       // パスが正しく生成されることを確認
       expect(result.minorPath).toBeTruthy();
       expect(result.majorPath).toBeTruthy();
       expect(result.signaturePath).toBeTruthy();
-      
+
       // 各パスが異なることを確認（異なる半径で生成されているため）
       expect(result.minorPath).not.toBe(result.majorPath);
       expect(result.majorPath).not.toBe(result.signaturePath);
@@ -130,7 +130,7 @@ describe('pathGeneration utils', () => {
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => generateThreeSegmentPaths(-1, 120, 170, 200)).toThrow(CircleOfFifthsError);
       expect(() => generateThreeSegmentPaths(12, 120, 170, 200)).toThrow(CircleOfFifthsError);
-      
+
       try {
         generateThreeSegmentPaths(-1, 120, 170, 200);
       } catch (error) {
@@ -143,7 +143,7 @@ describe('pathGeneration utils', () => {
       expect(() => generateThreeSegmentPaths(0, -120, 170, 200)).toThrow(CircleOfFifthsError);
       expect(() => generateThreeSegmentPaths(0, 120, -170, 200)).toThrow(CircleOfFifthsError);
       expect(() => generateThreeSegmentPaths(0, 120, 170, -200)).toThrow(CircleOfFifthsError);
-      
+
       try {
         generateThreeSegmentPaths(0, -120, 170, 200);
       } catch (error) {
@@ -156,11 +156,11 @@ describe('pathGeneration utils', () => {
       // minor >= major の場合
       expect(() => generateThreeSegmentPaths(0, 170, 170, 200)).toThrow(CircleOfFifthsError);
       expect(() => generateThreeSegmentPaths(0, 180, 170, 200)).toThrow(CircleOfFifthsError);
-      
+
       // major >= signature の場合
       expect(() => generateThreeSegmentPaths(0, 120, 200, 200)).toThrow(CircleOfFifthsError);
       expect(() => generateThreeSegmentPaths(0, 120, 210, 200)).toThrow(CircleOfFifthsError);
-      
+
       try {
         generateThreeSegmentPaths(0, 170, 170, 200);
       } catch (error) {

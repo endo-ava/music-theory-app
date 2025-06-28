@@ -40,7 +40,7 @@ describe('geometry utils', () => {
       expect(() => calculateAngle(-1)).toThrow(CircleOfFifthsError);
       expect(() => calculateAngle(12)).toThrow(CircleOfFifthsError);
       expect(() => calculateAngle(1.5)).toThrow(CircleOfFifthsError);
-      
+
       // エラーメッセージとコードの確認
       try {
         calculateAngle(-1);
@@ -56,11 +56,11 @@ describe('geometry utils', () => {
     test('正常ケース: 正の角度をそのまま返す', () => {
       expect(normalizeAngle(Math.PI / 2)).toBeCloseTo(Math.PI / 2, 10);
       expect(normalizeAngle(Math.PI)).toBeCloseTo(Math.PI, 10);
-      expect(normalizeAngle(3 * Math.PI / 2)).toBeCloseTo(3 * Math.PI / 2, 10);
+      expect(normalizeAngle((3 * Math.PI) / 2)).toBeCloseTo((3 * Math.PI) / 2, 10);
     });
 
     test('正常ケース: 負の角度を正規化', () => {
-      expect(normalizeAngle(-Math.PI / 2)).toBeCloseTo(3 * Math.PI / 2, 10);
+      expect(normalizeAngle(-Math.PI / 2)).toBeCloseTo((3 * Math.PI) / 2, 10);
       expect(normalizeAngle(-Math.PI)).toBeCloseTo(Math.PI, 10);
       expect(normalizeAngle(-2 * Math.PI)).toBeCloseTo(0, 10);
     });
@@ -113,14 +113,14 @@ describe('geometry utils', () => {
   describe('calculateTextPosition', () => {
     test('正常ケース: 各位置で正しいテキスト座標を計算', () => {
       const radius = 150;
-      
+
       for (let position = 0; position < SEGMENT_COUNT; position++) {
         const result = calculateTextPosition(position, radius);
-        
+
         // セグメントの中心角度を計算
         const centerAngle = calculateAngle(position) + Math.PI / SEGMENT_COUNT;
         const expected = polarToCartesian(radius, centerAngle);
-        
+
         expect(result.x).toBeCloseTo(expected.x, 10);
         expect(result.y).toBeCloseTo(expected.y, 10);
       }
@@ -129,7 +129,7 @@ describe('geometry utils', () => {
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => calculateTextPosition(-1, 100)).toThrow(CircleOfFifthsError);
       expect(() => calculateTextPosition(12, 100)).toThrow(CircleOfFifthsError);
-      
+
       try {
         calculateTextPosition(-1, 100);
       } catch (error) {
@@ -140,7 +140,7 @@ describe('geometry utils', () => {
 
     test('異常ケース: 負の半径でCircleOfFifthsErrorをスロー', () => {
       expect(() => calculateTextPosition(0, -100)).toThrow(CircleOfFifthsError);
-      
+
       try {
         calculateTextPosition(0, -100);
       } catch (error) {
