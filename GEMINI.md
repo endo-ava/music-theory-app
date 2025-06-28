@@ -1,10 +1,10 @@
-# CLAUDE.md
+# Gemini.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Gemini CLI when working with code in this repository.
 
 ## 🚨 重要：リンク先ドキュメントの必読
 
-**Claude Codeは、このファイル内のすべてのリンク先ドキュメントを必ず読み込むこと。**
+**Gemini CLIは、このファイル内のすべてのリンク先ドキュメントを必ず読み込むこと。**
 下記リンクがある箇所では、作業開始前に必ずリンク先のファイルをReadツールで読み込み、内容を把握してから作業を行うこと。
 
 ### 必読ドキュメント一覧
@@ -33,7 +33,7 @@ npm run dev
 npm run build
 
 # 本番サーバー起動
-npm start
+npm run start
 
 # リンター実行
 npm run lint
