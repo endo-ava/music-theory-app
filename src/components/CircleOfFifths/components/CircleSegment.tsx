@@ -2,9 +2,28 @@
 
 import { memo } from 'react';
 import { motion } from 'motion/react';
-import { CircleSegmentProps } from '../types/props';
 import { ANIMATION } from '../constants/index';
 import { KeyArea } from './KeyArea';
+import type {
+  CircleSegment as CircleSegmentType,
+  Point,
+  SegmentPaths,
+} from '@/types/circleOfFifths';
+
+/**
+ * セグメントコンポーネントのProps
+ */
+export interface CircleSegmentProps {
+  /** セグメントの情報 */
+  segment: CircleSegmentType;
+  paths: SegmentPaths;
+  textPositions: {
+    minorTextPos: Point;
+    majorTextPos: Point;
+    signatureTextPos: Point;
+  };
+  textRotation: number;
+}
 
 /**
  * 五度圏のセグメントコンポーネント
