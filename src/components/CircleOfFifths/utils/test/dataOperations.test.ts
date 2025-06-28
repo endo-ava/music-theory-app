@@ -11,9 +11,9 @@ describe('dataOperations utils', () => {
         isMajor: true,
         position: 0,
       };
-      
+
       const result = getKeyInfo(cMajorKey);
-      
+
       expect(result.name).toBe('C');
       expect(result.scale).toBe('長調');
       expect(result.position).toBe(1); // 位置 + 1 (表示用)
@@ -26,9 +26,9 @@ describe('dataOperations utils', () => {
         isMajor: false,
         position: 0,
       };
-      
+
       const result = getKeyInfo(aMinorKey);
-      
+
       expect(result.name).toBe('Am');
       expect(result.scale).toBe('短調');
       expect(result.position).toBe(1); // 位置 + 1 (表示用)
@@ -42,35 +42,35 @@ describe('dataOperations utils', () => {
         isMajor: true,
         position: 3,
       };
-      
+
       const fSharpMinorKey: Key = {
         name: 'F#m',
         isMajor: false,
         position: 3,
       };
-      
+
       const aMajorResult = getKeyInfo(aMajorKey);
       const fSharpMinorResult = getKeyInfo(fSharpMinorKey);
-      
+
       expect(aMajorResult.relativeKey).toBe('F#m');
       expect(fSharpMinorResult.relativeKey).toBe('A');
-      
+
       // 位置6: F#/G♭ major と D#m minor
       const fSharpMajorKey: Key = {
         name: 'F#',
         isMajor: true,
         position: 6,
       };
-      
+
       const dSharpMinorKey: Key = {
         name: 'D#m',
         isMajor: false,
         position: 6,
       };
-      
+
       const fSharpMajorResult = getKeyInfo(fSharpMajorKey);
       const dSharpMinorResult = getKeyInfo(dSharpMinorKey);
-      
+
       expect(fSharpMajorResult.relativeKey).toBe('D#m');
       expect(dSharpMinorResult.relativeKey).toBe('F#');
     });
@@ -78,12 +78,12 @@ describe('dataOperations utils', () => {
     test('正常ケース: 全てのKEYS定数のキーで正しく動作', () => {
       KEYS.forEach(key => {
         const result = getKeyInfo(key);
-        
+
         // 基本プロパティの確認
         expect(result.name).toBe(key.name);
         expect(result.position).toBe(key.position + 1);
         expect(result.scale).toBe(key.isMajor ? '長調' : '短調');
-        
+
         // 相対調の確認
         const expectedRelativeKey = KEYS.find(
           k => k.isMajor !== key.isMajor && k.position === key.position
@@ -100,7 +100,7 @@ describe('dataOperations utils', () => {
         isMajor: true,
         position: 99, // 存在しない位置
       };
-      
+
       // この場合、isValidKeyでfalseになるため、エラーがスローされる
       expect(() => getKeyInfo(hypotheticalKey)).toThrow(CircleOfFifthsError);
     });
@@ -118,11 +118,11 @@ describe('dataOperations utils', () => {
         { name: 'C', isMajor: true, position: 12 },
         { name: 'C', isMajor: true, position: 1.5 },
       ];
-      
+
       invalidKeys.forEach(invalidKey => {
         expect(() => getKeyInfo(invalidKey as Key)).toThrow(CircleOfFifthsError);
       });
-      
+
       // エラーメッセージとコードの確認
       try {
         getKeyInfo({ name: '', isMajor: true, position: 0 });
@@ -139,9 +139,9 @@ describe('dataOperations utils', () => {
         isMajor: true,
         position: 6,
       };
-      
+
       const result = getKeyInfo(complexKey);
-      
+
       expect(result.name).toBe('F#/G♭');
       expect(result.scale).toBe('長調');
       expect(result.position).toBe(7);
