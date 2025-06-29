@@ -23,31 +23,31 @@
 ## ファイル構造
 
 ```
-src/components/CircleOfFifths/
+src/features/circle-of-fifths/
 ├── README.md                 # このファイル
-├── CircleOfFifths.tsx        # メインコンポーネント
-├── animations.ts             # Framer Motionアニメーション定義
-├── components/               # 子コンポーネント
+├── index.ts                  # エクスポート統合
+├── components/               # コンポーネント
+│   ├── CircleOfFifths.tsx    # メインコンポーネント
 │   ├── CircleSegment.tsx     # セグメントコンポーネント
 │   ├── KeyArea.tsx          # キーエリアコンポーネント
 │   └── KeyInfoDisplay.tsx   # キー情報表示コンポーネント
+├── __stories__/              # Storybookストーリー
+│   └── CircleOfFifths.stories.tsx
+├── animations.ts             # Framer Motionアニメーション定義
 ├── constants/                # 定数定義
 │   └── index.ts             # すべての定数
 ├── hooks/                    # カスタムフック
 │   ├── useCircleOfFifths.ts  # CircleOfFifths用フック
 │   └── useKeyArea.ts         # KeyArea用フック
+├── store/                    # 状態管理
+│   └── index.ts             # Zustandストア
+├── types.ts                  # ローカル型定義
 └── utils/                    # ユーティリティ関数
     ├── index.ts             # 統合エクスポート
     ├── validation.ts        # バリデーション
-    ├── geometry.ts         # 幾何学計算
-    ├── pathGeneration.ts   # パス生成
-    └── dataOperations.ts   # データ操作
-
-src/types/
-└── circleOfFifths.ts        # グローバル型定義
-
-src/store/
-└── circleOfFifthsStore.ts   # Zustand状態管理
+    ├── geometry.ts          # 幾何学計算
+    ├── pathGeneration.ts    # パス生成
+    └── dataOperations.ts    # データ操作
 ```
 
 ## 使用方法
@@ -55,7 +55,7 @@ src/store/
 ### 基本的な使用
 
 ```tsx
-import { CircleOfFifths } from '@/components/CircleOfFifths';
+import { CircleOfFifths } from '@/features/circle-of-fifths';
 
 function App() {
   return (
@@ -69,7 +69,7 @@ function App() {
 ### カスタマイズ
 
 ```tsx
-import { CircleOfFifths } from '@/components/CircleOfFifths';
+import { CircleOfFifths } from '@/features/circle-of-fifths';
 
 function App() {
   return (

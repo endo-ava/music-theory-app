@@ -88,10 +88,11 @@ flowchart LR
 ### ファイル構造
 
 ```
-src/components/GlobalHeader/
+src/features/global-header/
 ├── README.md                       # この設計書
-├── GlobalHeader.tsx                # メインコンポーネント (Server)
-├── components/                     # 子コンポーネント
+├── index.ts                        # エクスポート統合
+├── components/                     # コンポーネント
+│   ├── GlobalHeader.tsx            # メインコンポーネント (Server)
 │   ├── Logo.tsx                   # ロゴコンポーネント (Server)
 │   ├── ActiveLinkProvider.tsx     # アクティブリンク管理 (Client)
 │   ├── DesktopNavigation.tsx      # デスクトップナビ (Client)
@@ -197,7 +198,7 @@ const {
 ### 基本的な使用
 
 ```tsx
-import { GlobalHeader } from '@/components/GlobalHeader';
+import { GlobalHeader } from '@/features/global-header';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -214,7 +215,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 ### カスタマイズ例
 
 ```tsx
-import { GlobalHeader } from '@/components/GlobalHeader';
+import { GlobalHeader } from '@/features/global-header';
 
 function CustomLayout() {
   return (
@@ -460,10 +461,10 @@ if (process.env.NODE_ENV === 'development') {
 
 ### 関連ドキュメント
 
-- [要件定義書](../../../docs/01.requirements.md)
-- [画面設計書](../../../docs/screenDesigns/01.hub.md)
-- [開発規約](../../../docs/03.developmentAgreement.md)
-- [コンポーネント設計テンプレート](../../../docs/templates/component-design-template.md)
+- [要件定義書](../../docs/01.requirements.md)
+- [画面設計書](../../docs/screenDesigns/01.hub.md)
+- [開発規約](../../docs/03.developmentAgreement.md)
+- [コンポーネント設計テンプレート](../../docs/templates/component-design-template.md)
 
 ### 用語集
 
