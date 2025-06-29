@@ -1,4 +1,4 @@
-import { CircleOfFifths } from '@/components/CircleOfFifths/CircleOfFifths';
+import { CircleOfFifths } from '@/features/circle-of-fifths';
 
 export default function Home() {
   return (
