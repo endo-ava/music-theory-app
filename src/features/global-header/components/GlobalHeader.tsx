@@ -1,7 +1,7 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
-import { GlobalHeaderProps, NavigationLink } from '../types';
+import { NavigationLink } from '../types';
 import { Logo } from './Logo';
 import { ActiveLinkProvider } from './ActiveLinkProvider';
 
@@ -13,6 +13,16 @@ const navigationLinks: NavigationLink[] = [
   { id: 'library', label: 'Library', href: '/library' },
   { id: 'tutorial', label: 'Tutorial', href: '/tutorial' },
 ];
+
+/**
+ * GlobalHeaderコンポーネントのProps
+ */
+export interface GlobalHeaderProps {
+  /** カスタムクラス名 */
+  className?: string;
+  /** カスタムスタイル */
+  style?: React.CSSProperties;
+}
 
 /**
  * グローバルヘッダーコンポーネント
@@ -54,5 +64,3 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = ({ className, style }) 
   );
 };
 
-// 型のエクスポート
-export type { GlobalHeaderProps, NavigationLink } from '../types';
