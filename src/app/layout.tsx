@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { GlobalHeader } from '@/components/GlobalHeader/GlobalHeader';
+import { GlobalHeader } from '@/features/global-header';
 
 export const metadata: Metadata = {
   title: '音楽理論学習アプリ',

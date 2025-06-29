@@ -13,7 +13,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `./docs/02.screenDesign.md` - 画面設計書(全体)
 - `./docs/screenDesigns/` - 画面設計書(個別)
 - `./docs/03.developmentAgreement.md` - **開発規約（最重要）**
-- `./src/components/CircleOfFifths/README.md` - CircleOfFifthsコンポーネント設計
 - `.github/PULL_REQUEST_TEMPLATE.md` - PRテンプレート
 - `.github/ISSUE_TEMPLATE/` - Issueテンプレート群
 
@@ -80,11 +79,26 @@ src/
 │   ├── layout.tsx         # ルートレイアウト
 │   ├── library/           # ライブラリページ
 │   └── tutorial/          # チュートリアルページ
-├── components/            # 再利用可能コンポーネント
-│   └── CircleOfFifths/   # 五度圏コンポーネント（メインUI）
-├── store/                # Zustandストア
-├── types/                # TypeScript型定義
-└── docs/                 # 設計書・要件定義
+├── features/              # 機能別コンポーネント
+│   ├── circle-of-fifths/  # 五度圏機能
+│   │   ├── README.md      # コンポーネント設計書
+│   │   ├── index.ts       # エクスポート統合
+│   │   ├── components/    # UIコンポーネント
+│   │   ├── __stories__/   # Storybookストーリー
+│   │   ├── animations.ts  # アニメーション定義
+│   │   ├── constants/     # 定数定義
+│   │   ├── hooks/         # カスタムフック
+│   │   ├── store/         # 状態管理（Zustand）
+│   │   ├── types.ts       # ローカル型定義
+│   │   └── utils/         # ユーティリティ関数
+│   └── global-header/     # グローバルヘッダー機能
+│       ├── README.md      # コンポーネント設計書
+│       ├── index.ts       # エクスポート統合
+│       ├── components/    # UIコンポーネント
+│       ├── hooks/         # カスタムフック
+│       └── types.ts       # ローカル型定義
+└── test/                  # テスト設定
+docs/                      # 設計書・要件定義
 ```
 
 ## 開発規約
@@ -107,4 +121,4 @@ src/
 
 - PR作成前に、必要に応じてドキュメント(./docs)との整合性を確認し、ドキュメントを更新すること
   - 基本ドキュメントはこちら: `./docs`
-  - 主要なコンポーネントのドキュメントはsrcの各階層に保存: 例. `./src/components/CircleOfFifths/README.md`
+  - 主要なコンポーネントのドキュメントはsrcの各階層に保存: 例. `./src/features/circle-of-fifths/README.md`
