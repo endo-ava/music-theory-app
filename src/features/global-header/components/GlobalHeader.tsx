@@ -63,4 +63,3 @@ export const GlobalHeader: React.FC<GlobalHeaderProps> = ({ className, style }) 
     </header>
   );
 };
-

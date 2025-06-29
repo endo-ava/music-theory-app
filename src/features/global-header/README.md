@@ -461,10 +461,10 @@ if (process.env.NODE_ENV === 'development') {
 
 ### 関連ドキュメント
 
-- [要件定義書](../../docs/01.requirements.md)
-- [画面設計書](../../docs/screenDesigns/01.hub.md)
-- [開発規約](../../docs/03.developmentAgreement.md)
-- [コンポーネント設計テンプレート](../../docs/templates/component-design-template.md)
+- [要件定義書](../../../docs/01.requirements.md)
+- [画面設計書](../../../docs/screenDesigns/01.hub.md)
+- [開発規約](../../../docs/03.developmentAgreement.md)
+- [コンポーネント設計テンプレート](../../../docs/templates/component-design-template.md)
 
 ### 用語集
 
