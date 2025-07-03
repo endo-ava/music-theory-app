@@ -13,7 +13,7 @@ const meta: Meta<typeof CircleOfFifths> = {
   tags: ['autodocs'],
   decorators: [
     Story => (
-      <div className="p-8 bg-gray-50 min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+      <div className="p-8 min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
         <Story />
       </div>
     ),
