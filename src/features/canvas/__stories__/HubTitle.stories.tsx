@@ -75,6 +75,9 @@ export const InteractiveTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
+    // テスト開始前にストアを初期状態に確実にセット
+    useHubStore.setState({ hubType: 'circle-of-fifths' });
+
     // HubTitleの表示確認
     const hubTitle = canvas.getByRole('heading', { level: 1 });
     expect(hubTitle).toBeInTheDocument();
@@ -231,6 +234,9 @@ export const HubTypeSwitchTest: Story = {
   ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+
+    // テスト開始前にストアを初期状態に確実にセット
+    useHubStore.setState({ hubType: 'circle-of-fifths' });
 
     // 初期状態でh1タグに「五度圏」が表示されていることを確認
     expect(canvas.getByRole('heading', { name: '五度圏' })).toBeInTheDocument();
