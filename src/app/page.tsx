@@ -1,11 +1,14 @@
-import { CircleOfFifths } from '@/features/circle-of-fifths';
+import { Canvas } from '@/features/canvas';
 
 export default function Home() {
   return (
     <div>
-      <main className="py-8 flex flex-col items-center">
-        <h1 className="text-title text-center mb-4">五度圏</h1>
-        <CircleOfFifths />
+      <main className="py-2 flex flex-col">
+        <div className="flex justify-end">
+          <div className="w-full max-w-7xl">
+            <Canvas />
+          </div>
+        </div>
       </main>
     </div>
   );
