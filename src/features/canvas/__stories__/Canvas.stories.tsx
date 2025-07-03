@@ -93,7 +93,7 @@ export const InteractiveTest: Story = {
     expect(hubTitle).toHaveTextContent('五度圏');
 
     // CircleOfFifthsの表示確認
-    const circleOfFifths = canvas.getByLabelText('五度圏');
+    const circleOfFifths = canvas.getByRole('img', { name: '五度圏' });
     expect(circleOfFifths).toBeInTheDocument();
   },
 };
@@ -123,10 +123,10 @@ export const AccessibilityTest: Story = {
     const heading = canvas.getByRole('heading', { level: 1 });
     expect(heading).toBeInTheDocument();
 
-    // 画像の代替テキスト確認
-    const image = canvas.getByRole('img');
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('aria-label');
+    // SVG要素の代替テキスト確認
+    const svg = canvas.getByRole('img', { name: '五度圏' });
+    expect(svg).toBeInTheDocument();
+    expect(svg).toHaveAttribute('aria-label', '五度圏');
   },
 };
 
