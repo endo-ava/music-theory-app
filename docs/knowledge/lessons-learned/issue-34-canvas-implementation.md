@@ -8,11 +8,13 @@ Issue #34「Canvas コンポーネントの実装」で得た総合的な知見�
 ## プロジェクト概要
 
 ### 目標
+
 - Interactive Hub 画面のメイン表示エリア（Canvas）コンポーネントを実装
 - 既存の CircleOfFifths コンポーネントをラップし、将来的な Hub 切り替え機能に対応
 - 包括的な Storybook テストの実装
 
 ### 成果物
+
 - `src/features/canvas/` 配下のコンポーネント実装
 - Storybook stories による包括的なテスト
 - 276行の詳細な設計書（README.md）
@@ -23,6 +25,7 @@ Issue #34「Canvas コンポーネントの実装」で得た総合的な知見�
 ### 1. アーキテクチャ設計
 
 #### Server/Client コンポーネント境界
+
 ```typescript
 // Canvas.tsx (Server Component)
 export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
@@ -41,22 +44,24 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore(); // 状態管理が必要
   const hubTitle = hubTitleMap[hubType] || '五度圏';
-  
+
   return <h1>{hubTitle}</h1>;
 };
 ```
 
 **学習ポイント：**
+
 - Static な部分は Server Component で高速化
 - 状態管理が必要な部分のみ Client Component に分離
 - 境界の理由を明確に設計文書で記録
 
 #### 状態管理設計
+
 ```typescript
 // hubStore.ts
-export const useHubStore = create<HubState>((set) => ({
+export const useHubStore = create<HubState>(set => ({
   hubType: 'circle-of-fifths',
-  setHubType: (hubType) => set({ hubType }),
+  setHubType: hubType => set({ hubType }),
 }));
 
 // 型安全なマッピング
@@ -67,6 +72,7 @@ const hubTitleMap: Record<HubType, string> = {
 ```
 
 **学習ポイント：**
+
 - 最小限の状態管理で必要十分な機能を実現
 - 型安全性を重視した設計
 - 将来拡張を見据えた構造
@@ -74,19 +80,20 @@ const hubTitleMap: Record<HubType, string> = {
 ### 2. テスト戦略
 
 #### CSF 3.0 による包括的テスト
+
 ```typescript
 // インタラクションテスト
 export const InteractiveTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // 明示的な状態初期化
     useHubStore.setState({ hubType: 'circle-of-fifths' });
-    
+
     // DOM 要素の存在確認
     const mainArea = canvas.getByRole('main');
     expect(mainArea).toBeInTheDocument();
-    
+
     // アクセシビリティ確認
     expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
   },
@@ -94,11 +101,13 @@ export const InteractiveTest: Story = {
 ```
 
 **学習ポイント：**
+
 - Storybook をビジュアル開発とテストの両方で活用
 - 状態管理テストでは明示的な初期化が必要
 - セマンティックなセレクターを使用した信頼性の高いテスト
 
 #### 多層的なテスト設計
+
 - **基本表示テスト**: Default Story
 - **インタラクションテスト**: play 関数による自動化
 - **アクセシビリティテスト**: a11y addon との連携
@@ -113,6 +122,7 @@ export const InteractiveTest: Story = {
 **原因**: Storybook のデフォルト背景が白色のため、ダークテーマコンポーネントが見えない
 
 **解決策**:
+
 ```typescript
 // .storybook/preview.ts
 export const parameters = {
@@ -141,33 +151,37 @@ decorators: [
 **問題**: Storybook での状態がテスト間で持続し、テストが不安定
 
 **最初の対応（誤った方向）**:
+
 ```typescript
 // ❌ 実装側での修正を試みた
-export const useHubStore = create<HubState>((set) => ({
+export const useHubStore = create<HubState>(set => ({
   hubType: 'circle-of-fifths',
-  setHubType: (hubType) => set({ hubType }),
+  setHubType: hubType => set({ hubType }),
   resetState: () => set({ hubType: 'circle-of-fifths' }), // 不要な機能
 }));
 ```
 
 **ユーザーフィードバック**:
+
 > "Storybook側の問題なのに、実装側の修正で対応しようとしていることに違和感を感じます"
 
 **正しい解決策**:
+
 ```typescript
 // ✅ テスト側での修正
 export const StateTest: Story = {
   play: async ({ canvasElement }) => {
     // テスト開始時に状態を初期化
     useHubStore.setState({ hubType: 'circle-of-fifths' });
-    
+
     const canvas = within(canvasElement);
     // テスト実行...
   },
 };
 ```
 
-**学習ポイント**: 
+**学習ポイント**:
+
 - 問題の根本原因を正確に特定することが重要
 - 実装側とテスト側の責任を明確に分離
 - ユーザーフィードバックを真摯に受け止める
@@ -179,6 +193,7 @@ export const StateTest: Story = {
 **原因**: `page.tsx` の `<main>` 要素と Canvas の `role="main"` が競合
 
 **解決策**:
+
 ```typescript
 // page.tsx - main 要素を削除
 export default function Home() {
@@ -206,17 +221,20 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ### GitHub Copilot レビューの活用
 
 #### 第1回レビュー（4件）
+
 1. **Zustand 状態の持続問題** → テスト側で状態初期化
 2. **CSS 冗長性** → 不要なクラスの削除
 3. **パフォーマンス最適化** → Record 型マッピングの使用
 4. **アクセシビリティ** → main ランドマークの重複解消
 
 #### 第2回レビュー（3件）
+
 1. **型安全性** → 型定義の一貫性確保
 2. **未使用依存関係** → 不要なimportの削除
 3. **未使用フィールド** → インターフェースの整理
 
 #### 第3回レビュー（2件）
+
 1. **冗長なTailwindクラス** → `md:p-4` の削除
 2. **テスト信頼性** → `getByRole('img')` → `getByLabelText()` への変更
 
@@ -240,11 +258,13 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ### 1. 文書化の重要性
 
 **成功要因**:
+
 - 276行の詳細な設計書（README.md）
 - コンポーネントの責任範囲を明確に記録
 - 将来の拡張方針を明示
 
 **効果**:
+
 - 実装中の判断迷いが減少
 - レビュー時の背景理解が向上
 - 後続開発者のオンボーディング支援
@@ -252,11 +272,13 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ### 2. 開発プロセスの最適化
 
 **効果的だった手法**:
+
 - Storybook ファーストアプローチ
 - 包括的なテストの事前設計
 - 継続的なレビューフィードバック対応
 
 **改善点**:
+
 - 型定義の一貫性チェック
 - 状態管理のユニットテスト
 - パフォーマンス指標の測定
@@ -264,6 +286,7 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ### 3. コミット戦略
 
 **実装したコミット分割**:
+
 1. **基本実装**: コンポーネント構造の作成
 2. **テスト実装**: Storybook stories の追加
 3. **統合修正**: メインページとの統合
@@ -311,17 +334,20 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ## 影響とメトリクス
 
 ### 開発効率
+
 - **実装期間**: 1日で完全実装
 - **レビュー対応**: 3回のイテレーションで完了
 - **コード品質**: 全レビューポイントの解消
 
 ### コードメトリクス
+
 - **追加行数**: 973行（新機能実装）
 - **削除行数**: 23行（リファクタリング）
 - **ファイル数**: 8つの新規ファイル
 - **テストカバレッジ**: 包括的なStorybook テスト
 
 ### 知見の蓄積
+
 - **設計書**: 276行の詳細ドキュメント
 - **知見文書**: 8つの体系的な知見ファイル
 - **ベストプラクティス**: 再利用可能な実装パターン

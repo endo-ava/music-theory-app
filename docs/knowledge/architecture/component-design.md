@@ -10,6 +10,7 @@ React コンポーネントの設計において、保守性・拡張性・パ�
 ### 基本原則
 
 #### 1. パフォーマンス最適化の原則
+
 - **Server Component 優先**: デフォルトでは Server Component を使用
 - **Client Component は最小限**: インタラクションが必要な部分のみ
 - **境界の明確化**: 依存関係を明確にし、境界を最小化
@@ -47,9 +48,9 @@ import { useHubStore } from '../store/hubStore';
 
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore(); // 状態管理が必要なためClient Component
-  
+
   const hubTitle = hubTitleMap[hubType] || '五度圏';
-  
+
   return <h1 className={`text-title text-center mb-4 ${className}`}>{hubTitle}</h1>;
 };
 ```
@@ -57,12 +58,14 @@ export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
 ### 設計判断基準
 
 #### Server Component を選択する場合
+
 - 静的なレイアウト・構造を提供
 - データフェッチングが必要
 - SEO対応が重要
 - 初期読み込み速度を重視
 
 #### Client Component を選択する場合
+
 - 状態管理が必要（useState, useEffect など）
 - ユーザーインタラクションが必要
 - ブラウザ API を使用
@@ -86,6 +89,7 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ```
 
 **利点：**
+
 - 静的部分は Server Component で高速化
 - 動的部分のみ Client Component で必要最小限
 
@@ -101,12 +105,13 @@ const hubTitleMap: Record<HubType, string> = {
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
   const hubTitle = hubTitleMap[hubType] || '五度圏';
-  
+
   return <h1 className={`text-title text-center mb-4 ${className}`}>{hubTitle}</h1>;
 };
 ```
 
 **利点：**
+
 - 型安全性の確保
 - 拡張性の向上
 - パフォーマンスの最適化
@@ -154,18 +159,21 @@ export interface HubTitleProps {
 ## 教訓・ポイント
 
 ### ✅ 成功パターン
+
 - **境界の明確化**: Server/Client の境界を明確にすることで、パフォーマンスが向上
 - **型安全性**: TypeScript による型定義で、バグの事前防止
 - **構成の分離**: 静的・動的要素を適切に分離することで、保守性が向上
 - **最小権限の原則**: 必要最小限の部分のみを Client Component に
 
 ### ❌ 避けるべきパターン
+
 - **過度な Client Component**: 不要な部分まで Client Component にしない
 - **型定義の不一致**: インターフェースと実装の不整合
 - **境界の曖昧さ**: Server/Client の境界が不明確
 - **Props の過度な複雑化**: 単純な Props 設計を心がける
 
 ### 🔧 実装時の注意点
+
 - **'use client' ディレクティブ**: Client Component には必ず記述
 - **状態管理の最適化**: 状態は必要最小限に抑制
 - **アクセシビリティ**: role 属性や aria-label の適切な設定

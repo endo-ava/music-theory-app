@@ -78,14 +78,14 @@ export const InteractiveTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // 要素の存在確認
     const mainArea = canvas.getByRole('main');
     expect(mainArea).toBeInTheDocument();
-    
+
     // 属性の確認
     expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
-    
+
     // 内容の確認
     const hubTitle = canvas.getByRole('heading', { level: 1 });
     expect(hubTitle).toHaveTextContent('五度圏');
@@ -101,18 +101,18 @@ export const InteractiveTest: Story = {
 export const InteractiveTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // DOM要素の存在確認
     const mainArea = canvas.getByRole('main');
     expect(mainArea).toBeInTheDocument();
-    
+
     // 属性の確認
     expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
-    
+
     // テキスト内容の確認
     const hubTitle = canvas.getByRole('heading', { level: 1 });
     expect(hubTitle).toHaveTextContent('五度圏');
-    
+
     // 画像要素の確認（信頼性の高い方法）
     const circleOfFifths = canvas.getByLabelText('五度圏');
     expect(circleOfFifths).toBeInTheDocument();
@@ -126,15 +126,15 @@ export const InteractiveTest: Story = {
 export const AccessibilityTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // セマンティックHTML要素の確認
     const mainArea = canvas.getByRole('main');
     expect(mainArea).toBeInTheDocument();
-    
+
     // 見出しの階層構造確認
     const heading = canvas.getByRole('heading', { level: 1 });
     expect(heading).toBeInTheDocument();
-    
+
     // 画像の代替テキスト確認
     const image = canvas.getByRole('img');
     expect(image).toHaveAttribute('aria-label');
@@ -157,7 +157,7 @@ export const ResponsiveTest: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // レスポンシブクラスの確認
     const mainArea = canvas.getByRole('main');
     expect(mainArea).toHaveClass('w-full', 'h-full');
@@ -177,20 +177,20 @@ import { useHubStore } from '../store/hubStore';
 export const StateManagementTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // 状態の明示的な初期化
     useHubStore.setState({ hubType: 'circle-of-fifths' });
-    
+
     // 初期状態の確認
     const title = canvas.getByRole('heading', { level: 1 });
     expect(title).toHaveTextContent('五度圏');
-    
+
     // 状態変更テスト
     useHubStore.setState({ hubType: 'chromatic-circle' });
     await waitFor(() => {
       expect(title).toHaveTextContent('クロマチックサークル');
     });
-    
+
     // 状態リセット
     useHubStore.setState({ hubType: 'circle-of-fifths' });
   },
@@ -204,10 +204,10 @@ export const StateManagementTest: Story = {
 play: async ({ canvasElement }) => {
   // テスト開始時に必ず状態を初期化
   useHubStore.setState({ hubType: 'circle-of-fifths' });
-  
+
   const canvas = within(canvasElement);
   // テスト実行...
-}
+};
 ```
 
 ## 高度なテスト手法
@@ -218,13 +218,13 @@ play: async ({ canvasElement }) => {
 export const AsyncTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // 非同期で表示される要素の待機
     await waitFor(() => {
       const asyncElement = canvas.getByTestId('async-content');
       expect(asyncElement).toBeInTheDocument();
     });
-    
+
     // タイムアウト設定
     await waitFor(
       () => {
@@ -246,15 +246,15 @@ export const UserInteractionTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const user = userEvent.setup();
-    
+
     // クリックイベントのシミュレーション
     const button = canvas.getByRole('button');
     await user.click(button);
-    
+
     // キーボードイベントのシミュレーション
     const input = canvas.getByRole('textbox');
     await user.type(input, 'テスト入力');
-    
+
     // 結果の確認
     expect(input).toHaveValue('テスト入力');
   },
@@ -308,18 +308,21 @@ decorators: [
 ## 教訓・ポイント
 
 ### ✅ 成功パターン
+
 - **明示的な状態初期化**: テスト間の状態汚染を防ぐ
 - **セマンティックなセレクター**: `getByRole` や `getByLabelText` の使用
 - **包括的なテスト**: インタラクション、アクセシビリティ、レスポンシブを統合
 - **適切なデコレータ**: 視覚的な一貫性を保つ
 
 ### ❌ 避けるべきパターン
+
 - **脆弱なセレクター**: `getByRole('img')` よりも `getByLabelText()` を優先
 - **状態の汚染**: テスト間での状態の影響
 - **過度に複雑なテスト**: 一つのテストで多くのことを確認しすぎない
 - **非同期処理の未考慮**: 適切な待機処理を実装
 
 ### 🔧 実装時の注意点
+
 - **テストの信頼性**: 安定したセレクターとアサーションを使用
 - **パフォーマンス**: 不要な再レンダリングを避ける
 - **保守性**: テストの意図を明確に記述

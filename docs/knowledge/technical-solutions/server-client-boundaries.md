@@ -27,7 +27,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
     >
       {/* 静的な構造は Server Component */}
       <HubTitle /> {/* 状態管理が必要な部分のみ Client Component */}
-      
+
       <div className="w-full h-full flex items-center justify-center">
         <CircleOfFifths />
       </div>
@@ -46,9 +46,9 @@ import { useHubStore } from '../store/hubStore';
 
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore(); // 状態管理が必要なため Client Component
-  
+
   const hubTitle = hubTitleMap[hubType] || '五度圏';
-  
+
   return <h1 className={`text-title text-center mb-4 ${className}`}>{hubTitle}</h1>;
 };
 ```
@@ -58,6 +58,7 @@ export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
 ### 1. Server Component を選択すべき場合
 
 #### 静的コンテンツの表示
+
 ```typescript
 // 静的なレイアウトコンポーネント
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -78,6 +79,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 ```
 
 #### SEO重要なコンテンツ
+
 ```typescript
 // SEO対応が重要なコンテンツ
 export const ArticleContent: React.FC<{ article: Article }> = ({ article }) => {
@@ -94,6 +96,7 @@ export const ArticleContent: React.FC<{ article: Article }> = ({ article }) => {
 ### 2. Client Component を選択すべき場合
 
 #### 状態管理が必要
+
 ```typescript
 // 状態管理が必要なコンポーネント
 'use client';
@@ -102,17 +105,17 @@ import { useState, useEffect } from 'react';
 export const InteractiveWidget: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [data, setData] = useState(null);
-  
+
   useEffect(() => {
     // ブラウザ API の使用
     const handleResize = () => {
       // リサイズ処理
     };
-    
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  
+
   return (
     <div>
       <button onClick={() => setIsExpanded(!isExpanded)}>
@@ -125,6 +128,7 @@ export const InteractiveWidget: React.FC = () => {
 ```
 
 #### ブラウザ API の使用
+
 ```typescript
 // localStorage、sessionStorage、Window API など
 'use client';
@@ -132,20 +136,20 @@ import { useEffect, useState } from 'react';
 
 export const ThemeToggle: React.FC = () => {
   const [theme, setTheme] = useState('dark');
-  
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       setTheme(savedTheme);
     }
   }, []);
-  
+
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
   };
-  
+
   return (
     <button onClick={toggleTheme}>
       {theme === 'dark' ? '🌙' : '☀️'}
@@ -176,7 +180,7 @@ export const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children 
 'use client';
 export const DynamicContent: React.FC = () => {
   const [state, setState] = useState(initialState);
-  
+
   return (
     <div>
       {/* 動的コンテンツ */}
@@ -194,10 +198,10 @@ export const CompositeComponent: React.FC = () => {
     <div>
       {/* Server Component 部分 */}
       <StaticSection />
-      
+
       {/* Client Component 部分 */}
       <InteractiveSection />
-      
+
       {/* 再び Server Component 部分 */}
       <AnotherStaticSection />
     </div>
@@ -211,7 +215,7 @@ export const CompositeComponent: React.FC = () => {
 // Server Component から Client Component への Props 渡し
 export const ParentServer: React.FC = () => {
   const staticData = await fetchStaticData();
-  
+
   return (
     <div>
       <h1>静的タイトル</h1>
@@ -224,11 +228,11 @@ export const ParentServer: React.FC = () => {
 'use client';
 export const InteractiveChild: React.FC<{ data: any }> = ({ data }) => {
   const [selected, setSelected] = useState(null);
-  
+
   return (
     <div>
       {data.map(item => (
-        <button 
+        <button
           key={item.id}
           onClick={() => setSelected(item)}
           className={selected?.id === item.id ? 'active' : ''}
@@ -254,7 +258,7 @@ import { useState } from 'react';
 export const Component: React.FC = () => {
   const [state, setState] = useState();
   // heavyLibraryは実際には使用していない
-  
+
   return <div>...</div>;
 };
 
@@ -264,7 +268,7 @@ import { useState } from 'react';
 
 export const Component: React.FC = () => {
   const [state, setState] = useState();
-  
+
   return <div>...</div>;
 };
 ```
@@ -277,7 +281,7 @@ import dynamic from 'next/dynamic';
 
 const HeavyClientComponent = dynamic(
   () => import('./HeavyClientComponent'),
-  { 
+  {
     ssr: false,
     loading: () => <div>読み込み中...</div>
   }
@@ -301,7 +305,7 @@ export const PageComponent: React.FC = () => {
 // ❌ Server Component で状態管理
 export const BadComponent: React.FC = () => {
   const [state, setState] = useState(); // エラー：Server Componentで状態管理
-  
+
   return <div>...</div>;
 };
 
@@ -309,7 +313,7 @@ export const BadComponent: React.FC = () => {
 'use client';
 export const GoodComponent: React.FC = () => {
   const [state, setState] = useState(); // 正しい：Client Componentで状態管理
-  
+
   return <div>...</div>;
 };
 ```
@@ -322,7 +326,7 @@ export const BadComponent: React.FC = () => {
   const handleClick = () => {
     // エラー：Server Componentでイベントハンドラー
   };
-  
+
   return <button onClick={handleClick}>クリック</button>;
 };
 
@@ -332,7 +336,7 @@ export const GoodComponent: React.FC = () => {
   const handleClick = () => {
     // 正しい：Client Componentでイベントハンドラー
   };
-  
+
   return <button onClick={handleClick}>クリック</button>;
 };
 ```
@@ -340,18 +344,21 @@ export const GoodComponent: React.FC = () => {
 ## 教訓・ポイント
 
 ### ✅ 成功パターン
+
 - **Server Component 優先**: デフォルトでは Server Component を選択
 - **最小境界**: 必要最小限の部分のみ Client Component に
 - **明確な分離**: 境界の理由を明確に設計
 - **パフォーマンス考慮**: バンドルサイズと初期読み込み速度を最適化
 
 ### ❌ 避けるべきパターン
+
 - **過度な Client Component**: 不要な部分まで Client Component にしない
 - **境界の曖昧さ**: Server/Client の境界が不明確
 - **状態管理の混在**: Server Component での状態管理
 - **パフォーマンスの未考慮**: 不要なJavaScriptの送信
 
 ### 🔧 実装時の注意点
+
 - **'use client' の配置**: Client Component の最上位に配置
 - **Props の型安全性**: Server から Client への Props は型安全に
 - **SSR の考慮**: Client Component のSSR対応
