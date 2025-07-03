@@ -171,8 +171,6 @@ export interface HubState {
 export interface CanvasConfig {
   /** 現在のHub種類 */
   hubType: HubType;
-  /** レスポンシブ設定 */
-  responsive: boolean;
 }
 ```
 
@@ -251,7 +249,6 @@ Tailwind CSSを使用したモダンなスタイリングシステム：
 - `@/features/circle-of-fifths` - 五度圏コンポーネント
 - `./HubTitle` - タイトル表示コンポーネント
 - `tailwind-merge` - Tailwindクラスのマージ
-- `clsx` - 条件付きクラス名の構築
 
 ### HubTitle コンポーネント
 
