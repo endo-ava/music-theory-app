@@ -1,5 +1,4 @@
 import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 import { HubTitle } from './HubTitle';
 
@@ -26,16 +25,14 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
   return (
     <div
       className={twMerge(
-        clsx(
-          // メイン表示エリアのレイアウト
-          'flex flex-col items-center justify-center',
-          // 背景は透明（ページ全体の背景を継承）
-          'bg-transparent',
-          // サイズ設定
-          'w-full h-full min-h-[400px]',
-          // レスポンシブ対応
-          'p-4 md:p-4 lg:p-8'
-        ),
+        // メイン表示エリアのレイアウト
+        'flex flex-col items-center justify-center',
+        // 背景は透明（ページ全体の背景を継承）
+        'bg-transparent',
+        // サイズ設定
+        'w-full h-full min-h-[400px]',
+        // レスポンシブ対応
+        'p-4 md:p-4 lg:p-8',
         className
       )}
       style={style}

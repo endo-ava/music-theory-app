@@ -13,6 +13,4 @@ export type HubType = 'circle-of-fifths' | 'chromatic-circle';
 export interface CanvasConfig {
   /** 現在のHub種類 */
   hubType: HubType;
-  /** レスポンシブ設定 */
-  responsive: boolean;
 }

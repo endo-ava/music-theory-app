@@ -1,5 +1,6 @@
 'use client';
 import { useHubStore } from '../store/hubStore';
+import type { HubType } from '../types';
 
 /**
  * HubTitle コンポーネントのProps
@@ -19,7 +20,7 @@ export interface HubTitleProps {
  * @returns HubTitle のJSX要素
  */
 // Hub種類に応じたタイトルを取得するマッピングオブジェクト
-const hubTitleMap: Record<string, string> = {
+const hubTitleMap: Record<HubType, string> = {
   'circle-of-fifths': '五度圏',
   'chromatic-circle': 'クロマチックサークル',
 };
