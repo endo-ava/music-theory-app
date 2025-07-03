@@ -32,7 +32,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
         // サイズ設定
         'w-full h-full min-h-[400px]',
         // レスポンシブ対応
-        'p-4 md:p-4 lg:p-8',
+        'p-4 lg:p-8',
         className
       )}
       style={style}
