@@ -18,20 +18,16 @@ export interface HubTitleProps {
  * @param props - コンポーネントのプロパティ
  * @returns HubTitle のJSX要素
  */
+// Hub種類に応じたタイトルを取得するマッピングオブジェクト
+const hubTitleMap: Record<string, string> = {
+  'circle-of-fifths': '五度圏',
+  'chromatic-circle': 'クロマチックサークル',
+};
+
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
 
-  // Hub種類に応じたタイトルを取得
-  const getHubTitle = () => {
-    switch (hubType) {
-      case 'circle-of-fifths':
-        return '五度圏';
-      case 'chromatic-circle':
-        return 'クロマチックサークル';
-      default:
-        return '五度圏';
-    }
-  };
+  const hubTitle = hubTitleMap[hubType] || '五度圏';
 
-  return <h1 className={`text-title text-center mb-4 ${className}`}>{getHubTitle()}</h1>;
+  return <h1 className={`text-title text-center mb-4 ${className}`}>{hubTitle}</h1>;
 };
