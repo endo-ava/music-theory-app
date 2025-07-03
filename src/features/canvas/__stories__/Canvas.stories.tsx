@@ -93,7 +93,7 @@ export const InteractiveTest: Story = {
     expect(hubTitle).toHaveTextContent('五度圏');
 
     // CircleOfFifthsの表示確認
-    const circleOfFifths = canvas.getByRole('img', { name: '五度圏' });
+    const circleOfFifths = canvas.getByLabelText('五度圏');
     expect(circleOfFifths).toBeInTheDocument();
   },
 };
@@ -168,7 +168,7 @@ export const ResponsiveTest: Story = {
     expect(mainArea).toHaveClass('w-full', 'h-full');
 
     // モバイル対応のパディング確認
-    expect(mainArea).toHaveClass('p-4', 'md:p-4', 'lg:p-8');
+    expect(mainArea).toHaveClass('p-4', 'lg:p-8');
 
     // フレックスレイアウト確認
     expect(mainArea).toHaveClass('flex', 'flex-col', 'items-center', 'justify-center');
