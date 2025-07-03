@@ -10,6 +10,7 @@ GitHub Copilot などの自動レビューツールや人間によるコード�
 ### 1. レビューフィードバックの分類
 
 #### パフォーマンス最適化
+
 ```typescript
 // 指摘内容: HubTitle コンポーネントの最適化
 // 問題: 毎回関数を再計算している
@@ -17,7 +18,7 @@ GitHub Copilot などの自動レビューツールや人間によるコード�
 // ❌ 修正前
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
-  
+
   const getHubTitle = (type: HubType) => {
     switch (type) {
       case 'circle-of-fifths':
@@ -28,7 +29,7 @@ export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
         return '五度圏';
     }
   };
-  
+
   return <h1>{getHubTitle(hubType)}</h1>;
 };
 
@@ -41,12 +42,13 @@ const hubTitleMap: Record<HubType, string> = {
 export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
   const hubTitle = hubTitleMap[hubType] || '五度圏';
-  
+
   return <h1>{hubTitle}</h1>;
 };
 ```
 
 #### 型安全性の向上
+
 ```typescript
 // 指摘内容: 型定義の一貫性
 // 問題: インターフェースと実装の不一致
@@ -65,6 +67,7 @@ export interface CanvasConfig {
 ```
 
 #### 不要な依存関係の削除
+
 ```typescript
 // 指摘内容: 未使用のimport
 // 問題: clsx が不要になった
@@ -154,16 +157,19 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ### 1. 緊急度別の分類
 
 #### 高優先度：即座に対応
+
 - **セキュリティ脆弱性**: 機密情報の漏洩やXSS脆弱性
 - **アクセシビリティ違反**: WCAG準拠の重要な問題
 - **パフォーマンス問題**: 重大なパフォーマンス劣化
 
 #### 中優先度：次のイテレーションで対応
+
 - **コード品質**: 可読性やメンテナンス性の改善
 - **型安全性**: TypeScript の型定義の強化
 - **テスト信頼性**: テストの安定性向上
 
 #### 低優先度：時間があるときに対応
+
 - **コードスタイル**: フォーマットや命名の統一
 - **不要コード**: 使用していないコードの削除
 - **最適化**: 微細なパフォーマンス改善
@@ -171,6 +177,7 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 ### 2. 対応戦略
 
 #### 段階的な対応
+
 ```typescript
 // 1. 即座に対応：セキュリティ・アクセシビリティ
 // 2. 次のコミット：型安全性・パフォーマンス
@@ -201,11 +208,13 @@ const hubTitleMap: Record<HubType, string> = {
 ### 1. 判断基準
 
 #### 実装側で対応すべき場合
+
 - **アーキテクチャ上の問題**: 設計の根本的な問題
 - **パフォーマンス問題**: 実際のユーザー体験に影響
 - **セキュリティ問題**: 本番環境での脆弱性
 
 #### テスト側で対応すべき場合
+
 - **テスト固有の問題**: Storybook やテスト環境での問題
 - **状態管理の初期化**: テスト間の状態汚染
 - **モック・スタブの設定**: テスト用のデータ設定
@@ -217,9 +226,9 @@ const hubTitleMap: Record<HubType, string> = {
 
 // ❌ 実装側での対応（過度な修正）
 // store/hubStore.ts
-export const useHubStore = create<HubState>((set) => ({
+export const useHubStore = create<HubState>(set => ({
   hubType: 'circle-of-fifths',
-  setHubType: (hubType) => set({ hubType }),
+  setHubType: hubType => set({ hubType }),
   resetState: () => set({ hubType: 'circle-of-fifths' }), // 不要な機能追加
 }));
 
@@ -229,7 +238,7 @@ export const StateTest: Story = {
   play: async ({ canvasElement }) => {
     // テスト開始時に状態を初期化
     useHubStore.setState({ hubType: 'circle-of-fifths' });
-    
+
     const canvas = within(canvasElement);
     // テスト実行...
   },
@@ -244,11 +253,13 @@ export const StateTest: Story = {
 ## レビューログ（例）
 
 ### 2025-07-03 - Issue #34 Canvas 実装
+
 - **指摘**: Server/Client コンポーネント境界の最適化
 - **対応**: HubTitle を Client Component に分離
 - **学習**: 状態管理が必要な部分のみ Client Component に
 
 ### 2025-07-03 - GitHub Copilot レビュー
+
 - **指摘**: Zustand 状態のテスト間持続
 - **対応**: play 関数での状態初期化
 - **学習**: テスト側で解決すべき問題の判断基準
@@ -273,18 +284,21 @@ const MemoizedComponent = React.memo(Component);
 ## 教訓・ポイント
 
 ### ✅ 効果的なレビュー活用
+
 - **迅速な対応**: 重要な指摘は即座に対応
 - **分類による優先順位**: 重要度に応じた対応順序
 - **実装 vs テスト**: 適切な修正箇所の判断
 - **継続的改善**: レビューフィードバックのパターン化
 
 ### ❌ 避けるべき対応
+
 - **過度な修正**: 問題の本質を超えた修正
 - **一律対応**: 優先度を考慮しない対応
 - **テスト汚染**: 実装側での不適切な修正
 - **フィードバック無視**: 重要な指摘の見落とし
 
 ### 🔧 対応時の注意点
+
 - **段階的改善**: 一度に全て修正せず、段階的に対応
 - **影響範囲**: 修正による副作用の考慮
 - **テスト実行**: 修正後のテスト確認

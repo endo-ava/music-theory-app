@@ -18,11 +18,11 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
         // ベース（モバイル）スタイル
         'flex flex-col items-center justify-center',
         'w-full h-full min-h-[400px]',
-        
+
         // モバイル → デスクトップへの拡張
         'p-4',           // モバイル: 16px
         'lg:p-8',        // デスクトップ: 32px
-        
+
         className
       )}
       style={style}
@@ -53,13 +53,13 @@ const ResponsiveGrid: React.FC = () => {
     <div className={twMerge(
       // モバイル: 1列
       'grid grid-cols-1 gap-4',
-      
+
       // タブレット: 2列
       'md:grid-cols-2 md:gap-6',
-      
+
       // デスクトップ: 3列
       'lg:grid-cols-3 lg:gap-8',
-      
+
       // 大デスクトップ: 4列
       'xl:grid-cols-4 xl:gap-10'
     )}>
@@ -77,17 +77,17 @@ const ResponsiveGrid: React.FC = () => {
 /* src/app/globals.css */
 @theme {
   /* スペーシング */
-  --spacing-xs: 0.25rem;  /* 4px */
-  --spacing-sm: 0.5rem;   /* 8px */
-  --spacing-md: 1rem;     /* 16px */
-  --spacing-lg: 1.5rem;   /* 24px */
-  --spacing-xl: 2rem;     /* 32px */
-  
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+
   /* タイポグラフィ */
-  --font-size-title: 1.875rem;    /* 30px */
-  --font-size-heading: 1.5rem;    /* 24px */
-  --font-size-body: 1rem;         /* 16px */
-  
+  --font-size-title: 1.875rem; /* 30px */
+  --font-size-heading: 1.5rem; /* 24px */
+  --font-size-body: 1rem; /* 16px */
+
   /* カラー */
   --color-primary: #3b82f6;
   --color-secondary: #6b7280;
@@ -105,10 +105,10 @@ export const ThemedComponent: React.FC = () => {
       // スペーシング
       'p-md',          // --spacing-md (16px)
       'lg:p-xl',       // --spacing-xl (32px)
-      
+
       // タイポグラフィ
       'text-title',    // --font-size-title
-      
+
       // カラー
       'text-primary',  // --color-primary
       'bg-secondary'   // --color-secondary
@@ -130,13 +130,13 @@ export const CardGrid: React.FC<{ items: Item[] }> = ({ items }) => {
     <div className={twMerge(
       // モバイル: 縦積み
       'flex flex-col space-y-4',
-      
+
       // タブレット: 2列のグリッド
       'md:grid md:grid-cols-2 md:gap-6 md:space-y-0',
-      
+
       // デスクトップ: 3列のグリッド
       'lg:grid-cols-3',
-      
+
       // 大画面: 4列のグリッド
       'xl:grid-cols-4'
     )}>
@@ -157,13 +157,13 @@ export const ResponsiveContainer: React.FC<{ children: React.ReactNode }> = ({ c
     <div className={twMerge(
       // モバイル: フル幅
       'w-full px-4',
-      
+
       // タブレット: 最大幅設定
       'md:max-w-3xl md:mx-auto md:px-6',
-      
+
       // デスクトップ: さらに大きな最大幅
       'lg:max-w-5xl lg:px-8',
-      
+
       // 大画面: 最大幅設定
       'xl:max-w-7xl xl:px-12'
     )}>
@@ -179,7 +179,7 @@ export const ResponsiveContainer: React.FC<{ children: React.ReactNode }> = ({ c
 // 画面サイズに応じた条件付きレンダリング
 export const ResponsiveNavigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   return (
     <nav className="relative">
       {/* モバイルメニューボタン */}
@@ -189,14 +189,14 @@ export const ResponsiveNavigation: React.FC = () => {
       >
         ☰
       </button>
-      
+
       {/* デスクトップナビゲーション */}
       <div className="hidden lg:flex lg:space-x-8">
         <NavigationItem href="/home">ホーム</NavigationItem>
         <NavigationItem href="/about">概要</NavigationItem>
         <NavigationItem href="/contact">連絡先</NavigationItem>
       </div>
-      
+
       {/* モバイルメニュー */}
       {isMobileMenuOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-lg">
@@ -240,12 +240,12 @@ export const ResponsiveImage: React.FC<{ src: string; alt: string }> = ({ src, a
 // 条件付きスタイルの最適化
 export const OptimizedComponent: React.FC<{ variant: 'mobile' | 'desktop' }> = ({ variant }) => {
   const baseStyles = 'flex items-center justify-center';
-  
+
   const variantStyles = {
     mobile: 'p-2 text-sm',
     desktop: 'p-4 text-lg'
   };
-  
+
   return (
     <div className={twMerge(
       baseStyles,
@@ -293,10 +293,10 @@ export const MergedComponent: React.FC<{ className?: string }> = ({ className })
       // ベーススタイル
       'flex flex-col items-center justify-center',
       'w-full h-full min-h-[400px]',
-      
+
       // レスポンシブスタイル
       'p-4 lg:p-8',
-      
+
       // 外部からのカスタマイズ
       className
     )}>
@@ -324,11 +324,11 @@ export const ResponsiveTest: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // レスポンシブクラスの確認
     const element = canvas.getByRole('main');
     expect(element).toHaveClass('p-4', 'lg:p-8');
-    
+
     // 画面サイズに応じた表示確認
     expect(element).toHaveClass('w-full', 'h-full');
   },
@@ -342,11 +342,11 @@ export const ResponsiveTest: Story = {
 describe('ResponsiveComponent', () => {
   it('should apply mobile styles', () => {
     render(<ResponsiveComponent />);
-    
+
     const element = screen.getByRole('main');
     expect(element).toHaveClass('p-4');
   });
-  
+
   it('should apply desktop styles', () => {
     // 画面サイズを変更
     Object.defineProperty(window, 'innerWidth', {
@@ -354,9 +354,9 @@ describe('ResponsiveComponent', () => {
       configurable: true,
       value: 1200,
     });
-    
+
     render(<ResponsiveComponent />);
-    
+
     const element = screen.getByRole('main');
     expect(element).toHaveClass('lg:p-8');
   });
@@ -366,18 +366,21 @@ describe('ResponsiveComponent', () => {
 ## 教訓・ポイント
 
 ### ✅ 成功パターン
+
 - **モバイルファースト**: 小さな画面から大きな画面への拡張
 - **デザイントークン**: 一貫性のあるデザインシステム
 - **適切なブレークポイント**: 実際のデバイスサイズを考慮
 - **パフォーマンス最適化**: 不要なスタイルの削除
 
 ### ❌ 避けるべきパターン
+
 - **デスクトップファースト**: 大画面からの縮小は非効率
 - **冗長なクラス**: `md:p-4` のような不要なクラス
 - **固定サイズ**: 柔軟性のない固定サイズ設定
 - **パフォーマンス無視**: 重いスタイルの無駄遣い
 
 ### 🔧 実装時の注意点
+
 - **テスト確認**: 各画面サイズでの動作確認
 - **アクセシビリティ**: 小画面でのタップ領域確保
 - **パフォーマンス**: 不要なスタイルの除去
