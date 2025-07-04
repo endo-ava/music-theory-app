@@ -6,8 +6,18 @@ const meta: Meta<typeof CircleOfFifths> = {
   component: CircleOfFifths,
   parameters: {
     layout: 'centered',
+    backgrounds: {
+      default: 'app-bg',
+    },
   },
   tags: ['autodocs'],
+  decorators: [
+    Story => (
+      <div className="p-8 min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
