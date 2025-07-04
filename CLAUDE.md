@@ -126,3 +126,46 @@ docs/                      # 設計書・要件定義
 ### PRレビュー対応について
 
 - github copilot等からレビューをもらうことがあるが、これは必ずしも鵜呑みにするのではなく、対応方針を自身で判断すること。柔軟に考え、対応不要と判断してもよい。ただしその場合はその理由を伝えること
+
+### Playwright MCP スクリーンショット設定
+
+#### 基本方針
+
+- 常に全画面（full_page: true）でスクリーンショットを取得する
+- ファイルサイズを最小化するため、品質とサイズを調整する
+- レスポンストークンサイズを制限内に収める
+
+#### スクリーンショット実行時の指示
+
+1. まずビューポートサイズを設定。何も指示が無ければ、1920x1080と設定する：
+
+```
+playwright:browser_set_viewport_size(width: 1920, height: 1080)
+```
+
+2. 以下の設定で全画面スクリーンショットを取得：
+
+```
+playwright:browser_take_screenshot(
+  filename: "[descriptive_name].jpg",
+  full_page: true,
+  quality: 70,
+  type: "jpeg",
+  raw: false
+)
+```
+
+#### 下記に一般的な画面サイズを記載する。例えば「スマホサイズで」と指示されたら下記のスマートフォンのサイズを設定する。
+
+- スマートフォン（一般的なサイズ）  
+  playwright:browser_set_viewport_size(width: 360, height: 800)
+- タブレット（10インチ）  
+  playwright:browser_set_viewport_size(width: 800, height: 1280)
+- FHD  
+  playwright:browser_set_viewport_size(width: 1920, height: 1080)
+- WQHD (2K)  
+  playwright:browser_set_viewport_size(width: 2560, height: 1440)
+- 4K  
+  playwright:browser_set_viewport_size(width: 3840, height: 2160)
+- ウルトラワイド  
+  playwright:browser_set_viewport_size(width: 3440, height: 1440)
