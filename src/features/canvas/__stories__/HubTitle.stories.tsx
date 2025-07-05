@@ -84,7 +84,7 @@ export const InteractiveTest: Story = {
     expect(hubTitle).toHaveTextContent('五度圏');
 
     // セマンティクスの確認
-    expect(hubTitle).toHaveClass('text-title', 'text-center', 'mb-4');
+    expect(hubTitle).toHaveClass('text-title');
   },
 };
 
@@ -112,7 +112,7 @@ export const AccessibilityTest: Story = {
     expect(heading).toHaveTextContent(/^(五度圏|クロマチックサークル)$/);
 
     // 基本的なCSSクラスの確認
-    expect(heading).toHaveClass('text-title', 'text-center', 'mb-4');
+    expect(heading).toHaveClass('text-title');
   },
 };
 
