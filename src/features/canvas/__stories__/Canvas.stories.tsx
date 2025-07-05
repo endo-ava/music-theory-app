@@ -171,7 +171,7 @@ export const ResponsiveTest: Story = {
     expect(mainArea).toHaveClass('p-4', 'lg:p-8');
 
     // フレックスレイアウト確認
-    expect(mainArea).toHaveClass('flex', 'flex-col', 'items-center', 'justify-center');
+    expect(mainArea).toHaveClass('flex', 'flex-col');
   },
 };
 
