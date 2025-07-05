@@ -1,6 +1,3 @@
-import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
-import KeyInfoDisplay from './KeyInfoDisplay';
 import { CircleSegment } from './CircleSegment';
 import { useCircleOfFifths } from '../hooks/useCircleOfFifths';
 
@@ -29,33 +26,19 @@ export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({ className, style
   const { viewBox, segments, textRotation } = useCircleOfFifths();
 
   return (
-    <div
-      className={twMerge(
-        clsx(
-          'relative flex items-center justify-center',
-          'w-[70vw] h-[70vw] max-w-[700px] max-h-[700px]'
-        ),
-        className
-      )}
-      style={style}
-    >
-      <div className="w-full h-full">
-        <svg viewBox={viewBox} className="block" aria-label="五度圏" role="img">
-          {/* 各セグメント絵画をループで呼び出す */}
-          {segments.map(({ segment, paths, textPositions }) => (
-            <CircleSegment
-              key={segment.position}
-              segment={segment}
-              paths={paths}
-              textPositions={textPositions}
-              textRotation={textRotation}
-            />
-          ))}
-        </svg>
-      </div>
-
-      {/* キー情報表示エリア */}
-      <KeyInfoDisplay />
+    <div className={className} style={style}>
+      <svg viewBox={viewBox} className="block" aria-label="五度圏" role="img">
+        {/* 各セグメント絵画をループで呼び出す */}
+        {segments.map(({ segment, paths, textPositions }) => (
+          <CircleSegment
+            key={segment.position}
+            segment={segment}
+            paths={paths}
+            textPositions={textPositions}
+            textRotation={textRotation}
+          />
+        ))}
+      </svg>
     </div>
   );
 };

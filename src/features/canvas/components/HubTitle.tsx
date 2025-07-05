@@ -1,4 +1,5 @@
 'use client';
+import { twMerge } from 'tailwind-merge';
 import { useHubStore } from '../store/hubStore';
 import type { HubType } from '../types';
 
@@ -30,5 +31,5 @@ export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
 
   const hubTitle = hubTitleMap[hubType] || '五度圏';
 
-  return <h1 className={`text-title text-center mb-4 ${className}`}>{hubTitle}</h1>;
+  return <h1 className={twMerge('text-title', className)}>{hubTitle}</h1>;
 };

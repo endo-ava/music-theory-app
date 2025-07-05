@@ -7,7 +7,7 @@ import { keyInfoVariants, keyInfoItemVariants } from '../animations';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 
 /**
- * キー情報表示コンポーネント
+ * キー情報表示コンポーネント: 削除予定。将来的に大幅改修されるため念のための残しています
  *
  * ホバー中のキーに関する情報を表示します。
  * キーの名前、調性、五度圏上の位置、平行調などの情報を表示します。
@@ -28,7 +28,7 @@ const KeyInfoDisplay: FC = () => {
         animate="visible"
         exit="exit"
         className="
-          absolute bottom-[-24px] left-1/2 transform -translate-x-full translate-y-full
+          bottom-[4px] left-1/2 transform -translate-x-full translate-y-full
           bg-key-area-minor backdrop-blur-sm rounded-lg p-6 shadow-lg border border-border
           z-50 transition-all duration-300
         "

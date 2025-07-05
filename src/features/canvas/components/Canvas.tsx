@@ -25,14 +25,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
   return (
     <div
       className={twMerge(
-        // メイン表示エリアのレイアウト
-        'flex flex-col items-center justify-center',
-        // 背景は透明（ページ全体の背景を継承）
-        'bg-transparent',
-        // サイズ設定
-        'w-full h-full min-h-[400px]',
-        // レスポンシブ対応
-        'p-4 lg:p-8',
+        'flex flex-col w-full h-full min-h-[400px] p-4 lg:p-8 bg-transparent',
         className
       )}
       style={style}
@@ -40,11 +33,14 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
       aria-label="メイン表示エリア"
     >
       {/* Hub タイトル */}
-      <HubTitle />
+      <HubTitle className="text-center text-2xl lg:text-4xl" />
 
-      {/* Hub コンポーネント表示 - 現在は五度圏のみ */}
-      <div className="w-full h-full flex items-center justify-center">
-        <CircleOfFifths />
+      {/* 固定間隔 */}
+      <div className="h-8 lg:h-12 flex-shrink-0"></div>
+
+      {/* Hub コンポーネント表示 - 五度圏 */}
+      <div className="flex items-center justify-center">
+        <CircleOfFifths className="w-[350px] h-[350px] lg:w-[750px] lg:h-[750px]" />
       </div>
     </div>
   );
