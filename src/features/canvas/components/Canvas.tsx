@@ -1,16 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 import { HubTitle } from './HubTitle';
-
-/**
- * Canvas コンポーネントのProps
- */
-export interface CanvasProps {
-  /** カスタムクラス名 */
-  className?: string;
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
-}
+import { ClassNameProps } from '@/shared/types';
 
 /**
  * メイン表示エリア（Canvas）コンポーネント
@@ -21,14 +12,13 @@ export interface CanvasProps {
  * @param props - コンポーネントのプロパティ
  * @returns Canvas のJSX要素
  */
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
         'flex flex-col w-full h-full min-h-[400px] p-4 lg:p-8 bg-transparent',
         className
       )}
-      style={style}
       role="main"
       aria-label="メイン表示エリア"
     >

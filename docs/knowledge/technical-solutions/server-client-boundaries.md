@@ -12,7 +12,7 @@ Next.js App Router における Server Component と Client Component の境界�
 ```typescript
 // ✅ 基本：Server Component を優先
 // Canvas.tsx (Server Component)
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
@@ -21,7 +21,6 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
         'p-4 lg:p-8',
         className
       )}
-      style={style}
       role="main"
       aria-label="メイン表示エリア"
     >
@@ -44,7 +43,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
 'use client';
 import { useHubStore } from '../store/hubStore';
 
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore(); // 状態管理が必要なため Client Component
 
   const hubTitle = hubTitleMap[hubType] || '五度圏';

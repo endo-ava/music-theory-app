@@ -16,7 +16,7 @@ GitHub Copilot などの自動レビューツールや人間によるコード�
 // 問題: 毎回関数を再計算している
 
 // ❌ 修正前
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
 
   const getHubTitle = (type: HubType) => {
@@ -39,7 +39,7 @@ const hubTitleMap: Record<HubType, string> = {
   'chromatic-circle': 'クロマチックサークル',
 };
 
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
   const hubTitle = hubTitleMap[hubType] || '五度圏';
 
@@ -76,7 +76,7 @@ export interface CanvasConfig {
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
@@ -93,7 +93,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
 import { twMerge } from 'tailwind-merge';
 // clsx の import を削除
 
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
@@ -124,7 +124,7 @@ export default function Home() {
 }
 
 // Canvas.tsx
-export const Canvas: React.FC<CanvasProps> = (props) => {
+export const Canvas: React.FC<ClassNameProps> = (props) => {
   return (
     <div role="main">
       {/* ... */}
@@ -143,7 +143,7 @@ export default function Home() {
 }
 
 // Canvas.tsx（role="main" を維持）
-export const Canvas: React.FC<CanvasProps> = (props) => {
+export const Canvas: React.FC<ClassNameProps> = (props) => {
   return (
     <div role="main" aria-label="メイン表示エリア">
       {/* ... */}
@@ -185,7 +185,7 @@ export const Canvas: React.FC<CanvasProps> = (props) => {
 
 // 例：段階的な改善
 // Commit 1: アクセシビリティ修正
-export const Canvas: React.FC<CanvasProps> = (props) => {
+export const Canvas: React.FC<ClassNameProps> = (props) => {
   return (
     <div role="main" aria-label="メイン表示エリア">
       {/* ... */}

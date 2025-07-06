@@ -1,15 +1,6 @@
 import { CircleSegment } from './CircleSegment';
 import { useCircleOfFifths } from '../hooks/useCircleOfFifths';
-
-/**
- * 五度圏メインコンポーネントのProps
- */
-export interface CircleOfFifthsProps {
-  /** カスタムクラス名 */
-  className?: string;
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
-}
+import { ClassNameProps } from '@/shared/types';
 
 /**
  * 五度圏表示コンポーネント
@@ -21,12 +12,12 @@ export interface CircleOfFifthsProps {
  * @param props - コンポーネントのプロパティ
  * @returns 五度圏のJSX要素
  */
-export const CircleOfFifths: React.FC<CircleOfFifthsProps> = ({ className, style }) => {
+export const CircleOfFifths: React.FC<ClassNameProps> = ({ className }) => {
   // カスタムフックからサークルセグメント絵画情報を取得
   const { viewBox, segments, textRotation } = useCircleOfFifths();
 
   return (
-    <div className={className} style={style}>
+    <div className={className}>
       <svg viewBox={viewBox} className="block" aria-label="五度圏" role="img">
         {/* 各セグメント絵画をループで呼び出す */}
         {segments.map(({ segment, paths, textPositions }) => (
