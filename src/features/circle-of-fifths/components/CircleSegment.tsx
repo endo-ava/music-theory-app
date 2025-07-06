@@ -68,7 +68,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
         {/* 調号エリア（表示のみ） */}
         <motion.path
           d={paths.signaturePath}
-          className={'fill-key-area-signature stroke-border border'}
+          className="fill-key-area-signature stroke-border border"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: ANIMATION.FADE_DURATION, delay: baseDelay + 0.2 }}
@@ -76,7 +76,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
 
         {/* 調号テキスト */}
         <motion.text
-          className={'fill-text-primary text-key-signature font-key-signature stroke-border border'}
+          className="fill-text-primary text-key-signature font-key-signature stroke-border border"
           x={textPositions.signatureTextPos.x}
           y={textPositions.signatureTextPos.y}
           textAnchor="middle"
