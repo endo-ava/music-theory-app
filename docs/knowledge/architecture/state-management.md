@@ -38,7 +38,7 @@ const hubTitleMap: Record<HubType, string> = {
 };
 
 // コンポーネントでの使用
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
   const hubTitle = hubTitleMap[hubType] || '五度圏';
 
@@ -136,7 +136,7 @@ export const useUIStore = create<UIState>(set => ({
 
 ```typescript
 // 派生状態をコンポーネント内で計算
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
 
   // 派生状態：hubType から title を導出

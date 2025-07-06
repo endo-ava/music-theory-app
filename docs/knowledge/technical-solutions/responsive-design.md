@@ -11,7 +11,7 @@ Tailwind CSS v4 を活用したレスポンシブ設計の実装手法を蓄積�
 
 ```typescript
 // ✅ モバイルファーストの実装
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
@@ -25,7 +25,6 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
 
         className
       )}
-      style={style}
     >
       {/* コンテンツ */}
     </div>

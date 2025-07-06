@@ -74,7 +74,7 @@ import { CircleOfFifths } from '@/features/circle-of-fifths';
 function App() {
   return (
     <div className="app">
-      <CircleOfFifths className="custom-circle" style={{ width: '600px', height: '600px' }} />
+      <CircleOfFifths className="custom-circle" />
     </div>
   );
 }
@@ -86,10 +86,9 @@ function App() {
 
 五度圏のメインコンポーネント。全体のレイアウトとイベントハンドリングを管理します。
 
-**Props（CircleOfFifthsProps）:**
+**Props（ClassNameProps）:**
 
 - `className?: string` - カスタムクラス名
-- `style?: React.CSSProperties` - カスタムスタイル
 
 ※ Props型定義はコンポーネントファイルの冒頭に定義されています
 
