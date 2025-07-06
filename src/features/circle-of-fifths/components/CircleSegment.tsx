@@ -76,9 +76,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
 
         {/* 調号テキスト */}
         <motion.text
-          className={
-            ' fill-text-primary text-key-signature font-key-signature stroke-border border'
-          }
+          className={'fill-text-primary text-key-signature font-key-signature stroke-border border'}
           x={textPositions.signatureTextPos.x}
           y={textPositions.signatureTextPos.y}
           textAnchor="middle"

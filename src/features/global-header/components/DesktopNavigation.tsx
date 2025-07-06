@@ -29,7 +29,7 @@ export const DesktopNavigation: React.FC<DesktopNavigationProps> = ({
   isActiveLink,
 }) => {
   return (
-    <nav className="hidden md:flex items-center space-x-8 lg:space-x-10">
+    <nav className="hidden items-center space-x-8 md:flex lg:space-x-10">
       {navigationLinks.map(link => (
         <NavigationLink key={link.id} link={link} isActive={isActiveLink(link)} isMobile={false} />
       ))}

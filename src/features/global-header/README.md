@@ -226,11 +226,11 @@ GlobalHeaderは画面サイズに応じて異なるレイアウトを提供し�
 
 ```tsx
 // レスポンシブレイアウトの実装例
-<header className="w-full bg-transparent relative flex items-center px-6 py-4 lg:px-8 border-b border-header-border min-h-[4rem]">
+<header className="border-header-border relative flex min-h-[4rem] w-full items-center border-b bg-transparent px-6 py-4 lg:px-8">
   <div className="flex-1 md:flex-1">
     <Logo />
   </div>
-  <div className="md:flex-1 md:flex md:justify-center">
+  <div className="md:flex md:flex-1 md:justify-center">
     <ActiveLinkProvider navigationLinks={navigationLinks} />
   </div>
   <div className="hidden md:block md:flex-1"></div>
