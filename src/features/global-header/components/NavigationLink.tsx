@@ -51,8 +51,8 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
         // トランジション - スムーズなインタラクション
         'transition-colors duration-200',
         // アクセシビリティ - キーボードナビゲーション対応（視覚的に控えめに）
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-header-border focus-visible:ring-offset-1',
-        'focus-visible:ring-offset-transparent rounded-sm',
+        'focus-visible:ring-header-border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
+        'rounded-sm focus-visible:ring-offset-transparent',
         // パディング - クリック領域の拡大（デスクトップとモバイルで差別化）
         isMobile ? 'px-3 py-2' : 'px-2 py-1'
       )}

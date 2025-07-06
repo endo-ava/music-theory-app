@@ -22,14 +22,14 @@ const navigationLinks: NavigationLink[] = [
  */
 export const GlobalHeader: React.FC = () => {
   return (
-    <header className="w-full bg-transparent relative flex items-center px-6 py-4 lg:px-8 border-b border-header-border min-h-[4rem]">
+    <header className="border-header-border relative flex min-h-[4rem] w-full items-center border-b bg-transparent px-6 py-4 lg:px-8">
       {/* ロゴエリア - 左端配置、Hubページへのリンク */}
       <div className="flex-1 md:flex-1">
         <Logo />
       </div>
 
       {/* アクティブリンクプロバイダー - モバイル：右端、デスクトップ：中央配置 */}
-      <div className="md:flex-1 md:flex md:justify-center">
+      <div className="md:flex md:flex-1 md:justify-center">
         <ActiveLinkProvider navigationLinks={navigationLinks} />
       </div>
 

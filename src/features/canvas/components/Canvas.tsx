@@ -16,7 +16,7 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
-        'flex flex-col w-full h-full min-h-[400px] p-4 lg:p-8 bg-transparent',
+        'flex h-full min-h-[400px] w-full flex-col bg-transparent p-4 lg:p-8',
         className
       )}
       role="main"
@@ -26,11 +26,11 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
       <HubTitle className="text-center text-2xl lg:text-4xl" />
 
       {/* 固定間隔 */}
-      <div className="h-8 lg:h-12 flex-shrink-0"></div>
+      <div className="h-8 flex-shrink-0 lg:h-12"></div>
 
       {/* Hub コンポーネント表示 - 五度圏 */}
       <div className="flex items-center justify-center">
-        <CircleOfFifths className="w-[350px] h-[350px] lg:w-[750px] lg:h-[750px]" />
+        <CircleOfFifths className="h-[350px] w-[350px] lg:h-[750px] lg:w-[750px]" />
       </div>
     </div>
   );

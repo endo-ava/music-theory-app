@@ -31,19 +31,19 @@ export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ isOpen, onCl
         // サイズとパディング
         'p-2',
         // カラー
-        'text-header-nav-link hover:text-header-nav-link-hover hover:bg-header-nav-link-active-bg',
+        'text-header-nav-link hover:bg-header-nav-link-active-bg hover:text-header-nav-link-hover',
         // トランジション
         'transition-colors duration-150',
         // アクセシビリティ
-        'md:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-header-border focus-visible:ring-offset-1',
-        'focus-visible:ring-offset-transparent rounded-sm'
+        'focus-visible:ring-header-border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 md:hidden',
+        'rounded-sm focus-visible:ring-offset-transparent'
       )}
       aria-label={isOpen ? 'メニューを閉じる' : 'メニューを開く'}
       aria-expanded={isOpen}
       aria-controls="mobile-menu"
     >
       <svg
-        className={clsx('w-6 h-6 transition-transform duration-200', isOpen && 'rotate-90')}
+        className={clsx('h-6 w-6 transition-transform duration-200', isOpen && 'rotate-90')}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
