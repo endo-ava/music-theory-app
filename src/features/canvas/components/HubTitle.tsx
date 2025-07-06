@@ -1,14 +1,8 @@
 'use client';
+import { twMerge } from 'tailwind-merge';
 import { useHubStore } from '../store/hubStore';
 import type { HubType } from '../types';
-
-/**
- * HubTitle コンポーネントのProps
- */
-export interface HubTitleProps {
-  /** カスタムクラス名 */
-  className?: string;
-}
+import { ClassNameProps } from '@/shared/types';
 
 /**
  * Hub タイトル表示コンポーネント
@@ -25,10 +19,10 @@ const hubTitleMap: Record<HubType, string> = {
   'chromatic-circle': 'クロマチックサークル',
 };
 
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className }) => {
   const { hubType } = useHubStore();
 
   const hubTitle = hubTitleMap[hubType] || '五度圏';
 
-  return <h1 className={`text-title text-center mb-4 ${className}`}>{hubTitle}</h1>;
+  return <h1 className={twMerge('text-title', className)}>{hubTitle}</h1>;
 };

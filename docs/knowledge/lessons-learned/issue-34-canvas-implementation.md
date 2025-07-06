@@ -28,7 +28,7 @@ Issue #34「Canvas コンポーネントの実装」で得た総合的な知見�
 
 ```typescript
 // Canvas.tsx (Server Component)
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div role="main" aria-label="メイン表示エリア">
       <HubTitle />           {/* Client Component */}
@@ -41,7 +41,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
 
 // HubTitle.tsx (Client Component)
 'use client';
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore(); // 状態管理が必要
   const hubTitle = hubTitleMap[hubType] || '五度圏';
 
@@ -205,7 +205,7 @@ export default function Home() {
 }
 
 // Canvas.tsx - role="main" を維持
-export const Canvas: React.FC<CanvasProps> = (props) => {
+export const Canvas: React.FC<ClassNameProps> = (props) => {
   return (
     <div role="main" aria-label="メイン表示エリア">
       {/* ... */}

@@ -1,8 +1,8 @@
 # GlobalHeader コンポーネント設計書
 
 > **作成日**: 2025-06-25  
-> **更新日**: 2025-06-25  
-> **バージョン**: 2.0.0  
+> **更新日**: 2025-07-05  
+> **バージョン**: 2.1.0  
 > **作成者**: Claude Code
 
 [<< 画面設計書に戻る](../../../docs/screenDesigns/01.hub.md)
@@ -129,13 +129,10 @@ src/features/global-header/
 #### GlobalHeader
 
 ```typescript
-interface GlobalHeaderProps {
-  /** カスタムクラス名 */
-  className?: string;
-
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
-}
+// GlobalHeaderは単一用途のため、propsは受け取りません
+export const GlobalHeader: React.FC = () => {
+  // 実装...
+};
 ```
 
 #### NavigationLink
@@ -212,25 +209,32 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 }
 ```
 
-### カスタマイズ例
+### レスポンシブレイアウト
+
+GlobalHeaderは画面サイズに応じて異なるレイアウトを提供します：
+
+**モバイル（md未満）**:
+
+- Logo: 左端配置
+- Navigation: 右端配置（ハンバーガーメニュー）
+
+**デスクトップ（md以上）**:
+
+- Logo: 左端配置
+- Navigation: 中央配置（水平メニュー）
+- 右側: バランス用空白エリア
 
 ```tsx
-import { GlobalHeader } from '@/features/global-header';
-
-function CustomLayout() {
-  return (
-    <>
-      <GlobalHeader
-        className="shadow-lg border-b-2"
-        style={{
-          background: 'linear-gradient(to right, #1e3a8a, #3b82f6)',
-          minHeight: '80px',
-        }}
-      />
-      {/* rest of layout */}
-    </>
-  );
-}
+// レスポンシブレイアウトの実装例
+<header className="border-header-border relative flex min-h-[4rem] w-full items-center border-b bg-transparent px-6 py-4 lg:px-8">
+  <div className="flex-1 md:flex-1">
+    <Logo />
+  </div>
+  <div className="md:flex md:flex-1 md:justify-center">
+    <ActiveLinkProvider navigationLinks={navigationLinks} />
+  </div>
+  <div className="hidden md:block md:flex-1"></div>
+</header>
 ```
 
 ### 高度な使用例
@@ -263,9 +267,9 @@ Next.js 15の最適化原則に従い、サーバーコンポーネントを最�
 - **サーバーコンポーネント**: GlobalHeader、Logo
 - **クライアントコンポーネント**: インタラクティブな機能のみに限定
 
-### 3. 再利用性
+### 3. 単一用途設計
 
-NavigationLinkコンポーネントをデスクトップとモバイルで共有し、DRY原則を徹底。
+GlobalHeaderは再利用性よりもシンプルさを重視し、アプリケーション固有の実装に最適化。NavigationLinkコンポーネントはデスクトップとモバイルで共有し、DRY原則を維持。
 
 ### 4. パフォーマンス
 
@@ -441,13 +445,13 @@ if (process.env.NODE_ENV === 'development') {
 
 ### 今後の拡張予定
 
-#### 短期 (v2.1.0)
+#### 短期 (v2.2.0)
 
 - [ ] ダークモード対応
 - [ ] 検索機能の統合
 - [ ] ユーザーメニューの追加
 
-#### 中期 (v2.2.0)
+#### 中期 (v2.3.0)
 
 - [ ] 動的ナビゲーションメニュー
 - [ ] パンくずリスト機能

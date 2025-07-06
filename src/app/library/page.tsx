@@ -7,13 +7,13 @@ export const metadata: Metadata = {
 
 export default function LibraryPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <main className="container mx-auto px-6 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="mx-auto max-w-4xl">
           {/* ページヘッダー */}
           <header className="mb-8">
-            <h1 className="text-4xl font-bold text-foreground mb-4">ライブラリ</h1>
-            <p className="text-lg text-muted-foreground">
+            <h1 className="text-foreground mb-4 text-4xl font-bold">ライブラリ</h1>
+            <p className="text-muted-foreground text-lg">
               音楽理論の各用語を深く、正確に学ぶためのリファレンス（辞書）画面
             </p>
           </header>
@@ -22,10 +22,10 @@ export default function LibraryPage() {
           <div className="space-y-8">
             {/* 検索・フィルタエリア */}
             <section className="bg-card rounded-lg border p-6">
-              <h2 className="text-2xl font-semibold mb-4">検索・フィルタ</h2>
+              <h2 className="mb-4 text-2xl font-semibold">検索・フィルタ</h2>
               <div className="text-muted-foreground">
                 <p>今後実装予定：</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
+                <ul className="mt-2 list-inside list-disc space-y-1">
                   <li>用語検索機能</li>
                   <li>カテゴリフィルタ（スケール、コード、リズムなど）</li>
                   <li>難易度フィルタ</li>
@@ -35,25 +35,25 @@ export default function LibraryPage() {
 
             {/* コンテンツエリア */}
             <section className="bg-card rounded-lg border p-6">
-              <h2 className="text-2xl font-semibold mb-4">音楽理論用語集</h2>
+              <h2 className="mb-4 text-2xl font-semibold">音楽理論用語集</h2>
               <div className="text-muted-foreground">
                 <p>今後実装予定のコンテンツ例：</p>
-                <div className="grid md:grid-cols-2 gap-4 mt-4">
-                  <div className="p-4 border rounded">
-                    <h3 className="font-medium text-foreground">五度圏</h3>
-                    <p className="text-sm mt-1">アニメーション図解付きの詳細解説</p>
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  <div className="rounded border p-4">
+                    <h3 className="text-foreground font-medium">五度圏</h3>
+                    <p className="mt-1 text-sm">アニメーション図解付きの詳細解説</p>
                   </div>
-                  <div className="p-4 border rounded">
-                    <h3 className="font-medium text-foreground">スケール</h3>
-                    <p className="text-sm mt-1">各スケールの特性と使用例</p>
+                  <div className="rounded border p-4">
+                    <h3 className="text-foreground font-medium">スケール</h3>
+                    <p className="mt-1 text-sm">各スケールの特性と使用例</p>
                   </div>
-                  <div className="p-4 border rounded">
-                    <h3 className="font-medium text-foreground">コード進行</h3>
-                    <p className="text-sm mt-1">代表的な進行パターンの解説</p>
+                  <div className="rounded border p-4">
+                    <h3 className="text-foreground font-medium">コード進行</h3>
+                    <p className="mt-1 text-sm">代表的な進行パターンの解説</p>
                   </div>
-                  <div className="p-4 border rounded">
-                    <h3 className="font-medium text-foreground">調性</h3>
-                    <p className="text-sm mt-1">長調・短調の理論と実践</p>
+                  <div className="rounded border p-4">
+                    <h3 className="text-foreground font-medium">調性</h3>
+                    <p className="mt-1 text-sm">長調・短調の理論と実践</p>
                   </div>
                 </div>
               </div>
@@ -61,10 +61,10 @@ export default function LibraryPage() {
 
             {/* インタラクティブ機能エリア */}
             <section className="bg-card rounded-lg border p-6">
-              <h2 className="text-2xl font-semibold mb-4">インタラクティブ機能</h2>
+              <h2 className="mb-4 text-2xl font-semibold">インタラクティブ機能</h2>
               <div className="text-muted-foreground">
                 <p>今後実装予定：</p>
-                <ul className="list-disc list-inside mt-2 space-y-1">
+                <ul className="mt-2 list-inside list-disc space-y-1">
                   <li>音の再生機能</li>
                   <li>ビジュアライゼーション</li>
                   <li>概念間のリンク表示</li>

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'motion/react';
 import { NavigationLink as NavigationLinkType } from '../types';
 import { NavigationLink } from './NavigationLink';
@@ -48,20 +47,9 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className={clsx(
-            // 絶対配置 - ヘッダーの下に配置
-            'absolute top-full left-0 right-0 z-50',
-            // 背景 - セミトランスペアレントな背景
-            'bg-header-bg backdrop-blur-sm',
-            // ボーダー
-            'border-t border-header-border',
-            // モバイルのみ表示
-            'md:hidden',
-            // シャドウ
-            'shadow-lg'
-          )}
+          className="bg-header-bg border-header-border absolute top-full right-0 left-0 z-50 border-t shadow-lg backdrop-blur-sm md:hidden"
         >
-          <div className="px-6 py-4 space-y-2">
+          <div className="space-y-2 px-6 py-4">
             {navigationLinks.map(link => (
               <NavigationLink
                 key={link.id}

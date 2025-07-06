@@ -2,12 +2,11 @@ import { Canvas } from '@/features/canvas';
 
 export default function Home() {
   return (
-    <div>
-      <div className="py-2 flex flex-col">
-        <div className="flex justify-end">
-          <div className="w-full max-w-7xl">
-            <Canvas />
-          </div>
+    <div className="flex h-screen flex-col">
+      <div className="flex flex-1">
+        <div className="flex-1">{/* 左側：他のコンテンツ */}</div>
+        <div className="w-full lg:w-1/2">
+          <Canvas />
         </div>
       </div>
     </div>

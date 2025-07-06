@@ -1,6 +1,4 @@
 import React from 'react';
-import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
 import { NavigationLink } from '../types';
 import { Logo } from './Logo';
 import { ActiveLinkProvider } from './ActiveLinkProvider';
@@ -15,51 +13,28 @@ const navigationLinks: NavigationLink[] = [
 ];
 
 /**
- * GlobalHeaderコンポーネントのProps
- */
-export interface GlobalHeaderProps {
-  /** カスタムクラス名 */
-  className?: string;
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
-}
-
-/**
  * グローバルヘッダーコンポーネント
  *
  * アプリケーション全体で使用されるヘッダーコンポーネント。
  * ロゴエリアとナビゲーションリンク（Hub, Library, Tutorial）を含む。
  *
- * @param props - コンポーネントのプロパティ
  * @returns GlobalHeaderのJSX要素
  */
-export const GlobalHeader: React.FC<GlobalHeaderProps> = ({ className, style }) => {
+export const GlobalHeader: React.FC = () => {
   return (
-    <header
-      className={twMerge(
-        clsx(
-          // 基本レイアウト - 全幅でクリーンな背景
-          'w-full bg-transparent',
-          // 位置設定 - モバイルメニューの絶対配置のための基準
-          'relative',
-          // フレックスレイアウト - ロゴ左端、ナビゲーション右端
-          'flex items-center justify-between',
-          // パディング - レスポンシブ対応
-          'px-6 py-4 lg:px-8',
-          // ボーダー - 下部に薄い境界線
-          'border-b border-header-border',
-          // 最小高さ - 一貫したヘッダー高さを保証
-          'min-h-[4rem]'
-        ),
-        className
-      )}
-      style={style}
-    >
+    <header className="border-header-border relative flex min-h-[4rem] w-full items-center border-b bg-transparent px-6 py-4 lg:px-8">
       {/* ロゴエリア - 左端配置、Hubページへのリンク */}
-      <Logo />
+      <div className="flex-1">
+        <Logo />
+      </div>
 
-      {/* アクティブリンクプロバイダー - ナビゲーション要素を統合 */}
-      <ActiveLinkProvider navigationLinks={navigationLinks} />
+      {/* アクティブリンクプロバイダー - モバイル：右端、デスクトップ：中央配置 */}
+      <div className="md:flex md:flex-1 md:justify-center">
+        <ActiveLinkProvider navigationLinks={navigationLinks} />
+      </div>
+
+      {/* 右側の空白エリア - デスクトップでのレイアウトバランス用 */}
+      <div className="hidden md:block md:flex-1"></div>
     </header>
   );
 };

@@ -13,7 +13,7 @@ const meta: Meta<typeof CircleOfFifths> = {
   tags: ['autodocs'],
   decorators: [
     Story => (
-      <div className="p-8 min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8 text-white">
         <Story />
       </div>
     ),
@@ -24,5 +24,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
 };
