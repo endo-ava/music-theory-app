@@ -34,10 +34,6 @@ const meta: Meta<typeof Canvas> = {
       control: 'text',
       description: 'カスタムクラス名',
     },
-    style: {
-      control: 'object',
-      description: 'カスタムスタイル',
-    },
   },
   decorators: [
     Story => (
@@ -171,26 +167,7 @@ export const ResponsiveTest: Story = {
     expect(mainArea).toHaveClass('p-4', 'lg:p-8');
 
     // フレックスレイアウト確認
-    expect(mainArea).toHaveClass('flex', 'flex-col', 'items-center', 'justify-center');
-  },
-};
-
-/**
- * カスタムサイズのCanvas
- */
-export const CustomSize: Story = {
-  args: {
-    style: {
-      width: '800px',
-      height: '600px',
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'カスタムサイズでCanvasを表示します。固定サイズでの表示確認に使用します。',
-      },
-    },
+    expect(mainArea).toHaveClass('flex', 'flex-col');
   },
 };
 
@@ -205,25 +182,6 @@ export const CustomStyle: Story = {
     docs: {
       description: {
         story: 'カスタムスタイルを適用したCanvasです。背景色やボーダーをカスタマイズできます。',
-      },
-    },
-  },
-};
-
-/**
- * 小さなサイズでのCanvas表示
- */
-export const Compact: Story = {
-  args: {
-    style: {
-      width: '400px',
-      height: '400px',
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'コンパクトなサイズでのCanvas表示です。レスポンシブ動作の確認に使用します。',
       },
     },
   },

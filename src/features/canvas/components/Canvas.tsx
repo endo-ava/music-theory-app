@@ -1,16 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 import { HubTitle } from './HubTitle';
-
-/**
- * Canvas コンポーネントのProps
- */
-export interface CanvasProps {
-  /** カスタムクラス名 */
-  className?: string;
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
-}
+import { ClassNameProps } from '@/shared/types';
 
 /**
  * メイン表示エリア（Canvas）コンポーネント
@@ -21,30 +12,25 @@ export interface CanvasProps {
  * @param props - コンポーネントのプロパティ
  * @returns Canvas のJSX要素
  */
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
-        // メイン表示エリアのレイアウト
-        'flex flex-col items-center justify-center',
-        // 背景は透明（ページ全体の背景を継承）
-        'bg-transparent',
-        // サイズ設定
-        'w-full h-full min-h-[400px]',
-        // レスポンシブ対応
-        'p-4 lg:p-8',
+        'flex h-full min-h-[400px] w-full flex-col bg-transparent p-4 lg:p-8',
         className
       )}
-      style={style}
       role="main"
       aria-label="メイン表示エリア"
     >
       {/* Hub タイトル */}
-      <HubTitle />
+      <HubTitle className="text-center text-2xl lg:text-4xl" />
 
-      {/* Hub コンポーネント表示 - 現在は五度圏のみ */}
-      <div className="w-full h-full flex items-center justify-center">
-        <CircleOfFifths />
+      {/* 固定間隔 */}
+      <div className="h-8 flex-shrink-0 lg:h-12"></div>
+
+      {/* Hub コンポーネント表示 - 五度圏 */}
+      <div className="flex items-center justify-center">
+        <CircleOfFifths className="h-[350px] w-[350px] lg:h-[750px] lg:w-[750px]" />
       </div>
     </div>
   );

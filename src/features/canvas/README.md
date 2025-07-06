@@ -61,7 +61,7 @@ import { Canvas } from '@/features/canvas';
 function App() {
   return (
     <div className="app">
-      <Canvas className="custom-canvas" style={{ width: '800px', height: '600px' }} />
+      <Canvas className="custom-canvas" />
     </div>
   );
 }
@@ -112,10 +112,9 @@ function CustomLayout() {
 
 Hub種類に応じたタイトルを動的に表示するクライアントコンポーネント。useHubStoreを使用してHub状態管理と連携します。
 
-**Props（CanvasProps）:**
+**Props（ClassNameProps）:**
 
 - `className?: string` - カスタムクラス名
-- `style?: React.CSSProperties` - カスタムスタイル
 
 **特徴:**
 
@@ -128,21 +127,19 @@ Hub種類に応じたタイトルを動的に表示するクライアントコ�
 
 ## 型定義
 
-### CanvasProps
+### ClassNameProps
 
 ```typescript
-export interface CanvasProps {
+export interface ClassNameProps {
   /** カスタムクラス名 */
   className?: string;
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
 }
 ```
 
-### HubTitleProps
+### ClassNameProps
 
 ```typescript
-export interface HubTitleProps {
+export interface ClassNameProps {
   /** カスタムクラス名 */
   className?: string;
 }
@@ -223,16 +220,14 @@ Tailwind CSSを使用したモダンなスタイリングシステム：
 
 1. **Default**: デフォルト設定でのCanvas表示（HubTitle + CircleOfFifths）
 2. **CustomSize**: カスタムサイズでの表示
-3. **CustomStyle**: カスタムスタイルの適用
-4. **Compact**: コンパクトサイズでの表示
-5. **HubStateDemo**: Hub状態管理機能のデモンストレーション
+3. **Compact**: コンパクトサイズでの表示
+4. **HubStateDemo**: Hub状態管理機能のデモンストレーション
 
 ### HubTitle ストーリー
 
 1. **Default**: デフォルトのHubTitle表示
-2. **CustomStyle**: カスタムスタイルの適用
-3. **HubTypeDemo**: Hub種類切り替えのデモンストレーション
-4. **HubTypeSwitchTest**: Hub切り替え機能のインタラクションテスト
+2. **HubTypeDemo**: Hub種類切り替えのデモンストレーション
+3. **HubTypeSwitchTest**: Hub切り替え機能のインタラクションテスト
 
 ## 将来の拡張予定
 

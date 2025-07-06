@@ -7,7 +7,7 @@
 
 [<< 画面設計書に戻る](../screenDesigns/[関連画面].md)
 
-[コンポーネントの1行概要説明]
+[コンポーネントの概要説明]
 
 ## 📋 目次
 
@@ -18,7 +18,6 @@
 - [設計思想](#設計思想)
 - [パフォーマンス](#パフォーマンス)
 - [アクセシビリティ](#アクセシビリティ)
-- [テスト戦略](#テスト戦略)
 - [開発・保守](#開発保守)
 
 ## 概要
@@ -33,11 +32,11 @@
 - **機能2**: 機能の説明
 - **機能3**: 機能の説明
 
-### ビジネス価値
-
-[このコンポーネントが提供するビジネス価値を記述]
-
 ## アーキテクチャ
+
+### コンポーネント構成
+
+[メイン・子コンポーネントの概要・役割を記述]
 
 ### コンポーネント構成図
 
@@ -115,9 +114,6 @@ interface [ComponentName]Props {
 
   /** カスタムクラス名 */
   className?: string;
-
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
 
   /** イベントハンドラー */
   onEvent?: (value: string) => void;
@@ -201,29 +197,7 @@ function CustomExample() {
     <[ComponentName]
       requiredProp="custom-value"
       className="custom-styles"
-      style={{
-        width: '100%',
-        height: '400px'
-      }}
       onEvent={handleCustomEvent}
-    />
-  );
-}
-```
-
-### 高度な使用例
-
-```tsx
-import { [ComponentName] } from '@/components/[ComponentName]';
-import { use[ComponentName] } from '@/components/[ComponentName]/hooks';
-
-function AdvancedExample() {
-  const { state, actions } = use[ComponentName]();
-
-  return (
-    <[ComponentName]
-      requiredProp={state.value}
-      onEvent={actions.handleEvent}
     />
   );
 }
@@ -260,18 +234,6 @@ function AdvancedExample() {
 - **`useCallback`**: 関数参照の安定化
 - **コード分割**: 動的インポートによる遅延読み込み
 
-### パフォーマンス指標
-
-| 指標                 | 目標値  | 現在値   | 測定方法                |
-| -------------------- | ------- | -------- | ----------------------- |
-| 初期レンダリング時間 | < 100ms | [測定値] | Performance API         |
-| バンドルサイズ       | < 50KB  | [測定値] | webpack-bundle-analyzer |
-| メモリ使用量         | < 10MB  | [測定値] | Chrome DevTools         |
-
-### 大量データでの考慮事項
-
-[大量のデータを扱う場合の性能考慮事項]
-
 ## アクセシビリティ
 
 ### WCAG準拠レベル
@@ -302,115 +264,17 @@ function AdvancedExample() {
 | `Enter/Space` | 要素の実行                 |
 | `Escape`      | モーダル・メニューを閉じる |
 
-## テスト戦略
-
-### ユニットテスト
-
-```typescript
-describe('[ComponentName]', () => {
-  it('正常にレンダリングされること', () => {
-    // テストコード
-  });
-
-  it('Propsが正しく反映されること', () => {
-    // テストコード
-  });
-
-  it('イベントが正しく発火すること', () => {
-    // テストコード
-  });
-});
-```
-
-### インテグレーションテスト
-
-```typescript
-describe('[ComponentName] Integration', () => {
-  it('他のコンポーネントと正しく連携すること', () => {
-    // テストコード
-  });
-});
-```
-
-### E2Eテスト
-
-```typescript
-describe('[ComponentName] E2E', () => {
-  it('ユーザーが期待通りに操作できること', () => {
-    // E2Eテストコード
-  });
-});
-```
-
-### 視覚回帰テスト
-
-```typescript
-describe('[ComponentName] Visual', () => {
-  it('スクリーンショットが期待通りであること', () => {
-    // 視覚回帰テスト
-  });
-});
-```
-
-### テストカバレッジ目標
-
-| 種類              | 目標  | 現在      |
-| ----------------- | ----- | --------- |
-| Line Coverage     | > 90% | [現在値]% |
-| Branch Coverage   | > 85% | [現在値]% |
-| Function Coverage | > 95% | [現在値]% |
-
 ## 開発・保守
-
-### 開発フロー
-
-1. **要件定義**: 機能要件・非機能要件の明確化
-2. **設計**: コンポーネント設計・API設計
-3. **実装**: TDD/BDDでの実装
-4. **テスト**: 各種テストの実行
-5. **レビュー**: コードレビュー・デザインレビュー
-6. **デプロイ**: Storybook・本番環境への反映
-
-### デバッグ方法
-
-#### 開発ツール
-
-- **React Developer Tools**: コンポーネント状態の確認
-- **Chrome DevTools**: パフォーマンス分析
-- **Storybook**: 独立した環境でのテスト
-
-#### ログ出力
-
-```typescript
-// デバッグ用ログ
-console.group('[ComponentName] Debug');
-console.log('Props:', props);
-console.log('State:', state);
-console.groupEnd();
-```
-
-### 既知の問題・制限事項
-
-| 問題  | 影響度 | 対応予定 | 回避方法       |
-| ----- | ------ | -------- | -------------- |
-| 問題1 | 高     | v2.0.0   | 回避方法の説明 |
-| 問題2 | 中     | 検討中   | 回避方法の説明 |
 
 ### 今後の拡張予定
 
-#### 短期 (次バージョン)
+#### 短期
 
 - [ ] 機能A の追加
 - [ ] パフォーマンス改善
 - [ ] アクセシビリティ強化
 
-#### 中期 (3ヶ月以内)
-
-- [ ] 機能B の追加
-- [ ] 他コンポーネントとの統合
-- [ ] テストカバレッジ向上
-
-#### 長期 (6ヶ月以内)
+#### 長期
 
 - [ ] 機能C の追加
 - [ ] アーキテクチャ見直し

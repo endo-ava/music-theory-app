@@ -35,7 +35,7 @@ const meta: Meta<typeof HubTitle> = {
   },
   decorators: [
     Story => (
-      <div className="p-8 bg-gray-50 min-h-[200px] flex items-center justify-center">
+      <div className="flex min-h-[200px] items-center justify-center bg-gray-50 p-8">
         <Story />
       </div>
     ),
@@ -84,7 +84,7 @@ export const InteractiveTest: Story = {
     expect(hubTitle).toHaveTextContent('五度圏');
 
     // セマンティクスの確認
-    expect(hubTitle).toHaveClass('text-title', 'text-center', 'mb-4');
+    expect(hubTitle).toHaveClass('text-title');
   },
 };
 
@@ -112,7 +112,7 @@ export const AccessibilityTest: Story = {
     expect(heading).toHaveTextContent(/^(五度圏|クロマチックサークル)$/);
 
     // 基本的なCSSクラスの確認
-    expect(heading).toHaveClass('text-title', 'text-center', 'mb-4');
+    expect(heading).toHaveClass('text-title');
   },
 };
 
@@ -151,12 +151,12 @@ export const HubTypeDemo: Story = {
       const { hubType, setHubType } = useHubStore();
 
       return (
-        <div className="p-8 bg-gray-50 min-h-[300px] flex flex-col items-center justify-center space-y-8">
+        <div className="flex min-h-[300px] flex-col items-center justify-center space-y-8 bg-gray-50 p-8">
           <Story />
           <div className="flex space-x-4">
             <button
               onClick={() => setHubType('circle-of-fifths')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`rounded-md px-4 py-2 font-medium transition-colors ${
                 hubType === 'circle-of-fifths'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -166,7 +166,7 @@ export const HubTypeDemo: Story = {
             </button>
             <button
               onClick={() => setHubType('chromatic-circle')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`rounded-md px-4 py-2 font-medium transition-colors ${
                 hubType === 'chromatic-circle'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -202,13 +202,13 @@ export const HubTypeSwitchTest: Story = {
       const { hubType, setHubType } = useHubStore();
 
       return (
-        <div className="p-8 bg-gray-50 min-h-[300px] flex flex-col items-center justify-center space-y-8">
+        <div className="flex min-h-[300px] flex-col items-center justify-center space-y-8 bg-gray-50 p-8">
           <Story />
           <div className="flex space-x-4">
             <button
               data-testid="circle-of-fifths-button"
               onClick={() => setHubType('circle-of-fifths')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`rounded-md px-4 py-2 font-medium transition-colors ${
                 hubType === 'circle-of-fifths'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -219,7 +219,7 @@ export const HubTypeSwitchTest: Story = {
             <button
               data-testid="chromatic-circle-button"
               onClick={() => setHubType('chromatic-circle')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
+              className={`rounded-md px-4 py-2 font-medium transition-colors ${
                 hubType === 'chromatic-circle'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'

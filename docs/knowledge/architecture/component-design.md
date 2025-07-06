@@ -19,7 +19,7 @@ React コンポーネントの設計において、保守性・拡張性・パ�
 
 ```typescript
 // Canvas.tsx (Server Component)
-export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
+export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
@@ -28,7 +28,6 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
         'p-4 lg:p-8',
         className
       )}
-      style={style}
       role="main"
       aria-label="メイン表示エリア"
     >
@@ -46,7 +45,7 @@ export const Canvas: React.FC<CanvasProps> = ({ className, style }) => {
 'use client';
 import { useHubStore } from '../store/hubStore';
 
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore(); // 状態管理が必要なためClient Component
 
   const hubTitle = hubTitleMap[hubType] || '五度圏';
@@ -77,7 +76,7 @@ export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
 
 ```typescript
 // 親コンポーネント（Server Component）
-export const Canvas: React.FC<CanvasProps> = (props) => {
+export const Canvas: React.FC<ClassNameProps> = (props) => {
   return (
     <div className="layout-wrapper">
       <StaticHeader />
@@ -102,7 +101,7 @@ const hubTitleMap: Record<HubType, string> = {
   'chromatic-circle': 'クロマチックサークル',
 };
 
-export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
+export const HubTitle: React.FC<ClassNameProps> = ({ className = '' }) => {
   const { hubType } = useHubStore();
   const hubTitle = hubTitleMap[hubType] || '五度圏';
 
@@ -122,15 +121,13 @@ export const HubTitle: React.FC<HubTitleProps> = ({ className = '' }) => {
 
 ```typescript
 // 基本的な Props 設計
-export interface CanvasProps {
+export interface ClassNameProps {
   /** カスタムクラス名 */
   className?: string;
-  /** カスタムスタイル */
-  style?: React.CSSProperties;
 }
 
 // 拡張可能な Props 設計
-export interface HubTitleProps {
+export interface ClassNameProps {
   /** カスタムクラス名 */
   className?: string;
   /** Hub タイプ（オプション：将来の拡張用） */
@@ -151,7 +148,7 @@ export interface CanvasConfig {
 }
 
 // コンポーネント固有の型定義
-export interface HubTitleProps {
+export interface ClassNameProps {
   className?: string;
 }
 ```
