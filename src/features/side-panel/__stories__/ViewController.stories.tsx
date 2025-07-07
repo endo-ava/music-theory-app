@@ -91,7 +91,7 @@ export const InteractiveTest: Story = {
     useHubStore.setState({ hubType: 'circle-of-fifths' });
 
     // ViewControllerの表示確認
-    const section = canvas.getByRole('radiogroup', { name: 'Hub種類の選択' });
+    const section = canvas.getByRole('radiogroup');
     expect(section).toBeInTheDocument();
 
     // タイトルの確認

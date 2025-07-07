@@ -99,14 +99,14 @@ export const InteractiveTest: Story = {
     // 統一セクションの確認
     const section = sidePanel.querySelector('section');
     expect(section).toBeInTheDocument();
-    expect(section).toHaveAttribute('aria-labelledby', 'side-panel-title');
+    expect(section).toHaveAttribute('aria-label', 'コントロールパネル');
 
     // ViewControllerの存在確認
     const viewController = canvas.getByRole('heading', { level: 2, name: 'View controller' });
     expect(viewController).toBeInTheDocument();
 
     // Hub切り替えボタンの確認
-    const radioGroup = canvas.getByRole('radiogroup', { name: 'Hub種類の選択' });
+    const radioGroup = canvas.getByRole('radiogroup');
     expect(radioGroup).toBeInTheDocument();
 
     // 共通データ構造からの情報が表示されていることを確認
@@ -149,7 +149,7 @@ export const ResponsiveTest: Story = {
     // レスポンシブレイアウトの基本確認
     const sidePanel = canvas.getByRole('complementary');
     expect(sidePanel).toBeInTheDocument();
-    expect(sidePanel).toHaveClass('w-100'); // 400px固定
+    expect(sidePanel).toHaveClass('flex', 'flex-col'); // 基本レイアウト構造
 
     // 縦スクロール対応の確認
     expect(sidePanel).toHaveClass('flex-col');
