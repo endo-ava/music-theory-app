@@ -1,10 +1,18 @@
 'use client';
 
 import { twMerge } from 'tailwind-merge';
-import { useHubStore } from '@/stores/hubStore';
-import { getHubOptions } from '@/shared/constants/hubs';
-import type { HubType } from '@/shared/types';
-import type { ViewControllerProps } from '../types';
+import { useViewController } from '../hooks/useViewController';
+import { HubRadioGroup } from './HubRadioGroup';
+import { HubDescription } from './HubDescription';
+import type { ClassNameProps } from '@/shared/types';
+
+/**
+ * View Controller コンポーネントのProps
+ */
+export interface ViewControllerProps extends ClassNameProps {
+  /** コンポーネントの見出し */
+  title?: string;
+}
 
 /**
  * View Controller (C-1) コンポーネント
@@ -12,63 +20,48 @@ import type { ViewControllerProps } from '../types';
  * Canvasに描画するHub（五度圏 vs クロマチック）を切り替える。
  * 音楽を分析するための「世界観（レンズ）」を選択するコントロール。
  *
+ * 設計思想：
+ * - "Push Client Components to the leaves" の原則
+ * - 単一責任原則の徹底
+ * - アクセシビリティファースト設計（キーボードナビゲーション、roving tabindex）
+ * - パフォーマンスを考慮した実装（useMemo, useCallback）
+ * - カスタムフックによるロジック分離
+ * - 子コンポーネントによる関心の分離
+ *
  * @param props - コンポーネントのプロパティ
+ * @param props.className - カスタムクラス名（外部レイアウト制御用）
+ * @param props.title - コンポーネントの見出し（デフォルト: 'View controller'）
  * @returns ViewController のJSX要素
  */
 export const ViewController: React.FC<ViewControllerProps> = ({
   className,
   title = 'View controller',
 }) => {
-  const { hubType, setHubType } = useHubStore();
-
-  const handleHubTypeChange = (newHubType: HubType) => {
-    setHubType(newHubType);
-  };
-
-  const hubOptions = getHubOptions();
+  // カスタムフックによるロジック分離
+  const { hubType, hubOptions, selectedOption, radioGroupRef, handleHubTypeChange, handleKeyDown } =
+    useViewController();
 
   return (
     <div className={twMerge('space-y-4', className)}>
       {/* Component Title */}
       <h2 className="text-text-primary text-lg font-semibold">{title}</h2>
 
-      <div
-        className="bg-background-muted grid grid-cols-2 gap-2 rounded-md p-1"
-        role="radiogroup"
-        aria-label="Hub種類の選択"
-      >
-        {hubOptions.map(option => (
-          <button
-            key={option.value}
-            onClick={() => handleHubTypeChange(option.value)}
-            className={twMerge(
-              'rounded px-3 py-2 text-sm font-medium transition-all duration-200',
-              'focus:ring-text-primary focus:ring-2 focus:ring-offset-1 focus:ring-offset-transparent focus:outline-none',
-              hubType === option.value
-                ? 'bg-key-area-selected text-text-primary border-border border shadow-sm'
-                : 'text-text-secondary hover:bg-key-area-hover hover:text-text-primary'
-            )}
-            role="radio"
-            aria-checked={hubType === option.value}
-            aria-describedby={`${option.value}-description`}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
+      {/* Hub ラジオグループ - 子コンポーネントに分離 */}
+      <HubRadioGroup
+        ref={radioGroupRef}
+        hubOptions={hubOptions}
+        selectedHub={hubType}
+        onHubChange={handleHubTypeChange}
+        onKeyDown={handleKeyDown}
+      />
 
-      {/* 選択されたHubの説明 */}
-      {hubOptions.map(
-        option =>
-          hubType === option.value && (
-            <p
-              key={option.value}
-              id={`${option.value}-description`}
-              className="text-text-muted text-sm"
-            >
-              <span>{option.label}:</span> {option.description}
-            </p>
-          )
+      {/* 選択されたHubの説明 - 条件分岐を最適化 */}
+      {selectedOption && (
+        <HubDescription
+          hubType={selectedOption.value}
+          label={selectedOption.label}
+          description={selectedOption.description}
+        />
       )}
     </div>
   );
