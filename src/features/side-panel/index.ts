@@ -12,7 +12,6 @@
  *
  * 内部コンポーネント（非公開）:
  * - HubOptionButton
- * - HubDescription
  * - HubRadioGroup
  * - useViewController フック
  */
@@ -25,5 +24,5 @@ export { ViewController } from './components/ViewController';
 export type { SidePanelProps } from './components/SidePanel';
 export type { ViewControllerProps } from './components/ViewController';
 
-// 注意: 内部実装（HubOptionButton, HubDescription, HubRadioGroup, useViewController）は
+// 注意: 内部実装（HubOptionButton, HubRadioGroup, useViewController）は
 // 意図的に非公開とし、安定したAPIを提供します。

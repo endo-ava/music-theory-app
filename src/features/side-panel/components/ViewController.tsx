@@ -3,7 +3,6 @@
 import { twMerge } from 'tailwind-merge';
 import { useViewController } from '../hooks/useViewController';
 import { HubRadioGroup } from './HubRadioGroup';
-import { HubDescription } from './HubDescription';
 import type { ClassNameProps } from '@/shared/types';
 
 /**
@@ -55,13 +54,11 @@ export const ViewController: React.FC<ViewControllerProps> = ({
         onKeyDown={handleKeyDown}
       />
 
-      {/* 選択されたHubの説明 - 条件分岐を最適化 */}
+      {/* 選択されたHubの説明 */}
       {selectedOption && (
-        <HubDescription
-          hubType={selectedOption.value}
-          label={selectedOption.label}
-          description={selectedOption.description}
-        />
+        <p id={`${selectedOption.value}-description`} className="text-text-muted text-sm">
+          <span className="font-medium">{selectedOption.label}:</span> {selectedOption.description}
+        </p>
       )}
     </div>
   );
