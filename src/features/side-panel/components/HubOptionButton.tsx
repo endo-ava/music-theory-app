@@ -41,8 +41,8 @@ export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
       onClick={() => onClick(value)}
       className={twMerge(
         // 基本スタイル
-        'rounded px-3 py-2 text-sm font-medium transition-all duration-200',
-        'focus:ring-text-primary focus:ring-2 focus:ring-offset-1 focus:ring-offset-transparent focus:outline-none',
+        'border-border rounded border px-3 py-2 text-sm font-medium transition-all duration-200',
+        'focus:ring-text-primary focus:ring-1 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none',
         // 状態別スタイル（条件を明確に分離）
         isSelected
           ? 'bg-key-area-selected text-text-primary border-border border shadow-sm'
