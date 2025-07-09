@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect } from '@storybook/test';
+import { within, expect, waitFor } from '@storybook/test';
 import { SidePanel } from '../components/SidePanel';
 import { useHubStore } from '@/stores/hubStore';
 
@@ -233,19 +233,33 @@ export const ViewControllerIntegrationTest: Story = {
     // 初期状態確認
     useHubStore.setState({ hubType: 'circle-of-fifths' });
 
-    const circleButton = canvas.getByRole('radio', { name: '五度圏' });
-    const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
+    // 状態更新の反映をwaitForで確実に待機
+    const circleButton = await waitFor(() => canvas.getByRole('radio', { name: '五度圏' }));
+    const chromaticButton = await waitFor(() =>
+      canvas.getByRole('radio', { name: 'クロマチック' })
+    );
 
-    expect(circleButton).toHaveAttribute('aria-checked', 'true');
+    await waitFor(() => {
+      expect(circleButton).toHaveAttribute('aria-checked', 'true');
+    });
 
     // 状態変更テスト（共通データ構造からの情報使用）
     const chromaticRadio = canvas.getByRole('radio', { name: 'クロマチック' });
     await chromaticRadio.click();
-    expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
-    expect(circleButton).toHaveAttribute('aria-checked', 'false');
+
+    // クリック後の状態更新をwaitForで確実に待機
+    await waitFor(() => {
+      expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
+    });
+
+    await waitFor(() => {
+      expect(circleButton).toHaveAttribute('aria-checked', 'false');
+    });
 
     // 共通データ構造からの説明が切り替わったことを確認
-    expect(canvas.getByText('半音階で配置された音の輪')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(canvas.getByText('半音階で配置された音の輪')).toBeInTheDocument();
+    });
   },
 };
 
