@@ -21,7 +21,6 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
         'flex h-full min-h-[400px] w-full flex-col bg-transparent p-4 lg:p-8',
         className
       )}
-      role="main"
       aria-label="メイン表示エリア"
     >
       {/* Hub タイトル */}
