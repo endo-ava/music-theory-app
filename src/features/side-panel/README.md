@@ -211,8 +211,8 @@ interface HubInfo {
   nameEn: string;
   /** 説明文 */
   description: string;
-  /** UI表示用短縮名（オプション） */
-  shortName?: string;
+  /** UI表示用短縮名 */
+  shortName: string;
 }
 ```
 
