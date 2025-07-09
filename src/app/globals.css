@@ -114,3 +114,15 @@
     padding: 0;
   }
 }
+
+@layer utilities {
+  /* Hub表示切り替え (Canvas component) */
+  /* hub-containerクラスで、data-hub-typeが"circle-of-fifths"の時、その中の..hub-chromatic-circleを隠す */
+  .hub-container[data-hub-type='circle-of-fifths'] .hub-chromatic-circle {
+    display: none;
+  }
+
+  .hub-container[data-hub-type='chromatic-circle'] .hub-circle-of-fifths {
+    display: none;
+  }
+}
