@@ -1,7 +1,7 @@
 'use client';
 import { twMerge } from 'tailwind-merge';
-import { useHubStore } from '../store/hubStore';
-import type { HubType } from '../types';
+import { useHubStore } from '@/stores/hubStore';
+import { getHubDisplayNameEn } from '@/shared/constants/hubs';
 import { ClassNameProps } from '@/shared/types';
 
 /**
@@ -13,16 +13,10 @@ import { ClassNameProps } from '@/shared/types';
  * @param props - コンポーネントのプロパティ
  * @returns HubTitle のJSX要素
  */
-// Hub種類に応じたタイトルを取得するマッピングオブジェクト
-const hubTitleMap: Record<HubType, string> = {
-  'circle-of-fifths': '五度圏',
-  'chromatic-circle': 'クロマチックサークル',
-};
-
 export const HubTitle: React.FC<ClassNameProps> = ({ className }) => {
   const { hubType } = useHubStore();
 
-  const hubTitle = hubTitleMap[hubType] || '五度圏';
+  const hubTitle = getHubDisplayNameEn(hubType);
 
   return <h1 className={twMerge('text-title', className)}>{hubTitle}</h1>;
 };

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, expect, userEvent } from '@storybook/test';
 import { HubTitle } from '../components/HubTitle';
-import { useHubStore } from '../store/hubStore';
+import { useHubStore } from '@/stores/hubStore';
 
 const meta: Meta<typeof HubTitle> = {
   title: 'Components/Canvas/HubTitle',
@@ -81,7 +81,7 @@ export const InteractiveTest: Story = {
     // HubTitleの表示確認
     const hubTitle = canvas.getByRole('heading', { level: 1 });
     expect(hubTitle).toBeInTheDocument();
-    expect(hubTitle).toHaveTextContent('五度圏');
+    expect(hubTitle).toHaveTextContent('Circle of Fifths');
 
     // セマンティクスの確認
     expect(hubTitle).toHaveClass('text-title');
@@ -109,7 +109,7 @@ export const AccessibilityTest: Story = {
     expect(heading).toBeInTheDocument();
 
     // テキストコンテンツの確認
-    expect(heading).toHaveTextContent(/^(五度圏|クロマチックサークル)$/);
+    expect(heading).toHaveTextContent(/^(Circle of Fifths|Chromatic Circle)$/);
 
     // 基本的なCSSクラスの確認
     expect(heading).toHaveClass('text-title');
@@ -204,6 +204,7 @@ export const HubTypeSwitchTest: Story = {
       return (
         <div className="flex min-h-[300px] flex-col items-center justify-center space-y-8 bg-gray-50 p-8">
           <Story />
+          {/* テスト用モックボタン: HubTitle コンポーネントの動作確認のため */}
           <div className="flex space-x-4">
             <button
               data-testid="circle-of-fifths-button"
@@ -238,21 +239,21 @@ export const HubTypeSwitchTest: Story = {
     // テスト開始前にストアを初期状態に確実にセット
     useHubStore.setState({ hubType: 'circle-of-fifths' });
 
-    // 初期状態でh1タグに「五度圏」が表示されていることを確認
-    expect(canvas.getByRole('heading', { name: '五度圏' })).toBeInTheDocument();
+    // 初期状態でh1タグに「Circle of Fifths」が表示されていることを確認
+    expect(canvas.getByRole('heading', { name: 'Circle of Fifths' })).toBeInTheDocument();
 
     // クロマチックサークルボタンをクリック
     const chromaticButton = canvas.getByTestId('chromatic-circle-button');
     await userEvent.click(chromaticButton);
 
-    // タイトルが「クロマチックサークル」に変更されることを確認
-    expect(canvas.getByRole('heading', { name: 'クロマチックサークル' })).toBeInTheDocument();
+    // タイトルが「Chromatic Circle」に変更されることを確認
+    expect(canvas.getByRole('heading', { name: 'Chromatic Circle' })).toBeInTheDocument();
 
     // 五度圏ボタンをクリック
     const circleButton = canvas.getByTestId('circle-of-fifths-button');
     await userEvent.click(circleButton);
 
-    // タイトルが「五度圏」に戻ることを確認
-    expect(canvas.getByRole('heading', { name: '五度圏' })).toBeInTheDocument();
+    // タイトルが「Circle of Fifths」に戻ることを確認
+    expect(canvas.getByRole('heading', { name: 'Circle of Fifths' })).toBeInTheDocument();
   },
 };

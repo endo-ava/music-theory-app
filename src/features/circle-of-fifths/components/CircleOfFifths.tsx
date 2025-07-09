@@ -18,7 +18,7 @@ export const CircleOfFifths: React.FC<ClassNameProps> = ({ className }) => {
 
   return (
     <div className={className}>
-      <svg viewBox={viewBox} className="block" aria-label="五度圏" role="img">
+      <svg viewBox={viewBox} className="block" aria-label="Circle of Fifths" role="img">
         {/* 各セグメント絵画をループで呼び出す */}
         {segments.map(({ segment, paths, textPositions }) => (
           <CircleSegment

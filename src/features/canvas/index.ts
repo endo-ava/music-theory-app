@@ -4,6 +4,7 @@
 
 export { Canvas } from './components/Canvas';
 export { HubTitle } from './components/HubTitle';
-export type { HubType, CanvasConfig } from './types';
-export { useHubStore } from './store/hubStore';
-export type { HubState } from './store/hubStore';
+export type { CanvasConfig } from './types';
+export type { HubType } from '@/shared/types';
+export { useHubStore } from '@/stores/hubStore';
+export type { HubState } from '@/stores/hubStore';

@@ -2,10 +2,7 @@
  * Canvas コンポーネントの型定義
  */
 
-/**
- * Hub の種類（将来の拡張用）
- */
-export type HubType = 'circle-of-fifths' | 'chromatic-circle';
+import type { HubType } from '@/shared/types';
 
 /**
  * Canvas の設定（将来の拡張用）
