@@ -39,18 +39,26 @@ Hub画面において音楽理論の可視化をコントロールする統合�
 
 **SidePanel**はメインコンテナとして機能し、内部に統一されたセクションを持ちます。現在はViewController（C-1）のみを含みますが、将来的にLayerController（C-2）、InformationPanel（C-3）が追加される設計となっています。
 
+**ViewController**は内部でさらに細かいコンポーネントに分離されています：
+
+- **useViewControllerフック**: ビジネスロジックと状態管理
+- **HubRadioGroup**: ラジオグループコンテナ
+- **HubOptionButton**: 個別のオプションボタン
+
 ### コンポーネント構成図
 
 ```mermaid
 graph TD
     A[SidePanel] --> B[Section Container]
-    B --> C[Header]
-    B --> D[ViewController C-1]
-    B --> E[Future: LayerController C-2]
-    B --> F[Future: InformationPanel C-3]
-    D --> G[Hub Toggle Buttons]
-    D --> H[Description Area]
-    G --> I[HubStore]
+    B --> C[ViewController C-1]
+    B --> D[Future: LayerController C-2]
+    B --> E[Future: InformationPanel C-3]
+    C --> F[useViewController Hook]
+    C --> G[HubRadioGroup]
+    C --> H[Description Area]
+    G --> I[HubOptionButton × 2]
+    F --> J[HubStore]
+    F --> K[Hub Constants]
 ```
 
 ### データフロー図
@@ -59,10 +67,13 @@ graph TD
 flowchart LR
     A[Page Layout] -->|Props| B[SidePanel]
     B -->|Render| C[ViewController]
-    C -->|Hub Selection| D[HubStore]
-    D -->|State Change| E[Canvas/HubTitle]
-    F[Shared Hub Constants] -->|Data| C
-    C -->|User Interaction| D
+    C -->|Hook| D[useViewController]
+    D -->|State| E[HubStore]
+    D -->|Data| F[Hub Constants]
+    C -->|Component| G[HubRadioGroup]
+    G -->|Buttons| H[HubOptionButton]
+    E -->|Global State| I[Canvas/HubTitle]
+    H -->|Events| D
 ```
 
 ### ファイル構造
@@ -71,11 +82,14 @@ flowchart LR
 src/features/side-panel/
 ├── README.md                     # このファイル
 ├── index.ts                      # エクスポート統合
-├── types.ts                      # 型定義
 ├── components/                   # UIコンポーネント
+│   ├── README.md                # コンポーネント設計書
 │   ├── SidePanel.tsx            # メインコンテナ
-│   └── ViewController.tsx       # Hub切り替えUI
-├── hooks/                       # カスタムフック（将来使用）
+│   ├── ViewController.tsx       # Hub切り替えUI
+│   ├── HubRadioGroup.tsx        # ラジオグループコンテナ
+│   └── HubOptionButton.tsx      # 個別オプションボタン
+├── hooks/                       # カスタムフック
+│   └── useViewController.ts     # ViewControllerビジネスロジック
 └── __stories__/                 # Storybookストーリー
     ├── SidePanel.stories.tsx
     └── ViewController.stories.tsx
@@ -86,8 +100,11 @@ src/features/side-panel/
 #### 内部依存
 
 - `@/shared/constants/hubs` - Hub共通データ構造とユーティリティ関数
-- `@/shared/types` - 共通型定義（HubType, HubInfo, ClassNameProps）
+- `@/shared/types` - 共通型定義（HubType, ClassNameProps）
 - `@/stores/hubStore` - Hub状態管理（Zustand）
+- `@/features/side-panel/hooks/useViewController` - ViewControllerビジネスロジック
+- `@/features/side-panel/components/HubRadioGroup` - ラジオグループコンポーネント
+- `@/features/side-panel/components/HubOptionButton` - オプションボタンコンポーネント
 
 #### 外部依存
 
@@ -112,12 +129,58 @@ interface SidePanelProps extends ClassNameProps {
 
 ```typescript
 interface ViewControllerProps extends ClassNameProps {
-  /** コンポーネントの見出し */
+  /** コンポーネントの見出し（デフォルト: 'View Controller'） */
   title?: string;
 }
 ```
 
+#### HubRadioGroup
+
+```typescript
+interface HubRadioGroupProps {
+  /** Hub オプション配列 */
+  hubOptions: HubOption[];
+  /** 現在選択されているHub */
+  selectedHub: HubType;
+  /** Hub変更ハンドラー */
+  onHubChange: (hubType: HubType) => void;
+  /** キーボードイベントハンドラー */
+  onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+}
+```
+
+#### HubOptionButton
+
+```typescript
+interface HubOptionButtonProps {
+  /** Hub オプションの値 */
+  value: HubType;
+  /** ボタンのラベル */
+  label: string;
+  /** 選択状態 */
+  isSelected: boolean;
+  /** クリックハンドラー */
+  onClick: (value: HubType) => void;
+  /** ARIA describedby 属性用のID */
+  describedById: string;
+  /** タブインデックス（roving tabindex パターン用） */
+  tabIndex: number;
+}
+```
+
 ### 状態管理
+
+#### ローカル状態 (useViewController)
+
+```typescript
+// useViewController フック内
+const radioGroupRef = useRef<HTMLDivElement>(null);
+const hubOptions = useMemo(() => getHubOptions(), []);
+const selectedOption = useMemo(
+  () => hubOptions.find(option => option.value === hubType),
+  [hubOptions, hubType]
+);
+```
 
 #### グローバル状態 (Zustand)
 
@@ -133,6 +196,14 @@ interface HubState {
 ### 共通データ構造
 
 ```typescript
+// useViewControllerで使用されるHubオプション情報
+interface HubOption {
+  value: HubType;
+  label: string;
+  description: string;
+}
+
+// @/shared/constants/hubsから取得
 interface HubInfo {
   /** 日本語名 */
   nameJa: string;
@@ -149,16 +220,18 @@ interface HubInfo {
 
 #### 公開メソッド
 
-| 関数名                | 引数               | 戻り値                               | 説明                           |
-| --------------------- | ------------------ | ------------------------------------ | ------------------------------ |
-| `getHubDisplayNameEn` | `hubType: HubType` | `string`                             | Hub英語名を取得                |
-| `getHubOptions`       | なし               | `Array<{value, label, description}>` | ViewController用オプション配列 |
+| 関数名                | 引数               | 戻り値                               | 説明                                 |
+| --------------------- | ------------------ | ------------------------------------ | ------------------------------------ |
+| `getHubDisplayNameEn` | `hubType: HubType` | `string`                             | Hub英語名を取得                      |
+| `getHubOptions`       | なし               | `Array<{value, label, description}>` | ViewController用オプション配列       |
+| `useViewController`   | なし               | `ViewControllerHook`                 | ViewControllerビジネスロジックフック |
 
 #### イベント
 
-| イベント名        | ペイロード             | 説明          |
-| ----------------- | ---------------------- | ------------- |
-| `onHubTypeChange` | `{ hubType: HubType }` | Hub種類変更時 |
+| イベント名        | ペイロード                 | 説明                     |
+| ----------------- | -------------------------- | ------------------------ |
+| `onHubTypeChange` | `{ hubType: HubType }`     | Hub種類変更時            |
+| `onKeyDown`       | `{ event: KeyboardEvent }` | キーボードナビゲーション |
 
 ## 使用方法
 
@@ -170,7 +243,7 @@ import { SidePanel } from '@/features/side-panel';
 function HubPage() {
   return (
     <div className="flex h-screen">
-      <div className="flex-1">
+      <div className="w-80">
         <SidePanel />
       </div>
       <div className="flex-1">{/* Canvas など */}</div>
@@ -244,7 +317,8 @@ ViewControllerは独立したコンポーネントとして設計され、SidePa
 
 ### 実装済み機能
 
-- **キーボードナビゲーション**: Tab、Enter、Spaceキーでの操作
+- **キーボードナビゲーション**: Arrow keys、Home、Endキーでの操作
+- **roving tabindexパターン**: 効率的なフォーカス管理
 - **スクリーンリーダー対応**: `role="radiogroup"`、`aria-checked`等の適切な設定
 - **フォーカス管理**: 視覚的なフォーカスリング表示
 - **ダークテーマ対応**: 高コントラスト比の実現
@@ -260,11 +334,14 @@ ViewControllerは独立したコンポーネントとして設計され、SidePa
 
 ### キーボード操作
 
-| キー          | 動作                     |
-| ------------- | ------------------------ |
-| `Tab`         | 次の要素にフォーカス移動 |
-| `Shift + Tab` | 前の要素にフォーカス移動 |
-| `Enter/Space` | Hub種類の切り替え        |
+| キー          | 動作                                   |
+| ------------- | -------------------------------------- |
+| `Tab`         | 次のコンポーネントにフォーカス移動     |
+| `Shift + Tab` | 前のコンポーネントにフォーカス移動     |
+| `Arrow Keys`  | ラジオグループ内でのオプション切り替え |
+| `Home`        | 最初のオプションに移動                 |
+| `End`         | 最後のオプションに移動                 |
+| `Enter/Space` | オプションの選択                       |
 
 ## 開発・保守
 

@@ -34,7 +34,7 @@ export interface ViewControllerProps extends ClassNameProps {
  */
 export const ViewController: React.FC<ViewControllerProps> = ({
   className,
-  title = 'View controller',
+  title = 'View Controller',
 }) => {
   // カスタムフックによるロジック分離
   const { hubType, hubOptions, selectedOption, radioGroupRef, handleHubTypeChange, handleKeyDown } =
@@ -56,7 +56,7 @@ export const ViewController: React.FC<ViewControllerProps> = ({
 
       {/* 選択されたHubの説明 */}
       {selectedOption && (
-        <p id={`${selectedOption.value}-description`} className="text-text-muted text-sm">
+        <p id={`${selectedOption.value}-description`} className="text-text-secondary text-sm">
           <span className="font-medium">{selectedOption.label}:</span> {selectedOption.description}
         </p>
       )}
