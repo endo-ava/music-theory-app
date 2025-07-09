@@ -40,7 +40,7 @@ export const getHubDisplayNameEn = (hubType: HubType): string => {
 export const getHubOptions = () => {
   return Object.entries(HUBS).map(([key, hub]) => ({
     value: key as HubType,
-    label: hub.shortName || hub.nameJa,
+    label: hub.shortName,
     description: hub.description,
   }));
 };
