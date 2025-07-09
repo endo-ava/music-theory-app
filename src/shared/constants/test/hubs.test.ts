@@ -64,13 +64,12 @@ describe('hubs constants', () => {
       });
     });
 
-    it('正常ケース: shortNameが存在する場合はlabelに使用される', () => {
+    it('正常ケース: shortNameがlabelに使用される', () => {
       const result = getHubOptions();
 
       result.forEach(option => {
         const hubInfo = HUBS[option.value as HubType];
-        const expectedLabel = hubInfo.shortName || hubInfo.nameJa;
-        expect(option.label).toBe(expectedLabel);
+        expect(option.label).toBe(hubInfo.shortName);
       });
     });
 
