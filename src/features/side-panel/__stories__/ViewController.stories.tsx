@@ -11,7 +11,7 @@ const meta: Meta<typeof ViewController> = {
     docs: {
       description: {
         component:
-          'Hub画面のView Controller（C-1）コンポーネント。共通データ構造（@/shared/constants/hubs）を使用してHub種類の切り替えを提供します。useHubStoreと連携してHub種類の状態管理を行い、Canvasの表示内容を制御します。',
+          'Hub画面のView Controller（C-1）コンポーネント。音楽理論の「世界観（レンズ）」を選択するための制御インターフェース。useViewControllerフックでビジネスロジックを管理し、HubRadioGroupとHubOptionButtonの子コンポーネントで構成されています。',
       },
     },
   },
@@ -19,16 +19,16 @@ const meta: Meta<typeof ViewController> = {
   argTypes: {
     className: {
       control: 'text',
-      description: 'カスタムクラス名',
+      description: 'カスタムクラス名（外部レイアウト制御用）',
     },
     title: {
       control: 'text',
-      description: 'コンポーネントのタイトル',
+      description: 'コンポーネントの見出し（デフォルト: "View Controller"）',
     },
   },
   decorators: [
     Story => (
-      <div className="flex min-h-[400px] items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8">
+      <div className="flex min-h-[500px] items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8">
         <div className="w-80">
           <Story />
         </div>
@@ -49,7 +49,7 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          'デフォルトの設定でViewControllerを表示します。共通データ構造からHub情報を取得し、初期状態では五度圏が選択されています。',
+          'デフォルトの設定でViewControllerを表示します。useViewControllerフックで管理される状態と、HubRadioGroupによるラジオボタンUI、選択されたHubの説明文が表示されます。',
       },
     },
   },
@@ -65,7 +65,8 @@ export const CustomTitle: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'カスタムタイトルを設定したViewControllerです。',
+        story:
+          'カスタムタイトルを設定したViewControllerです。デフォルトの"View Controller"から変更されています。',
       },
     },
   },
@@ -80,7 +81,7 @@ export const InteractiveTest: Story = {
     docs: {
       description: {
         story:
-          'ViewControllerコンポーネントの基本的なインタラクション動作をテストします。共通データ構造から取得したHub情報でボタンクリックが正常に動作することを確認します。',
+          'ViewControllerコンポーネントの基本的なインタラクション動作をテストします。useViewControllerフックの状態管理、HubRadioGroupのラジオボタン機能、説明文の動的表示を検証します。',
       },
     },
   },
@@ -96,7 +97,7 @@ export const InteractiveTest: Story = {
 
     // タイトルの確認
     const title = canvas.getByRole('heading', { level: 2 });
-    expect(title).toHaveTextContent('View controller');
+    expect(title).toHaveTextContent('View Controller');
 
     // 初期状態で五度圏ボタンが選択されていることを確認
     const circleButton = canvas.getByRole('radio', { name: '五度圏' });
@@ -121,7 +122,7 @@ export const HubTypeSwitchTest: Story = {
     docs: {
       description: {
         story:
-          'Hub種類切り替え機能の自動テストです。共通データ構造から取得されたHub情報に基づいて、ボタンクリックで状態が正しく変更されることを確認します。',
+          'Hub種類切り替え機能の自動テストです。useViewControllerフックの状態管理とHubRadioGroupのインタラクションが正しく連携することを確認します。',
       },
     },
   },
@@ -167,7 +168,7 @@ export const AccessibilityTest: Story = {
     docs: {
       description: {
         story:
-          'ViewControllerコンポーネントのアクセシビリティ要件をテストします。適切なARIA属性、フォーカス管理、キーボードナビゲーションを確認します。',
+          'ViewControllerコンポーネントのアクセシビリティ要件をテストします。HubRadioGroupのroving tabindexパターン、適切なARIA属性、キーボードナビゲーション対応を確認します。',
       },
     },
   },
@@ -176,7 +177,7 @@ export const AccessibilityTest: Story = {
 
     // 見出しの確認
     const heading = canvas.getByRole('heading', { level: 2 });
-    expect(heading).toHaveTextContent('View controller');
+    expect(heading).toHaveTextContent('View Controller');
 
     // ラジオグループの確認
     const radioGroup = canvas.getByRole('radiogroup');
@@ -186,12 +187,13 @@ export const AccessibilityTest: Story = {
     const circleButton = canvas.getByRole('radio', { name: '五度圏' });
     const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
 
+    // roving tabindexパターンの確認
+    expect(circleButton).toHaveAttribute('tabindex', '0'); // 選択されているボタンはfocusable
+    expect(chromaticButton).toHaveAttribute('tabindex', '-1'); // 非選択はnon-focusable
+
     // フォーカス可能であることを確認
     circleButton.focus();
     expect(circleButton).toHaveFocus();
-
-    chromaticButton.focus();
-    expect(chromaticButton).toHaveFocus();
 
     // 説明との関連付け確認
     expect(circleButton).toHaveAttribute('aria-describedby', 'circle-of-fifths-description');
@@ -200,17 +202,67 @@ export const AccessibilityTest: Story = {
 };
 
 /**
+ * キーボードナビゲーションテスト
+ */
+export const KeyboardNavigationTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'useViewControllerフックが提供するキーボードナビゲーション機能をテストします。Arrow keys、Home、Endキーによるroving tabindexパターンの実装を確認します。',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 初期状態を設定
+    useHubStore.setState({ hubType: 'circle-of-fifths' });
+
+    const circleButton = canvas.getByRole('radio', { name: '五度圏' });
+    const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
+
+    // 初期フォーカス確認
+    circleButton.focus();
+    expect(circleButton).toHaveFocus();
+
+    // roving tabindexパターンの確認
+    expect(circleButton).toHaveAttribute('tabindex', '0');
+    expect(chromaticButton).toHaveAttribute('tabindex', '-1');
+
+    // Arrowキーでの移動テスト
+    await userEvent.keyboard('{ArrowRight}');
+    expect(chromaticButton).toHaveFocus();
+    expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
+
+    await userEvent.keyboard('{ArrowLeft}');
+    expect(circleButton).toHaveFocus();
+    expect(circleButton).toHaveAttribute('aria-checked', 'true');
+
+    // Homeキーでの移動テスト
+    await userEvent.keyboard('{Home}');
+    expect(circleButton).toHaveFocus();
+
+    // Endキーでの移動テスト
+    await userEvent.keyboard('{End}');
+    expect(chromaticButton).toHaveFocus();
+    expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
+  },
+};
+
+/**
  * カスタムスタイルのViewController
  */
 export const CustomStyle: Story = {
   args: {
-    className: 'border-blue-500 bg-blue-50',
+    className: 'border-l-4 border-blue-500 pl-4 bg-blue-50/20 rounded-md',
   },
   parameters: {
     docs: {
       description: {
         story:
-          'カスタムスタイルを適用したViewControllerです。ボーダーと背景色をカスタマイズできます。',
+          'カスタムスタイルを適用したViewControllerです。className propsを使用して外部レイアウトやスタイルをカスタマイズできます。',
       },
     },
     a11y: {

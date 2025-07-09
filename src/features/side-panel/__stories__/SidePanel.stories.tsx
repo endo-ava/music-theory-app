@@ -11,7 +11,7 @@ const meta: Meta<typeof SidePanel> = {
     docs: {
       description: {
         component:
-          'Hub画面のサイドパネルメインコンテナコンポーネント。統一されたセクション構造でViewController（C-1）を含み、共通データ構造（@/shared/constants/hubs）を活用してHub種類の切り替えを提供します。将来的にLayerController（C-2）、InformationPanel（C-3）が追加される予定です。',
+          'Hub画面の左側に配置されるサイドパネルメインコンテナコンポーネント。音楽理論の表示制御と情報提示を行う統合インターフェースとして機能し、現在はViewController（C-1）を含み、将来的にLayerController（C-2）、InformationPanel（C-3）が追加される予定です。',
       },
     },
   },
@@ -19,17 +19,19 @@ const meta: Meta<typeof SidePanel> = {
   argTypes: {
     className: {
       control: 'text',
-      description: 'カスタムクラス名',
+      description: 'カスタムクラス名（外部レイアウト制御用）',
     },
     isVisible: {
       control: 'boolean',
-      description: 'パネルの表示状態',
+      description: 'パネルの表示状態（デフォルト: true）',
     },
   },
   decorators: [
     Story => (
       <div className="flex h-screen bg-gradient-to-b from-gray-900 to-black">
-        <Story />
+        <div className="w-80">
+          <Story />
+        </div>
         <div className="flex flex-1 items-center justify-center">
           <p className="text-xl text-white">Canvas Area</p>
         </div>
@@ -50,7 +52,7 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          'デフォルトの設定でSidePanelを表示します。統一されたセクション内にViewControllerが含まれ、ダークテーマで統一されたデザインです。',
+          'デフォルトの設定でSidePanelを表示します。aside要素と統一されたセクション内にViewControllerが含まれ、ダークテーマで統一されたデザインです。',
       },
     },
   },
@@ -67,7 +69,7 @@ export const Hidden: Story = {
     docs: {
       description: {
         story:
-          'isVisibleをfalseにした状態のSidePanelです。モバイル対応などで一時的に非表示にする場合に使用します。',
+          'isVisibleをfalseにした状態のSidePanelです。モバイル対応やレスポンシブデザインで一時的に非表示にする場合に使用します。',
       },
     },
   },
@@ -82,7 +84,7 @@ export const InteractiveTest: Story = {
     docs: {
       description: {
         story:
-          'SidePanelコンポーネントの基本的なインタラクション動作をテストします。統一されたセクション構造と内包するViewControllerの動作を確認します。',
+          'SidePanelコンポーネントの基本的なインタラクション動作をテストします。aside要素と統一されたセクション構造、内包するViewControllerの動作を確認します。',
       },
     },
   },
@@ -102,7 +104,7 @@ export const InteractiveTest: Story = {
     expect(section).toHaveAttribute('aria-label', 'コントロールパネル');
 
     // ViewControllerの存在確認
-    const viewController = canvas.getByRole('heading', { level: 2, name: 'View controller' });
+    const viewController = canvas.getByRole('heading', { level: 2, name: 'View Controller' });
     expect(viewController).toBeInTheDocument();
 
     // Hub切り替えボタンの確認
@@ -123,7 +125,7 @@ export const ResponsiveTest: Story = {
     docs: {
       description: {
         story:
-          'SidePanelコンポーネントのレスポンシブ対応をテストします。固定幅320px（w-80）での表示確認を行います。',
+          'SidePanelコンポーネントのレスポンシブ対応をテストします。外部レイアウト制御と内部のスクロール対応を確認します。',
       },
     },
     viewport: {
@@ -169,7 +171,7 @@ export const AccessibilityTest: Story = {
     docs: {
       description: {
         story:
-          'SidePanelコンポーネントのアクセシビリティ要件をテストします。適切なセマンティクス、ARIA属性、見出し階層を確認します。',
+          'SidePanelコンポーネントのアクセシビリティ要件をテストします。aside要素、適切なセマンティクス、ARIA属性、見出し階層を確認します。',
       },
     },
   },
@@ -182,7 +184,7 @@ export const AccessibilityTest: Story = {
 
     // 見出し階層の確認
     const h2 = canvas.getByRole('heading', { level: 2 });
-    expect(h2).toHaveTextContent('View controller');
+    expect(h2).toHaveTextContent('View Controller');
 
     // ViewControllerのアクセシビリティ確認
     const radioGroup = canvas.getByRole('radiogroup');
@@ -204,7 +206,7 @@ export const ViewControllerIntegrationTest: Story = {
     docs: {
       description: {
         story:
-          'SidePanelに統合されたViewControllerの動作確認テストです。共通データ構造とHub状態管理との連携を確認します。',
+          'SidePanelに統合されたViewControllerの動作確認テストです。コンテナとしての統合機能とHub状態管理との連携を確認します。',
       },
     },
   },
@@ -237,7 +239,8 @@ export const ViewControllerIntegrationTest: Story = {
     expect(circleButton).toHaveAttribute('aria-checked', 'true');
 
     // 状態変更テスト（共通データ構造からの情報使用）
-    await canvas.getByRole('radio', { name: 'クロマチック' }).click();
+    const chromaticRadio = canvas.getByRole('radio', { name: 'クロマチック' });
+    await chromaticRadio.click();
     expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
     expect(circleButton).toHaveAttribute('aria-checked', 'false');
 
@@ -251,12 +254,13 @@ export const ViewControllerIntegrationTest: Story = {
  */
 export const CustomStyle: Story = {
   args: {
-    className: 'border-l-4 border-blue-500 bg-blue-50',
+    className: 'border-l-4 border-blue-500 bg-blue-50/20',
   },
   parameters: {
     docs: {
       description: {
-        story: 'カスタムスタイルを適用したSidePanelです。ボーダーと背景色をカスタマイズできます。',
+        story:
+          'カスタムスタイルを適用したSidePanelです。className propsを使用して外部レイアウトやスタイルをカスタマイズできます。',
       },
     },
     a11y: {
