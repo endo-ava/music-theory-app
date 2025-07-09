@@ -204,6 +204,7 @@ export const HubTypeSwitchTest: Story = {
       return (
         <div className="flex min-h-[300px] flex-col items-center justify-center space-y-8 bg-gray-50 p-8">
           <Story />
+          {/* テスト用モックボタン: HubTitle コンポーネントの動作確認のため */}
           <div className="flex space-x-4">
             <button
               data-testid="circle-of-fifths-button"

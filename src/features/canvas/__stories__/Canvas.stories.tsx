@@ -79,7 +79,7 @@ export const InteractiveTest: Story = {
     const canvas = within(canvasElement);
 
     // メイン表示エリアの存在確認
-    const mainArea = canvas.getByRole('main');
+    const mainArea = canvas.getByLabelText('メイン表示エリア');
     expect(mainArea).toBeInTheDocument();
     expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
 
@@ -111,7 +111,7 @@ export const AccessibilityTest: Story = {
     const canvas = within(canvasElement);
 
     // メイン表示エリアのセマンティクス確認
-    const mainArea = canvas.getByRole('main');
+    const mainArea = canvas.getByLabelText('メイン表示エリア');
     expect(mainArea).toBeInTheDocument();
     expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
 
@@ -159,7 +159,7 @@ export const ResponsiveTest: Story = {
     const canvas = within(canvasElement);
 
     // レスポンシブレイアウトの基本確認
-    const mainArea = canvas.getByRole('main');
+    const mainArea = canvas.getByLabelText('メイン表示エリア');
     expect(mainArea).toBeInTheDocument();
     expect(mainArea).toHaveClass('w-full', 'h-full');
 
