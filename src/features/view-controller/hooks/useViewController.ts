@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useCallback, useRef } from 'react';
 import { useHubStore } from '@/stores/hubStore';
 import { getHubOptions } from '@/shared/constants/hubs';

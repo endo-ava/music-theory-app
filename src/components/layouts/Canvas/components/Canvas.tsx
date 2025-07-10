@@ -3,7 +3,7 @@ import { CircleOfFifths } from '@/features/circle-of-fifths';
 import { HubTitle } from './HubTitle';
 import { HubTypeController } from './HubTypeController';
 import { ClassNameProps } from '@/shared/types';
-import { ChromaticCircle } from '../../chromatic-circle';
+import { ChromaticCircle } from '@/features/chromatic-circle';
 
 /**
  * メイン表示エリア（Canvas）コンポーネント

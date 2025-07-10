@@ -3,7 +3,7 @@ import { within, expect } from '@storybook/test';
 import { Canvas } from '../components/Canvas';
 
 const meta: Meta<typeof Canvas> = {
-  title: 'Components/Canvas',
+  title: 'Components/Layouts/Canvas',
   component: Canvas,
   parameters: {
     layout: 'fullscreen',
