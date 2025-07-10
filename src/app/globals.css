@@ -90,9 +90,13 @@
       theme('colors.circle-bg-from'),
       theme('colors.circle-bg-to')
     );
-    /* グラデーションが繰り返されないようにするおまじない */
+    /* グラデーションが繰り返されないようにする */
     background-repeat: no-repeat;
-    /* 高さを画面全体に合わせる */
+    /* ビューポートに固定 */
+    background-attachment: fixed;
+    /* 画面全体にフィット */
+    background-size: 100% 100%;
+    /* 画面全体にの最小高さ */
     min-height: 100vh;
   }
 
