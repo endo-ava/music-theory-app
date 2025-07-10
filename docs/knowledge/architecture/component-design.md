@@ -181,7 +181,7 @@ export interface ClassNameProps {
 - [Next.js App Router 公式ドキュメント](https://nextjs.org/docs/app)
 - [React Server Components 解説](https://react.dev/reference/react/use-client)
 - [開発規約](../../03.developmentAgreement.md)
-- [Canvas コンポーネント設計書](../../src/features/canvas/README.md)
+- [Canvas コンポーネント設計書](../../src/components/layouts/Canvas/README.md)
 
 ## 更新履歴
 

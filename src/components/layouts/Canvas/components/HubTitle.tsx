@@ -1,4 +1,5 @@
 'use client';
+
 import { twMerge } from 'tailwind-merge';
 import { useHubStore } from '@/stores/hubStore';
 import { getHubDisplayNameEn } from '@/shared/constants/hubs';

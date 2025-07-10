@@ -1,5 +1,8 @@
 /**
- * Canvas 機能のエクスポート統合
+ * Canvas UI Container のエクスポート統合
+ *
+ * レイアウト用UIコンテナとしてのCanvasコンポーネントを提供します。
+ * 機能（Feature）コンポーネントを描画するための責任を持ちます。
  */
 
 export { Canvas } from './components/Canvas';

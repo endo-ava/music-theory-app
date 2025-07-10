@@ -79,7 +79,7 @@ flowchart LR
 ### ファイル構造
 
 ```
-src/features/side-panel/
+src/components/layouts/SidePanel/
 ├── README.md                     # このファイル
 ├── index.ts                      # エクスポート統合
 ├── components/                   # UIコンポーネント
@@ -102,9 +102,7 @@ src/features/side-panel/
 - `@/shared/constants/hubs` - Hub共通データ構造とユーティリティ関数
 - `@/shared/types` - 共通型定義（HubType, ClassNameProps）
 - `@/stores/hubStore` - Hub状態管理（Zustand）
-- `@/features/side-panel/hooks/useViewController` - ViewControllerビジネスロジック
-- `@/features/side-panel/components/HubRadioGroup` - ラジオグループコンポーネント
-- `@/features/side-panel/components/HubOptionButton` - オプションボタンコンポーネント
+- `@/features/view-controller` - ViewControllerビジネスロジック
 
 #### 外部依存
 
@@ -238,7 +236,7 @@ interface HubInfo {
 ### 基本的な使用
 
 ```tsx
-import { SidePanel } from '@/features/side-panel';
+import { SidePanel } from '@/components/layouts/SidePanel';
 
 function HubPage() {
   return (
@@ -255,7 +253,8 @@ function HubPage() {
 ### カスタマイズ例
 
 ```tsx
-import { SidePanel, ViewController } from '@/features/side-panel';
+import { SidePanel } from '@/components/layouts/SidePanel';
+import { ViewController } from '@/features/view-controller';
 
 function CustomHubPage() {
   return (

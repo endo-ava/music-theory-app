@@ -1,5 +1,5 @@
-import { Canvas } from '@/features/canvas';
-import { SidePanel } from '@/features/side-panel';
+import { Canvas } from '@/components/layouts/Canvas';
+import { SidePanel } from '@/components/layouts/SidePanel';
 
 /**
  * ホームページコンポーネント

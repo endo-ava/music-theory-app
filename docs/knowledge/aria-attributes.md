@@ -166,7 +166,7 @@ ARIA仕様では以下の優先順位があります：
   <ViewController />
 </section>
 
-// ViewController.tsx
+// ViewController.tsx (旧: side-panel内のコンポーネント)
 <h2 id="side-panel-title">View controller</h2>
 ```
 
@@ -179,12 +179,12 @@ ARIA仕様では以下の優先順位があります：
 ### 修正後（推奨）
 
 ```tsx
-// SidePanel.tsx
+// SidePanel.tsx (現: layouts/SidePanel)
 <section aria-label="コントロールパネル">
   <ViewController />
 </section>
 
-// ViewController.tsx
+// ViewController.tsx (現: features/view-controller)
 <h2>View controller</h2>
 <div role="radiogroup" aria-label="Hub種類の選択">
   <!-- ラジオボタン -->
