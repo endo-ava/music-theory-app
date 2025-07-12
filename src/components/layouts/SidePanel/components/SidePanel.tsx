@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { ViewController } from './ViewController';
+import { ViewController } from '@/features/view-controller';
 import type { ClassNameProps } from '@/shared/types';
 
 /**

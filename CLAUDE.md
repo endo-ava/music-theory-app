@@ -74,31 +74,37 @@ npm run build-storybook
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── page.tsx           # ルートページ
-│   ├── layout.tsx         # ルートレイアウト
-│   ├── library/           # ライブラリページ
-│   └── tutorial/          # チュートリアルページ
-├── features/              # 機能別コンポーネント
-│   ├── circle-of-fifths/  # 五度圏機能
-│   │   ├── README.md      # コンポーネント設計書
-│   │   ├── index.ts       # エクスポート統合
-│   │   ├── components/    # UIコンポーネント
-│   │   ├── __stories__/   # Storybookストーリー
-│   │   ├── animations.ts  # アニメーション定義
-│   │   ├── constants/     # 定数定義
-│   │   ├── hooks/         # カスタムフック
-│   │   ├── store/         # 状態管理（Zustand）
-│   │   ├── types.ts       # ローカル型定義
-│   │   └── utils/         # ユーティリティ関数
-│   └── global-header/     # グローバルヘッダー機能
-│       ├── README.md      # コンポーネント設計書
-│       ├── index.ts       # エクスポート統合
-│       ├── components/    # UIコンポーネント
-│       ├── hooks/         # カスタムフック
-│       └── types.ts       # ローカル型定義
-└── test/                  # テスト設定
-docs/                      # 設計書・要件定義
+├── app/                       # Next.js App Router
+│   ├── page.tsx              # ルートページ
+│   ├── layout.tsx            # ルートレイアウト
+│   ├── library/              # ライブラリページ
+│   └── tutorial/             # チュートリアルページ
+├── components/               # UIコンテナ
+│   └── layouts/              # レイアウト専用コンポーネント
+│       ├── SidePanel/        # サイドパネルレイアウト
+│       ├── Canvas/           # メイン表示エリアレイアウト
+│       └── GlobalHeader/     # グローバルヘッダーレイアウト
+├── features/                 # 機能Feature
+│   ├── view-controller/      # Hub切り替え機能
+│   ├── circle-of-fifths/     # 五度圏機能
+│   │   ├── README.md         # コンポーネント設計書
+│   │   ├── index.ts          # エクスポート統合
+│   │   ├── components/       # UIコンポーネント
+│   │   ├── __stories__/      # Storybookストーリー
+│   │   ├── animations.ts     # アニメーション定義
+│   │   ├── constants/        # 定数定義
+│   │   ├── hooks/            # カスタムフック
+│   │   ├── store/            # 状態管理（Zustand）
+│   │   ├── types.ts          # ローカル型定義
+│   │   └── utils/            # ユーティリティ関数
+│   └── chromatic-circle/     # クロマチック機能
+├── shared/                   # 共通要素
+│   ├── constants/            # 共通定数
+│   ├── types/                # 共通型定義
+│   └── utils/                # 共通ユーティリティ
+├── stores/                   # グローバル状態管理
+└── test/                     # テスト設定
+docs/                         # 設計書・要件定義
 ```
 
 ## 開発規約
@@ -121,7 +127,9 @@ docs/                      # 設計書・要件定義
 
 - PR作成前に、必要に応じてドキュメント(./docs)との整合性を確認し、ドキュメントを更新すること
   - 基本ドキュメントはこちら: `./docs`
-  - 主要なコンポーネントのドキュメントはsrcの各階層に保存: 例. `./src/features/circle-of-fifths/README.md`
+  - 主要なコンポーネントのドキュメントはsrcの各階層に保存:
+    - Features: `./src/features/circle-of-fifths/README.md`
+    - UI Containers: `./src/components/layouts/SidePanel/README.md`
 
 ### PRレビュー対応について
 

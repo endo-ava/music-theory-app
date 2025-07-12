@@ -4,7 +4,7 @@ import { SidePanel } from '../components/SidePanel';
 import { useHubStore } from '@/stores/hubStore';
 
 const meta: Meta<typeof SidePanel> = {
-  title: 'Components/SidePanel',
+  title: 'Components/Layouts/SidePanel',
   component: SidePanel,
   parameters: {
     layout: 'fullscreen',

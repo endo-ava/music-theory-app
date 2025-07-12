@@ -23,7 +23,7 @@
 ## ファイル構造
 
 ```
-src/features/canvas/
+src/components/layouts/Canvas/
 ├── README.md                 # このファイル
 ├── index.ts                  # エクスポート統合
 ├── components/               # コンポーネント
@@ -42,7 +42,7 @@ src/features/canvas/
 ### 基本的な使用
 
 ```tsx
-import { Canvas } from '@/features/canvas';
+import { Canvas } from '@/components/layouts/Canvas';
 
 function App() {
   return (
@@ -56,7 +56,7 @@ function App() {
 ### カスタマイズ
 
 ```tsx
-import { Canvas } from '@/features/canvas';
+import { Canvas } from '@/components/layouts/Canvas';
 
 function App() {
   return (
@@ -70,7 +70,7 @@ function App() {
 ### Hub状態管理の使用
 
 ```tsx
-import { Canvas, useHubStore } from '@/features/canvas';
+import { Canvas, useHubStore } from '@/components/layouts/Canvas';
 
 function AppWithHubControl() {
   const { hubType, setHubType } = useHubStore();
@@ -90,7 +90,7 @@ function AppWithHubControl() {
 ### HubTitleの個別使用
 
 ```tsx
-import { HubTitle } from '@/features/canvas';
+import { HubTitle } from '@/components/layouts/Canvas';
 
 function CustomLayout() {
   return (
