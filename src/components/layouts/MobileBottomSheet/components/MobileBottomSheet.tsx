@@ -5,42 +5,8 @@ import { motion } from 'motion/react';
 import { twMerge } from 'tailwind-merge';
 import { ViewController } from '@/features/view-controller';
 import { useBottomSheet } from '../hooks/useBottomSheet';
+import { CloseIcon, HandleIcon } from '@/shared/components/icons';
 import type { ClassNameProps } from '@/shared/types';
-
-/**
- * ハンドルアイコン（UIの取っ手部分）
- */
-const HandleIcon: React.FC = () => (
-  <svg
-    width="32"
-    height="6"
-    viewBox="0 0 32 6"
-    fill="none"
-    className="text-text-secondary"
-    aria-hidden="true"
-  >
-    <rect x="8" y="2" width="16" height="2" rx="1" fill="currentColor" />
-  </svg>
-);
-
-/**
- * 閉じるボタンアイコン
- */
-const CloseIcon: React.FC = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
 
 /**
  * MobileBottomSheetコンポーネント
