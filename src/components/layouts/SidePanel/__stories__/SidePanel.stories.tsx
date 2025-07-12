@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, waitFor } from '@storybook/test';
+import { within, expect } from '@storybook/test';
 import { SidePanel } from '../components/SidePanel';
-import { useHubStore } from '@/stores/hubStore';
 
 const meta: Meta<typeof SidePanel> = {
   title: 'Components/Layouts/SidePanel',
@@ -11,7 +10,7 @@ const meta: Meta<typeof SidePanel> = {
     docs: {
       description: {
         component:
-          'Hub画面の左側に配置されるサイドパネルメインコンテナコンポーネント。音楽理論の表示制御と情報提示を行う統合インターフェースとして機能し、現在はViewController（C-1）を含み、将来的にLayerController（C-2）、InformationPanel（C-3）が追加される予定です。',
+          'Hub画面の左側に配置されるレイアウト用UIコンテナ。Featureコンポーネントを格納・配置するためのレスポンシブ対応サイドパネルレイアウトを提供します。',
       },
     },
   },
@@ -25,13 +24,15 @@ const meta: Meta<typeof SidePanel> = {
       control: 'boolean',
       description: 'パネルの表示状態（デフォルト: true）',
     },
+    children: {
+      control: false,
+      description: '子要素（Featureコンポーネント）',
+    },
   },
   decorators: [
     Story => (
       <div className="flex h-screen bg-gradient-to-b from-gray-900 to-black">
-        <div className="w-80">
-          <Story />
-        </div>
+        <Story />
         <div className="flex flex-1 items-center justify-center">
           <p className="text-xl text-white">Canvas Area</p>
         </div>
@@ -44,7 +45,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * デフォルトのSidePanel表示
+ * デフォルトのSidePanel表示（空の状態）
+ * UIコンテナとしての基本レイアウト構造を確認
  */
 export const Default: Story = {
   args: {},
@@ -52,14 +54,28 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          'デフォルトの設定でSidePanelを表示します。aside要素と統一されたセクション内にViewControllerが含まれ、ダークテーマで統一されたデザインです。',
+          'デフォルトの設定でSidePanelを表示します。子要素がない空の状態で、aside要素とセマンティックHTML構造を確認できます。',
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // SidePanelの基本構造確認
+    const sidePanel = canvas.getByRole('complementary', { name: 'サイドパネル' });
+    await expect(sidePanel).toBeInTheDocument();
+
+    // 基本的なレイアウトクラスの確認
+    await expect(sidePanel).toHaveClass('flex', 'flex-col');
+
+    // セマンティックな構造の確認
+    await expect(sidePanel.tagName.toLowerCase()).toBe('aside');
   },
 };
 
 /**
  * 非表示状態のSidePanel
+ * isVisibleプロパティによる表示制御の確認
  */
 export const Hidden: Story = {
   args: {
@@ -73,59 +89,108 @@ export const Hidden: Story = {
       },
     },
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 非表示状態でも要素は存在するが、hiddenクラスが適用される
+    const sidePanel = canvas.getByRole('complementary', { name: 'サイドパネル' });
+    await expect(sidePanel).toBeInTheDocument();
+
+    // 非表示状態のスタイル確認
+    await expect(sidePanel).toHaveClass('hidden');
+  },
 };
 
 /**
- * インタラクションテスト
+ * カスタムスタイルのSidePanel
+ * className propsによるスタイルカスタマイズの確認
  */
-export const InteractiveTest: Story = {
-  args: {},
+export const CustomStyle: Story = {
+  args: {
+    className: 'border-l-4 border-blue-500 bg-blue-50/20',
+  },
   parameters: {
     docs: {
       description: {
         story:
-          'SidePanelコンポーネントの基本的なインタラクション動作をテストします。aside要素と統一されたセクション構造、内包するViewControllerの動作を確認します。',
+          'カスタムスタイルを適用したSidePanelです。className propsを使用して外部レイアウトやスタイルをカスタマイズできます。',
       },
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // テスト開始前にストアを初期状態に確実にセット
-    useHubStore.setState({ hubType: 'circle-of-fifths' });
-
-    // SidePanelの表示確認
     const sidePanel = canvas.getByRole('complementary', { name: 'サイドパネル' });
-    expect(sidePanel).toBeInTheDocument();
+    await expect(sidePanel).toBeInTheDocument();
 
-    // 統一セクションの確認
-    const section = sidePanel.querySelector('section');
-    expect(section).toBeInTheDocument();
-    expect(section).toHaveAttribute('aria-label', 'コントロールパネル');
+    // カスタムクラスが適用されていることを確認
+    await expect(sidePanel).toHaveClass('border-l-4', 'border-blue-500');
+  },
+};
 
-    // ViewControllerの存在確認
-    const viewController = canvas.getByRole('heading', { level: 2, name: 'View Controller' });
-    expect(viewController).toBeInTheDocument();
+/**
+ * 子要素を含むSidePanel
+ * Featureコンポーネントを格納した状態の確認
+ */
+export const WithChildren: Story = {
+  args: {
+    children: (
+      <div className="space-y-4 p-4">
+        <div className="rounded-lg bg-gray-800 p-4">
+          <h2 className="mb-2 text-lg font-semibold text-white">Sample Feature 1</h2>
+          <p className="text-gray-300">これはサンプルのFeatureコンポーネントです。</p>
+        </div>
+        <div className="rounded-lg bg-gray-800 p-4">
+          <h2 className="mb-2 text-lg font-semibold text-white">Sample Feature 2</h2>
+          <p className="text-gray-300">複数のFeatureを格納できます。</p>
+        </div>
+      </div>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'SidePanelに子要素（Featureコンポーネント）を含めた状態です。実際の使用例に近い形での表示確認ができます。',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
 
-    // Hub切り替えボタンの確認
-    const radioGroup = canvas.getByRole('radiogroup');
-    expect(radioGroup).toBeInTheDocument();
+    const sidePanel = canvas.getByRole('complementary', { name: 'サイドパネル' });
+    await expect(sidePanel).toBeInTheDocument();
 
-    // 共通データ構造からの情報が表示されていることを確認
-    expect(canvas.getByText('五度関係で配置された調の輪')).toBeInTheDocument();
+    // 子要素が正しく表示されていることを確認
+    await expect(canvas.getByText('Sample Feature 1')).toBeInTheDocument();
+    await expect(canvas.getByText('Sample Feature 2')).toBeInTheDocument();
+
+    // レイアウト構造の確認
+    const features = canvas.getAllByText(/Sample Feature/);
+    await expect(features).toHaveLength(2);
   },
 };
 
 /**
  * レスポンシブテスト
+ * 異なる画面サイズでのレイアウト確認
  */
 export const ResponsiveTest: Story = {
-  args: {},
+  args: {
+    children: (
+      <div className="p-4">
+        <div className="rounded-lg bg-gray-800 p-4">
+          <h2 className="text-lg font-semibold text-white">Responsive Content</h2>
+          <p className="text-gray-300">レスポンシブ対応のテストコンテンツです。</p>
+        </div>
+      </div>
+    ),
+  },
   parameters: {
     docs: {
       description: {
         story:
-          'SidePanelコンポーネントのレスポンシブ対応をテストします。外部レイアウト制御と内部のスクロール対応を確認します。',
+          'SidePanelコンポーネントのレスポンシブ対応をテストします。異なる画面サイズでのレイアウト構造を確認します。',
       },
     },
     viewport: {
@@ -150,28 +215,36 @@ export const ResponsiveTest: Story = {
 
     // レスポンシブレイアウトの基本確認
     const sidePanel = canvas.getByRole('complementary');
-    expect(sidePanel).toBeInTheDocument();
-    expect(sidePanel).toHaveClass('flex', 'flex-col'); // 基本レイアウト構造
+    await expect(sidePanel).toBeInTheDocument();
 
-    // 縦スクロール対応の確認
-    expect(sidePanel).toHaveClass('flex-col');
+    // 基本レイアウト構造の確認
+    await expect(sidePanel).toHaveClass('flex', 'flex-col');
 
-    // 内部コンテンツエリアのスクロール確認
-    const contentArea = sidePanel.querySelector('.overflow-y-auto');
-    expect(contentArea).toBeInTheDocument();
+    // コンテンツが正しく表示されていることを確認
+    await expect(canvas.getByText('Responsive Content')).toBeInTheDocument();
   },
 };
 
 /**
  * アクセシビリティテスト
+ * セマンティックHTML構造とARIA属性の確認
  */
 export const AccessibilityTest: Story = {
-  args: {},
+  args: {
+    children: (
+      <div className="p-4">
+        <h2 className="mb-4 text-lg font-semibold text-white">Accessibility Test</h2>
+        <button className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+          Sample Button
+        </button>
+      </div>
+    ),
+  },
   parameters: {
     docs: {
       description: {
         story:
-          'SidePanelコンポーネントのアクセシビリティ要件をテストします。aside要素、適切なセマンティクス、ARIA属性、見出し階層を確認します。',
+          'SidePanelコンポーネントのアクセシビリティ要件をテストします。aside要素、適切なセマンティクス、ARIA属性を確認します。',
       },
     },
   },
@@ -180,112 +253,47 @@ export const AccessibilityTest: Story = {
 
     // セマンティクス確認
     const sidePanel = canvas.getByRole('complementary');
-    expect(sidePanel).toHaveAttribute('aria-label', 'サイドパネル');
+    await expect(sidePanel).toHaveAttribute('aria-label', 'サイドパネル');
 
-    // 見出し階層の確認
-    const h2 = canvas.getByRole('heading', { level: 2 });
-    expect(h2).toHaveTextContent('View Controller');
+    // aside要素であることを確認
+    await expect(sidePanel.tagName.toLowerCase()).toBe('aside');
 
-    // ViewControllerのアクセシビリティ確認
-    const radioGroup = canvas.getByRole('radiogroup');
-    expect(radioGroup).toHaveAttribute('aria-label', 'Hub種類の選択');
+    // フォーカス可能な要素のテスト
+    const button = canvas.getByRole('button', { name: 'Sample Button' });
+    button.focus();
+    await expect(button).toHaveFocus();
 
-    // キーボードナビゲーション確認
-    const firstButton = canvas.getByRole('radio', { name: '五度圏' });
-    firstButton.focus();
-    expect(firstButton).toHaveFocus();
+    // ランドマークとしての機能確認
+    await expect(sidePanel).toHaveAttribute('role', 'complementary');
   },
 };
 
 /**
- * ViewControllerとの統合テスト
+ * 空の状態のSidePanel
+ * 子要素なしでの最小構成の確認
  */
-export const ViewControllerIntegrationTest: Story = {
-  args: {},
+export const Empty: Story = {
+  args: {
+    children: undefined,
+  },
   parameters: {
     docs: {
       description: {
         story:
-          'SidePanelに統合されたViewControllerの動作確認テストです。コンテナとしての統合機能とHub状態管理との連携を確認します。',
+          '子要素が明示的にundefinedの状態のSidePanelです。UIコンテナとしての最小構成での動作を確認できます。',
       },
     },
   },
-  decorators: [
-    Story => {
-      const { hubType } = useHubStore();
-
-      return (
-        <div className="flex h-screen bg-gradient-to-b from-gray-900 to-black">
-          <Story />
-          <div className="flex flex-1 flex-col items-center justify-center text-white">
-            <p className="mb-4 text-xl">Canvas Area</p>
-            <p className="bg-background-muted rounded px-4 py-2 text-sm">
-              Current Hub: <span className="font-mono font-bold">{hubType}</span>
-            </p>
-          </div>
-        </div>
-      );
-    },
-  ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 初期状態確認
-    useHubStore.setState({ hubType: 'circle-of-fifths' });
+    const sidePanel = canvas.getByRole('complementary', { name: 'サイドパネル' });
+    await expect(sidePanel).toBeInTheDocument();
 
-    // 状態更新の反映をwaitForで確実に待機
-    const circleButton = await waitFor(() => canvas.getByRole('radio', { name: '五度圏' }));
-    const chromaticButton = await waitFor(() =>
-      canvas.getByRole('radio', { name: 'クロマチック' })
-    );
+    // 基本構造は保持されていることを確認
+    await expect(sidePanel).toHaveClass('flex', 'flex-col');
 
-    await waitFor(() => {
-      expect(circleButton).toHaveAttribute('aria-checked', 'true');
-    });
-
-    // 状態変更テスト（共通データ構造からの情報使用）
-    const chromaticRadio = canvas.getByRole('radio', { name: 'クロマチック' });
-    await chromaticRadio.click();
-
-    // クリック後の状態更新をwaitForで確実に待機
-    await waitFor(() => {
-      expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
-    });
-
-    await waitFor(() => {
-      expect(circleButton).toHaveAttribute('aria-checked', 'false');
-    });
-
-    // 共通データ構造からの説明が切り替わったことを確認
-    await waitFor(() => {
-      expect(canvas.getByText('半音階で配置された音の輪')).toBeInTheDocument();
-    });
-  },
-};
-
-/**
- * カスタムスタイルのSidePanel
- */
-export const CustomStyle: Story = {
-  args: {
-    className: 'border-l-4 border-blue-500 bg-blue-50/20',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'カスタムスタイルを適用したSidePanelです。className propsを使用して外部レイアウトやスタイルをカスタマイズできます。',
-      },
-    },
-    a11y: {
-      config: {
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: false, // カスタムスタイルでのコントラスト検証を無効化
-          },
-        ],
-      },
-    },
+    // 内容が空であることを確認
+    await expect(sidePanel).toBeEmptyDOMElement();
   },
 };
