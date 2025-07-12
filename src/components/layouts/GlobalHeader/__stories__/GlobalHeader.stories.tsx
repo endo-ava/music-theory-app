@@ -74,10 +74,16 @@ export const MobileView: Story = {
     await expect(logo).toBeInTheDocument();
 
     // モバイルメニューボタンの存在確認（存在する場合）
-    const mobileMenuButton = canvas.queryByRole('button');
+    const mobileMenuButton = canvas.queryByRole('button', { name: /メニューを開く/i });
     if (mobileMenuButton) {
       // モバイルメニューのクリック動作をテスト
       await user.click(mobileMenuButton);
+
+      // クリック後、メニューが開いた状態のボタンラベルを確認
+      const closeButton = canvas.queryByRole('button', { name: /メニューを閉じる/i });
+      if (closeButton) {
+        await expect(closeButton).toBeInTheDocument();
+      }
     }
 
     // ナビゲーションリンクの基本動作確認
