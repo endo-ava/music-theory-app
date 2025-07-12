@@ -1,13 +1,13 @@
-# Side Panel 設計書
+# SidePanel UI Container 設計書
 
-> **作成日**: 2025-07-06  
-> **更新日**: 2025-07-06  
+> **作成日**: 2025-07-12  
+> **更新日**: 2025-07-12  
 > **バージョン**: 1.0.0  
 > **作成者**: Claude Code
 
-[<< Hub画面設計書に戻る](../../../docs/screenDesigns/01.hub.md)
+[<< Hub画面設計書に戻る](../../../../docs/screenDesigns/01.hub.md)
 
-Hub画面の左側に配置されるサイドパネル機能。音楽理論の表示制御と情報提示を行うコントロールパネルとして機能し、将来的にはLayerController、InformationPanelを含む統合的なUI管理システムとなる予定です。
+Hub画面の左側に配置されるレイアウト用UIコンテナ。Featureコンポーネントを格納・配置するためのレスポンシブ対応サイドパネルレイアウトを提供します。
 
 ## 📋 目次
 
@@ -24,56 +24,46 @@ Hub画面の左側に配置されるサイドパネル機能。音楽理論の�
 
 ### 目的・役割
 
-Hub画面において音楽理論の可視化をコントロールする統合インターフェースとして設計されています。ユーザーが音楽理論の「世界観（レンズ）」を選択し、将来的には表示レイヤーの制御や詳細情報の表示を一元管理する役割を担います。
+SidePanelはHub画面における左側レイアウトエリアを管理する純粋なUIコンテナです。機能的なコンポーネント（Feature）を適切に配置・表示するためのレイアウト構造とスタイリングを提供し、レスポンシブ対応や基本的なアクセシビリティ構造を担います。
 
 ### 主要機能
 
-- **ViewController (C-1)**: Hub種類（五度圏 ⇔ クロマチックサークル）の切り替え
-- **統合セクション**: 全コンポーネントを統一されたセクション内に配置
-- **レスポンシブ対応**: PC版のみ実装済み、モバイル対応は将来実装予定
-- **ダークテーマ**: アプリケーション全体のダークテーマに統合
+- **レイアウト管理**: 左側固定幅のサイドパネルレイアウト
+- **コンテンツ格納**: Featureコンポーネントの配置エリア提供
+- **レスポンシブ対応**: 画面サイズに応じた表示制御（将来実装予定）
+- **スタイリング統合**: Tailwind CSSによる一貫したデザインシステム
+- **アクセシビリティ基盤**: セマンティックHTML構造とlandmark role
 
 ## アーキテクチャ
 
 ### コンポーネント構成
 
-**SidePanel**はメインコンテナとして機能し、内部に統一されたセクションを持ちます。現在はViewController（C-1）のみを含みますが、将来的にLayerController（C-2）、InformationPanel（C-3）が追加される設計となっています。
-
-**ViewController**は内部でさらに細かいコンポーネントに分離されています：
-
-- **useViewControllerフック**: ビジネスロジックと状態管理
-- **HubRadioGroup**: ラジオグループコンテナ
-- **HubOptionButton**: 個別のオプションボタン
+SidePanelは単純なレイアウトコンテナとして設計されており、内部に任意のFeatureコンポーネントを配置できます。現在はViewController Featureを含んでいますが、将来的に他のFeatureも追加可能な拡張性を持ちます。
 
 ### コンポーネント構成図
 
 ```mermaid
 graph TD
-    A[SidePanel] --> B[Section Container]
-    B --> C[ViewController C-1]
-    B --> D[Future: LayerController C-2]
-    B --> E[Future: InformationPanel C-3]
-    C --> F[useViewController Hook]
-    C --> G[HubRadioGroup]
-    C --> H[Description Area]
-    G --> I[HubOptionButton × 2]
-    F --> J[HubStore]
-    F --> K[Hub Constants]
+    A[SidePanel Container] --> B[Layout Structure]
+    B --> C[Content Area]
+    C --> D[Feature Slot 1]
+    C --> E[Feature Slot 2 - Future]
+    C --> F[Feature Slot 3 - Future]
+    D --> G[ViewController Feature]
+    G --> H[Business Logic]
+    G --> I[UI Components]
 ```
 
 ### データフロー図
 
 ```mermaid
 flowchart LR
-    A[Page Layout] -->|Props| B[SidePanel]
-    B -->|Render| C[ViewController]
-    C -->|Hook| D[useViewController]
-    D -->|State| E[HubStore]
-    D -->|Data| F[Hub Constants]
-    C -->|Component| G[HubRadioGroup]
-    G -->|Buttons| H[HubOptionButton]
-    E -->|Global State| I[Canvas/HubTitle]
-    H -->|Events| D
+    A[Parent Layout] -->|Props| B[SidePanel]
+    B -->|Container| C[Content Area]
+    C -->|Render| D[Feature Components]
+    D -->|Independent| E[Feature State Management]
+    B -->|Style Props| F[Tailwind Classes]
+    F -->|Merged| G[Final Styles]
 ```
 
 ### ファイル構造
@@ -82,33 +72,22 @@ flowchart LR
 src/components/layouts/SidePanel/
 ├── README.md                     # このファイル
 ├── index.ts                      # エクスポート統合
-├── components/                   # UIコンポーネント
-│   ├── README.md                # コンポーネント設計書
-│   ├── SidePanel.tsx            # メインコンテナ
-│   ├── ViewController.tsx       # Hub切り替えUI
-│   ├── HubRadioGroup.tsx        # ラジオグループコンテナ
-│   └── HubOptionButton.tsx      # 個別オプションボタン
-├── hooks/                       # カスタムフック
-│   └── useViewController.ts     # ViewControllerビジネスロジック
+├── components/                   # UIコンテナコンポーネント
+│   └── SidePanel.tsx            # メインコンテナ
 └── __stories__/                 # Storybookストーリー
-    ├── SidePanel.stories.tsx
-    └── ViewController.stories.tsx
+    └── SidePanel.stories.tsx    # レイアウトストーリー
 ```
 
 ### 依存関係
 
 #### 内部依存
 
-- `@/shared/constants/hubs` - Hub共通データ構造とユーティリティ関数
-- `@/shared/types` - 共通型定義（HubType, ClassNameProps）
-- `@/stores/hubStore` - Hub状態管理（Zustand）
-- `@/features/view-controller` - ViewControllerビジネスロジック
+なし（純粋なレイアウトコンテナのため）
 
 #### 外部依存
 
 - `react` - Reactフレームワーク
 - `tailwind-merge` - Tailwindクラス最適化
-- `zustand` - 状態管理ライブラリ
 
 ## 技術仕様
 
@@ -117,119 +96,35 @@ src/components/layouts/SidePanel/
 #### SidePanel
 
 ```typescript
-interface SidePanelProps extends ClassNameProps {
-  /** パネルの表示状態 */
+interface SidePanelProps {
+  /** パネルの表示状態（将来のレスポンシブ対応用） */
   isVisible?: boolean;
-}
-```
 
-#### ViewController
+  /** 追加のCSSクラス名 */
+  className?: string;
 
-```typescript
-interface ViewControllerProps extends ClassNameProps {
-  /** コンポーネントの見出し（デフォルト: 'View Controller'） */
-  title?: string;
-}
-```
-
-#### HubRadioGroup
-
-```typescript
-interface HubRadioGroupProps {
-  /** Hub オプション配列 */
-  hubOptions: HubOption[];
-  /** 現在選択されているHub */
-  selectedHub: HubType;
-  /** Hub変更ハンドラー */
-  onHubChange: (hubType: HubType) => void;
-  /** キーボードイベントハンドラー */
-  onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-}
-```
-
-#### HubOptionButton
-
-```typescript
-interface HubOptionButtonProps {
-  /** Hub オプションの値 */
-  value: HubType;
-  /** ボタンのラベル */
-  label: string;
-  /** 選択状態 */
-  isSelected: boolean;
-  /** クリックハンドラー */
-  onClick: (value: HubType) => void;
-  /** ARIA describedby 属性用のID */
-  describedById: string;
-  /** タブインデックス（roving tabindex パターン用） */
-  tabIndex: number;
+  /** 子要素（Featureコンポーネント） */
+  children?: React.ReactNode;
 }
 ```
 
 ### 状態管理
 
-#### ローカル状態 (useViewController)
+SidePanelはStatelessコンポーネントとして設計されており、独自の状態は持ちません。レイアウトに関連する表示制御のみを担当します。
 
-```typescript
-// useViewController フック内
-const radioGroupRef = useRef<HTMLDivElement>(null);
-const hubOptions = useMemo(() => getHubOptions(), []);
-const selectedOption = useMemo(
-  () => hubOptions.find(option => option.value === hubType),
-  [hubOptions, hubType]
-);
-```
+### レイアウト仕様
 
-#### グローバル状態 (Zustand)
+#### デスクトップ
 
-```typescript
-interface HubState {
-  /** 現在のHub種類 */
-  hubType: HubType;
-  /** Hub種類を設定する */
-  setHubType: (hubType: HubType) => void;
-}
-```
+- **幅**: 320px（固定）
+- **高さ**: 100vh（フルハイト）
+- **位置**: 左側固定
+- **スクロール**: 内容がオーバーフローした場合に縦スクロール
 
-### 共通データ構造
+#### モバイル（将来実装）
 
-```typescript
-// useViewControllerで使用されるHubオプション情報
-interface HubOption {
-  value: HubType;
-  label: string;
-  description: string;
-}
-
-// @/shared/constants/hubsから取得
-interface HubInfo {
-  /** 日本語名 */
-  nameJa: string;
-  /** 英語名 */
-  nameEn: string;
-  /** 説明文 */
-  description: string;
-  /** UI表示用短縮名 */
-  shortName: string;
-}
-```
-
-### API仕様
-
-#### 公開メソッド
-
-| 関数名                | 引数               | 戻り値                               | 説明                                 |
-| --------------------- | ------------------ | ------------------------------------ | ------------------------------------ |
-| `getHubDisplayNameEn` | `hubType: HubType` | `string`                             | Hub英語名を取得                      |
-| `getHubOptions`       | なし               | `Array<{value, label, description}>` | ViewController用オプション配列       |
-| `useViewController`   | なし               | `ViewControllerHook`                 | ViewControllerビジネスロジックフック |
-
-#### イベント
-
-| イベント名        | ペイロード                 | 説明                     |
-| ----------------- | -------------------------- | ------------------------ |
-| `onHubTypeChange` | `{ hubType: HubType }`     | Hub種類変更時            |
-| `onKeyDown`       | `{ event: KeyboardEvent }` | キーボードナビゲーション |
+- **レイアウト**: ボトムシート形式
+- **表示制御**: isVisibleプロパティによる切り替え
 
 ## 使用方法
 
@@ -237,14 +132,15 @@ interface HubInfo {
 
 ```tsx
 import { SidePanel } from '@/components/layouts/SidePanel';
+import { ViewController } from '@/features/view-controller';
 
 function HubPage() {
   return (
     <div className="flex h-screen">
-      <div className="w-80">
-        <SidePanel />
-      </div>
-      <div className="flex-1">{/* Canvas など */}</div>
+      <SidePanel>
+        <ViewController />
+      </SidePanel>
+      <div className="flex-1">{/* メインコンテンツエリア */}</div>
     </div>
   );
 }
@@ -259,14 +155,36 @@ import { ViewController } from '@/features/view-controller';
 function CustomHubPage() {
   return (
     <div className="flex h-screen">
-      {/* 非表示状態 */}
-      <SidePanel isVisible={false} />
+      {/* カスタムスタイル適用 */}
+      <SidePanel className="border-r-2 border-gray-300 shadow-lg">
+        <ViewController title="ビューコントローラー" />
+        {/* 将来的に他のFeatureも追加可能 */}
+      </SidePanel>
 
-      {/* カスタムスタイル */}
-      <SidePanel className="border-l-4 border-blue-500" />
+      {/* 非表示状態（将来のレスポンシブ対応） */}
+      <SidePanel isVisible={false}>
+        <ViewController />
+      </SidePanel>
+    </div>
+  );
+}
+```
 
-      {/* ViewController 単体使用 */}
-      <ViewController title="ビューの選択" />
+### レイアウト統合例
+
+```tsx
+import { SidePanel } from '@/components/layouts/SidePanel';
+import { Canvas } from '@/components/layouts/Canvas';
+import { GlobalHeader } from '@/components/layouts/GlobalHeader';
+
+function FullHubLayout() {
+  return (
+    <div className="flex h-screen flex-col">
+      <GlobalHeader />
+      <div className="flex flex-1">
+        <SidePanel>{/* Featureコンポーネントを配置 */}</SidePanel>
+        <Canvas />
+      </div>
     </div>
   );
 }
@@ -276,37 +194,43 @@ function CustomHubPage() {
 
 ### 1. 単一責任原則
 
-SidePanelは「Hub画面のコントロールUI管理」という単一の責任を持ちます。表示制御、状態管理との連携、将来の拡張性を考慮した統合コンテナとして機能します。
+SidePanelは「レイアウトコンテナ」という単一の責任のみを持ちます。機能的なロジックは一切含まず、純粋にFeatureコンポーネントの配置と基本的なスタイリングに集中しています。
 
 ### 2. 再利用性
 
-ViewControllerは独立したコンポーネントとして設計され、SidePanel以外でも使用可能です。共通データ構造の活用により、他の画面でのHub切り替えUIとしても利用できます。
+汎用的なレイアウトコンテナとして設計されており、様々なFeatureコンポーネントを格納できます。プロパティベースのカスタマイズにより、異なる用途でも再利用可能です。
 
 ### 3. 保守性
 
-- Hub情報の一元管理により、データ変更時の影響を最小化
-- 統一されたセクション構造により、将来のコンポーネント追加が容易
-- 型安全性により、TypeScriptによる静的チェックが効果的
+- 最小限のプロパティと依存関係
+- 明確な責任範囲による変更影響の限定
+- 型安全性による実装ミスの防止
 
-### 4. パフォーマンス
+### 4. 拡張性
 
-- Client Componentを必要最小限に抑制
-- `twMerge`による効率的なクラス名管理
-- 状態変更時の必要最小限な再レンダリング
+- Featureコンポーネントの追加・削除が容易
+- 将来のレスポンシブ対応に備えた設計
+- スタイリングのカスタマイズ対応
 
 ### 5. アクセシビリティ
 
-- セマンティックHTML構造の採用
-- 適切なARIA属性による支援技術対応
-- キーボードナビゲーション完全対応
+- セマンティックなHTML構造
+- 適切なlandmark roleの提供
+- Featureコンポーネントのアクセシビリティをサポート
 
 ## パフォーマンス
 
 ### 最適化手法
 
-- **Client Component最小化**: 状態管理が必要な部分のみをClient Component化
-- **メモ化**: Hub定数データの効率的な活用
-- **レイジーローディング**: 将来のC-2、C-3実装時の動的インポート対応準備
+- **Server Component**: 状態を持たないため、Server Componentとして実装
+- **軽量実装**: 最小限のDOM構造とスタイル
+- **効率的なクラス結合**: tailwind-mergeによる最適化
+
+### レンダリング特性
+
+- 静的なレイアウト構造のため、再レンダリング頻度は最小
+- 子コンポーネント（Feature）の状態変更による影響を受けない
+- CSSによるレイアウト最適化
 
 ## アクセシビリティ
 
@@ -316,67 +240,70 @@ ViewControllerは独立したコンポーネントとして設計され、SidePa
 
 ### 実装済み機能
 
-- **キーボードナビゲーション**: Arrow keys、Home、Endキーでの操作
-- **roving tabindexパターン**: 効率的なフォーカス管理
-- **スクリーンリーダー対応**: `role="radiogroup"`、`aria-checked`等の適切な設定
-- **フォーカス管理**: 視覚的なフォーカスリング表示
-- **ダークテーマ対応**: 高コントラスト比の実現
+- **セマンティックHTML**: `<aside>`要素による適切な構造化
+- **Landmark role**: `role="complementary"`による補助コンテンツの識別
+- **論理的な文書構造**: 適切な見出し階層とコンテンツ順序
 
 ### ARIA属性
 
-| 属性               | 値                 | 用途                           |
-| ------------------ | ------------------ | ------------------------------ |
-| `aria-label`       | "サイドパネル"     | パネル全体の説明               |
-| `aria-labelledby`  | "side-panel-title" | セクションタイトルとの関連付け |
-| `aria-checked`     | `true/false`       | Hub選択状態                    |
-| `aria-describedby` | "hub-description"  | Hub説明との関連付け            |
+| 属性         | 値                | 用途                 |
+| ------------ | ----------------- | -------------------- |
+| `role`       | `"complementary"` | 補助的なランドマーク |
+| `aria-label` | `"サイドパネル"`  | パネル全体の説明     |
 
-### キーボード操作
+### スクリーンリーダー対応
 
-| キー          | 動作                                   |
-| ------------- | -------------------------------------- |
-| `Tab`         | 次のコンポーネントにフォーカス移動     |
-| `Shift + Tab` | 前のコンポーネントにフォーカス移動     |
-| `Arrow Keys`  | ラジオグループ内でのオプション切り替え |
-| `Home`        | 最初のオプションに移動                 |
-| `End`         | 最後のオプションに移動                 |
-| `Enter/Space` | オプションの選択                       |
+- 明確なlandmark構造による効率的なナビゲーション
+- 内包するFeatureコンポーネントのアクセシビリティ機能をサポート
 
 ## 開発・保守
+
+### 実装ガイドライン
+
+1. **Pure UI Container**: 機能的なロジックは含めない
+2. **Props最小化**: 必要最小限のプロパティのみ提供
+3. **スタイル分離**: Tailwind CSSによる一貫したスタイリング
+4. **型安全性**: TypeScriptによる厳密な型定義
 
 ### 今後の拡張予定
 
 #### 短期
 
-- [ ] LayerController (C-2) の実装
-- [ ] InformationPanel (C-3) の実装
-- [ ] モバイル対応（ボトムシート形式）
+- [ ] レスポンシブ対応（モバイル用ボトムシート）
+- [ ] アニメーション効果（開閉時のトランジション）
+- [ ] テーマ対応（ライト/ダークモード）
 
 #### 長期
 
-- [ ] アニメーション効果の追加
-- [ ] キーボードショートカット対応
-- [ ] 多言語対応
+- [ ] 複数パネル対応（タブ切り替え）
+- [ ] サイズ調整機能（リサイザブル）
+- [ ] 位置カスタマイズ（左右切り替え）
+
+### テスト方針
+
+- **レイアウトテスト**: 適切なDOM構造の検証
+- **スタイルテスト**: CSS クラスの適用確認
+- **アクセシビリティテスト**: ARIA属性とセマンティック構造の検証
 
 ### 関連ドキュメント
 
-- [要件定義書](../../../docs/01.requirements.md)
-- [Hub画面設計書](../../../docs/screenDesigns/01.hub.md)
-- [開発規約](../../../docs/03.developmentAgreement.md)
-- [Hub共通データ構造](../../../src/shared/constants/hubs.ts)
-- [Storybook](http://localhost:6006/?path=/story/components-sidepanel)
+- [要件定義書](../../../../docs/01.requirements.md)
+- [Hub画面設計書](../../../../docs/screenDesigns/01.hub.md)
+- [開発規約](../../../../docs/03.developmentAgreement.md)
+- [レイアウトシステム概要](../README.md)
+- [Storybook](http://localhost:6006/?path=/story/layouts-sidepanel)
 
 ### 用語集
 
-| 用語             | 定義                                                                           |
-| ---------------- | ------------------------------------------------------------------------------ |
-| Hub              | 音楽理論を分析するための「世界観（レンズ）」（五度圏、クロマチックサークル等） |
-| ViewController   | Hub種類を切り替えるUIコンポーネント（C-1）                                     |
-| LayerController  | 表示レイヤーを制御するUIコンポーネント（C-2、将来実装）                        |
-| InformationPanel | 選択要素の詳細情報を表示するコンポーネント（C-3、将来実装）                    |
+| 用語             | 定義                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| UI Container     | レイアウトと配置のみを担当する純粋なコンテナコンポーネント   |
+| Feature          | 具体的な機能を提供するビジネスロジック付きコンポーネント     |
+| Layout Component | アプリケーションの構造を定義するレイアウト専用コンポーネント |
+| Landmark         | スクリーンリーダーでナビゲーション可能な構造的要素           |
 
 ---
 
-> 📝 **Note**: この設計書は [開発規約](../../../docs/03.developmentAgreement.md) に従って作成されています。  
-> 🔄 **Update**: 機能追加・変更時はこの設計書も合わせて更新してください。  
+> 📝 **Note**: この設計書は [開発規約](../../../../docs/03.developmentAgreement.md) に従って作成されています。  
+> 🔄 **Update**: レイアウト変更時はこの設計書も合わせて更新してください。  
 > 🤝 **Collaboration**: 不明な点があれば開発チームまでお問い合わせください。
