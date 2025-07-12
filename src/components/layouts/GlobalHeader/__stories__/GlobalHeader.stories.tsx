@@ -74,17 +74,10 @@ export const MobileView: Story = {
     await expect(logo).toBeInTheDocument();
 
     // モバイルメニューボタンの存在確認（存在する場合）
-    try {
-      const mobileMenuButton = canvas.getByRole('button');
-      if (mobileMenuButton) {
-        // モバイルメニューのクリック動作をテスト
-        await user.click(mobileMenuButton);
-
-        // メニューが開いた状態での操作確認
-        // Note: 実装に応じてメニュー内のリンクをテスト
-      }
-    } catch {
-      // モバイルメニューボタンが存在しない場合はスキップ
+    const mobileMenuButton = canvas.queryByRole('button');
+    if (mobileMenuButton) {
+      // モバイルメニューのクリック動作をテスト
+      await user.click(mobileMenuButton);
     }
 
     // ナビゲーションリンクの基本動作確認
@@ -192,10 +185,11 @@ export const ActiveLinkState: Story = {
     await expect(tutorialLink).toBeInTheDocument();
 
     // アクティブ状態のスタイルが適用されているかを確認
-    // Note: 実際の実装に応じて、アクティブクラスやARIA属性をチェック
-    // 例: aria-current="page" の確認など
+    // Note: Storybookの環境ではNext.jsのrouterコンテキストが異なるため、
+    // aria-current属性の動的設定は実際のアプリケーション内でテストすることが推奨される
+    // ここでは、aria-current属性が条件付きで設定される実装があることを文書化
 
-    // Hubリンクがデフォルトでアクティブであることを想定
-    // await expect(hubLink).toHaveAttribute('aria-current', 'page');
+    // 実装確認: NavigationLinkコンポーネントでaria-current={isActive ? 'page' : undefined}が実装されている
+    // 実際の動作確認は統合テストまたは手動テストで行う
   },
 };
