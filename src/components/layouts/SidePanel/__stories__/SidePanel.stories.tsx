@@ -24,10 +24,6 @@ const meta: Meta<typeof SidePanel> = {
       control: 'boolean',
       description: 'パネルの表示状態（デフォルト: true）',
     },
-    children: {
-      control: false,
-      description: '子要素（Featureコンポーネント）',
-    },
   },
   decorators: [
     Story => (
