@@ -66,7 +66,7 @@ export const Default: Story = {
     // セマンティックな構造の確認
     await expect(sidePanel.tagName.toLowerCase()).toBe('aside');
 
-    // 現在はiewControllerが含まれたsectionが表示されている
+    // 現在はViewControllerが含まれたsectionが表示されている
     const controlPanel = canvas.getByLabelText('コントロールパネル');
     await expect(controlPanel).toBeInTheDocument();
   },

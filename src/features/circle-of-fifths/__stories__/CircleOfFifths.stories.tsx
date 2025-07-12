@@ -39,8 +39,6 @@ export const Default: Story = {
     const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
     await expect(circleContainer).toBeInTheDocument();
 
-    // SVG内のインタラクティブ要素の存在確認
-    await expect(circleContainer).toBeInTheDocument();
     // SVGが適切にレンダリングされていることを確認
     await expect(circleContainer.tagName.toLowerCase()).toBe('svg');
     // SVGが適切なviewBoxを持っていることを確認
