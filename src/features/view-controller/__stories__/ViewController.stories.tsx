@@ -4,7 +4,7 @@ import { ViewController } from '../components/ViewController';
 import { useHubStore } from '@/stores/hubStore';
 
 const meta: Meta<typeof ViewController> = {
-  title: 'Features/ViewController',
+  title: 'Components/ViewController',
   component: ViewController,
   parameters: {
     layout: 'centered',

@@ -3,7 +3,7 @@ import { within, userEvent, expect } from '@storybook/test';
 import { GlobalHeader } from '../components/GlobalHeader';
 
 const meta: Meta<typeof GlobalHeader> = {
-  title: 'Components/GlobalHeader',
+  title: 'Components/Layouts/GlobalHeader',
   component: GlobalHeader,
   parameters: {
     layout: 'fullscreen',
