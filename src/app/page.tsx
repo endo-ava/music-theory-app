@@ -1,15 +1,18 @@
 import { Canvas } from '@/components/layouts/Canvas';
 import { SidePanel } from '@/components/layouts/SidePanel';
+import { MobileBottomSheet } from '@/components/layouts/MobileBottomSheet';
 
 /**
  * ホームページコンポーネント
  *
  * Hub画面のメインレイアウトを提供する。
- * SidePanelとCanvasを2カラムレイアウトで配置。
+ * レスポンシブ対応：
+ * - デスクトップ：SidePanelとCanvasの2カラムレイアウト（Tailwindで制御）
+ * - モバイル：Canvas全画面 + MobileBottomSheet（BottomSheet + トリガーボタン）
  *
- * レイアウト設計：
- * - 責任分離の原則：親がレイアウト責任、子が描画責任
- * - レスポンシブ対応：PCでは2カラム、モバイルでは将来対応予定
+ * アーキテクチャ設計：
+ * - UI Container/Feature分離：MobileBottomSheetはlayouts配下で完全分離
+ * - SSR活用：Push Client Components to the leaves
  *
  * @returns ホームページのJSX要素
  */
@@ -18,12 +21,15 @@ export default function Home() {
     <div className="flex h-screen flex-col">
       {/* 2-column layout: Side Panel + Canvas */}
       <main className="flex flex-1">
-        {/* Left: Side Panel - 幅自動調整（32rem〜42rem） */}
-        <SidePanel className="w-fit max-w-[42rem] min-w-[32rem] pl-8" />
+        {/* Left: Side Panel - デスクトップ（md以上）のみ表示 */}
+        <SidePanel className="hidden w-fit max-w-[42rem] min-w-[32rem] pl-8 md:block" />
 
         {/* Right: Canvas - 残り領域を使用 */}
         <Canvas className="flex-1" />
       </main>
+
+      {/* モバイル専用レイアウト - モバイル（md未満）のみ表示 */}
+      <MobileBottomSheet className="md:hidden" />
     </div>
   );
 }

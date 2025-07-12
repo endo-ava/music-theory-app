@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import React from 'react';
+import { CloseIcon, HamburgerIcon } from '@/shared/components/icons';
 
 /**
  * MobileMenuButtonコンポーネントのProps
@@ -42,28 +43,27 @@ export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ isOpen, onCl
       aria-expanded={isOpen}
       aria-controls="mobile-menu"
     >
-      <svg
-        className={clsx('h-6 w-6 transition-transform duration-200', isOpen && 'rotate-90')}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        {isOpen ? (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        ) : (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        )}
-      </svg>
+      <div className="relative h-6 w-6">
+        {/* HamburgerIcon */}
+        <div
+          className={clsx(
+            'absolute inset-0 transition-all duration-200 ease-in-out',
+            isOpen ? 'scale-75 rotate-90 opacity-0' : 'scale-100 rotate-0 opacity-100'
+          )}
+        >
+          <HamburgerIcon size={24} />
+        </div>
+
+        {/* CloseIcon */}
+        <div
+          className={clsx(
+            'absolute inset-0 transition-all duration-200 ease-in-out',
+            isOpen ? 'scale-100 rotate-0 opacity-100' : 'scale-75 rotate-90 opacity-0'
+          )}
+        >
+          <CloseIcon size={24} />
+        </div>
+      </div>
     </button>
   );
 };
