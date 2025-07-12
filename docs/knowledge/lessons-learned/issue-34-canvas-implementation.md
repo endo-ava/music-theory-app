@@ -15,7 +15,7 @@ Issue #34「Canvas コンポーネントの実装」で得た総合的な知見�
 
 ### 成果物
 
-- `src/features/canvas/` 配下のコンポーネント実装
+- `src/components/layouts/Canvas/` 配下のコンポーネント実装
 - Storybook stories による包括的なテスト
 - 276行の詳細な設計書（README.md）
 - PR #35 による完全な実装

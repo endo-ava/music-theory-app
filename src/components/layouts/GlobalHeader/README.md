@@ -5,7 +5,7 @@
 > **バージョン**: 2.1.0  
 > **作成者**: Claude Code
 
-[<< 画面設計書に戻る](../../../docs/screenDesigns/01.hub.md)
+[<< 画面設計書に戻る](/docs/screenDesigns/01.hub.md)
 
 アプリケーション全体で使用される統一ナビゲーションヘッダーコンポーネント
 
@@ -88,7 +88,7 @@ flowchart LR
 ### ファイル構造
 
 ```
-src/features/global-header/
+src/components/layouts/GlobalHeader/
 ├── README.md                       # この設計書
 ├── index.ts                        # エクスポート統合
 ├── components/                     # コンポーネント
@@ -195,7 +195,7 @@ const {
 ### 基本的な使用
 
 ```tsx
-import { GlobalHeader } from '@/features/global-header';
+import { GlobalHeader } from '@/components/layouts/GlobalHeader';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
