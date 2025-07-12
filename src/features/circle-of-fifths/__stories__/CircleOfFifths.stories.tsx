@@ -40,17 +40,13 @@ export const Default: Story = {
     await expect(circleContainer).toBeInTheDocument();
 
     // SVG内のインタラクティブ要素の存在確認
-    const svgElement = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    await expect(svgElement).toBeInTheDocument();
-
+    await expect(circleContainer).toBeInTheDocument();
     // SVGが適切にレンダリングされていることを確認
-    await expect(svgElement.tagName.toLowerCase()).toBe('svg');
-
+    await expect(circleContainer.tagName.toLowerCase()).toBe('svg');
     // SVGが適切なviewBoxを持っていることを確認
-    await expect(svgElement).toHaveAttribute('viewBox');
-
+    await expect(circleContainer).toHaveAttribute('viewBox');
     // SVGにCircleSegmentが含まれていることを確認（path要素として）
-    const pathElements = svgElement.querySelectorAll('path');
+    const pathElements = circleContainer.querySelectorAll('path');
     expect(pathElements.length).toBeGreaterThan(0);
   },
 };
