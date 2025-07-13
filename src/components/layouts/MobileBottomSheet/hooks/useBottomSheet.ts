@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type { PanInfo } from 'framer-motion';
 import { BottomSheetState } from '../types';
 import { SHEET_CONFIG } from '../constants';
+import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
 
 /**
  * `useBottomSheet` カスタムフック
@@ -18,8 +19,8 @@ import { SHEET_CONFIG } from '../constants';
  * - `isHalf`: シートが'half'状態であるかを示す真偽値。
  * - `isCollapsed`: シートが'collapsed'状態であるかを示す真偽値。
  * - `y`: `framer-motion` の `animate` プロパティに渡すY座標（ピクセル）。
- * - `dragConstraints`: `framer-motion` の `dragConstraints` プロパティに渡すドラッグ可能な範囲。
  * - `sheetHeight`: シートの高さ
+ * - `dragConstraints`: `framer-motion` の `dragConstraints` プロパティに渡すドラッグ可能な範囲。
  * - `toggleBottomSheet`: シートの状態をサイクルさせる関数。
  * - `collapseBottomSheet`: シートを折りたたむ関数。
  * - `handleDragEnd`: ドラッグ終了時に呼び出されるイベントハンドラ。`framer-motion` の `PanInfo` を受け取ります。
@@ -28,17 +29,8 @@ export const useBottomSheet = () => {
   const sheetRef = useRef<HTMLDivElement>(null);
   const [sheetState, setSheetState] = useState<BottomSheetState>('collapsed');
 
-  // windowの高さをstateで管理し、クライアントサイドでのみ計算 / SSR時に`window`がないことによるエラーを防ぐ
-  const [windowHeight, setWindowHeight] = useState(0);
-  useEffect(() => {
-    // コンポーネントがマウントされてから高さを取得・設定
-    setWindowHeight(window.innerHeight);
-
-    // ウィンドウサイズが変わったときにも追従するようにする
-    const handleResize = () => setWindowHeight(window.innerHeight);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  // ウィンドウサイズを取得（汎用フック使用）
+  const { height: windowHeight } = useWindowSize();
 
   /** スナップポイントとシートの高さの計算(メモ化) */
   const { snapPoints, sheetHeight } = useMemo(() => {
@@ -57,6 +49,9 @@ export const useBottomSheet = () => {
   const isExpanded = sheetState === 'expanded';
   const isHalf = sheetState === 'half';
   const isCollapsed = sheetState === 'collapsed';
+
+  // 背景スクロールロック（汎用フック使用）
+  useBodyScrollLock(!isCollapsed);
 
   // 状態変更関数（useCallbackでメモ化）
   const collapseBottomSheet = useCallback(() => setSheetState('collapsed'), []);
@@ -137,32 +132,6 @@ export const useBottomSheet = () => {
       focusable?.focus();
     }
   }, [isExpanded]);
-
-  // ボトムシートが開いているときは背景のスクロールをロック
-  useEffect(() => {
-    const body = document.body;
-    if (!isCollapsed) {
-      // シートが開いている時は背景スクロールを無効化
-      const originalOverflow = body.style.overflow;
-      const originalPosition = body.style.position;
-      const originalTop = body.style.top;
-      const scrollY = window.scrollY;
-
-      body.style.overflow = 'hidden';
-      body.style.position = 'fixed';
-      body.style.top = `-${scrollY}px`;
-      body.style.width = '100%';
-
-      return () => {
-        // cleanup: 元の状態に戻す
-        body.style.overflow = originalOverflow;
-        body.style.position = originalPosition;
-        body.style.top = originalTop;
-        body.style.width = '';
-        window.scrollTo(0, scrollY);
-      };
-    }
-  }, [isCollapsed]);
 
   // Escapeキーが押されたときにシートを折りたたむイベントリスナーを設定します。
   useEffect(() => {

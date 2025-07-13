@@ -1,18 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import { twMerge } from 'tailwind-merge';
-import { ViewController } from '@/features/view-controller';
 import { useBottomSheet } from '../hooks/useBottomSheet';
 import { CloseIcon, HandleIcon } from '@/shared/components/icons';
+import { BottomSheetContent } from './BottomSheetContent';
 import type { ClassNameProps } from '@/shared/types';
 
 /**
  * MobileBottomSheetコンポーネント
  *
  * モバイル環境で画面下部から表示されるUIコンテナ。
- * トリガー、シート、コンテンツのすべてを単一コンポーネントで管理する。
+ * ボトムシート全体の動作とアニメーションを管理し、コンテンツ表示はBottomSheetContentコンポーネントに委譲する。
  *
  * @param props - コンポーネントのプロパティ
  * @returns MobileBottomSheetのJSX要素
@@ -30,14 +30,12 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
     handleDragEnd,
   } = useBottomSheet();
 
-  const [activeTab, setActiveTab] = useState<'view' | 'layer'>('view');
-
   const contentVisible = isHalf || isExpanded;
 
   // Define heights for layout calculations
-  const triggerAreaHeight = 60; // px (height of handle + label + padding)
-  const tabsAreaHeight = 60; // px (approximate height of tabs + close button row)
-  const totalHeaderHeight = triggerAreaHeight + tabsAreaHeight; // Total height when expanded
+  const triggerAreaHeight = 60; // px (height of handle + close button + padding)
+  const tabsAreaHeight = 60; // px (approximate height of tabs)
+  const totalHeaderHeight = triggerAreaHeight + tabsAreaHeight;
 
   return (
     <div className={twMerge('pointer-events-none fixed right-0 bottom-0 left-0 z-50', className)}>
@@ -59,7 +57,7 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
       >
         {/* Trigger Area (always visible, narrower) */}
         <motion.div
-          className="flex cursor-pointer flex-col items-center px-6 py-2" // py-2 for narrower height
+          className="flex cursor-pointer flex-col items-center px-6 py-2"
           onClick={toggleBottomSheet}
           whileTap={{ scale: 0.98 }}
         >
@@ -77,61 +75,12 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
           </button>
         </div>
 
-        {/* Content Header (visible when half or expanded) */}
-        {contentVisible && (
-          <motion.div
-            className="border-border flex w-full flex-col border-b"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            style={{ pointerEvents: contentVisible ? 'auto' : 'none' }}
-          >
-            {/* Tab Navigation Area */}
-            <div className="flex w-full px-6 pb-4">
-              <button
-                className={twMerge(
-                  'flex-1 py-3 text-center text-sm font-medium transition-colors',
-                  activeTab === 'view'
-                    ? 'text-text-primary border-primary border-b-2'
-                    : 'text-text-secondary hover:text-text-primary'
-                )}
-                onClick={() => setActiveTab('view')}
-              >
-                ビュー設定
-              </button>
-              <button
-                className={twMerge(
-                  'flex-1 py-3 text-center text-sm font-medium transition-colors',
-                  activeTab === 'layer'
-                    ? 'text-text-primary border-primary border-b-2'
-                    : 'text-text-secondary hover:text-text-primary'
-                )}
-                onClick={() => setActiveTab('layer')}
-              >
-                レイヤー設定
-              </button>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Content Area */}
-        <motion.div
-          className="overflow-y-auto p-6"
-          style={{
-            maxHeight: isExpanded
-              ? `calc(85vh - ${totalHeaderHeight}px)`
-              : `calc(42.5vh - ${totalHeaderHeight}px)`,
-            pointerEvents: contentVisible ? 'auto' : 'none',
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: contentVisible ? 1 : 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          {activeTab === 'view' && <ViewController />}
-          {activeTab === 'layer' && (
-            <div className="text-text-primary">レイヤー設定のコンテンツがここに入ります。</div>
-          )}
-        </motion.div>
+        {/* Bottom Sheet Content */}
+        <BottomSheetContent
+          contentVisible={contentVisible}
+          isExpanded={isExpanded}
+          headerHeight={totalHeaderHeight}
+        />
       </motion.div>
     </div>
   );
