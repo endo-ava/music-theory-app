@@ -3,7 +3,6 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useViewController } from '../hooks/useViewController';
-import { useIsMobile } from '../hooks/useIsMobile';
 import { HubRadioGroup } from './HubRadioGroup';
 import type { ClassNameProps } from '@/shared/types';
 
@@ -31,12 +30,11 @@ export const ViewController: React.FC<ViewControllerProps> = ({
   // カスタムフックによるロジック分離
   const { hubType, hubOptions, selectedOption, radioGroupRef, handleHubTypeChange, handleKeyDown } =
     useViewController();
-  const { isMobile } = useIsMobile();
 
   return (
     <div className={twMerge('space-y-4', className)}>
-      {/* Component Title - モバイルでは非表示 */}
-      {!isMobile && <h2 className="text-text-primary text-lg font-semibold">{title}</h2>}
+      {/* Component Title - モバイルでは非表示、md以上で表示 */}
+      <h2 className="text-text-primary hidden text-lg font-semibold md:block">{title}</h2>
 
       {/* Hub ラジオグループ - 子コンポーネントに分離 */}
       <HubRadioGroup
