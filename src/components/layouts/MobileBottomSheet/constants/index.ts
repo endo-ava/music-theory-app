@@ -7,7 +7,7 @@ export const SHEET_CONFIG = {
   /** 半分開いたときの比率 */
   halfOpenRatio: 0.45,
   /** 全開時の画面上部マージン */
-  expandedTopMarginPx: 0,
+  expandedTopMarginPx: 20,
   /** スワイプと判定する速度のしきい値 */
   velocityThreshold: 500,
 };

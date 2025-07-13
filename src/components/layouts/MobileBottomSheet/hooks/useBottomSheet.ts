@@ -19,6 +19,7 @@ import { SHEET_CONFIG } from '../constants';
  * - `isCollapsed`: シートが'collapsed'状態であるかを示す真偽値。
  * - `y`: `framer-motion` の `animate` プロパティに渡すY座標（ピクセル）。
  * - `dragConstraints`: `framer-motion` の `dragConstraints` プロパティに渡すドラッグ可能な範囲。
+ * - `sheetHeight`: シートの高さ
  * - `toggleBottomSheet`: シートの状態をサイクルさせる関数。
  * - `collapseBottomSheet`: シートを折りたたむ関数。
  * - `handleDragEnd`: ドラッグ終了時に呼び出されるイベントハンドラ。`framer-motion` の `PanInfo` を受け取ります。
@@ -39,13 +40,16 @@ export const useBottomSheet = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  /** スナップポイントの計算(メモ化) */
-  const snapPoints = useMemo(() => {
+  /** スナップポイントとシートの高さの計算(メモ化) */
+  const { snapPoints, sheetHeight } = useMemo(() => {
     const sheetHeight = windowHeight * SHEET_CONFIG.vh;
     return {
-      expanded: SHEET_CONFIG.expandedTopMarginPx,
-      half: sheetHeight * SHEET_CONFIG.halfOpenRatio,
-      collapsed: sheetHeight - SHEET_CONFIG.collapsedVisiblePx,
+      sheetHeight,
+      snapPoints: {
+        expanded: SHEET_CONFIG.expandedTopMarginPx,
+        half: sheetHeight * SHEET_CONFIG.halfOpenRatio,
+        collapsed: sheetHeight - SHEET_CONFIG.collapsedVisiblePx,
+      },
     };
   }, [windowHeight]);
 
@@ -152,6 +156,7 @@ export const useBottomSheet = () => {
     isHalf,
     isCollapsed,
     y: snapPoints[sheetState],
+    sheetHeight,
     dragConstraints: {
       top: snapPoints.expanded,
       bottom: snapPoints.collapsed,
