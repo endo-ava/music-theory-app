@@ -21,6 +21,7 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
   const {
     sheetRef,
     y,
+    sheetHeight,
     isHalf,
     isExpanded,
     dragConstraints,
@@ -43,7 +44,10 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
       <motion.div
         ref={sheetRef}
         className="bg-background-muted/80 border-border pointer-events-auto w-full rounded-t-2xl border-t border-r border-l shadow-lg backdrop-blur-sm"
-        style={{ height: '85vh' }}
+        style={{
+          height: sheetHeight > 0 ? `${sheetHeight}px` : '85vh',
+          y,
+        }}
         animate={{ y }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         drag="y"
