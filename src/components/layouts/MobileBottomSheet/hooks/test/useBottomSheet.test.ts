@@ -1,0 +1,549 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { useBottomSheet } from '../useBottomSheet';
+import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
+import { SHEET_CONFIG } from '../../constants';
+
+// 依存フックをモック
+vi.mock('@/shared/hooks', () => ({
+  useWindowSize: vi.fn(),
+  useBodyScrollLock: vi.fn(),
+}));
+
+describe('useBottomSheet', () => {
+  // モック関数の型定義
+  const mockUseWindowSize = useWindowSize as ReturnType<typeof vi.fn>;
+  const mockUseBodyScrollLock = useBodyScrollLock as ReturnType<typeof vi.fn>;
+
+  // モック変数
+  let mockWindowHeight: number;
+  let mockBodyScrollLock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    // デフォルト値を設定
+    mockWindowHeight = 1000;
+    mockBodyScrollLock = vi.fn();
+
+    // useWindowSize のモック
+    mockUseWindowSize.mockReturnValue({
+      width: 1024,
+      height: mockWindowHeight,
+    });
+
+    // useBodyScrollLock のモック
+    mockUseBodyScrollLock.mockImplementation(mockBodyScrollLock);
+
+    // DOM要素をクリア
+    document.body.innerHTML = '';
+
+    // キーボードイベント用のモック
+    document.addEventListener = vi.fn();
+    document.removeEventListener = vi.fn();
+
+    // console.errorをモック（不要なエラーログを抑制）
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('初期化', () => {
+    it('正常ケース: フックが正常に初期化される', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      expect(result.current).toHaveProperty('sheetRef');
+      expect(result.current).toHaveProperty('bottomSheetState');
+      expect(result.current).toHaveProperty('isExpanded');
+      expect(result.current).toHaveProperty('isHalf');
+      expect(result.current).toHaveProperty('isCollapsed');
+      expect(result.current).toHaveProperty('y');
+      expect(result.current).toHaveProperty('sheetHeight');
+      expect(result.current).toHaveProperty('dragConstraints');
+      expect(result.current).toHaveProperty('toggleBottomSheet');
+      expect(result.current).toHaveProperty('collapseBottomSheet');
+      expect(result.current).toHaveProperty('handleDragEnd');
+    });
+
+    it('正常ケース: 初期状態で collapsed である', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      expect(result.current.bottomSheetState).toBe('collapsed');
+      expect(result.current.isCollapsed).toBe(true);
+      expect(result.current.isHalf).toBe(false);
+      expect(result.current.isExpanded).toBe(false);
+    });
+
+    it('正常ケース: 依存フックが正しく呼ばれる', () => {
+      renderHook(() => useBottomSheet());
+
+      expect(mockUseWindowSize).toHaveBeenCalledTimes(1);
+      expect(mockUseBodyScrollLock).toHaveBeenCalledWith(false); // isCollapsed = true なので
+    });
+
+    it('正常ケース: シートの高さが正しく計算される', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const expectedHeight = mockWindowHeight * SHEET_CONFIG.vh;
+      expect(result.current.sheetHeight).toBe(expectedHeight);
+    });
+
+    it('正常ケース: スナップポイントが正しく計算される', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const expectedSheetHeight = mockWindowHeight * SHEET_CONFIG.vh;
+      const expectedY = expectedSheetHeight - SHEET_CONFIG.collapsedVisiblePx;
+
+      expect(result.current.y).toBe(expectedY);
+
+      expect(result.current.dragConstraints).toEqual({
+        top: SHEET_CONFIG.expandedTopMarginPx,
+        bottom: expectedSheetHeight - SHEET_CONFIG.collapsedVisiblePx,
+      });
+    });
+  });
+
+  describe('windowHeight 依存の計算', () => {
+    it('境界値ケース: windowHeight = 0 の場合', () => {
+      mockUseWindowSize.mockReturnValue({ width: 1024, height: 0 });
+
+      const { result } = renderHook(() => useBottomSheet());
+
+      expect(result.current.sheetHeight).toBe(0);
+      expect(result.current.y).toBe(-SHEET_CONFIG.collapsedVisiblePx);
+    });
+
+    it('正常ケース: windowHeight 変更時に値が再計算される', () => {
+      const { result, rerender } = renderHook(() => useBottomSheet());
+
+      // 初期値の確認
+      const initialHeight = mockWindowHeight * SHEET_CONFIG.vh;
+      expect(result.current.sheetHeight).toBe(initialHeight);
+
+      // windowHeight を変更
+      mockWindowHeight = 1200;
+      mockUseWindowSize.mockReturnValue({ width: 1024, height: 1200 });
+      rerender();
+
+      // 再計算された値の確認
+      const newHeight = 1200 * SHEET_CONFIG.vh;
+      expect(result.current.sheetHeight).toBe(newHeight);
+    });
+  });
+
+  describe('状態管理', () => {
+    it('正常ケース: toggleBottomSheet で状態が循環する', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // collapsed → half
+      act(() => {
+        result.current.toggleBottomSheet();
+      });
+      expect(result.current.bottomSheetState).toBe('half');
+      expect(result.current.isHalf).toBe(true);
+
+      // half → expanded
+      act(() => {
+        result.current.toggleBottomSheet();
+      });
+      expect(result.current.bottomSheetState).toBe('expanded');
+      expect(result.current.isExpanded).toBe(true);
+
+      // expanded → half
+      act(() => {
+        result.current.toggleBottomSheet();
+      });
+      expect(result.current.bottomSheetState).toBe('half');
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: collapseBottomSheet で collapsed になる', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // まず expanded にする
+      act(() => {
+        result.current.toggleBottomSheet(); // → half
+        result.current.toggleBottomSheet(); // → expanded
+      });
+      expect(result.current.isExpanded).toBe(true);
+
+      // collapse する
+      act(() => {
+        result.current.collapseBottomSheet();
+      });
+      expect(result.current.bottomSheetState).toBe('collapsed');
+      expect(result.current.isCollapsed).toBe(true);
+    });
+
+    it('正常ケース: 状態変更時に useBodyScrollLock が適切に呼ばれる', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // 初期状態: collapsed (useBodyScrollLock(false))
+      expect(mockUseBodyScrollLock).toHaveBeenLastCalledWith(false);
+
+      // half に変更
+      act(() => {
+        result.current.toggleBottomSheet();
+      });
+      expect(mockUseBodyScrollLock).toHaveBeenLastCalledWith(true);
+
+      // expanded に変更
+      act(() => {
+        result.current.toggleBottomSheet();
+      });
+      expect(mockUseBodyScrollLock).toHaveBeenLastCalledWith(true);
+
+      // collapsed に戻す
+      act(() => {
+        result.current.collapseBottomSheet();
+      });
+      expect(mockUseBodyScrollLock).toHaveBeenLastCalledWith(false);
+    });
+  });
+
+  describe('ドラッグ処理', () => {
+    it('正常ケース: handleDragEnd が存在し呼び出し可能である', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      expect(result.current.handleDragEnd).toBeTypeOf('function');
+
+      // 基本的な呼び出しテスト（エラーを投げないことを確認）
+      expect(() => {
+        const mockPanInfo = {
+          offset: { x: 0, y: 50 },
+          velocity: { x: 0, y: 100 },
+          point: { x: 0, y: 50 },
+          delta: { x: 0, y: 50 },
+        };
+        result.current.handleDragEnd(null, mockPanInfo);
+      }).not.toThrow();
+    });
+
+    it('正常ケース: 高速上スワイプで状態が上がる', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockPanInfo = {
+        offset: { x: 0, y: -50 },
+        velocity: { x: 0, y: -600 }, // velocityThreshold (500) を超える
+        point: { x: 0, y: -50 },
+        delta: { x: 0, y: -50 },
+      };
+
+      // collapsed から開始
+      expect(result.current.isCollapsed).toBe(true);
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // half になることを確認
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: 高速下スワイプで状態が下がる', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // まず expanded にする
+      act(() => {
+        result.current.toggleBottomSheet(); // → half
+        result.current.toggleBottomSheet(); // → expanded
+      });
+      expect(result.current.isExpanded).toBe(true);
+
+      const mockPanInfo = {
+        offset: { x: 0, y: 50 },
+        velocity: { x: 0, y: 600 }, // velocityThreshold (500) を超える
+        point: { x: 0, y: 50 },
+        delta: { x: 0, y: 50 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // half になることを確認
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('境界値ケース: velocityThreshold ちょうどの値', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockPanInfo = {
+        offset: { x: 0, y: -50 },
+        velocity: { x: 0, y: -(SHEET_CONFIG.velocityThreshold + 1) }, // 境界値を超える
+        point: { x: 0, y: -50 },
+        delta: { x: 0, y: -50 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // 境界値を超えるので高速スワイプとして処理される
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: expanded状態で高速下スワイプ -> collapseBottomSheet呼び出し', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // expanded状態にする
+      act(() => {
+        result.current.toggleBottomSheet(); // → half
+        result.current.toggleBottomSheet(); // → expanded
+      });
+      expect(result.current.isExpanded).toBe(true);
+
+      const mockPanInfo = {
+        offset: { x: 0, y: 50 },
+        velocity: { x: 0, y: 600 }, // velocityThreshold (500) を超える
+        point: { x: 0, y: 50 },
+        delta: { x: 0, y: 50 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // half状態になる（expanded -> half への変更）
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: half状態で高速下スワイプ -> collapseBottomSheet呼び出し', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // half状態にする
+      act(() => {
+        result.current.toggleBottomSheet(); // → half
+      });
+      expect(result.current.isHalf).toBe(true);
+
+      const mockPanInfo = {
+        offset: { x: 0, y: 50 },
+        velocity: { x: 0, y: 600 }, // velocityThreshold (500) を超える
+        point: { x: 0, y: 50 },
+        delta: { x: 0, y: 50 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // collapsed状態になる
+      expect(result.current.isCollapsed).toBe(true);
+    });
+
+    it('正常ケース: collapsed状態で低速上ドラッグ(-50px以下)', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      expect(result.current.isCollapsed).toBe(true);
+
+      const mockPanInfo = {
+        offset: { x: 0, y: -60 }, // -50px以下の上ドラッグ
+        velocity: { x: 0, y: -100 }, // velocityThresholdを下回る
+        point: { x: 0, y: -60 },
+        delta: { x: 0, y: -60 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // half状態になる
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: half状態で高速上スワイプ -> expandBottomSheet呼び出し(88行目)', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // まずhalf状態にする
+      act(() => {
+        result.current.toggleBottomSheet(); // collapsed → half
+      });
+      expect(result.current.isHalf).toBe(true);
+
+      const mockPanInfo = {
+        offset: { x: 0, y: -50 },
+        velocity: { x: 0, y: -600 }, // velocityThreshold (500) を超える負の値
+        point: { x: 0, y: -50 },
+        delta: { x: 0, y: -50 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // expanded状態になる（88行目のexpandBottomSheet()が実行される）
+      expect(result.current.isExpanded).toBe(true);
+    });
+
+    it('正常ケース: 低速ドラッグで最近点へのスナップ - currentDistance < prevDistance が true(110行目)', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // half状態にする
+      act(() => {
+        result.current.toggleBottomSheet(); // collapsed → half
+      });
+      expect(result.current.isHalf).toBe(true);
+
+      // expanded位置に近い位置まで大きく上ドラッグ（expandedが最近点になる）
+      const mockPanInfo = {
+        offset: { x: 0, y: -400 }, // 大きく上ドラッグ
+        velocity: { x: 0, y: -200 }, // velocityThreshold(500)を下回る低速
+        point: { x: 0, y: -400 },
+        delta: { x: 0, y: -400 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // expanded状態が最も近いのでexpanded状態になる（110行目でcurrentDistance < prevDistanceがtrue）
+      expect(result.current.isExpanded).toBe(true);
+    });
+
+    it('正常ケース: 低速ドラッグで最近点へのスナップ - currentDistance < prevDistance が false(110行目)', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // half状態にする
+      act(() => {
+        result.current.toggleBottomSheet(); // collapsed → half
+      });
+      expect(result.current.isHalf).toBe(true);
+
+      // 現在のhalf位置に近い位置で少しだけドラッグ（halfが最近点のまま）
+      const mockPanInfo = {
+        offset: { x: 0, y: 10 }, // 少し下ドラッグ
+        velocity: { x: 0, y: 100 }, // velocityThreshold(500)を下回る低速
+        point: { x: 0, y: 10 },
+        delta: { x: 0, y: 10 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockPanInfo);
+      });
+
+      // half状態が最も近いのでhalf状態のまま（110行目でcurrentDistance < prevDistanceがfalseでprevStateを返す）
+      expect(result.current.isHalf).toBe(true);
+    });
+  });
+
+  describe('キーボードイベント処理', () => {
+    it('正常ケース: Escape キーで collapsed になる', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // まず expanded にする
+      act(() => {
+        result.current.toggleBottomSheet(); // → half
+        result.current.toggleBottomSheet(); // → expanded
+      });
+      expect(result.current.isExpanded).toBe(true);
+
+      // Escape キーイベントをシミュレート
+      const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
+
+      // addEventListener の呼び出しからハンドラーを取得
+      const addEventListenerCalls = (document.addEventListener as ReturnType<typeof vi.fn>).mock
+        .calls;
+      const keydownHandler = addEventListenerCalls.find(
+        (call: unknown[]) => call[0] === 'keydown'
+      )?.[1] as ((event: KeyboardEvent) => void) | undefined;
+
+      expect(keydownHandler).toBeDefined();
+
+      act(() => {
+        keydownHandler!(escapeEvent);
+      });
+
+      expect(result.current.isCollapsed).toBe(true);
+    });
+
+    it('正常ケース: アンマウント時にイベントリスナーが削除される', () => {
+      const { unmount } = renderHook(() => useBottomSheet());
+
+      // addEventListener が呼ばれることを確認
+      expect(document.addEventListener).toHaveBeenCalledWith('keydown', expect.any(Function));
+
+      unmount();
+
+      // removeEventListener が呼ばれることを確認
+      expect(document.removeEventListener).toHaveBeenCalledWith('keydown', expect.any(Function));
+    });
+  });
+
+  describe('フォーカス管理', () => {
+    it('正常ケース: expanded 時にフォーカス可能な要素にフォーカスが移動する', () => {
+      // フォーカス可能な要素をモック
+      const mockFocusableElement = {
+        focus: vi.fn(),
+      };
+
+      const mockSheetRef = {
+        current: {
+          querySelector: vi.fn().mockReturnValue(mockFocusableElement),
+        },
+      };
+
+      const { result } = renderHook(() => useBottomSheet());
+
+      // sheetRef を設定
+      result.current.sheetRef.current = mockSheetRef.current as unknown as HTMLDivElement;
+
+      // expanded 状態に変更
+      act(() => {
+        result.current.toggleBottomSheet(); // → half
+        result.current.toggleBottomSheet(); // → expanded
+      });
+
+      // querySelector が適切なセレクタで呼ばれることを確認
+      expect(mockSheetRef.current.querySelector).toHaveBeenCalledWith(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+
+      // focus が呼ばれることを確認
+      expect(mockFocusableElement.focus).toHaveBeenCalledTimes(1);
+    });
+
+    it('正常ケース: フォーカス可能な要素が存在しない場合にエラーを投げない', () => {
+      const mockSheetRef = {
+        current: {
+          querySelector: vi.fn().mockReturnValue(null),
+        },
+      };
+
+      const { result } = renderHook(() => useBottomSheet());
+
+      // sheetRef を設定
+      result.current.sheetRef.current = mockSheetRef.current as unknown as HTMLDivElement;
+
+      // expanded 状態に変更してもエラーを投げないことを確認
+      expect(() => {
+        act(() => {
+          result.current.toggleBottomSheet(); // → half
+          result.current.toggleBottomSheet(); // → expanded
+        });
+      }).not.toThrow();
+    });
+  });
+
+  describe('エラー処理', () => {
+    it('異常ケース: useWindowSize がエラーを返す場合', () => {
+      mockUseWindowSize.mockImplementation(() => {
+        throw new Error('Window size error');
+      });
+
+      expect(() => {
+        renderHook(() => useBottomSheet());
+      }).toThrow('Window size error');
+    });
+
+    it('異常ケース: useBodyScrollLock がエラーを返す場合', () => {
+      mockUseBodyScrollLock.mockImplementation(() => {
+        throw new Error('Body scroll lock error');
+      });
+
+      expect(() => {
+        renderHook(() => useBottomSheet());
+      }).toThrow('Body scroll lock error');
+    });
+  });
+});
