@@ -66,7 +66,18 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
           <HandleIcon />
         </motion.div>
 
-        {/* Tabs and Close Button Area (visible when half or expanded) */}
+        {/* Close Button Area */}
+        <div className="flex w-full justify-end px-6">
+          <button
+            onClick={collapseBottomSheet}
+            className="text-text-secondary hover:text-text-primary rounded-md p-1 transition-colors"
+            aria-label="閉じる"
+          >
+            <CloseIcon />
+          </button>
+        </div>
+
+        {/* Content Header (visible when half or expanded) */}
         {contentVisible && (
           <motion.div
             className="border-border flex w-full flex-col border-b"
@@ -75,41 +86,29 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
             transition={{ delay: 0.1 }}
             style={{ pointerEvents: contentVisible ? 'auto' : 'none' }}
           >
-            {/* Tab Navigation and Close Button Row */}
-            <div className="flex w-full items-center justify-between px-6 py-4">
-              {' '}
-              {/* Adjusted padding */}
-              <div className="flex flex-1">
-                <button
-                  className={twMerge(
-                    'flex-1 py-3 text-center text-sm font-medium transition-colors',
-                    activeTab === 'view'
-                      ? 'text-text-primary border-primary border-b-2'
-                      : 'text-text-secondary hover:text-text-primary'
-                  )}
-                  onClick={() => setActiveTab('view')}
-                >
-                  ビュー設定
-                </button>
-                <button
-                  className={twMerge(
-                    'flex-1 py-3 text-center text-sm font-medium transition-colors',
-                    activeTab === 'layer'
-                      ? 'text-text-primary border-primary border-b-2'
-                      : 'text-text-secondary hover:text-text-primary'
-                  )}
-                  onClick={() => setActiveTab('layer')}
-                >
-                  レイヤー設定
-                </button>
-              </div>
-              {/* Close Button */}
+            {/* Tab Navigation Area */}
+            <div className="flex w-full px-6 pb-4">
               <button
-                onClick={collapseBottomSheet}
-                className="text-text-secondary hover:text-text-primary ml-4 rounded-md p-1 transition-colors"
-                aria-label="閉じる"
+                className={twMerge(
+                  'flex-1 py-3 text-center text-sm font-medium transition-colors',
+                  activeTab === 'view'
+                    ? 'text-text-primary border-primary border-b-2'
+                    : 'text-text-secondary hover:text-text-primary'
+                )}
+                onClick={() => setActiveTab('view')}
               >
-                <CloseIcon />
+                ビュー設定
+              </button>
+              <button
+                className={twMerge(
+                  'flex-1 py-3 text-center text-sm font-medium transition-colors',
+                  activeTab === 'layer'
+                    ? 'text-text-primary border-primary border-b-2'
+                    : 'text-text-secondary hover:text-text-primary'
+                )}
+                onClick={() => setActiveTab('layer')}
+              >
+                レイヤー設定
               </button>
             </div>
           </motion.div>

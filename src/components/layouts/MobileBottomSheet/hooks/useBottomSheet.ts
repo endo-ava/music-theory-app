@@ -138,6 +138,32 @@ export const useBottomSheet = () => {
     }
   }, [isExpanded]);
 
+  // ボトムシートが開いているときは背景のスクロールをロック
+  useEffect(() => {
+    const body = document.body;
+    if (!isCollapsed) {
+      // シートが開いている時は背景スクロールを無効化
+      const originalOverflow = body.style.overflow;
+      const originalPosition = body.style.position;
+      const originalTop = body.style.top;
+      const scrollY = window.scrollY;
+
+      body.style.overflow = 'hidden';
+      body.style.position = 'fixed';
+      body.style.top = `-${scrollY}px`;
+      body.style.width = '100%';
+
+      return () => {
+        // cleanup: 元の状態に戻す
+        body.style.overflow = originalOverflow;
+        body.style.position = originalPosition;
+        body.style.top = originalTop;
+        body.style.width = '';
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isCollapsed]);
+
   // Escapeキーが押されたときにシートを折りたたむイベントリスナーを設定します。
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
