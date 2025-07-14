@@ -1,2 +1,2 @@
-export { useWindowSize } from './useWindowSize';
+export { useFixedViewportHeight } from './useFixedViewportHeight';
 export { useBodyScrollLock } from './useBodyScrollLock';
