@@ -2,10 +2,14 @@
 
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { twMerge } from 'tailwind-merge';
 import { ViewController } from '@/features/view-controller';
+import { BottomSheetTabNavigation } from './BottomSheetTabNavigation';
+import { TABS } from '../constants';
 
-interface BottomSheetContentProps {
+/**
+ * BottomSheetContentコンポーネントのProps
+ */
+export interface BottomSheetContentProps {
   /**
    * コンテンツが表示されているかどうか
    */
@@ -34,7 +38,7 @@ export const BottomSheetContent: React.FC<BottomSheetContentProps> = ({
   isExpanded,
   headerHeight,
 }) => {
-  const [activeTab, setActiveTab] = useState<'view' | 'layer'>('layer');
+  const [activeTab, setActiveTab] = useState<string>('layer');
 
   if (!contentVisible) {
     return null;
@@ -48,30 +52,7 @@ export const BottomSheetContent: React.FC<BottomSheetContentProps> = ({
         style={{ pointerEvents: contentVisible ? 'auto' : 'none' }}
       >
         {/* Tab Navigation Area */}
-        <div className="flex w-full px-6 pb-4">
-          <button
-            className={twMerge(
-              'flex-1 py-3 text-center text-sm font-medium transition-colors',
-              activeTab === 'view'
-                ? 'text-text-primary border-primary border-b-2'
-                : 'text-text-secondary hover:text-text-primary'
-            )}
-            onClick={() => setActiveTab('view')}
-          >
-            View
-          </button>
-          <button
-            className={twMerge(
-              'flex-1 py-3 text-center text-sm font-medium transition-colors',
-              activeTab === 'layer'
-                ? 'text-text-primary border-primary border-b-2'
-                : 'text-text-secondary hover:text-text-primary'
-            )}
-            onClick={() => setActiveTab('layer')}
-          >
-            Layer
-          </button>
-        </div>
+        <BottomSheetTabNavigation tabs={TABS} activeTab={activeTab} onTabChange={setActiveTab} />
       </motion.div>
 
       {/* Content Area */}
