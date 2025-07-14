@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useBottomSheet } from '../useBottomSheet';
 import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
+import { findScrollableParent, shouldAllowDrag } from '@/shared/utils';
 import { SHEET_CONFIG } from '../../constants';
 
 // 依存フックをモック
@@ -10,10 +11,18 @@ vi.mock('@/shared/hooks', () => ({
   useBodyScrollLock: vi.fn(),
 }));
 
+// 依存ユーティリティをモック
+vi.mock('@/shared/utils', () => ({
+  findScrollableParent: vi.fn(),
+  shouldAllowDrag: vi.fn(),
+}));
+
 describe('useBottomSheet', () => {
   // モック関数の型定義
   const mockUseWindowSize = useWindowSize as ReturnType<typeof vi.fn>;
   const mockUseBodyScrollLock = useBodyScrollLock as ReturnType<typeof vi.fn>;
+  const mockFindScrollableParent = findScrollableParent as ReturnType<typeof vi.fn>;
+  const mockShouldAllowDrag = shouldAllowDrag as ReturnType<typeof vi.fn>;
 
   // モック変数
   let mockWindowHeight: number;
@@ -32,6 +41,12 @@ describe('useBottomSheet', () => {
 
     // useBodyScrollLock のモック
     mockUseBodyScrollLock.mockImplementation(mockBodyScrollLock);
+
+    // findScrollableParent のモック（デフォルトは null）
+    mockFindScrollableParent.mockReturnValue(null);
+
+    // shouldAllowDrag のモック（デフォルトは true）
+    mockShouldAllowDrag.mockReturnValue(true);
 
     // DOM要素をクリア
     document.body.innerHTML = '';
@@ -62,6 +77,7 @@ describe('useBottomSheet', () => {
       expect(result.current).toHaveProperty('dragConstraints');
       expect(result.current).toHaveProperty('toggleBottomSheet');
       expect(result.current).toHaveProperty('collapseBottomSheet');
+      expect(result.current).toHaveProperty('handleDragStart');
       expect(result.current).toHaveProperty('handleDragEnd');
     });
 
@@ -100,6 +116,30 @@ describe('useBottomSheet', () => {
         top: SHEET_CONFIG.expandedTopMarginPx,
         bottom: expectedSheetHeight - SHEET_CONFIG.collapsedVisiblePx,
       });
+    });
+
+    it('正常ケース: isDragAllowed の初期値は true である', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // isDragAllowedが内部stateなので直接アクセスできないが、
+      // handleDragEndの動作でデフォルト値がtrueであることを確認
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 }, // 高速上スワイプ
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      // 初期状態はcollapsed
+      expect(result.current.isCollapsed).toBe(true);
+
+      // isDragAllowedがtrueなので通常の処理が動作する
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // 状態が変更される（isDragAllowedがtrueだから）
+      expect(result.current.isHalf).toBe(true);
     });
   });
 
@@ -425,6 +465,262 @@ describe('useBottomSheet', () => {
       // half状態が最も近いのでhalf状態のまま（110行目でcurrentDistance < prevDistanceがfalseでprevStateを返す）
       expect(result.current.isHalf).toBe(true);
     });
+
+    it('正常ケース: isDragAllowed が false の場合、handleDragEnd は早期 return する', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // まずhandleDragStartでisDragAllowedをfalseにする
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(false);
+
+      const mockStartEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockStartPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 },
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      // handleDragStartでisDragAllowedをfalseにする
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      // 初期状態をcollapsedで確認
+      expect(result.current.isCollapsed).toBe(true);
+
+      // isDragAllowedがfalseの状態でhandleDragEndを呼ぶ
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 }, // 高速上スワイプ（通常なら状態変更される）
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // isDragAllowedがfalseなので状態は変更されない
+      expect(result.current.isCollapsed).toBe(true);
+    });
+
+    it('正常ケース: isDragAllowed が true の場合、handleDragEnd は通常の処理を継続', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // handleDragStartでisDragAllowedをtrueにする（デフォルト）
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      const mockStartEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockStartPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 },
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      // handleDragStartでisDragAllowedをtrueにする
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      // 初期状態をcollapsedで確認
+      expect(result.current.isCollapsed).toBe(true);
+
+      // isDragAllowedがtrueの状態でhandleDragEndを呼ぶ
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 }, // 高速上スワイプ
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // isDragAllowedがtrueなので通常の処理が実行され、状態が変更される
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: isDragAllowed が false の場合、handleDragEnd 終了時に true にリセットされる', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // handleDragStartでisDragAllowedをfalseにする
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(false);
+
+      const mockStartEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockStartPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 },
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      // handleDragStartでisDragAllowedをfalseにする
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      // isDragAllowedがfalseの状態でhandleDragEndを呼ぶ
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 },
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // 次のドラッグで正常に動作することを確認（isDragAllowedがtrueにリセットされている）
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // 今度は状態が変更される
+      expect(result.current.isHalf).toBe(true);
+    });
+  });
+
+  describe('isDragAllowed state 管理', () => {
+    it('正常ケース: handleDragStart でスクロール不可の場合に isDragAllowed が false に変更', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // スクロール可能な要素があり、shouldAllowDrag が false を返す
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(false);
+
+      const mockStartEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockStartPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: -100 }, // 上方向
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      // isDragAllowedがfalseになったことを、handleDragEndの動作で確認
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 }, // 高速上スワイプ（通常なら状態変更される）
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      const initialState = result.current.bottomSheetState;
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // isDragAllowedがfalseなので状態は変更されない
+      expect(result.current.bottomSheetState).toBe(initialState);
+    });
+
+    it('正常ケース: handleDragStart でスクロール可能の場合に isDragAllowed が true に変更', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // スクロール可能な要素があり、shouldAllowDrag が true を返す
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      const mockStartEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockStartPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 }, // 下方向
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      // isDragAllowedがtrueになったことを、handleDragEndの動作で確認
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 }, // 高速上スワイプ
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      // 初期状態はcollapsed
+      expect(result.current.isCollapsed).toBe(true);
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // isDragAllowedがtrueなので状態が変更される
+      expect(result.current.isHalf).toBe(true);
+    });
+
+    it('正常ケース: handleDragStart でスクロール要素がない場合に isDragAllowed が true に保持', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // スクロール可能な要素がない
+      mockFindScrollableParent.mockReturnValue(null);
+
+      const mockStartEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockStartPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 },
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockStartEvent, mockStartPanInfo);
+      });
+
+      // isDragAllowedがtrueに保持されることを、handleDragEndの動作で確認
+      const mockEndPanInfo = {
+        offset: { x: 0, y: -100 },
+        velocity: { x: 0, y: -600 }, // 高速上スワイプ
+        point: { x: 0, y: -100 },
+        delta: { x: 0, y: -100 },
+      };
+
+      // 初期状態はcollapsed
+      expect(result.current.isCollapsed).toBe(true);
+
+      act(() => {
+        result.current.handleDragEnd(null, mockEndPanInfo);
+      });
+
+      // isDragAllowedがtrueなので状態が変更される
+      expect(result.current.isHalf).toBe(true);
+    });
   });
 
   describe('キーボードイベント処理', () => {
@@ -544,6 +840,183 @@ describe('useBottomSheet', () => {
       expect(() => {
         renderHook(() => useBottomSheet());
       }).toThrow('Body scroll lock error');
+    });
+  });
+
+  describe('handleDragStart', () => {
+    it('正常ケース: handleDragStart が存在し呼び出し可能である', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      expect(result.current.handleDragStart).toBeTypeOf('function');
+
+      // 基本的な呼び出しテスト（エラーを投げないことを確認）
+      expect(() => {
+        const mockEvent = {
+          target: document.createElement('div'),
+        } as unknown as MouseEvent;
+        const mockPanInfo = {
+          offset: { x: 0, y: 0 },
+          velocity: { x: 0, y: 100 },
+          point: { x: 0, y: 0 },
+          delta: { x: 0, y: 0 },
+        };
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      }).not.toThrow();
+    });
+
+    it('正常ケース: スクロール可能な親要素がない場合はドラッグを許可', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      // findScrollableParent が null を返すように設定
+      mockFindScrollableParent.mockReturnValue(null);
+
+      const mockEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 },
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      });
+
+      // findScrollableParent が呼ばれることを確認
+      expect(mockFindScrollableParent).toHaveBeenCalledWith(mockEvent.target);
+      // shouldAllowDrag は呼ばれないことを確認
+      expect(mockShouldAllowDrag).not.toHaveBeenCalled();
+    });
+
+    it('正常ケース: スクロール可能な親要素があり、shouldAllowDrag が true の場合', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      const mockEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 100 }, // 下方向
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      });
+
+      // findScrollableParent が呼ばれることを確認
+      expect(mockFindScrollableParent).toHaveBeenCalledWith(mockEvent.target);
+      // shouldAllowDrag が正しい引数で呼ばれることを確認
+      expect(mockShouldAllowDrag).toHaveBeenCalledWith(mockScrollableElement, 'down');
+    });
+
+    it('正常ケース: スクロール可能な親要素があり、shouldAllowDrag が false の場合', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(false);
+
+      const mockEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: -100 }, // 上方向
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      });
+
+      // findScrollableParent が呼ばれることを確認
+      expect(mockFindScrollableParent).toHaveBeenCalledWith(mockEvent.target);
+      // shouldAllowDrag が正しい引数で呼ばれることを確認
+      expect(mockShouldAllowDrag).toHaveBeenCalledWith(mockScrollableElement, 'up');
+    });
+
+    it('境界値ケース: velocity.y が 0 の場合（上方向として処理）', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      const mockEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 0 }, // 境界値
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      });
+
+      // velocity.y が 0 以下なので 'up' として処理される
+      expect(mockShouldAllowDrag).toHaveBeenCalledWith(mockScrollableElement, 'up');
+    });
+
+    it('境界値ケース: velocity.y が正の値の場合（下方向として処理）', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      const mockEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: 0.1 }, // 小さな正の値
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      });
+
+      // velocity.y が正の値なので 'down' として処理される
+      expect(mockShouldAllowDrag).toHaveBeenCalledWith(mockScrollableElement, 'down');
+    });
+
+    it('境界値ケース: velocity.y が負の値の場合（上方向として処理）', () => {
+      const { result } = renderHook(() => useBottomSheet());
+
+      const mockScrollableElement = document.createElement('div');
+      mockFindScrollableParent.mockReturnValue(mockScrollableElement);
+      mockShouldAllowDrag.mockReturnValue(true);
+
+      const mockEvent = {
+        target: document.createElement('div'),
+      } as unknown as MouseEvent;
+      const mockPanInfo = {
+        offset: { x: 0, y: 0 },
+        velocity: { x: 0, y: -0.1 }, // 小さな負の値
+        point: { x: 0, y: 0 },
+        delta: { x: 0, y: 0 },
+      };
+
+      act(() => {
+        result.current.handleDragStart(mockEvent, mockPanInfo);
+      });
+
+      // velocity.y が負の値なので 'up' として処理される
+      expect(mockShouldAllowDrag).toHaveBeenCalledWith(mockScrollableElement, 'up');
     });
   });
 });
