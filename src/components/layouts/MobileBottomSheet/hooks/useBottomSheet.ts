@@ -5,6 +5,7 @@ import type { PanInfo } from 'framer-motion';
 import { BottomSheetState } from '../types';
 import { SHEET_CONFIG } from '../constants';
 import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
+import { findScrollableParent, shouldAllowDrag } from '@/shared/utils';
 
 /**
  * `useBottomSheet` カスタムフック
@@ -23,11 +24,13 @@ import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
  * - `dragConstraints`: `framer-motion` の `dragConstraints` プロパティに渡すドラッグ可能な範囲。
  * - `toggleBottomSheet`: シートの状態をサイクルさせる関数。
  * - `collapseBottomSheet`: シートを折りたたむ関数。
+ * - `handleDragStart`: ドラッグ開始時のイベントハンドラ。内部スクロールとの競合を回避。
  * - `handleDragEnd`: ドラッグ終了時に呼び出されるイベントハンドラ。`framer-motion` の `PanInfo` を受け取ります。
  */
 export const useBottomSheet = () => {
   const sheetRef = useRef<HTMLDivElement>(null);
   const [sheetState, setSheetState] = useState<BottomSheetState>('collapsed');
+  const [isDragAllowed, setIsDragAllowed] = useState(true);
 
   // ウィンドウサイズを取得（汎用フック使用）
   const { height: windowHeight } = useWindowSize();
@@ -70,11 +73,39 @@ export const useBottomSheet = () => {
   }, []);
 
   /**
+   * ドラッグ開始時のイベントを処理するコールバック関数
+   * 内部コンテンツのスクロールとシートの移動を適切に判定し、競合を回避する
+   */
+  const handleDragStart = useCallback(
+    (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+      const target = event.target as HTMLElement;
+      const scrollableParent = findScrollableParent(target);
+
+      if (scrollableParent) {
+        const dragDirection = info.velocity.y > 0 ? 'down' : 'up';
+        const allowDrag = shouldAllowDrag(scrollableParent, dragDirection);
+
+        setIsDragAllowed(allowDrag);
+      } else {
+        // スクロール可能な要素がない場合はドラッグを許可
+        setIsDragAllowed(true);
+      }
+    },
+    []
+  );
+
+  /**
    * ドラッグ終了時のイベントを処理するコールバック関数
    * スワイプの速度と最終位置に基づいて、シートを最適なスナップポイントに移動させる
    */
   const handleDragEnd = useCallback(
     (_: unknown, info: PanInfo) => {
+      // ドラッグが許可されていない場合は何もしない
+      if (!isDragAllowed) {
+        setIsDragAllowed(true); // 次回のドラッグのためにリセット
+        return;
+      }
+
       const { offset, velocity } = info;
       const dragY = offset.y;
       const velocityY = velocity.y;
@@ -113,6 +144,7 @@ export const useBottomSheet = () => {
       setSheetState(nearestState);
     },
     [
+      isDragAllowed,
       sheetState,
       snapPoints,
       collapseBottomSheet,
@@ -158,6 +190,7 @@ export const useBottomSheet = () => {
     },
     toggleBottomSheet,
     collapseBottomSheet,
+    handleDragStart,
     handleDragEnd,
   };
 };

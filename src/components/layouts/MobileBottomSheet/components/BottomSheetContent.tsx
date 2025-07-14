@@ -45,9 +45,6 @@ export const BottomSheetContent: React.FC<BottomSheetContentProps> = ({
       {/* Content Header (visible when half or expanded) */}
       <motion.div
         className="border-border flex w-full flex-col border-b"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.1 }}
         style={{ pointerEvents: contentVisible ? 'auto' : 'none' }}
       >
         {/* Tab Navigation Area */}

@@ -13,6 +13,7 @@ import type { ClassNameProps } from '@/shared/types';
  *
  * モバイル環境で画面下部から表示されるUIコンテナ。
  * ボトムシート全体の動作とアニメーションを管理し、コンテンツ表示はBottomSheetContentコンポーネントに委譲する。
+ * ボトムシート全体でのドラッグ操作をサポートし、内部コンテンツのスクロールとの競合を適切に処理する。
  *
  * @param props - コンポーネントのプロパティ
  * @returns MobileBottomSheetのJSX要素
@@ -27,6 +28,7 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
     dragConstraints,
     toggleBottomSheet,
     collapseBottomSheet,
+    handleDragStart,
     handleDragEnd,
   } = useBottomSheet();
 
@@ -50,25 +52,27 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         drag="y"
         dragConstraints={dragConstraints}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         role="dialog"
         aria-modal="false"
         aria-labelledby="bottom-sheet-title"
       >
-        {/* Trigger Area (always visible, narrower) */}
-        <motion.div
-          className="flex cursor-pointer flex-col items-center px-6 py-2"
-          onClick={toggleBottomSheet}
-          whileTap={{ scale: 0.98 }}
-        >
-          <HandleIcon />
-        </motion.div>
+        {/* Header Area (Handle + Close Button) */}
+        <div className="relative">
+          {/* Trigger Area (tap to toggle) - Full width except close button */}
+          <motion.button
+            className="flex w-full cursor-pointer items-center justify-center py-4"
+            onClick={toggleBottomSheet}
+            whileTap={{ scale: 0.98 }}
+          >
+            <HandleIcon />
+          </motion.button>
 
-        {/* Close Button Area */}
-        <div className="flex w-full justify-end px-6">
+          {/* Close Button - Absolute positioned */}
           <button
             onClick={collapseBottomSheet}
-            className="text-text-secondary hover:text-text-primary rounded-md p-1 transition-colors"
+            className="text-text-secondary hover:text-text-primary absolute top-3 right-6 rounded-md transition-colors"
             aria-label="閉じる"
           >
             <CloseIcon />
