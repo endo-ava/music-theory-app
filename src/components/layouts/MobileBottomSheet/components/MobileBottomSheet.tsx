@@ -35,8 +35,9 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
   const contentVisible = isHalf || isExpanded;
 
   // Define heights for layout calculations
-  const triggerAreaHeight = 60; // px (height of handle + close button + padding)
-  const tabsAreaHeight = 60; // px (approximate height of tabs)
+  const DEFAULT_AREA_HEIGHT = 60; // px (standard height for UI elements)
+  const triggerAreaHeight = DEFAULT_AREA_HEIGHT; // height of handle + close button + padding
+  const tabsAreaHeight = DEFAULT_AREA_HEIGHT; // approximate height of tabs
   const totalHeaderHeight = triggerAreaHeight + tabsAreaHeight;
 
   return (
@@ -58,6 +59,11 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
         aria-modal="false"
         aria-labelledby="bottom-sheet-title"
       >
+        {/* Visually hidden heading for accessibility */}
+        <h2 id="bottom-sheet-title" className="sr-only">
+          ボトムシート
+        </h2>
+
         {/* Header Area (Handle + Close Button) */}
         <BottomSheetHeader onToggle={toggleBottomSheet} onClose={collapseBottomSheet} />
 

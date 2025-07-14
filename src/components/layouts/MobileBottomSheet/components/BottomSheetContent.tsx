@@ -38,7 +38,7 @@ export const BottomSheetContent: React.FC<BottomSheetContentProps> = ({
   isExpanded,
   headerHeight,
 }) => {
-  const [activeTab, setActiveTab] = useState<string>('layer');
+  const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
 
   if (!contentVisible) {
     return null;
