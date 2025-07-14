@@ -35,7 +35,8 @@ export const BottomSheetHeader: React.FC<BottomSheetHeaderProps> = ({ onToggle, 
         className="flex w-full cursor-pointer items-center justify-center py-4"
         onClick={onToggle}
         whileTap={{ scale: 0.98 }}
-        aria-label="ボトムシートを切り替え"
+        aria-label="ボトムシートを開く"
+        tabIndex={0}
       >
         <HandleIcon />
       </motion.button>
@@ -44,7 +45,8 @@ export const BottomSheetHeader: React.FC<BottomSheetHeaderProps> = ({ onToggle, 
       <button
         onClick={onClose}
         className="text-text-secondary hover:text-text-primary absolute top-3 right-6 rounded-md transition-colors"
-        aria-label="閉じる"
+        aria-label="ボトムシートを閉じる"
+        tabIndex={0}
       >
         <CloseIcon />
       </button>
