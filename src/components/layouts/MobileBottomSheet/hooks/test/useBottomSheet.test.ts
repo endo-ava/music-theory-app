@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useBottomSheet } from '../useBottomSheet';
-import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
+import { useFixedViewportHeight, useBodyScrollLock } from '@/shared/hooks';
 import { findScrollableParent, shouldAllowDrag } from '@/shared/utils';
 import { SHEET_CONFIG } from '../../constants';
 
 // 依存フックをモック
 vi.mock('@/shared/hooks', () => ({
-  useWindowSize: vi.fn(),
+  useFixedViewportHeight: vi.fn(),
   useBodyScrollLock: vi.fn(),
 }));
 
@@ -19,7 +19,7 @@ vi.mock('@/shared/utils', () => ({
 
 describe('useBottomSheet', () => {
   // モック関数の型定義
-  const mockUseWindowSize = useWindowSize as ReturnType<typeof vi.fn>;
+  const mockUseFixedViewportHeight = useFixedViewportHeight as ReturnType<typeof vi.fn>;
   const mockUseBodyScrollLock = useBodyScrollLock as ReturnType<typeof vi.fn>;
   const mockFindScrollableParent = findScrollableParent as ReturnType<typeof vi.fn>;
   const mockShouldAllowDrag = shouldAllowDrag as ReturnType<typeof vi.fn>;
@@ -33,11 +33,8 @@ describe('useBottomSheet', () => {
     mockWindowHeight = 1000;
     mockBodyScrollLock = vi.fn();
 
-    // useWindowSize のモック
-    mockUseWindowSize.mockReturnValue({
-      width: 1024,
-      height: mockWindowHeight,
-    });
+    // useFixedViewportHeight のモック
+    mockUseFixedViewportHeight.mockReturnValue(mockWindowHeight);
 
     // useBodyScrollLock のモック
     mockUseBodyScrollLock.mockImplementation(mockBodyScrollLock);
@@ -93,7 +90,7 @@ describe('useBottomSheet', () => {
     it('正常ケース: 依存フックが正しく呼ばれる', () => {
       renderHook(() => useBottomSheet());
 
-      expect(mockUseWindowSize).toHaveBeenCalledTimes(1);
+      expect(mockUseFixedViewportHeight).toHaveBeenCalledTimes(1);
       expect(mockUseBodyScrollLock).toHaveBeenCalledWith(false); // isCollapsed = true なので
     });
 
@@ -145,7 +142,7 @@ describe('useBottomSheet', () => {
 
   describe('windowHeight 依存の計算', () => {
     it('境界値ケース: windowHeight = 0 の場合', () => {
-      mockUseWindowSize.mockReturnValue({ width: 1024, height: 0 });
+      mockUseFixedViewportHeight.mockReturnValue(0);
 
       const { result } = renderHook(() => useBottomSheet());
 
@@ -153,21 +150,15 @@ describe('useBottomSheet', () => {
       expect(result.current.y).toBe(-SHEET_CONFIG.collapsedVisiblePx);
     });
 
-    it('正常ケース: windowHeight 変更時に値が再計算される', () => {
-      const { result, rerender } = renderHook(() => useBottomSheet());
+    it('正常ケース: windowHeight に基づいて値が正しく計算される', () => {
+      const testHeight = 1200;
+      mockUseFixedViewportHeight.mockReturnValue(testHeight);
 
-      // 初期値の確認
-      const initialHeight = mockWindowHeight * SHEET_CONFIG.vh;
-      expect(result.current.sheetHeight).toBe(initialHeight);
+      const { result } = renderHook(() => useBottomSheet());
 
-      // windowHeight を変更
-      mockWindowHeight = 1200;
-      mockUseWindowSize.mockReturnValue({ width: 1024, height: 1200 });
-      rerender();
-
-      // 再計算された値の確認
-      const newHeight = 1200 * SHEET_CONFIG.vh;
-      expect(result.current.sheetHeight).toBe(newHeight);
+      // 計算された値の確認
+      const expectedSheetHeight = testHeight * SHEET_CONFIG.vh;
+      expect(result.current.sheetHeight).toBe(expectedSheetHeight);
     });
   });
 
@@ -822,14 +813,14 @@ describe('useBottomSheet', () => {
   });
 
   describe('エラー処理', () => {
-    it('異常ケース: useWindowSize がエラーを返す場合', () => {
-      mockUseWindowSize.mockImplementation(() => {
-        throw new Error('Window size error');
+    it('異常ケース: useFixedViewportHeight がエラーを返す場合', () => {
+      mockUseFixedViewportHeight.mockImplementation(() => {
+        throw new Error('Fixed viewport height error');
       });
 
       expect(() => {
         renderHook(() => useBottomSheet());
-      }).toThrow('Window size error');
+      }).toThrow('Fixed viewport height error');
     });
 
     it('異常ケース: useBodyScrollLock がエラーを返す場合', () => {

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import type { PanInfo } from 'framer-motion';
 import { BottomSheetState } from '../types';
 import { SHEET_CONFIG } from '../constants';
-import { useWindowSize, useBodyScrollLock } from '@/shared/hooks';
+import { useBodyScrollLock, useFixedViewportHeight } from '@/shared/hooks';
 import { findScrollableParent, shouldAllowDrag } from '@/shared/utils';
 
 /**
@@ -32,8 +32,8 @@ export const useBottomSheet = () => {
   const [sheetState, setSheetState] = useState<BottomSheetState>('collapsed');
   const [isDragAllowed, setIsDragAllowed] = useState(true);
 
-  // ウィンドウサイズを取得（汎用フック使用）
-  const { height: windowHeight } = useWindowSize();
+  // 固定ビューポート高さを取得（URLバー変動を無視）
+  const windowHeight = useFixedViewportHeight();
 
   /** スナップポイントとシートの高さの計算(メモ化) */
   const { snapPoints, sheetHeight } = useMemo(() => {
