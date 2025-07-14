@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { twMerge } from 'tailwind-merge';
 import { useBottomSheet } from '../hooks/useBottomSheet';
-import { CloseIcon, HandleIcon } from '@/shared/components/icons';
+import { BottomSheetHeader } from './BottomSheetHeader';
 import { BottomSheetContent } from './BottomSheetContent';
 import type { ClassNameProps } from '@/shared/types';
 
@@ -59,25 +59,7 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
         aria-labelledby="bottom-sheet-title"
       >
         {/* Header Area (Handle + Close Button) */}
-        <div className="relative">
-          {/* Trigger Area (tap to toggle) - Full width except close button */}
-          <motion.button
-            className="flex w-full cursor-pointer items-center justify-center py-4"
-            onClick={toggleBottomSheet}
-            whileTap={{ scale: 0.98 }}
-          >
-            <HandleIcon />
-          </motion.button>
-
-          {/* Close Button - Absolute positioned */}
-          <button
-            onClick={collapseBottomSheet}
-            className="text-text-secondary hover:text-text-primary absolute top-3 right-6 rounded-md transition-colors"
-            aria-label="閉じる"
-          >
-            <CloseIcon />
-          </button>
-        </div>
+        <BottomSheetHeader onToggle={toggleBottomSheet} onClose={collapseBottomSheet} />
 
         {/* Bottom Sheet Content */}
         <BottomSheetContent

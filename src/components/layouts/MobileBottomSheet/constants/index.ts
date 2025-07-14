@@ -1,3 +1,5 @@
+import { Tab } from '../types';
+
 /** シート設定 */
 export const SHEET_CONFIG = {
   /** シートの高さ（ビューポートの85%） */
@@ -11,3 +13,9 @@ export const SHEET_CONFIG = {
   /** スワイプと判定する速度のしきい値 */
   velocityThreshold: 500,
 };
+
+/** タブの定義 */
+export const TABS: Tab[] = [
+  { id: 'view', label: 'View' },
+  { id: 'layer', label: 'Layer' },
+];
