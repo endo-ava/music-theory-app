@@ -22,6 +22,10 @@ export interface BottomSheetContentProps {
    * ヘッダーの高さ（レイアウト計算用）
    */
   headerHeight: number;
+  /**
+   * シートの高さ（レイアウト計算用）
+   */
+  sheetHeight: number;
 }
 
 /**
@@ -37,6 +41,7 @@ export const BottomSheetContent: React.FC<BottomSheetContentProps> = ({
   contentVisible,
   isExpanded,
   headerHeight,
+  sheetHeight,
 }) => {
   const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
 
@@ -60,8 +65,8 @@ export const BottomSheetContent: React.FC<BottomSheetContentProps> = ({
         className="overflow-y-auto p-6"
         style={{
           maxHeight: isExpanded
-            ? `calc(85vh - ${headerHeight}px)`
-            : `calc(42.5vh - ${headerHeight}px)`,
+            ? `${sheetHeight * 0.85 - headerHeight}px`
+            : `${sheetHeight * 0.425 - headerHeight}px`,
           pointerEvents: contentVisible ? 'auto' : 'none',
         }}
         initial={{ opacity: 0 }}

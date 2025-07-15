@@ -72,6 +72,7 @@ export const MobileBottomSheet: React.FC<ClassNameProps> = ({ className }) => {
           contentVisible={contentVisible}
           isExpanded={isExpanded}
           headerHeight={totalHeaderHeight}
+          sheetHeight={sheetHeight}
         />
       </motion.div>
     </div>
