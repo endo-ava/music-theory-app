@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 
 /**
  * 固定ビューポート高さを取得するカスタムフック
@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react';
 export const useFixedViewportHeight = (): number => {
   const [fixedHeight, setFixedHeight] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // SSR対応: クライアントサイドでのみ実行
     // 初回のみ高さを取得し、その後は固定
     if (typeof window !== 'undefined') {

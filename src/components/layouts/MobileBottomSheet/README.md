@@ -96,7 +96,7 @@ src/components/layouts/MobileBottomSheet/
 
 - `@/shared/hooks/useBodyScrollLock` - 背景スクロール制御
 - `@/shared/hooks/useFixedViewportHeight` - 固定ビューポート高さ取得
-- `@/shared/utils/scrollUtils` - スクロール要素判定ユーティリティ
+- `@/shared/utils/scroll` - スクロール要素判定ユーティリティ
 - `@/shared/types` - 共通型定義
 
 #### 外部依存
