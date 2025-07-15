@@ -180,7 +180,7 @@ interface UseBottomSheetReturn {
 ```typescript
 const SHEET_CONFIG = {
   vh: 0.85, // ビューポート高さに対する割合
-  expandedTopMarginPx: 60, // 全開時の上部マージン
+  expandedTopMarginPx: 20, // 全開時の上部マージン
   halfOpenRatio: 0.5, // 半開き時の高さ比率
   collapsedVisiblePx: 60, // 折りたたみ時の可視領域
   velocityThreshold: 500, // 高速スワイプ判定の閾値
