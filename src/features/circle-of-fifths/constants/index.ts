@@ -15,7 +15,8 @@ import { Key, CircleSegment } from '@/features/circle-of-fifths/types';
 /** 五度圏のセグメント数 */
 export const SEGMENT_COUNT = 12;
 
-/** 角度の基本オフセット（Cが一番上に来るように調整） */
+/** 角度の基本オフセット（Cが一番上に来るように調整）
+ * -90度（真上）から-15度（最初のセグメント中心）への調整 */
 export const ANGLE_OFFSET = -105;
 
 /** 1セグメントあたりの角度（度） */
@@ -84,6 +85,9 @@ export const CIRCLE_SEGMENTS: CircleSegment[] = [
 // レイアウト定数（計算に必要な値のみ）
 // ============================================================================
 
+/** マイナーキーテキストの配置オフセット比率（テキストがエリア内側に配置されるように調整） */
+export const MINOR_TEXT_OFFSET_RATIO = 1.2;
+
 /**
  * 五度圏の同心円レイアウト定数
  *
@@ -102,6 +106,21 @@ export const CIRCLE_LAYOUT = {
   INNER_RADIUS: 130,
   /** 中心の空白エリア（90px）- ドーナツ形状を作り、中心部分を空ける */
   CENTER_RADIUS: 90,
+} as const;
+
+/**
+ * テキスト配置用半径定数
+ *
+ * 五度圏の各エリアにテキストを配置するための半径値。
+ * CIRCLE_LAYOUTの値を基に事前計算されている。
+ */
+export const TEXT_RADIUS = {
+  /** マイナーキーテキストの配置半径（108.33px）- INNER_RADIUS / MINOR_TEXT_OFFSET_RATIO */
+  MINOR: CIRCLE_LAYOUT.INNER_RADIUS / MINOR_TEXT_OFFSET_RATIO,
+  /** メジャーキーテキストの配置半径（152.5px）- INNER_RADIUS と MIDDLE_RADIUS の中点 */
+  MAJOR: (CIRCLE_LAYOUT.INNER_RADIUS + CIRCLE_LAYOUT.MIDDLE_RADIUS) / 2,
+  /** 調号テキストの配置半径（187.5px）- MIDDLE_RADIUS と RADIUS の中点 */
+  SIGNATURE: (CIRCLE_LAYOUT.MIDDLE_RADIUS + CIRCLE_LAYOUT.RADIUS) / 2,
 } as const;
 
 // ============================================================================
