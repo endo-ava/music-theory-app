@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT } from '../constants';
+import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
 import { CircleSegment, Point, SegmentPaths } from '@/features/circle-of-fifths/types';
 import { calculateTextPosition, calculateTextRotation } from '../utils/geometry';
 import { generateThreeSegmentPaths } from '../utils/pathGeneration';
@@ -53,15 +53,9 @@ export const useCircleOfFifths = () => {
 
       // 各領域の中心にテキストを配置するための座標を計算
       const textPositions = {
-        minorTextPos: calculateTextPosition(position, CIRCLE_LAYOUT.INNER_RADIUS / 1.2),
-        majorTextPos: calculateTextPosition(
-          position,
-          (CIRCLE_LAYOUT.INNER_RADIUS + CIRCLE_LAYOUT.MIDDLE_RADIUS) / 2
-        ),
-        signatureTextPos: calculateTextPosition(
-          position,
-          (CIRCLE_LAYOUT.MIDDLE_RADIUS + CIRCLE_LAYOUT.RADIUS) / 2
-        ),
+        minorTextPos: calculateTextPosition(position, TEXT_RADIUS.MINOR),
+        majorTextPos: calculateTextPosition(position, TEXT_RADIUS.MAJOR),
+        signatureTextPos: calculateTextPosition(position, TEXT_RADIUS.SIGNATURE),
       };
 
       return {
