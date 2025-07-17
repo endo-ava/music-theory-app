@@ -1,6 +1,5 @@
 'use client';
 
-import { twMerge } from 'tailwind-merge';
 import { useHubStore } from '@/stores/hubStore';
 import { getHubDisplayNameEn } from '@/shared/constants/hubs';
 import { ClassNameProps } from '@/shared/types';
@@ -19,5 +18,5 @@ export const HubTitle: React.FC<ClassNameProps> = ({ className }) => {
 
   const hubTitle = getHubDisplayNameEn(hubType);
 
-  return <h1 className={twMerge('text-title', className)}>{hubTitle}</h1>;
+  return <h1 className={className}>{hubTitle}</h1>;
 };
