@@ -161,9 +161,9 @@ TypeScriptを使用して型安全性を確保し、コンパイル時のエラ�
 ```typescript
 export const CIRCLE_LAYOUT = {
   RADIUS: 200, // 外側の半径
-  INNER_RADIUS: 120, // 内側の半径（マイナーキーエリア）
-  MIDDLE_RADIUS: 170, // 中間の半径（メジャーキーエリア）
-  CENTER_RADIUS: 80, // 中心の半径（調号エリア）
+  INNER_RADIUS: 130, // 内側の半径（マイナーキーエリア）
+  MIDDLE_RADIUS: 175, // 中間の半径（メジャーキーエリア）
+  CENTER_RADIUS: 90, // 中心の半径（調号エリア）
 } as const;
 ```
 
