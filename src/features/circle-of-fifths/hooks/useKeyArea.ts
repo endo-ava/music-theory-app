@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 import { Key, CircleSegment as CircleSegmentType } from '@/features/circle-of-fifths/types';
 import { useAudio } from './useAudio';
-import { Position } from '@/domain';
+import { FifthsIndex } from '@/domain';
 
 // フックが必要とするProps
 export interface UseKeyAreaProps {
@@ -55,9 +55,9 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
         setSelectedKey(keyData);
         // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
         if (isMajor) {
-          playMajorChordAtPosition(position as Position);
+          playMajorChordAtPosition(position as FifthsIndex);
         } else {
-          playMinorChordAtPosition(position as Position);
+          playMinorChordAtPosition(position as FifthsIndex);
         }
       },
       handleMouseEnter: () => setHoveredKey(keyData),

@@ -95,33 +95,4 @@ export class Note {
       throw new Error(`Invalid octave: ${octave}. Must be between 0 and 8`);
     }
   }
-
-  /**
-   * ファクトリーメソッド: Tone.js記法から作成
-   */
-  static fromToneNotation(notation: string): Note {
-    const match = notation.match(/^([A-G]#?)(\d)$/);
-    if (!match) {
-      throw new Error(`Invalid tone notation: ${notation}`);
-    }
-
-    const noteName = match[1] as NoteName;
-    const octave = parseInt(match[2]) as Octave;
-
-    return new Note(noteName, octave);
-  }
-
-  /**
-   * ファクトリーメソッド: C4を基準とした音符作成
-   */
-  static c4(): Note {
-    return new Note('C', 4);
-  }
-
-  /**
-   * ファクトリーメソッド: 指定されたオクターブでのC音
-   */
-  static c(octave: Octave): Note {
-    return new Note('C', octave);
-  }
 }
