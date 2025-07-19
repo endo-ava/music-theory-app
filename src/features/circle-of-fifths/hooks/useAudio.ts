@@ -2,14 +2,14 @@
  * 五度圏音響機能のカスタムフック
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { AudioEngine, ChordBuilder, FifthsIndex } from '@/domain';
 
 /**
  * 音を鳴らすためのシンプルなフック
  */
 export const useAudio = () => {
-  const chordBuilder = new ChordBuilder();
+  const chordBuilder = useMemo(() => new ChordBuilder(), []);
 
   const playMajorChordAtPosition = useCallback(
     async (fifthsIndex: FifthsIndex) => {

@@ -30,6 +30,9 @@ export class AudioEngine {
     notes.forEach((note, i) => {
       setTimeout(() => {
         if (this.sampler) {
+          // 再生時にログを出力
+          console.log(`🎹 Playing note: ${note} (delay: ${i * this.config.arpeggioDelay}ms)`);
+
           this.sampler.triggerAttackRelease(note, this.config.release);
         }
       }, i * this.config.arpeggioDelay);
