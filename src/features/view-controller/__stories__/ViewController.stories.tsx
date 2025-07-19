@@ -23,7 +23,7 @@ const meta: Meta<typeof ViewController> = {
     },
     title: {
       control: 'text',
-      description: 'コンポーネントの見出し（デフォルト: "View Controller"）',
+      description: 'コンポーネントの見出し（デフォルト: "View"）',
     },
   },
   decorators: [
@@ -66,7 +66,7 @@ export const CustomTitle: Story = {
     docs: {
       description: {
         story:
-          'カスタムタイトルを設定したViewControllerです。デフォルトの"View Controller"から変更されています。',
+          'カスタムタイトルを設定したViewControllerです。デフォルトの"View"から変更されています。',
       },
     },
   },
@@ -97,7 +97,7 @@ export const InteractiveTest: Story = {
 
     // タイトルの確認
     const title = canvas.getByRole('heading', { level: 2 });
-    expect(title).toHaveTextContent('View Controller');
+    expect(title).toHaveTextContent('View');
 
     // 初期状態で五度圏ボタンが選択されていることを確認
     const circleButton = canvas.getByRole('radio', { name: '五度圏' });
@@ -177,7 +177,7 @@ export const AccessibilityTest: Story = {
 
     // 見出しの確認
     const heading = canvas.getByRole('heading', { level: 2 });
-    expect(heading).toHaveTextContent('View Controller');
+    expect(heading).toHaveTextContent('View');
 
     // ラジオグループの確認
     const radioGroup = canvas.getByRole('radiogroup');

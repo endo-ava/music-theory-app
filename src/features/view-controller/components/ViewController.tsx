@@ -23,10 +23,7 @@ export interface ViewControllerProps extends ClassNameProps {
  * @param props - コンポーネントのプロパティ
  * @returns ViewControllerのJSX要素
  */
-export const ViewController: React.FC<ViewControllerProps> = ({
-  className,
-  title = 'View Controller',
-}) => {
+export const ViewController: React.FC<ViewControllerProps> = ({ className, title = 'View' }) => {
   // カスタムフックによるロジック分離
   const { hubType, hubOptions, selectedOption, radioGroupRef, handleHubTypeChange, handleKeyDown } =
     useViewController();
@@ -34,7 +31,7 @@ export const ViewController: React.FC<ViewControllerProps> = ({
   return (
     <div className={twMerge('space-y-4', className)}>
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
-      <h2 className="text-text-primary hidden text-lg font-semibold md:block">{title}</h2>
+      <h2 className="text-text-primary hidden text-lg md:block">{title}</h2>
 
       {/* Hub ラジオグループ - 子コンポーネントに分離 */}
       <HubRadioGroup
