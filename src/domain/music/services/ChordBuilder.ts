@@ -3,7 +3,7 @@
  */
 
 import type { FifthsIndex } from '../types/FifthsIndex';
-import { Note } from '../value-objects/Note';
+import { Note, Octave } from '../value-objects/Note';
 import { Chord } from '../entities/Chord';
 import { MusicTheoryConverter } from '../utils/MusicTheoryConverter';
 
@@ -21,7 +21,7 @@ export class ChordBuilder {
    * @param octave 基準オクターブ（デフォルト: 4）
    * @returns 対応するメジャートライアド
    */
-  buildMajorTriadFromPosition(fifthsIndex: FifthsIndex, octave: 4 = 4): Chord {
+  buildMajorTriadFromPosition(fifthsIndex: FifthsIndex, octave: Octave = 4): Chord {
     const noteName = MusicTheoryConverter.fifthsToNoteName(fifthsIndex);
     const rootNote = new Note(noteName, octave);
 
@@ -35,7 +35,7 @@ export class ChordBuilder {
    * @param octave 基準オクターブ（デフォルト: 4）
    * @returns 対応するマイナートライアド
    */
-  buildMinorTriadFromPosition(fifthsIndex: FifthsIndex, octave: 4 = 4): Chord {
+  buildMinorTriadFromPosition(fifthsIndex: FifthsIndex, octave: Octave = 4): Chord {
     const noteName = MusicTheoryConverter.fifthsToNoteName(fifthsIndex);
     const rootNote = new Note(noteName, octave);
 

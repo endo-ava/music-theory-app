@@ -46,42 +46,46 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
     };
   }, [selectedKey, hoveredKey, keyName, isMajor]);
 
-  // イベントハンドラーを定義
-  const handlers = useMemo(() => {
-    const keyData: Key = { name: keyName, isMajor, position };
+  // propsからkeyDataをメモ化
+  const keyData = useMemo<Key>(
+    () => ({ name: keyName, isMajor, position }),
+    [keyName, isMajor, position]
+  );
 
-    return {
-      handleClick: () => {
-        setSelectedKey(keyData);
-        // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
-        if (isMajor) {
-          playMajorChordAtPosition(position as FifthsIndex);
-        } else {
-          playMinorChordAtPosition(position as FifthsIndex);
-        }
-      },
-      handleMouseEnter: () => setHoveredKey(keyData),
-      handleMouseLeave: () => setHoveredKey(null),
-    };
+  // クリック時の処理をuseCallbackでメモ化
+  const handleClick = useCallback(() => {
+    setSelectedKey(keyData);
+    // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
+    if (isMajor) {
+      playMajorChordAtPosition(position as FifthsIndex);
+    } else {
+      playMinorChordAtPosition(position as FifthsIndex);
+    }
   }, [
-    keyName,
+    keyData,
     isMajor,
     position,
     setSelectedKey,
-    setHoveredKey,
     playMajorChordAtPosition,
     playMinorChordAtPosition,
   ]);
 
-  // handleClick等は不変なので、useCallbackでラップする
-  const memoizedHandlers = {
-    handleClick: useCallback(handlers.handleClick, [handlers.handleClick]),
-    handleMouseEnter: useCallback(handlers.handleMouseEnter, [handlers.handleMouseEnter]),
-    handleMouseLeave: useCallback(handlers.handleMouseLeave, [handlers.handleMouseLeave]),
-  };
+  // マウスエンター時の処理
+  const handleMouseEnter = useCallback(() => {
+    setHoveredKey(keyData);
+  }, [setHoveredKey, keyData]);
+
+  // マウスリーブ時の処理
+  const handleMouseLeave = useCallback(() => {
+    setHoveredKey(null);
+  }, [setHoveredKey]);
 
   return {
     states,
-    handlers: memoizedHandlers,
+    handlers: {
+      handleClick,
+      handleMouseEnter,
+      handleMouseLeave,
+    },
   };
 };
