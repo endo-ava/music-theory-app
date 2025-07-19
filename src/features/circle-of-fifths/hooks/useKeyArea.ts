@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 import { Key, CircleSegment as CircleSegmentType } from '@/features/circle-of-fifths/types';
+import { useAudio } from './useAudio';
+import { Position } from '@/domain';
 
 // フックが必要とするProps
 export interface UseKeyAreaProps {
@@ -18,6 +20,7 @@ export interface UseKeyAreaProps {
 export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
   const { position } = segment;
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
+  const { playMajorChordAtPosition, playMinorChordAtPosition } = useAudio();
 
   // 派生状態（選択、ホバー）をまとめて計算し、メモ化
   const states = useMemo(() => {
@@ -48,11 +51,27 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
     const keyData: Key = { name: keyName, isMajor, position };
 
     return {
-      handleClick: () => setSelectedKey(keyData),
+      handleClick: () => {
+        setSelectedKey(keyData);
+        // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
+        if (isMajor) {
+          playMajorChordAtPosition(position as Position);
+        } else {
+          playMinorChordAtPosition(position as Position);
+        }
+      },
       handleMouseEnter: () => setHoveredKey(keyData),
       handleMouseLeave: () => setHoveredKey(null),
     };
-  }, [keyName, isMajor, position, setSelectedKey, setHoveredKey]);
+  }, [
+    keyName,
+    isMajor,
+    position,
+    setSelectedKey,
+    setHoveredKey,
+    playMajorChordAtPosition,
+    playMinorChordAtPosition,
+  ]);
 
   // handleClick等は不変なので、useCallbackでラップする
   const memoizedHandlers = {
