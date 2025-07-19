@@ -111,20 +111,7 @@ export class Interval {
   }
 
   /**
-   * ファクトリーメソッド: セミトーン数から音程を作成
-   */
-  static fromSemitones(semitones: Semitones): Interval {
-    const entry = Object.entries(Interval.INTERVAL_MAP).find(([, value]) => value === semitones);
-
-    if (!entry) {
-      throw new Error(`No interval found for ${semitones} semitones`);
-    }
-
-    return new Interval(entry[0] as IntervalType);
-  }
-
-  /**
-   * 頻繁に使用される音程のファクトリーメソッド
+   * トライアド構築に必要な音程のファクトリーメソッド
    */
   static unison(): Interval {
     return new Interval('unison');

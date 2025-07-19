@@ -3,7 +3,7 @@
  */
 
 import { useCallback } from 'react';
-import { AudioEngine, ChordBuilder, Position } from '@/domain';
+import { AudioEngine, ChordBuilder, FifthsIndex } from '@/domain';
 
 /**
  * 音を鳴らすためのシンプルなフック
@@ -12,9 +12,9 @@ export const useAudio = () => {
   const chordBuilder = new ChordBuilder();
 
   const playMajorChordAtPosition = useCallback(
-    async (position: Position) => {
+    async (fifthsIndex: FifthsIndex) => {
       try {
-        const chord = chordBuilder.buildMajorTriadFromPosition(position);
+        const chord = chordBuilder.buildMajorTriadFromPosition(fifthsIndex);
         await AudioEngine.playChord(chord);
       } catch (error) {
         console.error('Failed to play chord:', error);
@@ -24,9 +24,9 @@ export const useAudio = () => {
   );
 
   const playMinorChordAtPosition = useCallback(
-    async (position: Position) => {
+    async (fifthsIndex: FifthsIndex) => {
       try {
-        const chord = chordBuilder.buildMinorTriadFromPosition(position);
+        const chord = chordBuilder.buildMinorTriadFromPosition(fifthsIndex);
         await AudioEngine.playChord(chord);
       } catch (error) {
         console.error('Failed to play chord:', error);
