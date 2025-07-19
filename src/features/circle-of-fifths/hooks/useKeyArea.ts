@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 import { Key, CircleSegment as CircleSegmentType } from '@/features/circle-of-fifths/types';
+import { useAudio } from './useAudio';
+import { FifthsIndex } from '@/domain';
 
 // フックが必要とするProps
 export interface UseKeyAreaProps {
@@ -18,6 +20,7 @@ export interface UseKeyAreaProps {
 export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
   const { position } = segment;
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
+  const { playMajorChordAtPosition, playMinorChordAtPosition } = useAudio();
 
   // 派生状態（選択、ホバー）をまとめて計算し、メモ化
   const states = useMemo(() => {
@@ -43,26 +46,46 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
     };
   }, [selectedKey, hoveredKey, keyName, isMajor]);
 
-  // イベントハンドラーを定義
-  const handlers = useMemo(() => {
-    const keyData: Key = { name: keyName, isMajor, position };
+  // propsからkeyDataをメモ化
+  const keyData = useMemo<Key>(
+    () => ({ name: keyName, isMajor, position }),
+    [keyName, isMajor, position]
+  );
 
-    return {
-      handleClick: () => setSelectedKey(keyData),
-      handleMouseEnter: () => setHoveredKey(keyData),
-      handleMouseLeave: () => setHoveredKey(null),
-    };
-  }, [keyName, isMajor, position, setSelectedKey, setHoveredKey]);
+  // クリック時の処理をuseCallbackでメモ化
+  const handleClick = useCallback(() => {
+    setSelectedKey(keyData);
+    // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
+    if (isMajor) {
+      playMajorChordAtPosition(position as FifthsIndex);
+    } else {
+      playMinorChordAtPosition(position as FifthsIndex);
+    }
+  }, [
+    keyData,
+    isMajor,
+    position,
+    setSelectedKey,
+    playMajorChordAtPosition,
+    playMinorChordAtPosition,
+  ]);
 
-  // handleClick等は不変なので、useCallbackでラップする
-  const memoizedHandlers = {
-    handleClick: useCallback(handlers.handleClick, [handlers.handleClick]),
-    handleMouseEnter: useCallback(handlers.handleMouseEnter, [handlers.handleMouseEnter]),
-    handleMouseLeave: useCallback(handlers.handleMouseLeave, [handlers.handleMouseLeave]),
-  };
+  // マウスエンター時の処理
+  const handleMouseEnter = useCallback(() => {
+    setHoveredKey(keyData);
+  }, [setHoveredKey, keyData]);
+
+  // マウスリーブ時の処理
+  const handleMouseLeave = useCallback(() => {
+    setHoveredKey(null);
+  }, [setHoveredKey]);
 
   return {
     states,
-    handlers: memoizedHandlers,
+    handlers: {
+      handleClick,
+      handleMouseEnter,
+      handleMouseLeave,
+    },
   };
 };
