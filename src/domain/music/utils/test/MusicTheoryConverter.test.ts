@@ -99,6 +99,81 @@ describe('MusicTheoryConverter', () => {
     });
   });
 
+  describe('FifthsIndex → 相対マイナーキー', () => {
+    it('正常ケース: 五度圏ポジションから相対マイナーキーの音名を取得', () => {
+      const expectedMapping: Array<[FifthsIndex, NoteName]> = [
+        [0, 'A'], // C major → A minor
+        [1, 'E'], // G major → E minor
+        [2, 'B'], // D major → B minor
+        [3, 'F#'], // A major → F# minor
+        [4, 'C#'], // E major → C# minor
+        [5, 'G#'], // B major → G# minor
+        [6, 'D#'], // F# major → D# minor
+        [7, 'A#'], // C# major → A# minor
+        [8, 'F'], // G# major → F minor
+        [9, 'C'], // D# major → C minor
+        [10, 'G'], // A# major → G minor
+        [11, 'D'], // F major → D minor
+      ];
+
+      expectedMapping.forEach(([fifthsIndex, expectedMinorNote]) => {
+        expect(MusicTheoryConverter.fifthsToRelativeMinorNoteName(fifthsIndex)).toBe(
+          expectedMinorNote
+        );
+      });
+    });
+
+    it('正常ケース: 相対メジャー・マイナー関係の一貫性', () => {
+      const allFifthsIndices: FifthsIndex[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+      allFifthsIndices.forEach(fifthsIndex => {
+        const majorNoteName = MusicTheoryConverter.fifthsToNoteName(fifthsIndex);
+        const relativeMinorNoteName =
+          MusicTheoryConverter.fifthsToRelativeMinorNoteName(fifthsIndex);
+
+        // メジャーキーから相対マイナーキーは短3度下（-3セミトーン）の関係
+        const expectedMinorNote = MusicTheoryConverter.transposeNoteName(majorNoteName, -3);
+        expect(relativeMinorNoteName).toBe(expectedMinorNote);
+      });
+    });
+
+    it('正常ケース: 音楽理論的正確性の検証', () => {
+      // よく知られた相対調の関係をテスト
+      const wellKnownPairs: Array<[FifthsIndex, NoteName, NoteName]> = [
+        [0, 'C', 'A'], // C major ↔ A minor
+        [1, 'G', 'E'], // G major ↔ E minor
+        [2, 'D', 'B'], // D major ↔ B minor
+        [11, 'F', 'D'], // F major ↔ D minor
+      ];
+
+      wellKnownPairs.forEach(([position, expectedMajor, expectedMinor]) => {
+        const actualMajor = MusicTheoryConverter.fifthsToNoteName(position);
+        const actualMinor = MusicTheoryConverter.fifthsToRelativeMinorNoteName(position);
+
+        expect(actualMajor).toBe(expectedMajor);
+        expect(actualMinor).toBe(expectedMinor);
+      });
+    });
+
+    it('正常ケース: ドメインモデル（Interval）使用の検証', () => {
+      // 内部でintervalToSemitonesByType('minor3rd')を使用していることを間接的に検証
+      const testCases: Array<[FifthsIndex, NoteName]> = [
+        [0, 'A'], // C - minor3rd = A
+        [6, 'D#'], // F# - minor3rd = D#
+      ];
+
+      testCases.forEach(([fifthsIndex, expectedMinor]) => {
+        const result = MusicTheoryConverter.fifthsToRelativeMinorNoteName(fifthsIndex);
+        expect(result).toBe(expectedMinor);
+
+        // 短3度（3セミトーン）が正しく適用されていることを確認
+        const majorNote = MusicTheoryConverter.fifthsToNoteName(fifthsIndex);
+        const manualCalculation = MusicTheoryConverter.transposeNoteName(majorNote, -3);
+        expect(result).toBe(manualCalculation);
+      });
+    });
+  });
+
   describe('FifthsIndex ↔ Semitones', () => {
     it('正常ケース: 五度圏からセミトーンへの変換', () => {
       const expectedMapping: Array<[FifthsIndex, Semitones]> = [

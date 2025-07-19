@@ -33,11 +33,12 @@ export class ChordBuilder {
    *
    * @param fifthsIndex 五度圏インデックス
    * @param octave 基準オクターブ（デフォルト: 4）
-   * @returns 対応するマイナートライアド
+   * @returns 対応するマイナートライアド（相対マイナーキー）
    */
   buildMinorTriadFromPosition(fifthsIndex: FifthsIndex, octave: Octave = 4): Chord {
-    const noteName = MusicTheoryConverter.fifthsToNoteName(fifthsIndex);
-    const rootNote = new Note(noteName, octave);
+    // 相対マイナーキーの音名を取得（メジャーキーから短3度下）
+    const minorNoteName = MusicTheoryConverter.fifthsToRelativeMinorNoteName(fifthsIndex);
+    const rootNote = new Note(minorNoteName, octave);
 
     return Chord.minor(rootNote);
   }

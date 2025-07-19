@@ -114,4 +114,18 @@ export class MusicTheoryConverter {
     const toChromatic = this.noteNameToChromatic(to);
     return (toChromatic - fromChromatic + 12) % 12;
   }
+
+  /**
+   * 五度圏ポジションから相対マイナーキーの音名を取得
+   *
+   * 各ポジションのメジャーキーから短3度下の音名が相対マイナーキーとなる
+   * 例: C major (position 0) → A minor
+   */
+  static fifthsToRelativeMinorNoteName(fifthsIndex: FifthsIndex): NoteName {
+    // メジャーキーの音名を取得
+    const majorNoteName = this.fifthsToNoteName(fifthsIndex);
+    // 短3度下の音名を算出（短3度を下降方向に適用）
+    const minorThirdDown = -this.intervalToSemitonesByType('minor3rd');
+    return this.transposeNoteName(majorNoteName, minorThirdDown);
+  }
 }

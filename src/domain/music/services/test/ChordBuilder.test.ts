@@ -75,19 +75,20 @@ describe('ChordBuilder', () => {
 
   describe('buildMinorTriadFromPosition', () => {
     it('正常ケース: 各五度圏ポジションからマイナートライアドを構築', () => {
+      // 各ポジションの相対マイナーキー（メジャーキーから短3度下）
       const testCases: Array<[FifthsIndex, string, string[]]> = [
-        [0, 'Cm', ['C4', 'D#4', 'G4']], // C minor
-        [1, 'Gm', ['G4', 'A#4', 'D5']], // G minor
-        [2, 'Dm', ['D4', 'F4', 'A4']], // D minor
-        [3, 'Am', ['A4', 'C5', 'E5']], // A minor
-        [4, 'Em', ['E4', 'G4', 'B4']], // E minor
-        [5, 'Bm', ['B4', 'D5', 'F#5']], // B minor
-        [6, 'F#m', ['F#4', 'A4', 'C#5']], // F# minor
-        [7, 'C#m', ['C#4', 'E4', 'G#4']], // C# minor
-        [8, 'G#m', ['G#4', 'B4', 'D#5']], // G# minor
-        [9, 'D#m', ['D#4', 'F#4', 'A#4']], // D# minor
-        [10, 'A#m', ['A#4', 'C#5', 'F5']], // A# minor
-        [11, 'Fm', ['F4', 'G#4', 'C5']], // F minor
+        [0, 'Am', ['A4', 'C5', 'E5']], // C major → A minor
+        [1, 'Em', ['E4', 'G4', 'B4']], // G major → E minor
+        [2, 'Bm', ['B4', 'D5', 'F#5']], // D major → B minor
+        [3, 'F#m', ['F#4', 'A4', 'C#5']], // A major → F# minor
+        [4, 'C#m', ['C#4', 'E4', 'G#4']], // E major → C# minor
+        [5, 'G#m', ['G#4', 'B4', 'D#5']], // B major → G# minor
+        [6, 'D#m', ['D#4', 'F#4', 'A#4']], // F# major → D# minor
+        [7, 'A#m', ['A#4', 'C#5', 'F5']], // C# major → A# minor
+        [8, 'Fm', ['F4', 'G#4', 'C5']], // G# major → F minor
+        [9, 'Cm', ['C4', 'D#4', 'G4']], // D# major → C minor
+        [10, 'Gm', ['G4', 'A#4', 'D5']], // A# major → G minor
+        [11, 'Dm', ['D4', 'F4', 'A4']], // F major → D minor
       ];
 
       testCases.forEach(([fifthsIndex, expectedName, expectedTones]) => {
@@ -101,17 +102,17 @@ describe('ChordBuilder', () => {
     });
 
     it('正常ケース: デフォルトオクターブ4での構築', () => {
-      const chord = chordBuilder.buildMinorTriadFromPosition(3); // A minor
+      const chord = chordBuilder.buildMinorTriadFromPosition(3); // F# minor (A major の相対マイナー)
 
       expect(chord.root.octave).toBe(4);
-      expect(chord.toneNotations).toEqual(['A4', 'C5', 'E5']);
+      expect(chord.toneNotations).toEqual(['F#4', 'A4', 'C#5']);
     });
 
     it('正常ケース: カスタムオクターブでの構築', () => {
       const testCases: Array<[FifthsIndex, number, string[]]> = [
-        [3, 3, ['A3', 'C4', 'E4']], // A minor, octave 3
-        [4, 5, ['E5', 'G5', 'B5']], // E minor, octave 5
-        [11, 2, ['F2', 'G#2', 'C3']], // F minor, octave 2
+        [3, 3, ['F#3', 'A3', 'C#4']], // F# minor (A major の相対マイナー), octave 3
+        [4, 5, ['C#5', 'E5', 'G#5']], // C# minor (E major の相対マイナー), octave 5
+        [11, 2, ['D2', 'F2', 'A2']], // D minor (F major の相対マイナー), octave 2
       ];
 
       testCases.forEach(([fifthsIndex, octave, expectedTones]) => {
@@ -123,7 +124,7 @@ describe('ChordBuilder', () => {
     });
 
     it('正常ケース: 構築した和音がChordインスタンス', () => {
-      const chord = chordBuilder.buildMinorTriadFromPosition(3);
+      const chord = chordBuilder.buildMinorTriadFromPosition(3); // F# minor
 
       expect(chord).toBeInstanceOf(Chord);
       expect(chord.root).toBeInstanceOf(Note);
@@ -132,15 +133,17 @@ describe('ChordBuilder', () => {
   });
 
   describe('音楽理論的整合性', () => {
-    it('正常ケース: 同じポジションのメジャーとマイナーコードのルート音一致', () => {
+    it('正常ケース: 同じポジションのメジャーとマイナーコードは相対調の関係', () => {
       const allPositions: FifthsIndex[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
       allPositions.forEach(position => {
         const majorChord = chordBuilder.buildMajorTriadFromPosition(position);
         const minorChord = chordBuilder.buildMinorTriadFromPosition(position);
 
-        expect(majorChord.root.noteName).toBe(minorChord.root.noteName);
+        // 相対マイナーキーは、メジャーキーから短3度下に位置する
         expect(majorChord.root.octave).toBe(minorChord.root.octave);
+        expect(majorChord.type).toBe('major');
+        expect(minorChord.type).toBe('minor');
       });
     });
 
@@ -163,7 +166,7 @@ describe('ChordBuilder', () => {
     });
 
     it('正常ケース: 相対メジャー・マイナー関係', () => {
-      // メジャーキーとその相対マイナーキーの関係性
+      // 同じポジションのメジャーキーとマイナーキーが相対調の関係になっている
       const relativeKeyPairs: Array<[FifthsIndex, string, string]> = [
         [0, 'C', 'Am'], // C major ↔ A minor
         [1, 'G', 'Em'], // G major ↔ E minor
@@ -173,9 +176,7 @@ describe('ChordBuilder', () => {
 
       relativeKeyPairs.forEach(([position, majorName, expectedMinorName]) => {
         const majorChord = chordBuilder.buildMajorTriadFromPosition(position);
-        // 相対マイナーは短3度下（五度圏で3ポジション右回り）
-        const relativeMinorPosition = ((position + 3) % 12) as FifthsIndex;
-        const minorChord = chordBuilder.buildMinorTriadFromPosition(relativeMinorPosition);
+        const minorChord = chordBuilder.buildMinorTriadFromPosition(position);
 
         expect(majorChord.name).toBe(majorName);
         expect(minorChord.name).toBe(expectedMinorName);
@@ -238,7 +239,7 @@ describe('ChordBuilder', () => {
       // 各和音が独立して正しく構築される
       expect(chord1.name).toBe('C');
       expect(chord2.name).toBe('G');
-      expect(chord3.name).toBe('Am');
+      expect(chord3.name).toBe('F#m');
 
       // インスタンスが異なる
       expect(chord1).not.toBe(chord2);
@@ -263,7 +264,7 @@ describe('ChordBuilder', () => {
       const progression = [
         chordBuilder.buildMajorTriadFromPosition(0), // I (C)
         chordBuilder.buildMajorTriadFromPosition(1), // V (G)
-        chordBuilder.buildMinorTriadFromPosition(3), // vi (Am)
+        chordBuilder.buildMinorTriadFromPosition(0), // vi (Am)
         chordBuilder.buildMajorTriadFromPosition(11), // IV (F)
       ];
 
