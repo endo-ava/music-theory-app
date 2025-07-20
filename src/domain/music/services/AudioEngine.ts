@@ -4,6 +4,7 @@
 
 import * as Tone from 'tone';
 import { Chord } from '../entities/Chord';
+import { SAMPLER_CONFIG } from '../config/audioAssets';
 
 /**
  * 音響エンジン - リアルなピアノサンプルを使用
@@ -30,8 +31,10 @@ export class AudioEngine {
     notes.forEach((note, i) => {
       setTimeout(() => {
         if (this.sampler) {
-          // 再生時にログを出力
-          console.log(`🎹 Playing note: ${note} (delay: ${i * this.config.arpeggioDelay}ms)`);
+          // 開発環境でのみログ出力
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🎹 Playing note: ${note} (delay: ${i * this.config.arpeggioDelay}ms)`);
+          }
 
           this.sampler.triggerAttackRelease(note, this.config.release);
         }
@@ -67,18 +70,19 @@ export class AudioEngine {
       await Tone.start();
     }
 
-    // ピアノサンプラー作成（基本的なピアノ音）
-    this.sampler = new Tone.Sampler({
-      urls: {
-        C4: 'https://tonejs.github.io/audio/salamander/C4.mp3',
-        'D#4': 'https://tonejs.github.io/audio/salamander/Ds4.mp3',
-        'F#4': 'https://tonejs.github.io/audio/salamander/Fs4.mp3',
-        A4: 'https://tonejs.github.io/audio/salamander/A4.mp3',
-      },
-      release: 1,
-      baseUrl: '',
-    }).toDestination();
-
-    this.sampler.volume.value = this.config.volume;
+    // ピアノサンプラー作成（設定ファイルから音源URL取得）
+    return new Promise<void>(resolve => {
+      this.sampler = new Tone.Sampler({
+        urls: SAMPLER_CONFIG.urls,
+        release: SAMPLER_CONFIG.release,
+        baseUrl: SAMPLER_CONFIG.baseUrl,
+        onload: () => {
+          if (this.sampler) {
+            this.sampler.volume.value = this.config.volume;
+          }
+          resolve();
+        },
+      }).toDestination();
+    });
   }
 }

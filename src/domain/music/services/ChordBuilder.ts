@@ -15,7 +15,7 @@ import { MusicTheoryConverter } from '../utils/MusicTheoryConverter';
  */
 export class ChordBuilder {
   /**
-   * PositionからメジャートライアドHを構築
+   * Positionからメジャートライアドを構築
    *
    * @param fifthsIndex 五度圏インデックス
    * @param octave 基準オクターブ（デフォルト: 4）

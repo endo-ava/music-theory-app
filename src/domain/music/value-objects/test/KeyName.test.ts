@@ -175,7 +175,7 @@ describe('KeyName型定義', () => {
       expect(fifthsOrderMajor.length).toBe(12);
 
       // 各ポジションが有効なMajorKeyNameであることを確認
-      fifthsOrderMajor.forEach((key, index) => {
+      fifthsOrderMajor.forEach(key => {
         const keyName: MajorKeyName = key;
         expect(keyName).toBe(key);
       });
@@ -201,7 +201,7 @@ describe('KeyName型定義', () => {
       expect(fifthsOrderMinor.length).toBe(12);
 
       // 各ポジションが有効なMinorKeyNameであることを確認
-      fifthsOrderMinor.forEach((key, index) => {
+      fifthsOrderMinor.forEach(key => {
         const keyName: MinorKeyName = key;
         expect(keyName).toBe(key);
       });
