@@ -77,11 +77,8 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
   const handleClick = useCallback(() => {
     setSelectedKey(keyData);
     // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
-    if (isMajor) {
-      playMajorChordAtPosition(position as FifthsIndex);
-    } else {
-      playMinorChordAtPosition(position as FifthsIndex);
-    }
+    const playChordFunction = isMajor ? playMajorChordAtPosition : playMinorChordAtPosition;
+    playChordFunction(position as FifthsIndex);
   }, [
     keyData,
     isMajor,

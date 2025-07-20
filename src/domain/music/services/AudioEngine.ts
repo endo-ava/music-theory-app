@@ -66,7 +66,8 @@ export class AudioEngine {
     if (this.sampler) return;
 
     // Tone.js開始（ユーザー操作時）
-    if (Tone.getContext().state !== 'running') {
+    const REQUIRED_CONTEXT_STATE = 'running' as const;
+    if (Tone.getContext().state !== REQUIRED_CONTEXT_STATE) {
       await Tone.start();
     }
 

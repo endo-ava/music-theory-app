@@ -134,7 +134,10 @@ describe('useAudio', () => {
       });
 
       // エラーがログに出力される
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to play chord:', expect.any(Error));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to play major chord at position 0:',
+        expect.any(Error)
+      );
 
       // AudioEngine.playChordは呼ばれない
       expect(mockDomain.AudioEngine.playChord).not.toHaveBeenCalled();
@@ -154,7 +157,10 @@ describe('useAudio', () => {
       });
 
       // エラーがログに出力される
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to play chord:', expect.any(Error));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to play major chord at position 0:',
+        expect.any(Error)
+      );
 
       consoleErrorSpy.mockRestore();
     });
@@ -215,7 +221,10 @@ describe('useAudio', () => {
       });
 
       // エラーがログに出力される
-      expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to play chord:', expect.any(Error));
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to play minor chord at position 3:',
+        expect.any(Error)
+      );
 
       consoleErrorSpy.mockRestore();
     });

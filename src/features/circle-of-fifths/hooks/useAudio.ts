@@ -17,7 +17,7 @@ export const useAudio = () => {
         const chord = chordBuilder.buildMajorTriadFromPosition(fifthsIndex);
         await AudioEngine.playChord(chord);
       } catch (error) {
-        console.error('Failed to play chord:', error);
+        console.error(`Failed to play major chord at position ${fifthsIndex}:`, error);
       }
     },
     [chordBuilder]
@@ -29,7 +29,7 @@ export const useAudio = () => {
         const chord = chordBuilder.buildMinorTriadFromPosition(fifthsIndex);
         await AudioEngine.playChord(chord);
       } catch (error) {
-        console.error('Failed to play chord:', error);
+        console.error(`Failed to play minor chord at position ${fifthsIndex}:`, error);
       }
     },
     [chordBuilder]
