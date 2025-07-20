@@ -12,11 +12,17 @@ import { Note } from '../../value-objects/Note';
 vi.mock('tone', () => ({
   start: vi.fn().mockResolvedValue(undefined),
   getContext: vi.fn().mockReturnValue({ state: 'running' }),
-  Sampler: vi.fn().mockImplementation(() => ({
-    triggerAttackRelease: vi.fn(),
-    volume: { value: -10 },
-    toDestination: vi.fn().mockReturnThis(),
-  })),
+  Sampler: vi.fn().mockImplementation(config => {
+    // onloadコールバックがある場合は即座に実行
+    if (config && config.onload) {
+      setTimeout(() => config.onload(), 0);
+    }
+    return {
+      triggerAttackRelease: vi.fn(),
+      volume: { value: -10 },
+      toDestination: vi.fn().mockReturnThis(),
+    };
+  }),
 }));
 
 describe('AudioEngine', () => {
