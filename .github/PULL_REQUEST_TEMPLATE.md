@@ -1,3 +1,5 @@
+<!-- レビューは日本語で行うこと -->
+
 # Overview
 
 ## Related Issues
