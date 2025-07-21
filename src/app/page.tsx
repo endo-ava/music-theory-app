@@ -1,6 +1,7 @@
 import { Canvas } from '@/components/layouts/Canvas';
 import { SidePanel } from '@/components/layouts/SidePanel';
-import { MobileBottomSheet } from '@/components/layouts/MobileBottomSheet';
+
+import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet';
 
 /**
  * ホームページコンポーネント
@@ -25,11 +26,18 @@ export default function Home() {
         <SidePanel className="hidden w-fit max-w-[42rem] min-w-[32rem] pl-8 md:block" />
 
         {/* Right: Canvas - 残り領域を使用 */}
-        <Canvas className="flex-1" />
-      </main>
+        {/* モバイルの時だけインタラクティブな部分をラッパーで囲む。 */}
+        <div className="flex-1 md:hidden">
+          <MobileInteractionWrapper>
+            <Canvas className="flex-1" />
+          </MobileInteractionWrapper>
+        </div>
 
-      {/* モバイル専用レイアウト - モバイル（md未満）のみ表示 */}
-      <MobileBottomSheet className="md:hidden" />
+        {/* デスクトップの時は、Canvasはインタラクション不要 */}
+        <div className="hidden flex-1 md:block">
+          <Canvas className="flex-1" />
+        </div>
+      </main>
     </div>
   );
 }

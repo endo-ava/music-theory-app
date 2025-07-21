@@ -1,9 +1,4 @@
 /**
- * BottomSheet状態の定義
- */
-export type BottomSheetState = 'collapsed' | 'half' | 'expanded';
-
-/**
  * タブの型定義
  */
 export interface Tab {
