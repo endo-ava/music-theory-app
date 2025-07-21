@@ -54,7 +54,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
                 <div className="w-8" />
                 {/* キャンセルボタン */}
                 <button
-                  onClick={_ => {
+                  onClick={() => {
                     setActiveSnapPoint(SNAP_POINTS.LOWEST);
                   }}
                   className="text-text-secondary hover:text-text-primary flex h-8 w-8 items-center justify-center rounded-md transition-colors"
