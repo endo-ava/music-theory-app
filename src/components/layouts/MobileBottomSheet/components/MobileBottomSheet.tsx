@@ -37,7 +37,6 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
       <VaulDrawer.Portal>
         <VaulDrawer.Overlay className="pointer-events-none fixed inset-0 z-50 bg-black/40" />
         <VaulDrawer.Content
-          onClick={e => e.stopPropagation()}
           className={cn(
             'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-full flex-col rounded-t-[10px] border',
             'bg-background-muted/80 border-border backdrop-blur-sm',
@@ -55,12 +54,12 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
                 <div className="w-8" />
                 {/* キャンセルボタン */}
                 <button
-                  onClick={e => {
-                    e.stopPropagation(); // イベントの伝播を停止
+                  onClick={_ => {
                     setActiveSnapPoint(SNAP_POINTS.LOWEST);
                   }}
                   className="text-text-secondary hover:text-text-primary flex h-8 w-8 items-center justify-center rounded-md transition-colors"
                   aria-label="閉じる"
+                  type="button"
                 >
                   {/* Xアイコン */}
                   <CloseIcon className="h-4 w-4" />

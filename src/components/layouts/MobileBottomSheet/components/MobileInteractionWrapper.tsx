@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { MobileBottomSheet } from './MobileBottomSheet';
 import { SNAP_POINTS, TABS } from '../constants';
 
@@ -16,17 +16,17 @@ export function MobileInteractionWrapper({ children }: MobileInteractionWrapperP
   // タブ用のstate
   const [activeTab, setActiveTab] = useState<string>(TABS[1].id);
 
+  // Memoized onClick handler for background click
+  const handleBackgroundClick = useCallback(() => {
+    if (activeSnapPoint !== SNAP_POINTS.LOWEST) {
+      setActiveSnapPoint(SNAP_POINTS.LOWEST);
+    }
+  }, [activeSnapPoint]);
+
   return (
     <>
       {/* 背景クリック用のラッパー */}
-      <div
-        className="flex-1"
-        onClick={() => {
-          if (activeSnapPoint !== SNAP_POINTS.LOWEST) {
-            setActiveSnapPoint(SNAP_POINTS.LOWEST);
-          }
-        }}
-      >
+      <div className="flex-1" onClick={handleBackgroundClick}>
         {/* Homeコンポーネントから渡された子要素（Canvasなど）を表示 */}
         {children}
       </div>
