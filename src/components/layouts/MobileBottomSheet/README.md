@@ -1,13 +1,13 @@
 # MobileBottomSheet 設計書
 
 > **作成日**: 2024-07-14  
-> **更新日**: 2024-07-14  
-> **バージョン**: 1.0.0  
+> **更新日**: 2024-07-21  
+> **バージョン**: 1.1.0  
 > **作成者**: Claude Code
 
 [<< 画面設計書に戻る](../../../docs/screenDesigns/)
 
-モバイル環境における画面下部からのスライドアップ式UIコンテナコンポーネント。ドラッグ操作による3段階の高さ調整と、内部コンテンツのスクロール競合回避機能を提供します。
+モバイル環境における画面下部からのスライドアップ式UIコンテナコンポーネント。Vaulライブラリベースでスナップポイント機能による3段階の高さ調整と、背景インタラクション両立機能を提供します。
 
 ## 📋 目次
 
@@ -28,81 +28,85 @@ MobileBottomSheetは、モバイル端末での画面下部からスライドア
 
 ### 主要機能
 
-- **3段階の高さ調整**: collapsed（折りたたみ）/ half（半開き）/ expanded（全開）状態への切り替え
-- **ドラッグ操作**: 指やマウスでのドラッグによる自然な操作感
-- **スクロール競合回避**: 内部コンテンツのスクロールとシートの移動を適切に判定・制御
-- **アニメーション**: Framer Motionによるスムーズなトランジション効果
-- **キーボードサポート**: Escapeキーでの閉じる操作とフォーカス管理
-- **アクセシビリティ**: ARIA属性による支援技術対応
+- **3段階のスナップポイント**: LOWEST（6%）/ HALF（50%）/ EXPANDED（90%）状態への切り替え
+- **ドラッグ操作**: Vaulライブラリによる滑らかなドラッグ＆スナップ操作
+- **背景インタラクション両立**: `modal={false}` + `dismissible={false}`で背景クリック可能
+- **状態管理の外部化**: MobileInteractionWrapperでの集約的状態管理
+- **タブナビゲーション**: View/Layer切り替えUIの内蔵
+- **アクセシビリティ**: ARIA属性とキーボード操作サポート
 
 ## アーキテクチャ
 
 ### コンポーネント構成
 
-- **MobileBottomSheet**: メインコンポーネント。全体の制御とアニメーションを担当
-- **BottomSheetHeader**: ハンドル、タイトル、閉じるボタンを含むヘッダー部分
-- **BottomSheetContent**: タブナビゲーションとコンテンツエリアを管理
-- **BottomSheetTabNavigation**: タブ切り替えUI
+- **MobileInteractionWrapper**: 状態管理とインタラクション制御のメインコンテナ
+- **MobileBottomSheet**: VaulDrawer.Rootをラップしたプレゼンテーショナルコンポーネント
+- **BottomSheetTabNavigation**: View/Layerタブ切り替えUIコンポーネント
+- **VaulDrawer.Overlay**: 背景オーバーレイ（pointer-events-none設定）
+- **VaulDrawer.Content**: ドロワーのメインコンテンツエリア
+- **HandleIcon/CloseIcon**: ドラッグハンドルと閉じるボタンのアイコン
 
 ### コンポーネント構成図
 
 ```mermaid
 graph TD
-    A[MobileBottomSheet] --> B[BottomSheetHeader]
-    A --> C[BottomSheetContent]
-    C --> D[BottomSheetTabNavigation]
-    A --> E[useBottomSheet Hook]
-    E --> F[useBodyScrollLock Hook]
-    E --> G[useFixedViewportHeight Hook]
+    A[MobileInteractionWrapper] --> B[useState: activeSnapPoint]
+    A --> C[useState: activeTab]
+    A --> D[MobileBottomSheet]
+    A --> E[背景クリックイベントハンドラー]
+    D --> F[VaulDrawer.Root]
+    D --> G[BottomSheetTabNavigation]
+    F --> H[VaulDrawer.Overlay]
+    F --> I[VaulDrawer.Content]
+    I --> J[ViewController]
+    I --> K[Layer Content]
 ```
 
 ### データフロー図
 
 ```mermaid
 flowchart LR
-    A[親コンポーネント] -->|className| B[MobileBottomSheet]
-    B -->|useBottomSheet| C[カスタムフック]
-    C -->|状態管理| D[BottomSheetState]
-    D -->|Props| E[BottomSheetHeader]
-    D -->|Props| F[BottomSheetContent]
-    E -->|onToggle/onClose| C
-    F -->|スクロール判定| G[ドラッグ制御]
-    G -->|状態変更| D
+    A[親コンポーネント] -->|children| B[MobileInteractionWrapper]
+    B -->|状態管理| C[activeSnapPoint/activeTab]
+    B -->|背景クリック| D[setActiveSnapPoint]
+    B -->|Props| E[MobileBottomSheet]
+    E -->|Vaul制御| F[VaulDrawer.Root]
+    E -->|タブ切り替え| G[onTabChange]
+    F -->|スナップポイント| H[activeSnapPoint]
+    G -->|状態更新| C
 ```
 
 ### ファイル構造
 
 ```
 src/components/layouts/MobileBottomSheet/
-├── README.md                           # このファイル
+├── README.md                              # このファイル
+├── index.ts                               # エクスポート統合
 ├── components/
-│   ├── MobileBottomSheet.tsx          # メインコンポーネント
-│   ├── BottomSheetHeader.tsx          # ヘッダー部分
-│   ├── BottomSheetContent.tsx         # コンテンツエリア
-│   └── BottomSheetTabNavigation.tsx   # タブナビゲーション
-├── hooks/
-│   └── useBottomSheet.ts              # 状態管理とロジック
+│   ├── MobileInteractionWrapper.tsx      # 状態管理ラッパー
+│   ├── MobileBottomSheet.tsx              # Vaulドロワーラッパー
+│   └── BottomSheetTabNavigation.tsx      # タブナビゲーション
 ├── constants/
-│   └── index.ts                       # 設定定数
+│   └── index.ts                           # SNAP_POINTS, TABS定義
 ├── types/
-│   └── index.ts                       # 型定義
+│   └── index.ts                           # 型定義
 └── __stories__/
-    └── MobileBottomSheet.stories.tsx  # Storybookテスト
+    └── MobileBottomSheet.stories.tsx      # Storybookテスト
 ```
 
 ### 依存関係
 
 #### 内部依存
 
-- `@/shared/hooks/useBodyScrollLock` - 背景スクロール制御
-- `@/shared/hooks/useFixedViewportHeight` - 固定ビューポート高さ取得
-- `@/shared/utils/scroll` - スクロール要素判定ユーティリティ
-- `@/shared/types` - 共通型定義
+- `@/features/view-controller` - Viewタブコンテンツ
+- `@/shared/components/icons` - HandleIcon, CloseIcon
+- `@/shared/types` - 共通型定義 (ClassNameProps)
+- `@/lib/utils` - cn関数 (tailwind-merge)
 
 #### 外部依存
 
 - `react` - Reactフレームワーク
-- `motion` - アニメーションライブラリ (Framer Motion)
+- `vaul` - Drawer/BottomSheetライブラリ
 - `tailwind-merge` - Tailwindクラス最適化
 
 ## 技術仕様
@@ -175,15 +179,16 @@ interface UseBottomSheetReturn {
 }
 ```
 
-### 定数設定
+### Vaul設定
 
 ```typescript
-const SHEET_CONFIG = {
-  vh: 0.85, // ビューポート高さに対する割合
-  expandedTopMarginPx: 20, // 全開時の上部マージン
-  halfOpenRatio: 0.5, // 半開き時の高さ比率
-  collapsedVisiblePx: 60, // 折りたたみ時の可視領域
-  velocityThreshold: 500, // 高速スワイプ判定の閾値
+// VaulDrawer.Rootの主要プロパティ
+const VAUL_CONFIG = {
+  shouldScaleBackground: true, // 背景スケール効果
+  dismissible: false, // オーバーレイクリックで閉じない
+  modal: false, // 背景インタラクションを有効に
+  defaultOpen: true, // 初期状態で開いておく
+  snapPoints: [0.06, 0.5, 0.9], // スナップポイント設定
 };
 ```
 
@@ -192,18 +197,20 @@ const SHEET_CONFIG = {
 ### 基本的な使用
 
 ```tsx
-import { MobileBottomSheet } from '@/components/layouts/MobileBottomSheet';
+import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet';
+import { Canvas } from '@/components/layouts/Canvas';
 
-function App() {
+function MobileApp() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* メインコンテンツ */}
-      <main className="p-4">
-        <h1>メインコンテンツ</h1>
+    <div className="flex h-screen flex-col">
+      <main className="flex flex-1">
+        {/* モバイル用レイアウト */}
+        <div className="flex-1 md:hidden">
+          <MobileInteractionWrapper>
+            <Canvas className="flex-1" />
+          </MobileInteractionWrapper>
+        </div>
       </main>
-
-      {/* ボトムシート */}
-      <MobileBottomSheet />
     </div>
   );
 }
@@ -212,15 +219,29 @@ function App() {
 ### カスタマイズ例
 
 ```tsx
-import { MobileBottomSheet } from '@/components/layouts/MobileBottomSheet';
+import {
+  MobileInteractionWrapper,
+  MobileBottomSheet,
+} from '@/components/layouts/MobileBottomSheet';
+import { useState } from 'react';
 
 function CustomExample() {
+  const [snapPoint, setSnapPoint] = useState(0.06);
+  const [activeTab, setActiveTab] = useState('view');
+
   return (
     <div className="relative">
-      {/* 他のコンテンツ */}
+      {/* 背景コンテンツ */}
+      <div onClick={() => setSnapPoint(0.06)}>{/* メインコンテンツ */}</div>
 
       {/* カスタムスタイルのボトムシート */}
-      <MobileBottomSheet className="custom-bottom-sheet shadow-2xl" />
+      <MobileBottomSheet
+        className="custom-bottom-sheet shadow-2xl"
+        activeSnapPoint={snapPoint}
+        setActiveSnapPoint={setSnapPoint}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
     </div>
   );
 }
@@ -260,26 +281,27 @@ MobileBottomSheetは「モバイル環境でのボトムシート表示」とい
 
 ### 最適化手法
 
-- **`React.memo`**: BottomSheetHeader、BottomSheetContentで不要な再レンダリングを防止
+- **状態の集約化**: MobileInteractionWrapperで状態管理を一元化
+- **React.memo**: BottomSheetTabNavigationで不要な再レンダリングを防止
 - **`useCallback`**: イベントハンドラーの参照安定化
-- **`useMemo`**: スナップポイント計算のメモ化
-- **Framer Motion**: GPUアクセラレーションを活用したアニメーション
+- **Vaul**: 高パフォーマンスなドラッグ＆スナップアニメーション
 
 ### レンダリング最適化
 
 ```typescript
-// スナップポイントの計算をメモ化
-const { snapPoints, sheetHeight } = useMemo(() => {
-  const sheetHeight = windowHeight * SHEET_CONFIG.vh;
-  return {
-    sheetHeight,
-    snapPoints: {
-      expanded: SHEET_CONFIG.expandedTopMarginPx,
-      half: sheetHeight * SHEET_CONFIG.halfOpenRatio,
-      collapsed: sheetHeight - SHEET_CONFIG.collapsedVisiblePx,
-    },
-  };
-}, [windowHeight]);
+// スナップポイント定数の一元管理
+export const SNAP_POINTS = {
+  LOWEST: 0.06,
+  HALF: 0.5,
+  EXPANDED: 0.9,
+} as const;
+
+// イベントハンドラーの最適化
+const handleBackgroundClick = useCallback(() => {
+  if (activeSnapPoint !== SNAP_POINTS.LOWEST) {
+    setActiveSnapPoint(SNAP_POINTS.LOWEST);
+  }
+}, [activeSnapPoint, setActiveSnapPoint]);
 ```
 
 ## アクセシビリティ
