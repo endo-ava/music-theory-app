@@ -21,7 +21,7 @@ export function MobileInteractionWrapper({ children }: MobileInteractionWrapperP
     if (activeSnapPoint !== SNAP_POINTS.LOWEST) {
       setActiveSnapPoint(SNAP_POINTS.LOWEST);
     }
-  }, [activeSnapPoint]);
+  }, [activeSnapPoint, setActiveSnapPoint]);
 
   return (
     <>
