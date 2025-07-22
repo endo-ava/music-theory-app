@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { MobileBottomSheet } from './MobileBottomSheet';
 import { SNAP_POINTS, TABS } from '../constants';
 
@@ -22,6 +22,25 @@ export function MobileInteractionWrapper({ children }: MobileInteractionWrapperP
       setActiveSnapPoint(SNAP_POINTS.LOWEST);
     }
   }, [activeSnapPoint, setActiveSnapPoint]);
+
+  // ボトムシートが開いている時に背景スクロールを無効化
+  useEffect(() => {
+    if (activeSnapPoint !== SNAP_POINTS.LOWEST) {
+      // ボトムシートが開いている場合、背景スクロールを無効化
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      // ボトムシートが閉じている場合、背景スクロールを有効化
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+
+    // クリーンアップ
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [activeSnapPoint]);
 
   return (
     <>
