@@ -19,7 +19,7 @@ import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet
  */
 export default function Home() {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-[calc(100dvh-4rem)] flex-col">
       {/* 2-column layout: Side Panel + Canvas */}
       <main className="flex flex-1">
         {/* Left: Side Panel - デスクトップ（md以上）のみ表示 */}
