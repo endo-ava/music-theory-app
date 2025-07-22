@@ -32,10 +32,15 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
       activeSnapPoint={activeSnapPoint}
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
+      closeThreshold={0.25}
+      scrollLockTimeout={100}
       defaultOpen
     >
       <VaulDrawer.Portal>
-        <VaulDrawer.Overlay className="pointer-events-none fixed inset-0 z-50 bg-black/40" />
+        <VaulDrawer.Overlay
+          className="fixed inset-0 z-50 bg-black/40"
+          onClick={() => setActiveSnapPoint(SNAP_POINTS.LOWEST)}
+        />
         <VaulDrawer.Content
           className={cn(
             'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-full flex-col rounded-t-[10px] border',
