@@ -70,8 +70,8 @@
     background-attachment: fixed;
     /* 画面全体にフィット */
     background-size: 100% 100%;
-    /* 画面全体にの最小高さ */
-    min-height: 100vh;
+    /* 画面全体にの最小高さ（モバイルブラウザのアドレスバー考慮） */
+    min-height: 100dvh;
   }
 
   /* 他にもh1やaタグなどのデフォルトスタイルをここで定義できる */
