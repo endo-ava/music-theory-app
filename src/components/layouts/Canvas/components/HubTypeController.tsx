@@ -18,10 +18,10 @@ export const HubTypeController: React.FC = () => {
   const { hubType } = useHubStore();
 
   useEffect(() => {
-    const container = document.querySelector('.hub-container');
-    if (container) {
+    const containers = document.querySelectorAll('.hub-container');
+    containers.forEach(container => {
       container.setAttribute('data-hub-type', hubType);
-    }
+    });
   }, [hubType]);
 
   // レンダリングしない（純粋なDOM操作コンポーネント）
