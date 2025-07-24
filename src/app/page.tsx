@@ -19,23 +19,20 @@ import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet
  */
 export default function Home() {
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-[calc(100dvh-var(--header-height))] flex-col">
       {/* 2-column layout: Side Panel + Canvas */}
       <main className="flex flex-1">
-        {/* Left: Side Panel - デスクトップ（md以上）のみ表示 */}
-        <SidePanel className="hidden w-fit max-w-[42rem] min-w-[32rem] pl-8 md:block" />
+        {/* デスクトップ */}
+        {/* Left: Side Panel */}
+        <SidePanel className="hidden w-fit max-w-[var(--sidebar-width-max)] min-w-[var(--sidebar-width-min)] pl-8 md:block" />
+        {/* Right: Canvas */}
+        <Canvas className="hidden flex-1 md:block" />
 
-        {/* Right: Canvas - 残り領域を使用 */}
-        {/* モバイルの時だけインタラクティブな部分をラッパーで囲む。 */}
+        {/* モバイル */}
         <div className="flex-1 md:hidden">
           <MobileInteractionWrapper>
             <Canvas className="flex-1" />
           </MobileInteractionWrapper>
-        </div>
-
-        {/* デスクトップの時は、Canvasはインタラクション不要 */}
-        <div className="hidden flex-1 md:block">
-          <Canvas className="flex-1" />
         </div>
       </main>
     </div>
