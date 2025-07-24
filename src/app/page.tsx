@@ -22,20 +22,17 @@ export default function Home() {
     <div className="flex h-[calc(100dvh-4rem)] flex-col">
       {/* 2-column layout: Side Panel + Canvas */}
       <main className="flex flex-1">
-        {/* Left: Side Panel - デスクトップ（md以上）のみ表示 */}
+        {/* デスクトップ */}
+        {/* Left: Side Panel */}
         <SidePanel className="hidden w-fit max-w-[42rem] min-w-[32rem] pl-8 md:block" />
+        {/* Right: Canvas */}
+        <Canvas className="hidden flex-1 md:block" />
 
-        {/* Right: Canvas - 残り領域を使用 */}
-        {/* モバイルの時だけインタラクティブな部分をラッパーで囲む。 */}
+        {/* モバイル */}
         <div className="flex-1 md:hidden">
           <MobileInteractionWrapper>
             <Canvas className="flex-1" />
           </MobileInteractionWrapper>
-        </div>
-
-        {/* デスクトップの時は、Canvasはインタラクション不要 */}
-        <div className="hidden flex-1 md:block">
-          <Canvas className="flex-1" />
         </div>
       </main>
     </div>
