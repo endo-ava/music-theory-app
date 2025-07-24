@@ -32,8 +32,8 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
       activeSnapPoint={activeSnapPoint}
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
-      closeThreshold={0.25}
-      scrollLockTimeout={100}
+      closeThreshold={0.25} // ドローワーの高さの25%がドラッグされると閉じる
+      scrollLockTimeout={100} // スクロールロックが適用されるまでの遅延時間
       defaultOpen
     >
       <VaulDrawer.Portal>

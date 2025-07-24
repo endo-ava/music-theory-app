@@ -51,6 +51,11 @@
   /* ヘッダー専用フォントウェイト */
   --font-weight-header-logo: 600;
   --font-weight-header-nav: 500;
+
+  /* レイアウト関連 (layout) */
+  --header-height: 4rem;
+  --sidebar-width-min: 32rem;
+  --sidebar-width-max: 42rem;
 }
 
 /* ---------------------------------- */
