@@ -28,17 +28,17 @@ export function MobileInteractionWrapper({ children }: MobileInteractionWrapperP
     if (activeSnapPoint !== SNAP_POINTS.LOWEST) {
       // ボトムシートが開いている場合、背景スクロールを無効化
       document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
+      document.body.style.overscrollBehavior = 'contain'; // プルトゥリフレッシュ防止
     } else {
       // ボトムシートが閉じている場合、背景スクロールを有効化
       document.body.style.overflow = '';
-      document.body.style.touchAction = '';
+      document.body.style.overscrollBehavior = '';
     }
 
     // クリーンアップ
     return () => {
       document.body.style.overflow = '';
-      document.body.style.touchAction = '';
+      document.body.style.overscrollBehavior = '';
     };
   }, [activeSnapPoint]);
 

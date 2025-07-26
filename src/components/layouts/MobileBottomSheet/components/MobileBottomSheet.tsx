@@ -33,7 +33,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
       closeThreshold={0.25} // ドローワーの高さの25%がドラッグされると閉じる
-      scrollLockTimeout={100} // スクロールロックが適用されるまでの遅延時間
+      scrollLockTimeout={0} // スクロールロックが適用されるまでの遅延時間
       defaultOpen
     >
       <VaulDrawer.Portal>
@@ -42,6 +42,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
           onClick={() => setActiveSnapPoint(SNAP_POINTS.LOWEST)}
         />
         <VaulDrawer.Content
+          data-vaul-drag-handle
           className={cn(
             'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-full flex-col rounded-t-[10px] border',
             'bg-background-muted/80 border-border backdrop-blur-sm',
