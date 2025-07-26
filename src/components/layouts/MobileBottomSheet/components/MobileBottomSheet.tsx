@@ -26,18 +26,14 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
 }) => {
   return (
     <VaulDrawer.Root
-      shouldScaleBackground={false} // 実機でのレンダリング負荷軽減
+      shouldScaleBackground
       dismissible={false}
       modal={false}
       activeSnapPoint={activeSnapPoint}
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
-      closeThreshold={0.1} // より敏感な閾値設定（実機での反応改善）
-      scrollLockTimeout={0} // 即座にスクロールロック適用
-      snapToSequentialPoint={false} // 速度ベースのスワイプを有効化
-      handleOnly={false} // 全体でドラッグ可能を維持
-      noBodyStyles={false} // vaulの標準スタイル制御を使用
-      repositionInputs={true} // iOS キーボード問題の回避
+      closeThreshold={0.25} // ドローワーの高さの25%がドラッグされると閉じる
+      scrollLockTimeout={0} // スクロールロックが適用されるまでの遅延時間
       defaultOpen
     >
       <VaulDrawer.Portal>
