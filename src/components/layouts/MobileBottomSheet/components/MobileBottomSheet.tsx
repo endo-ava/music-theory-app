@@ -8,6 +8,7 @@ import { SNAP_POINTS, TABS } from '../constants';
 import { cn } from '@/lib/utils';
 import type { ClassNameProps } from '@/shared/types';
 import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
+import { useCustomTouchHandler } from '../hooks/useCustomTouchHandler';
 
 // propsの型定義
 interface MobileBottomSheetProps extends ClassNameProps {
@@ -24,6 +25,13 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   activeTab,
   onTabChange,
 }) => {
+  // カスタムタッチハンドラーでvaulの判定をバイパス
+  const { touchHandlers } = useCustomTouchHandler({
+    activeSnapPoint,
+    setActiveSnapPoint,
+    isEnabled: true,
+  });
+
   return (
     <VaulDrawer.Root
       shouldScaleBackground
@@ -33,7 +41,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
       closeThreshold={0.25} // ドローワーの高さの25%がドラッグされると閉じる
-      scrollLockTimeout={100} // スクロールロックが適用されるまでの遅延時間
+      scrollLockTimeout={0} // スクロールロックが適用されるまでの遅延時間
       defaultOpen
     >
       <VaulDrawer.Portal>
@@ -47,6 +55,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             'bg-background-muted/80 border-border backdrop-blur-sm',
             className
           )}
+          {...touchHandlers}
         >
           <div className="flex h-full flex-col">
             {/* ヘッダー */}
