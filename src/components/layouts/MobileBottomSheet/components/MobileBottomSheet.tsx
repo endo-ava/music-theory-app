@@ -8,6 +8,7 @@ import { SNAP_POINTS, TABS } from '../constants';
 import { cn } from '@/lib/utils';
 import type { ClassNameProps } from '@/shared/types';
 import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
+import { useCustomTouchHandler } from '../hooks/useCustomTouchHandler';
 
 // propsの型定義
 interface MobileBottomSheetProps extends ClassNameProps {
@@ -24,6 +25,13 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   activeTab,
   onTabChange,
 }) => {
+  // カスタムタッチハンドラーでvaulの判定をバイパス
+  const { touchHandlers } = useCustomTouchHandler({
+    activeSnapPoint,
+    setActiveSnapPoint,
+    isEnabled: true,
+  });
+
   return (
     <VaulDrawer.Root
       shouldScaleBackground
@@ -42,12 +50,12 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
           onClick={() => setActiveSnapPoint(SNAP_POINTS.LOWEST)}
         />
         <VaulDrawer.Content
-          data-vaul-drag-handle
           className={cn(
             'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-full flex-col rounded-t-[10px] border',
             'bg-background-muted/80 border-border backdrop-blur-sm',
             className
           )}
+          {...touchHandlers}
         >
           <div className="flex h-full flex-col">
             {/* ヘッダー */}
