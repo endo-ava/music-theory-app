@@ -107,4 +107,10 @@
   .hub-container[data-hub-type='chromatic-circle'] .hub-circle-of-fifths {
     display: none;
   }
+
+  /* カスタムタッチハンドラー用スタイル */
+  .custom-touch-handler-active {
+    overscroll-behavior: contain;
+    touch-action: pan-x pinch-zoom;
+  }
 }

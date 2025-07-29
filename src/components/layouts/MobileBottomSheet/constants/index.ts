@@ -28,7 +28,7 @@ export const TABS: Tab[] = [
 export const SNAP_POINTS = {
   /** 最小化状態：画面の6%の高さに表示 */
   LOWEST: 0.06,
-  /** 中間状態：画面の50%の高さに表示 */
+  /** 中間状態：画面の40%の高さに表示  */
   HALF: 0.4,
   /** 展開状態：画面の90%の高さに表示 */
   EXPANDED: 0.9,
