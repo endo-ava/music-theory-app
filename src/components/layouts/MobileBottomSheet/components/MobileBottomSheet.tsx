@@ -56,7 +56,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             className
           )}
         >
-          {/* カスタムタッチハンドラー用ラッパー（vaultとの競合回避） */}
+          {/* カスタムタッチハンドラー用ラッパー（vaulとの競合回避） */}
           <div className="flex h-full flex-col" {...touchHandlers}>
             {/* ヘッダー */}
             <div className="border-border border-b px-4 pt-3 pb-4">
