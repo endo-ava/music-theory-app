@@ -3,6 +3,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { SNAP_POINTS } from '../constants';
 
+// タッチ操作の閾値定数
+const TOUCH_THRESHOLDS = {
+  /** ドラッグ開始判定の最小移動距離（px） */
+  DRAG_THRESHOLD: 3,
+  /** スナップ切り替えに必要な最小距離（px） */
+  MINIMUM_SWIPE_DISTANCE: 25,
+} as const;
+
 interface UseCustomTouchHandlerOptions {
   activeSnapPoint: number | string | null;
   setActiveSnapPoint: (point: number | string | null) => void;
@@ -35,7 +43,7 @@ export function useCustomTouchHandler({
 
       startY.current = event.touches[0].clientY;
       isDragging.current = false;
-      event.preventDefault();
+      // タッチ開始時はpreventDefaultしない（アクセシビリティ保持）
     },
     [isEnabled]
   );
@@ -47,8 +55,8 @@ export function useCustomTouchHandler({
       const currentY = event.touches[0].clientY;
       const deltaY = Math.abs(currentY - startY.current);
 
-      // 3px以上の移動でドラッグ開始
-      if (!isDragging.current && deltaY > 3) {
+      // DRAG_THRESHOLD以上の移動でドラッグ開始
+      if (!isDragging.current && deltaY > TOUCH_THRESHOLDS.DRAG_THRESHOLD) {
         isDragging.current = true;
       }
 
@@ -69,8 +77,8 @@ export function useCustomTouchHandler({
 
       const deltaY = event.changedTouches[0].clientY - startY.current;
 
-      // 25px以上の移動で反応
-      if (Math.abs(deltaY) < 25) {
+      // MINIMUM_SWIPE_DISTANCE以上の移動で反応
+      if (Math.abs(deltaY) < TOUCH_THRESHOLDS.MINIMUM_SWIPE_DISTANCE) {
         startY.current = 0;
         isDragging.current = false;
         return;
@@ -99,6 +107,7 @@ export function useCustomTouchHandler({
         setActiveSnapPoint(nextSnapPoint);
       }
 
+      // ドラッグが実行された場合のみpreventDefault
       event.preventDefault();
       startY.current = 0;
       isDragging.current = false;
@@ -108,16 +117,14 @@ export function useCustomTouchHandler({
 
   // プルトゥリフレッシュ防止の最小限設定
   useEffect(() => {
+    const className = 'custom-touch-handler-active';
+
     if (isEnabled) {
-      document.body.style.overscrollBehavior = 'contain';
-      document.body.style.touchAction = 'pan-x pinch-zoom';
+      document.body.classList.add(className);
     }
 
     return () => {
-      if (isEnabled) {
-        document.body.style.overscrollBehavior = '';
-        document.body.style.touchAction = '';
-      }
+      document.body.classList.remove(className);
     };
   }, [isEnabled]);
 

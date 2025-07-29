@@ -55,9 +55,9 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             'bg-background-muted/80 border-border backdrop-blur-sm',
             className
           )}
-          {...touchHandlers}
         >
-          <div className="flex h-full flex-col">
+          {/* カスタムタッチハンドラー用ラッパー（vaultとの競合回避） */}
+          <div className="flex h-full flex-col" {...touchHandlers}>
             {/* ヘッダー */}
             <div className="border-border border-b px-4 pt-3 pb-4">
               {/* ドラッグ用のハンドルアイコン */}
