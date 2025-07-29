@@ -41,6 +41,9 @@ export function useCustomTouchHandler({
     (event: React.TouchEvent) => {
       if (!isEnabled) return;
 
+      // touches配列が空の場合は早期リターン（ランタイムエラー防止）
+      if (event.touches.length === 0) return;
+
       startY.current = event.touches[0].clientY;
       isDragging.current = false;
       // タッチ開始時はpreventDefaultしない（アクセシビリティ保持）
@@ -51,6 +54,9 @@ export function useCustomTouchHandler({
   const handleTouchMove = useCallback(
     (event: React.TouchEvent) => {
       if (!isEnabled) return;
+
+      // touches配列が空の場合は早期リターン（ランタイムエラー防止）
+      if (event.touches.length === 0) return;
 
       const currentY = event.touches[0].clientY;
       const deltaY = Math.abs(currentY - startY.current);
@@ -70,6 +76,13 @@ export function useCustomTouchHandler({
   const handleTouchEnd = useCallback(
     (event: React.TouchEvent) => {
       if (!isEnabled || !isDragging.current) {
+        startY.current = 0;
+        isDragging.current = false;
+        return;
+      }
+
+      // changedTouches配列が空の場合は状態を初期化して早期リターン（ランタイムエラー防止）
+      if (event.changedTouches.length === 0) {
         startY.current = 0;
         isDragging.current = false;
         return;
