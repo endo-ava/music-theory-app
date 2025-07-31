@@ -136,4 +136,47 @@ export class Interval {
   static majorSeventh(): Interval {
     return new Interval('major7th');
   }
+
+  static minorSecond(): Interval {
+    return new Interval('minor2nd');
+  }
+
+  static majorSecond(): Interval {
+    return new Interval('major2nd');
+  }
+
+  static perfectFourth(): Interval {
+    return new Interval('perfect4th');
+  }
+
+  static augmentedFourth(): Interval {
+    return new Interval('tritone');
+  }
+
+  static diminishedFifth(): Interval {
+    return new Interval('tritone');
+  }
+
+  static minorSixth(): Interval {
+    return new Interval('minor6th');
+  }
+
+  static majorSixth(): Interval {
+    return new Interval('major6th');
+  }
+
+  /**
+   * セミトーン数から音程を作成するファクトリーメソッド
+   */
+  static fromSemitones(semitones: number): Interval {
+    const typeEntry = Object.entries(Interval.INTERVAL_MAP).find(
+      ([, value]) => value === semitones
+    );
+
+    if (!typeEntry) {
+      throw new Error(`No interval type found for ${semitones} semitones`);
+    }
+
+    return new Interval(typeEntry[0] as IntervalType);
+  }
 }
