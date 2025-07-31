@@ -38,7 +38,6 @@ export const KeyArea = memo<KeyAreaProps>(
     // カスタムフックから状態とイベントハンドラを受け取る
     const { states, handlers } = useKeyArea({ keyName, isMajor, segment });
     const { fillClassName, textClassName } = states;
-    const { handleClick, handleMouseEnter, handleMouseLeave } = handlers;
 
     // アニメーションの計算
     const animationDelay = segment.position * ANIMATION.BASE_DELAY + (isMajor ? 0.1 : 0);
@@ -46,15 +45,13 @@ export const KeyArea = memo<KeyAreaProps>(
 
     return (
       <motion.g
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
         style={{ cursor: 'pointer' }}
         whileHover={{ scale: ANIMATION.HOVER_SCALE }}
         whileTap={{ scale: ANIMATION.TAP_SCALE }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: ANIMATION.FADE_DURATION, delay: animationDelay }}
+        {...handlers}
       >
         <motion.path
           className={`stroke-border border ${fillClassName}`}

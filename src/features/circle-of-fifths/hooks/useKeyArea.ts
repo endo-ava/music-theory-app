@@ -2,6 +2,10 @@ import { useCallback, useMemo } from 'react';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 import { Key, CircleSegment as CircleSegmentType } from '@/features/circle-of-fifths/types';
 import { useAudio } from './useAudio';
+import { useLongPress } from './useLongPress';
+import { useCurrentMusicalKeyStore } from '@/stores/currentMusicalKeyStore';
+import { MusicalKey } from '@/domain/music/value-objects';
+import { MusicTheoryConverter } from '@/domain';
 import { FifthsIndex } from '@/domain';
 
 /**
@@ -41,6 +45,7 @@ export interface UseKeyAreaProps {
 export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
   const { position } = segment;
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
+  const { setCurrentMusicalKey } = useCurrentMusicalKeyStore();
   const { playMajorChordAtPosition, playMinorChordAtPosition } = useAudio();
 
   // 派生状態（選択、ホバー）をまとめて計算し、メモ化
@@ -73,7 +78,7 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
     [keyName, isMajor, position]
   );
 
-  // クリック時の処理をuseCallbackでメモ化
+  // 通常のクリック時の処理（キー選択＋音響再生）
   const handleClick = useCallback(() => {
     setSelectedKey(keyData);
     // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
@@ -88,22 +93,103 @@ export const useKeyArea = ({ keyName, isMajor, segment }: UseKeyAreaProps) => {
     playMinorChordAtPosition,
   ]);
 
-  // マウスエンター時の処理
-  const handleMouseEnter = useCallback(() => {
-    setHoveredKey(keyData);
-  }, [setHoveredKey, keyData]);
+  // ロングプレス開始時の処理（視覚フィードバック）
+  const handleLongPressStart = useCallback(() => {
+    // 視覚フィードバックは削除
+  }, []);
 
-  // マウスリーブ時の処理
-  const handleMouseLeave = useCallback(() => {
-    setHoveredKey(null);
-  }, [setHoveredKey]);
+  // ロングプレス完了時の処理（現在の音楽キー設定 + 選択状態切り替え）
+  const handleLongPress = useCallback(() => {
+    // 1. 現在の音楽キー設定（五度圏インデックスから直接キー名を取得）
+    let keyName: string;
+    if (isMajor) {
+      const baseNoteName = MusicTheoryConverter.fifthsToNoteName(position as FifthsIndex);
+      keyName = baseNoteName;
+    } else {
+      // マイナーキーの場合は相対マイナーキー名を使用
+      const relativeMinorNoteName = MusicTheoryConverter.fifthsToRelativeMinorNoteName(
+        position as FifthsIndex
+      );
+      keyName = `${relativeMinorNoteName}m`;
+    }
+
+    const musicalKey = MusicalKey.fromKeyName(
+      keyName as Parameters<typeof MusicalKey.fromKeyName>[0]
+    );
+    setCurrentMusicalKey(musicalKey);
+
+    // 2. 選択状態の切り替え（通常のクリックと同様）
+    setSelectedKey(keyData);
+
+    // 3. 音響再生
+    const playChordFunction = isMajor ? playMajorChordAtPosition : playMinorChordAtPosition;
+    playChordFunction(position as FifthsIndex);
+
+    // 4. 触覚フィードバック（モバイルデバイスのみ）
+    if ('vibrate' in navigator) {
+      navigator.vibrate(50);
+    }
+  }, [
+    isMajor,
+    position,
+    setCurrentMusicalKey,
+    keyData,
+    setSelectedKey,
+    playMajorChordAtPosition,
+    playMinorChordAtPosition,
+  ]);
+
+  // 通常のクリック時の処理
+  const handleClickWithReset = useCallback(() => {
+    handleClick();
+  }, [handleClick]);
+
+  // マウスエンター時の処理（Reactイベントハンドラー形式）
+  const handleMouseEnter = useCallback(
+    (_event: React.MouseEvent) => {
+      setHoveredKey(keyData);
+    },
+    [setHoveredKey, keyData]
+  );
+
+  // マウスリーブ時の処理（Reactイベントハンドラー形式）
+  const handleMouseLeave = useCallback(
+    (_event: React.MouseEvent) => {
+      setHoveredKey(null);
+    },
+    [setHoveredKey]
+  );
+
+  // ロングプレス機能の統合
+  const longPressHandlers = useLongPress({
+    onLongPressStart: handleLongPressStart,
+    onLongPress: handleLongPress,
+    onClick: handleClickWithReset,
+    delay: 500, // 500ms でロングプレス判定
+  });
+
+  // マウスリーブハンドラーを統合（ホバー解除 + ロングプレスキャンセル）
+  const combinedMouseLeave = useCallback(
+    (event: React.MouseEvent) => {
+      handleMouseLeave(event);
+      longPressHandlers.onMouseLeave?.();
+    },
+    [handleMouseLeave, longPressHandlers.onMouseLeave]
+  );
 
   return {
     states,
     handlers: {
-      handleClick,
-      handleMouseEnter,
-      handleMouseLeave,
+      // React DOM イベント用（motion.gで使用）
+      onMouseEnter: handleMouseEnter,
+      onMouseLeave: combinedMouseLeave,
+      // ロングプレス対応のハンドラー（onMouseLeaveを除く）
+      onMouseDown: longPressHandlers.onMouseDown,
+      onMouseUp: longPressHandlers.onMouseUp,
+      onMouseMove: longPressHandlers.onMouseMove,
+      onTouchStart: longPressHandlers.onTouchStart,
+      onTouchEnd: longPressHandlers.onTouchEnd,
+      onTouchMove: longPressHandlers.onTouchMove,
     },
   };
 };
