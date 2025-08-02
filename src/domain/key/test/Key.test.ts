@@ -1,351 +1,226 @@
+/**
+ * Key集約のユニットテスト
+ * 現在のKey実装に合わせて最小限のテストに更新
+ */
+
 import { describe, it, expect } from 'vitest';
-import { Key } from '../Key';
+import { Key } from '../index';
 import { PitchClass } from '../../common/PitchClass';
 import { ScalePattern } from '../../common/ScalePattern';
+import { ChordQuality } from '../../chord';
 
 describe('Key', () => {
-  describe('調の作成', () => {
-    it('PitchClassとScalePatternから調を作成できる', () => {
-      const tonic = new PitchClass('C');
+  describe('constructor', () => {
+    it('正常ケース: PitchClassとScalePatternから調を作成できる', () => {
+      const tonic = PitchClass.fromCircleOfFifths(0); // C
       const pattern = ScalePattern.Major;
       const key = new Key(tonic, pattern);
 
       expect(key.tonic.name).toBe('C');
-      expect(key.primaryPattern.type).toBe('Major');
-      expect(key.isMajor).toBe(true);
-      expect(key.isMinor).toBe(false);
+      expect(key.pattern.name).toBe('Major');
+      expect(key.keyName).toBe('C Major');
     });
 
-    it('ファクトリーメソッドでメジャーキーを作成できる', () => {
-      const key = Key.major(new PitchClass('G'));
-
-      expect(key.tonic.name).toBe('G');
-      expect(key.isMajor).toBe(true);
-      expect(key.isMinor).toBe(false);
-    });
-
-    it('ファクトリーメソッドでマイナーキーを作成できる', () => {
-      const key = Key.minor(new PitchClass('A'));
+    it('正常ケース: マイナーキーを作成できる', () => {
+      const tonic = PitchClass.fromCircleOfFifths(3); // A
+      const pattern = ScalePattern.Aeolian;
+      const key = new Key(tonic, pattern);
 
       expect(key.tonic.name).toBe('A');
-      expect(key.isMinor).toBe(true);
-      expect(key.isMajor).toBe(false);
+      expect(key.pattern.name).toBe('Aeolian (Natural Minor)');
+      expect(key.keyName).toBe('A Aeolian (Natural Minor)');
+    });
+  });
+
+  describe('keyName getter', () => {
+    it('正常ケース: キー名を正しく取得できる', () => {
+      const cMajor = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
+      const dMinor = new Key(
+        PitchClass.fromCircleOfFifths(2), // D
+        ScalePattern.Aeolian
+      );
+
+      expect(cMajor.keyName).toBe('C Major');
+      expect(dMinor.keyName).toBe('D Aeolian (Natural Minor)');
+    });
+  });
+
+  describe('getDiatonicChord', () => {
+    it('正常ケース: C Majorの各度数のダイアトニックコードを正しく生成', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
+
+      // I度 - C Major
+      const iChord = key.getDiatonicChord(1);
+      expect(iChord.name).toBe('C');
+      expect(iChord.quality).toBe(ChordQuality.MajorTriad);
+
+      // V度 - G Major
+      const vChord = key.getDiatonicChord(5);
+      expect(vChord.name).toBe('G');
+      expect(vChord.quality).toBe(ChordQuality.MajorTriad);
+
+      // vi度 - A Minor
+      const viChord = key.getDiatonicChord(6);
+      expect(viChord.name).toBe('Am');
+      expect(viChord.quality).toBe(ChordQuality.MinorTriad);
     });
 
-    it('C Majorキーを作成できる', () => {
-      const key = Key.cMajor();
+    it('異常ケース: 無効な度数でエラーをスロー', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
 
-      expect(key.tonic.name).toBe('C');
-      expect(key.isMajor).toBe(true);
+      expect(() => key.getDiatonicChord(0)).toThrow('度数は1から7の間で指定してください。');
+      expect(() => key.getDiatonicChord(8)).toThrow('度数は1から7の間で指定してください。');
+    });
+  });
+
+  describe('特定和音取得メソッド', () => {
+    it('正常ケース: トニックコードを正しく取得', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(1), // G
+        ScalePattern.Major
+      );
+
+      const tonicChord = key.getTonicChord();
+      expect(tonicChord.name).toBe('G');
+      expect(tonicChord.quality).toBe(ChordQuality.MajorTriad);
     });
 
-    it('A Minorキーを作成できる', () => {
-      const key = Key.aMinor();
+    it('正常ケース: ドミナントコードを正しく取得', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
 
-      expect(key.tonic.name).toBe('A');
-      expect(key.isMinor).toBe(true);
+      const dominantChord = key.getDominantChord();
+      expect(dominantChord.name).toBe('G');
+      expect(dominantChord.quality).toBe(ChordQuality.MajorTriad);
     });
 
-    it('キー名文字列からメジャーキーを作成できる', () => {
-      const key = Key.fromKeyName('G');
+    it('正常ケース: サブドミナントコードを正しく取得', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
+
+      const subdominantChord = key.getSubdominantChord();
+      expect(subdominantChord.name).toBe('F');
+      expect(subdominantChord.quality).toBe(ChordQuality.MajorTriad);
+    });
+  });
+
+  describe('fromCircleOfFifths ファクトリメソッド', () => {
+    it('正常ケース: 五度圏インデックスからメジャーキーを生成', () => {
+      const key = Key.fromCircleOfFifths(1, false); // G Major
 
       expect(key.tonic.name).toBe('G');
-      expect(key.isMajor).toBe(true);
+      expect(key.pattern).toBe(ScalePattern.Major);
+      expect(key.keyName).toBe('G Major');
     });
 
-    it('キー名文字列からマイナーキーを作成できる', () => {
-      const key = Key.fromKeyName('Em');
+    it('正常ケース: 五度圏インデックスからマイナーキーを生成', () => {
+      const key = Key.fromCircleOfFifths(0, true); // A Minor (C Majorの相対マイナー)
 
-      expect(key.tonic.name).toBe('E');
-      expect(key.isMinor).toBe(true);
+      expect(key.tonic.name).toBe('A');
+      expect(key.pattern).toBe(ScalePattern.Aeolian);
+      expect(key.keyName).toBe('A Aeolian (Natural Minor)');
     });
 
-    it('無効なメジャーキー名でエラーが発生する', () => {
-      expect(() => Key.fromKeyName('X')).toThrow('Invalid major key name: X');
-    });
-
-    it('無効なマイナーキー名でエラーが発生する', () => {
-      expect(() => Key.fromKeyName('Xm')).toThrow('Invalid minor key name: Xm');
-    });
-  });
-
-  describe('表示名', () => {
-    it('メジャーキーの表示名を正しく取得できる', () => {
-      const key = Key.major(new PitchClass('F#'));
-      expect(key.getDisplayName()).toBe('F# Major');
-    });
-
-    it('マイナーキーの表示名を正しく取得できる', () => {
-      const key = Key.minor(new PitchClass('D'));
-      expect(key.getDisplayName()).toBe('D Minor');
-    });
-
-    it('短縮表示名を正しく取得できる', () => {
-      const majorKey = Key.major(new PitchClass('C'));
-      const minorKey = Key.minor(new PitchClass('A'));
-
-      expect(majorKey.getShortName()).toBe('C');
-      expect(minorKey.getShortName()).toBe('Am');
-    });
-
-    it('toString()で表示名を返す', () => {
-      const key = Key.cMajor();
-      expect(key.toString()).toBe('C Major');
+    it('正常ケース: 全ての五度圏インデックスでキーを生成可能', () => {
+      for (let i = 0; i < 12; i++) {
+        expect(() => Key.fromCircleOfFifths(i, false)).not.toThrow();
+        expect(() => Key.fromCircleOfFifths(i, true)).not.toThrow();
+      }
     });
   });
 
-  describe('音高クラスと音符操作', () => {
-    it('指定した度数の音高クラスを取得できる', () => {
-      const key = Key.cMajor();
+  describe('primaryScale プロパティ', () => {
+    it('正常ケース: 主要スケールが正しく設定される', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
 
-      expect(key.getPitchClassAtDegree(1).name).toBe('C');
-      expect(key.getPitchClassAtDegree(3).name).toBe('E');
-      expect(key.getPitchClassAtDegree(5).name).toBe('G');
-      expect(key.getPitchClassAtDegree(7).name).toBe('B');
-    });
-
-    it('調の全音高クラスを取得できる', () => {
-      const key = Key.cMajor();
-      const pitchClasses = key.getPitchClasses();
-
-      expect(pitchClasses).toHaveLength(7);
-      expect(pitchClasses[0].name).toBe('C');
-      expect(pitchClasses[2].name).toBe('E');
-      expect(pitchClasses[4].name).toBe('G');
-    });
-
-    it('音高クラスの含有判定ができる', () => {
-      const key = Key.cMajor();
-
-      expect(key.contains(new PitchClass('C'))).toBe(true);
-      expect(key.contains(new PitchClass('E'))).toBe(true);
-      expect(key.contains(new PitchClass('G'))).toBe(true);
-      expect(key.contains(new PitchClass('C#'))).toBe(false);
-      expect(key.contains(new PitchClass('F#'))).toBe(false);
+      expect(key.primaryScale.root.name).toBe('C');
+      expect(key.primaryScale.pattern).toBe(ScalePattern.Major);
     });
   });
 
-  describe('和声機能', () => {
-    it('メジャーキーの和声機能を正しく取得できる', () => {
-      const key = Key.cMajor();
+  describe('境界値テスト', () => {
+    it('境界値ケース: 全ての五度圏ポジションでのキー作成', () => {
+      const expectedMajorKeys = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
+      const expectedMinorKeys = ['A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F', 'C', 'G', 'D'];
 
-      expect(key.getHarmonicFunctionAtDegree(1)).toBe('tonic'); // I
-      expect(key.getHarmonicFunctionAtDegree(2)).toBe('subdominant'); // ii
-      expect(key.getHarmonicFunctionAtDegree(3)).toBe('tonic'); // iii
-      expect(key.getHarmonicFunctionAtDegree(4)).toBe('subdominant'); // IV
-      expect(key.getHarmonicFunctionAtDegree(5)).toBe('dominant'); // V
-      expect(key.getHarmonicFunctionAtDegree(6)).toBe('tonic'); // vi
-      expect(key.getHarmonicFunctionAtDegree(7)).toBe('dominant'); // vii°
-    });
+      for (let i = 0; i < 12; i++) {
+        const majorKey = Key.fromCircleOfFifths(i, false);
+        const minorKey = Key.fromCircleOfFifths(i, true);
 
-    it('マイナーキーの和声機能を正しく取得できる', () => {
-      const key = Key.aMinor();
-
-      expect(key.getHarmonicFunctionAtDegree(1)).toBe('tonic'); // i
-      expect(key.getHarmonicFunctionAtDegree(2)).toBe('subdominant'); // ii°
-      expect(key.getHarmonicFunctionAtDegree(3)).toBe('tonic'); // III
-      expect(key.getHarmonicFunctionAtDegree(4)).toBe('subdominant'); // iv
-      expect(key.getHarmonicFunctionAtDegree(5)).toBe('dominant'); // v
-      expect(key.getHarmonicFunctionAtDegree(6)).toBe('tonic'); // VI
-      expect(key.getHarmonicFunctionAtDegree(7)).toBe('dominant'); // VII
-    });
-
-    it('トニック機能の度数一覧を取得できる', () => {
-      const majorKey = Key.cMajor();
-      const minorKey = Key.aMinor();
-
-      expect(majorKey.getTonicDegrees()).toEqual([1, 3, 6]);
-      expect(minorKey.getTonicDegrees()).toEqual([1, 3, 6]);
-    });
-
-    it('サブドミナント機能の度数一覧を取得できる', () => {
-      const majorKey = Key.cMajor();
-      const minorKey = Key.aMinor();
-
-      expect(majorKey.getSubdominantDegrees()).toEqual([2, 4]);
-      expect(minorKey.getSubdominantDegrees()).toEqual([2, 4]);
-    });
-
-    it('ドミナント機能の度数一覧を取得できる', () => {
-      const majorKey = Key.cMajor();
-      const minorKey = Key.aMinor();
-
-      expect(majorKey.getDominantDegrees()).toEqual([5, 7]);
-      expect(minorKey.getDominantDegrees()).toEqual([5, 7]);
+        expect(majorKey.tonic.name).toBe(expectedMajorKeys[i]);
+        expect(minorKey.tonic.name).toBe(expectedMinorKeys[i]);
+      }
     });
   });
 
-  describe('調の関係性', () => {
-    it('相対調を正しく取得できる', () => {
-      const cMajor = Key.cMajor();
-      const aMinor = cMajor.getRelativeKey();
+  describe('音楽理論的特性', () => {
+    it('正常ケース: C Majorキーのダイアトニックコード進行', () => {
+      const key = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
 
+      // I-vi-IV-V進行
+      const progression = [
+        key.getDiatonicChord(1), // C Major
+        key.getDiatonicChord(6), // A Minor
+        key.getDiatonicChord(4), // F Major
+        key.getDiatonicChord(5), // G Major
+      ];
+
+      expect(progression[0].name).toBe('C');
+      expect(progression[1].name).toBe('Am');
+      expect(progression[2].name).toBe('F');
+      expect(progression[3].name).toBe('G');
+    });
+
+    it('正常ケース: 相対調関係の確認', () => {
+      const cMajor = new Key(
+        PitchClass.fromCircleOfFifths(0), // C
+        ScalePattern.Major
+      );
+      const aMinor = new Key(
+        PitchClass.fromCircleOfFifths(3), // A
+        ScalePattern.Aeolian
+      );
+
+      // C MajorとA Minorは相対調（同じ調号）
+      expect(cMajor.tonic.name).toBe('C');
       expect(aMinor.tonic.name).toBe('A');
-      expect(aMinor.isMinor).toBe(true);
-
-      const backToMajor = aMinor.getRelativeKey();
-      expect(backToMajor.tonic.name).toBe('C');
-      expect(backToMajor.isMajor).toBe(true);
-    });
-
-    it('平行調を正しく取得できる', () => {
-      const cMajor = Key.cMajor();
-      const cMinor = cMajor.getParallelKey();
-
-      expect(cMinor.tonic.name).toBe('C');
-      expect(cMinor.isMinor).toBe(true);
-
-      const backToMajor = cMinor.getParallelKey();
-      expect(backToMajor.tonic.name).toBe('C');
-      expect(backToMajor.isMajor).toBe(true);
-    });
-
-    it('モーダルキーを取得できる', () => {
-      const cMajor = Key.cMajor();
-      const cDorian = cMajor.getModalKey(ScalePattern.Dorian);
-
-      expect(cDorian.tonic.name).toBe('C');
-      expect(cDorian.primaryPattern.type).toBe('Dorian');
     });
   });
 
-  describe('移調', () => {
-    it('調を移調できる', () => {
-      const cMajor = Key.cMajor();
-      const dMajor = cMajor.transpose(2); // 2半音上
+  describe('実用例', () => {
+    it('正常ケース: 一般的なキーでの基本和音', () => {
+      const testKeys = [
+        { circleIndex: 0, name: 'C' }, // C Major
+        { circleIndex: 1, name: 'G' }, // G Major
+        { circleIndex: 11, name: 'F' }, // F Major
+      ];
 
-      expect(dMajor.tonic.name).toBe('D');
-      expect(dMajor.isMajor).toBe(true);
-    });
+      testKeys.forEach(({ circleIndex, name }) => {
+        const key = Key.fromCircleOfFifths(circleIndex, false);
+        const tonic = key.getTonicChord();
 
-    it('負の値で下降移調できる', () => {
-      const cMajor = Key.cMajor();
-      const bFlatMajor = cMajor.transpose(-2); // 2半音下
-
-      expect(bFlatMajor.tonic.name).toBe('A#'); // B♭の異名同音
-      expect(bFlatMajor.isMajor).toBe(true);
-    });
-  });
-
-  describe('主要スケール', () => {
-    it('主要スケールを取得できる', () => {
-      const key = Key.cMajor();
-      const primaryScale = key.primaryScale;
-
-      expect(primaryScale.root.name).toBe('C');
-      expect(primaryScale.pattern.type).toBe('Major');
-    });
-  });
-
-  describe('等価性判定', () => {
-    it('同じトニックとパターンの調は等価である', () => {
-      const key1 = Key.major(new PitchClass('C'));
-      const key2 = Key.major(new PitchClass('C'));
-
-      expect(key1.equals(key2)).toBe(true);
-    });
-
-    it('異なるトニックの調は等価でない', () => {
-      const cMajor = Key.major(new PitchClass('C'));
-      const dMajor = Key.major(new PitchClass('D'));
-
-      expect(cMajor.equals(dMajor)).toBe(false);
-    });
-
-    it('異なるパターンの調は等価でない', () => {
-      const cMajor = Key.major(new PitchClass('C'));
-      const cMinor = Key.minor(new PitchClass('C'));
-
-      expect(cMajor.equals(cMinor)).toBe(false);
-    });
-  });
-
-  describe('シリアライゼーション', () => {
-    it('JSONに変換できる', () => {
-      const key = Key.major(new PitchClass('G'));
-      const json = key.toJSON();
-
-      expect(json.tonic.name).toBe('G');
-      expect(json.primaryPattern.type).toBe('Major');
-      expect(json.primaryPattern.intervals).toEqual([0, 2, 4, 5, 7, 9, 11]);
-    });
-
-    it('JSONから復元できる', () => {
-      const json = {
-        tonic: { name: 'F#' as const },
-        primaryPattern: {
-          name: 'Major Scale',
-          type: 'Major' as const,
-          intervals: [0, 2, 4, 5, 7, 9, 11],
-        },
-      };
-      const key = Key.fromJSON(json);
-
-      expect(key.tonic.name).toBe('F#');
-      expect(key.isMajor).toBe(true);
-    });
-
-    it('JSON変換と復元で同じ調になる', () => {
-      const original = Key.minor(new PitchClass('E'));
-      const json = original.toJSON();
-      const restored = Key.fromJSON(json);
-
-      expect(original.equals(restored)).toBe(true);
-    });
-  });
-
-  describe('デフォルト調', () => {
-    it('デフォルト調はC Majorである', () => {
-      const defaultKey = Key.getDefault();
-      const cMajor = Key.cMajor();
-
-      expect(defaultKey.equals(cMajor)).toBe(true);
-    });
-  });
-
-  describe('バリデーション', () => {
-    it('tonicがnullの場合エラーが発生する', () => {
-      expect(() => {
-        // @ts-expect-error Testing invalid input
-        new Key(null, ScalePattern.Major);
-      }).toThrow('Key must have a tonic PitchClass');
-    });
-
-    it('primaryPatternがnullの場合エラーが発生する', () => {
-      expect(() => {
-        // @ts-expect-error Testing invalid input
-        new Key(new PitchClass('C'), null);
-      }).toThrow('Key must have a primary ScalePattern');
-    });
-  });
-
-  describe('すべての有効なキーのテスト', () => {
-    const validMajorKeys = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
-    const validMinorKeys = [
-      'Am',
-      'Em',
-      'Bm',
-      'F#m',
-      'C#m',
-      'G#m',
-      'D#m',
-      'A#m',
-      'Fm',
-      'Cm',
-      'Gm',
-      'Dm',
-    ];
-
-    it.each(validMajorKeys)('メジャーキー %s で調を作成できる', keyName => {
-      expect(() => Key.fromKeyName(keyName)).not.toThrow();
-      const key = Key.fromKeyName(keyName);
-      expect(key.isMajor).toBe(true);
-    });
-
-    it.each(validMinorKeys)('マイナーキー %s で調を作成できる', keyName => {
-      expect(() => Key.fromKeyName(keyName)).not.toThrow();
-      const key = Key.fromKeyName(keyName);
-      expect(key.isMinor).toBe(true);
+        expect(tonic.name).toBe(name);
+        expect(tonic.quality).toBe(ChordQuality.MajorTriad);
+      });
     });
   });
 });

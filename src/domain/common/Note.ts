@@ -1,98 +1,40 @@
-/**
- * 音符の値オブジェクト
- */
+import { Interval } from './Interval';
+import { PitchClass } from './PitchClass';
 
 /**
- * 音名（ルート名）
- */
-export type NoteName = 'C' | 'C#' | 'D' | 'D#' | 'E' | 'F' | 'F#' | 'G' | 'G#' | 'A' | 'A#' | 'B';
-
-/**
- * オクターブ番号（一般的な範囲）
- */
-export type Octave = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-
-/**
- * 音符を表現する値オブジェクト
- *
- * 音楽理論における具体的な音の高さを表現する。
- * Tone.jsでの再生に必要な情報を提供する。
+ * オクターブを含む具体的な音高を表現する不変の値オブジェクト
  */
 export class Note {
   constructor(
-    private readonly _noteName: NoteName,
-    private readonly _octave: Octave
+    public readonly _pitchClass: PitchClass,
+    public readonly _octave: number
   ) {
-    this.validateNote(_noteName, _octave);
-  }
-
-  /**
-   * 音名
-   */
-  get noteName(): NoteName {
-    return this._noteName;
-  }
-
-  /**
-   * オクターブ番号
-   */
-  get octave(): Octave {
-    return this._octave;
+    Object.freeze(this);
   }
 
   /**
    * Tone.jsで使用する文字列表現（例: "C4", "F#3"）
    */
-  get toneNotation(): string {
-    return `${this._noteName}${this._octave}`;
+  get toString(): string {
+    return `${this._pitchClass}${this._octave}`;
   }
 
   /**
-   * 表示用文字列
+   * 指定されたインターバル分だけ移調した新しいNoteを返す
+   * @param interval 移調するインターバル
    */
-  getDisplay(): string {
-    return this.toneNotation;
-  }
+  transposeBy(interval: Interval): Note {
+    const totalSemitones = this._pitchClass.chromaticIndex + this._octave * 12 + interval.semitones;
 
-  /**
-   * 他の音符との等価性をチェック
-   */
-  equals(other: Note): boolean {
-    return this._noteName === other._noteName && this._octave === other._octave;
-  }
+    const newOctave = Math.floor(totalSemitones / 12);
+    const newChromaticIndex = totalSemitones % 12;
 
-  /**
-   * 文字列表現
-   */
-  toString(): string {
-    return this.toneNotation;
-  }
+    const newPitchClass = Object.values(PitchClass).find(
+      p => p instanceof PitchClass && p.chromaticIndex === newChromaticIndex
+    );
 
-  /**
-   * 音符の妥当性検証
-   */
-  private validateNote(noteName: NoteName, octave: Octave): void {
-    const validNoteNames: NoteName[] = [
-      'C',
-      'C#',
-      'D',
-      'D#',
-      'E',
-      'F',
-      'F#',
-      'G',
-      'G#',
-      'A',
-      'A#',
-      'B',
-    ];
+    if (!newPitchClass) throw new Error('移調計算に失敗しました。');
 
-    if (!validNoteNames.includes(noteName)) {
-      throw new Error(`Invalid note name: ${noteName}`);
-    }
-
-    if (octave < 0 || octave > 8) {
-      throw new Error(`Invalid octave: ${octave}. Must be between 0 and 8`);
-    }
+    return new Note(newPitchClass, newOctave);
   }
 }

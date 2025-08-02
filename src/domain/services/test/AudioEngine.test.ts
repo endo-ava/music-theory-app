@@ -7,6 +7,7 @@ import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from 'vite
 import { AudioEngine } from '@/domain/services/AudioEngine';
 import { Chord } from '@/domain/chord';
 import { Note } from '@/domain/common/Note';
+import { PitchClass } from '@/domain/common/PitchClass';
 
 // Tone.jsの基本的なモック
 vi.mock('tone', () => ({
@@ -90,7 +91,8 @@ describe('AudioEngine', () => {
 
   describe('playChord', () => {
     it('正常ケース: 和音再生インターフェースのテスト', async () => {
-      const chord = Chord.major(new Note('C', 4));
+      const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
+      const chord = Chord.major(new Note(cPitchClass, 4));
 
       // エラーなく実行されることを確認
       await expect(AudioEngine.playChord(chord)).resolves.toBeUndefined();
@@ -98,10 +100,9 @@ describe('AudioEngine', () => {
 
     it('正常ケース: 異なる和音での再生', async () => {
       const testCases = [
-        Chord.major(new Note('C', 4)),
-        Chord.minor(new Note('A', 4)),
-        Chord.major7(new Note('F', 4)),
-        Chord.dominant7(new Note('G', 4)),
+        Chord.major(new Note(PitchClass.fromCircleOfFifths(0), 4)), // C Major
+        Chord.minor(new Note(PitchClass.fromCircleOfFifths(3), 4)), // A Minor
+        Chord.dominantSeventh(new Note(PitchClass.fromCircleOfFifths(1), 4)), // G7
       ];
 
       for (const chord of testCases) {
@@ -110,7 +111,8 @@ describe('AudioEngine', () => {
     });
 
     it('正常ケース: 複数回の連続再生', async () => {
-      const chord = Chord.major(new Note('C', 4));
+      const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
+      const chord = Chord.major(new Note(cPitchClass, 4));
 
       // 複数回実行してもエラーが発生しない
       await AudioEngine.playChord(chord);
@@ -138,7 +140,8 @@ describe('AudioEngine', () => {
       expect(AudioEngine.config.arpeggioDelay).toBe(200);
 
       // 新しい設定で和音を再生
-      const chord = Chord.major(new Note('G', 4));
+      const gPitchClass = PitchClass.fromCircleOfFifths(1); // G
+      const chord = Chord.major(new Note(gPitchClass, 4));
       await expect(AudioEngine.playChord(chord)).resolves.toBeUndefined();
     });
 
@@ -156,11 +159,9 @@ describe('AudioEngine', () => {
   describe('型安全性の検証', () => {
     it('正常ケース: Chordエンティティとの統合', async () => {
       const chords = [
-        Chord.major(new Note('C', 4)),
-        Chord.minor(new Note('D', 4)),
-        Chord.major7(new Note('E', 4)),
-        Chord.minor7(new Note('F', 4)),
-        Chord.dominant7(new Note('G', 4)),
+        Chord.major(new Note(PitchClass.fromCircleOfFifths(0), 4)), // C Major
+        Chord.minor(new Note(PitchClass.fromCircleOfFifths(2), 4)), // D Minor
+        Chord.dominantSeventh(new Note(PitchClass.fromCircleOfFifths(1), 4)), // G7
       ];
 
       // すべての和音タイプで再生可能
@@ -193,10 +194,10 @@ describe('AudioEngine', () => {
     it('正常ケース: 基本的な和音進行の再生', async () => {
       // I-V-vi-IV進行
       const progression = [
-        Chord.major(new Note('C', 4)), // I
-        Chord.major(new Note('G', 4)), // V
-        Chord.minor(new Note('A', 4)), // vi
-        Chord.major(new Note('F', 4)), // IV
+        Chord.major(new Note(PitchClass.fromCircleOfFifths(0), 4)), // C Major (I)
+        Chord.major(new Note(PitchClass.fromCircleOfFifths(1), 4)), // G Major (V)
+        Chord.minor(new Note(PitchClass.fromCircleOfFifths(3), 4)), // A Minor (vi)
+        Chord.major(new Note(PitchClass.fromCircleOfFifths(11), 4)), // F Major (IV)
       ];
 
       // 連続して再生
@@ -215,7 +216,8 @@ describe('AudioEngine', () => {
       // サンプラーをリセット
       (AudioEngine as any).sampler = null;
 
-      const chord = Chord.major(new Note('C', 4));
+      const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
+      const chord = Chord.major(new Note(cPitchClass, 4));
       await AudioEngine.playChord(chord);
 
       // Tone.start()が呼ばれることを確認（64-65行目のカバレッジ）
@@ -228,14 +230,16 @@ describe('AudioEngine', () => {
       AudioEngine.setArpeggioSpeed(120);
 
       // いくつかの和音を再生
-      await AudioEngine.playChord(Chord.major(new Note('C', 4)));
+      const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
+      await AudioEngine.playChord(Chord.major(new Note(cPitchClass, 4)));
 
       // 途中で設定変更
       AudioEngine.setVolume(-8);
       AudioEngine.setArpeggioSpeed(80);
 
       // 変更後の設定で再生
-      await AudioEngine.playChord(Chord.minor(new Note('A', 4)));
+      const aPitchClass = PitchClass.fromCircleOfFifths(3); // A
+      await AudioEngine.playChord(Chord.minor(new Note(aPitchClass, 4)));
 
       // 最終的な設定の確認
       expect(AudioEngine.config.volume).toBe(-8);
@@ -244,9 +248,10 @@ describe('AudioEngine', () => {
 
     it('正常ケース: 異なるオクターブでの再生', async () => {
       const octaves = [2, 3, 4, 5, 6];
+      const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
 
       for (const octave of octaves) {
-        const chord = Chord.major(new Note('C', octave as any));
+        const chord = Chord.major(new Note(cPitchClass, octave));
         await expect(AudioEngine.playChord(chord)).resolves.toBeUndefined();
       }
     });

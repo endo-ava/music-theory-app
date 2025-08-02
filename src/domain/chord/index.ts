@@ -1,241 +1,137 @@
+import { Interval, Note, PitchClass } from '..';
+
 /**
- * 和音エンティティ
+ * コードの品質（レシピ）を定義する不変の値オブジェクト
+ * 例：メジャートライアドは「ルート音、長3度、完全5度」というレシピを持つ
  */
+export class ChordQuality {
+  constructor(
+    /** 例: "Major Triad", "m7" */
+    public readonly nameSuffix: string,
+    /** ルート音からのインターバルの配列 */
+    public readonly intervals: readonly Interval[]
+  ) {
+    Object.freeze(this);
+  }
 
-import { Note, Interval } from '../common';
+  // --- 一般的なコード品質の定義 ---
+  static readonly MajorTriad = new ChordQuality('', [Interval.MajorThird, Interval.PerfectFifth]);
+  static readonly MinorTriad = new ChordQuality('m', [Interval.MinorThird, Interval.PerfectFifth]);
+  static readonly DominantSeventh = new ChordQuality('7', [
+    Interval.MajorThird,
+    Interval.PerfectFifth,
+    Interval.MinorSeventh,
+  ]);
+  static readonly MajorSeventh = new ChordQuality('maj7', [
+    Interval.MajorThird,
+    Interval.PerfectFifth,
+    Interval.MajorSeventh,
+  ]);
+  static readonly MinorSeventh = new ChordQuality('m7', [
+    Interval.MinorThird,
+    Interval.PerfectFifth,
+    Interval.MinorSeventh,
+  ]);
+  static readonly DiminishedTriad = new ChordQuality('dim', [
+    Interval.MinorThird,
+    Interval.Tritone,
+  ]);
+}
 
 /**
- * 和音の種類
- */
-export type ChordType =
-  | 'major' // メジャートライアド（1, 3, 5度）
-  | 'minor' // マイナートライアド（1, ♭3, 5度）
-  | 'major7' // メジャー7th（1, 3, 5, 7度）
-  | 'minor7' // マイナー7th（1, ♭3, 5, ♭7度）
-  | 'dominant7'; // ドミナント7th（1, 3, 5, ♭7度）
-
-/**
- * 和音エンティティ
- *
- * 音楽理論における和音を表現し、構成音の管理と
- * 音響再生に必要な情報を提供する。
+ * 和音を表現する集約（Aggregate Root）
  */
 export class Chord {
-  private readonly _notes: ReadonlyArray<Note>;
+  public readonly rootNote: Note;
+  public readonly constituentNotes: readonly Note[];
+  public readonly name: string;
+  public readonly quality: ChordQuality;
 
-  constructor(
-    private readonly _root: Note,
-    private readonly _type: ChordType,
-    notes?: Note[]
-  ) {
-    // 構成音が明示的に渡された場合はそれを使用、
-    // そうでなければ和音タイプから自動生成
-    this._notes = notes ? notes : this.generateNotes(_root, _type);
-    this.validateChord();
+  /**
+   * Chordのインスタンス化はファクトリメソッド経由で行うため、privateにする
+   */
+  private constructor(rootNote: Note, quality: ChordQuality) {
+    this.rootNote = rootNote;
+    this.quality = quality;
+    this.name = `${rootNote._pitchClass.name}${quality.nameSuffix}`;
+
+    // ルート音と、ルート音を各インターバルで移調した音で構成音を生成
+    const notes = [rootNote];
+    for (const interval of quality.intervals) {
+      notes.push(rootNote.transposeBy(interval));
+    }
+    this.constituentNotes = Object.freeze(notes);
+
+    Object.freeze(this);
   }
 
   /**
-   * ルート音
+   * ルート音とコード品質からChordを生成する
+   * @param rootNote ルート音
+   * @param quality コード品質（レシピ）
    */
-  get root(): Note {
-    return this._root;
+  static from(rootNote: Note, quality: ChordQuality): Chord {
+    return new Chord(rootNote, quality);
   }
 
-  /**
-   * 和音タイプ
-   */
-  get type(): ChordType {
-    return this._type;
+  // ファクトリメソッド
+
+  static major(rootNote: Note): Chord {
+    return new Chord(rootNote, ChordQuality.MajorTriad);
   }
 
-  /**
-   * 構成音の配列
-   */
-  get notes(): ReadonlyArray<Note> {
-    return this._notes;
+  static minor(rootNote: Note): Chord {
+    return new Chord(rootNote, ChordQuality.MinorTriad);
   }
 
-  /**
-   * 和音名（例: "Cmaj", "Am"）
-   */
-  get name(): string {
-    const typeNames: Record<ChordType, string> = {
-      major: '',
-      minor: 'm',
-      major7: 'maj7',
-      minor7: 'm7',
-      dominant7: '7',
-    };
-    return `${this._root.noteName}${typeNames[this._type]}`;
+  static dominantSeventh(rootNote: Note): Chord {
+    return new Chord(rootNote, ChordQuality.DominantSeventh);
   }
 
   /**
    * Tone.js用の音符表記配列
    */
   get toneNotations(): string[] {
-    return this._notes.map(note => note.toneNotation);
+    return [...this.constituentNotes].map(note => note.toString);
   }
 
   /**
-   * 表示用文字列
+   * 五度圏インデックスからメジャーコードを生成する
+   * @param circleIndex 五度圏インデックス (C=0, G=1...)
+   * @param octave オクターブ（未指定時は音名に応じて最適化）
    */
-  getDisplay(): string {
-    return this.name;
+  static fromCircleOfFifths(circleIndex: number, octave?: number): Chord {
+    const rootPitch = PitchClass.fromCircleOfFifths(circleIndex);
+    const finalOctave = octave ?? this.getOptimizedOctave(rootPitch);
+    const rootNote = new Note(rootPitch, finalOctave);
+    return Chord.major(rootNote);
   }
 
   /**
-   * 詳細説明
+   * 五度圏インデックスから、その相対マイナーコードを生成する
+   * @param circleIndex 五度圏インデックス (C=0 の場合、Amが生成される)
+   * @param octave オクターブ（未指定時は音名に応じて最適化）
    */
-  getDescription(): string {
-    const noteNames = this._notes.map(note => note.noteName).join(', ');
-    return `${this.name} (${noteNames})`;
+  static relativeMinorFromCircleOfFifths(circleIndex: number, octave?: number): Chord {
+    // 相対マイナーのルート音を取得（メジャーキーから短3度下）
+    const majorRoot = PitchClass.fromCircleOfFifths(circleIndex);
+    const minorRoot = majorRoot.transposeBy(Interval.MinorThird.invert()); // 短3度下に移調
+
+    const finalOctave = octave ?? this.getOptimizedOctave(minorRoot);
+    const rootNote = new Note(minorRoot, finalOctave);
+    return Chord.minor(rootNote);
   }
 
-  /**
-   * 他の和音との等価性をチェック
-   */
-  equals(other: Chord): boolean {
-    return (
-      this._root.equals(other._root) &&
-      this._type === other._type &&
-      this._notes.length === other._notes.length &&
-      this._notes.every((note, index) => note.equals(other._notes[index]))
-    );
-  }
+  // =========================================================
+  // プライベート・ヘルパーメソッド
+  // =========================================================
 
   /**
-   * 文字列表現
+   * ルート音の音名から最適なオクターブを決定 (G#/A♭以上は3、それ以下は4)
+   * @param pitchClass 判定対象のピッチクラス
    */
-  toString(): string {
-    return `Chord(${this.name})`;
-  }
-
-  /**
-   * 和音タイプから構成音を生成
-   */
-  private generateNotes(root: Note, type: ChordType): Note[] {
-    const intervals = this.getIntervalsForChordType(type);
-    const notes: Note[] = [root]; // ルート音から開始
-
-    intervals.forEach(interval => {
-      if (interval.semitones > 0) {
-        // ユニゾン以外
-        const noteFromRoot = this.addInterval(root, interval);
-        notes.push(noteFromRoot);
-      }
-    });
-
-    return notes;
-  }
-
-  /**
-   * 和音タイプに対応する音程配列を取得
-   */
-  private getIntervalsForChordType(type: ChordType): Interval[] {
-    switch (type) {
-      case 'major':
-        return [
-          Interval.unison(), // 1度
-          Interval.majorThird(), // 長3度
-          Interval.perfectFifth(), // 完全5度
-        ];
-      case 'minor':
-        return [
-          Interval.unison(), // 1度
-          Interval.minorThird(), // 短3度
-          Interval.perfectFifth(), // 完全5度
-        ];
-      case 'major7':
-        return [
-          Interval.unison(), // 1度
-          Interval.majorThird(), // 長3度
-          Interval.perfectFifth(), // 完全5度
-          Interval.majorSeventh(), // 長7度
-        ];
-      case 'minor7':
-        return [
-          Interval.unison(), // 1度
-          Interval.minorThird(), // 短3度
-          Interval.perfectFifth(), // 完全5度
-          Interval.minorSeventh(), // 短7度
-        ];
-      case 'dominant7':
-        return [
-          Interval.unison(), // 1度
-          Interval.majorThird(), // 長3度
-          Interval.perfectFifth(), // 完全5度
-          Interval.minorSeventh(), // 短7度
-        ];
-      default:
-        throw new Error(`Unsupported chord type: ${type}`);
-    }
-  }
-
-  /**
-   * ルート音に音程を追加して新しい音符を生成
-   */
-  private addInterval(root: Note, interval: Interval): Note {
-    // セミトーン数に基づいて新しい音名とオクターブを計算
-    const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-    const rootIndex = noteNames.indexOf(root.noteName);
-
-    if (rootIndex === -1) {
-      throw new Error(`Invalid root note: ${root.noteName}`);
-    }
-
-    const newIndex = (rootIndex + interval.semitones) % 12;
-    const octaveAdjustment = Math.floor((rootIndex + interval.semitones) / 12);
-    const newNoteName = noteNames[newIndex] as Note['noteName'];
-    const newOctave = (root.octave + octaveAdjustment) as Note['octave'];
-
-    return new Note(newNoteName, newOctave);
-  }
-
-  /**
-   * 和音の妥当性検証
-   */
-  private validateChord(): void {
-    if (this._notes.length === 0) {
-      throw new Error('Chord must have at least one note');
-    }
-
-    if (!this._notes[0].equals(this._root)) {
-      throw new Error('First note must be the root note');
-    }
-  }
-
-  /**
-   * ファクトリーメソッド: メジャートライアド
-   */
-  static major(root: Note): Chord {
-    return new Chord(root, 'major');
-  }
-
-  /**
-   * ファクトリーメソッド: マイナートライアド
-   */
-  static minor(root: Note): Chord {
-    return new Chord(root, 'minor');
-  }
-
-  /**
-   * ファクトリーメソッド: メジャー7th
-   */
-  static major7(root: Note): Chord {
-    return new Chord(root, 'major7');
-  }
-
-  /**
-   * ファクトリーメソッド: マイナー7th
-   */
-  static minor7(root: Note): Chord {
-    return new Chord(root, 'minor7');
-  }
-
-  /**
-   * ファクトリーメソッド: ドミナント7th
-   */
-  static dominant7(root: Note): Chord {
-    return new Chord(root, 'dominant7');
+  private static getOptimizedOctave(pitchClass: PitchClass): number {
+    // G# (chromaticIndex: 8) 以上の音は低いオクターブにする
+    return pitchClass.chromaticIndex >= 8 ? 3 : 4;
   }
 }

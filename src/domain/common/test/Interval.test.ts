@@ -1,267 +1,147 @@
 /**
  * Interval値オブジェクトのユニットテスト
+ * 新しいInterval実装（セミトーン数ベース）に対応
  */
 
 import { describe, it, expect } from 'vitest';
-import { Interval, type IntervalType, type Semitones } from '@/domain/common/Interval';
+import { Interval } from '../Interval';
 
 describe('Interval', () => {
   describe('constructor', () => {
-    it('正常ケース: 有効なIntervalTypeでインスタンスを作成', () => {
-      const validTypes: IntervalType[] = [
-        'unison',
-        'minor2nd',
-        'major2nd',
-        'minor3rd',
-        'major3rd',
-        'perfect4th',
-        'tritone',
-        'perfect5th',
-        'minor6th',
-        'major6th',
-        'minor7th',
-        'major7th',
-        'octave',
+    it('正常ケース: セミトーン数でインスタンスを作成', () => {
+      const testCases = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+      testCases.forEach(semitones => {
+        const interval = new Interval(semitones);
+        expect(interval.semitones).toBe(semitones);
+      });
+    });
+
+    it('正常ケース: 負の値も受け入れる（下行音程）', () => {
+      const testCases = [-12, -7, -5, -3, -1];
+
+      testCases.forEach(semitones => {
+        const interval = new Interval(semitones);
+        expect(interval.semitones).toBe(semitones);
+      });
+    });
+  });
+
+  describe('静的プロパティ', () => {
+    it('正常ケース: 基本的な音程の定義が正しい', () => {
+      const expectedIntervals = [
+        { interval: Interval.MinorSecond, semitones: 1, name: 'MinorSecond' },
+        { interval: Interval.MajorSecond, semitones: 2, name: 'MajorSecond' },
+        { interval: Interval.MinorThird, semitones: 3, name: 'MinorThird' },
+        { interval: Interval.MajorThird, semitones: 4, name: 'MajorThird' },
+        { interval: Interval.PerfectFourth, semitones: 5, name: 'PerfectFourth' },
+        { interval: Interval.Tritone, semitones: 6, name: 'Tritone' },
+        { interval: Interval.PerfectFifth, semitones: 7, name: 'PerfectFifth' },
+        { interval: Interval.MinorSixth, semitones: 8, name: 'MinorSixth' },
+        { interval: Interval.MajorSixth, semitones: 9, name: 'MajorSixth' },
+        { interval: Interval.MinorSeventh, semitones: 10, name: 'MinorSeventh' },
+        { interval: Interval.MajorSeventh, semitones: 11, name: 'MajorSeventh' },
+        { interval: Interval.Octave, semitones: 12, name: 'Octave' },
       ];
 
-      validTypes.forEach(type => {
-        const interval = new Interval(type);
-        expect(interval.type).toBe(type);
+      expectedIntervals.forEach(({ interval, semitones }) => {
+        expect(interval.semitones).toBe(semitones);
+        expect(interval).toBeInstanceOf(Interval);
       });
     });
 
-    it('異常ケース: 無効なIntervalTypeでエラーをスロー', () => {
-      const invalidTypes = ['invalid', 'perfect9th', 'minor4th', ''];
-
-      invalidTypes.forEach(type => {
-        expect(() => new Interval(type as IntervalType)).toThrow(`Invalid interval type: ${type}`);
-      });
+    it('正常ケース: 便宜上の別名も正しく定義されている', () => {
+      expect(Interval.Half.semitones).toBe(1);
+      expect(Interval.Whole.semitones).toBe(2);
     });
   });
 
-  describe('semitones getter', () => {
-    it('正常ケース: 各音程タイプが正しいセミトーン数を返す', () => {
-      const expectedMapping: Array<[IntervalType, Semitones]> = [
-        ['unison', 0],
-        ['minor2nd', 1],
-        ['major2nd', 2],
-        ['minor3rd', 3],
-        ['major3rd', 4],
-        ['perfect4th', 5],
-        ['tritone', 6],
-        ['perfect5th', 7],
-        ['minor6th', 8],
-        ['major6th', 9],
-        ['minor7th', 10],
-        ['major7th', 11],
-        ['octave', 12],
+  describe('invert メソッド', () => {
+    it('正常ケース: 音程の方向を反転する', () => {
+      const majorThird = Interval.MajorThird; // +4半音
+      const invertedInterval = majorThird.invert(); // -4半音
+
+      expect(invertedInterval.semitones).toBe(-4);
+    });
+
+    it('正常ケース: 様々な音程の反転', () => {
+      const testCases = [
+        { original: Interval.PerfectFifth, expected: -7 },
+        { original: Interval.MinorThird, expected: -3 },
+        { original: Interval.Octave, expected: -12 },
+        { original: new Interval(1), expected: -1 }, // MinorSecond
       ];
 
-      expectedMapping.forEach(([intervalType, expectedSemitones]) => {
-        const interval = new Interval(intervalType);
-        expect(interval.semitones).toBe(expectedSemitones);
+      testCases.forEach(({ original, expected }) => {
+        const inverted = original.invert();
+        expect(inverted.semitones).toBe(expected);
       });
     });
-  });
 
-  describe('getDisplayName', () => {
-    it('正常ケース: 各音程タイプが正しい日本語表示名を返す', () => {
-      const expectedMapping: Array<[IntervalType, string]> = [
-        ['unison', '1度'],
-        ['minor2nd', '短2度'],
-        ['major2nd', '長2度'],
-        ['minor3rd', '短3度'],
-        ['major3rd', '長3度'],
-        ['perfect4th', '完全4度'],
-        ['tritone', '増4度/減5度'],
-        ['perfect5th', '完全5度'],
-        ['minor6th', '短6度'],
-        ['major6th', '長6度'],
-        ['minor7th', '短7度'],
-        ['major7th', '長7度'],
-        ['octave', 'オクターブ'],
-      ];
+    it('正常ケース: 二重反転で元に戻る', () => {
+      const original = Interval.MajorSeventh;
+      const doubleInverted = original.invert().invert();
 
-      expectedMapping.forEach(([intervalType, expectedDisplayName]) => {
-        const interval = new Interval(intervalType);
-        expect(interval.getDisplayName()).toBe(expectedDisplayName);
-      });
-    });
-  });
-
-  describe('equals', () => {
-    it('正常ケース: 同じ音程タイプでtrueを返す', () => {
-      const interval1 = new Interval('major3rd');
-      const interval2 = new Interval('major3rd');
-
-      expect(interval1.equals(interval2)).toBe(true);
-    });
-
-    it('正常ケース: 異なる音程タイプでfalseを返す', () => {
-      const interval1 = new Interval('major3rd');
-      const interval2 = new Interval('minor3rd');
-
-      expect(interval1.equals(interval2)).toBe(false);
-    });
-
-    it('正常ケース: 同じセミトーン数でも異なる音程タイプはfalse', () => {
-      // tritone(6)とminor6th(8)は異なる音程
-      const tritone = new Interval('tritone');
-      const minor6th = new Interval('minor6th');
-
-      expect(tritone.equals(minor6th)).toBe(false);
-    });
-  });
-
-  describe('toString', () => {
-    it('正常ケース: 日本語表示名とセミトーン数を含む文字列を返す', () => {
-      const testCases: Array<[IntervalType, string]> = [
-        ['unison', '1度 (0半音)'],
-        ['minor3rd', '短3度 (3半音)'],
-        ['major3rd', '長3度 (4半音)'],
-        ['perfect5th', '完全5度 (7半音)'],
-        ['octave', 'オクターブ (12半音)'],
-      ];
-
-      testCases.forEach(([intervalType, expectedString]) => {
-        const interval = new Interval(intervalType);
-        expect(interval.toString()).toBe(expectedString);
-      });
-    });
-  });
-
-  describe('ファクトリーメソッド', () => {
-    it('正常ケース: unison()が1度を作成', () => {
-      const interval = Interval.unison();
-
-      expect(interval.type).toBe('unison');
-      expect(interval.semitones).toBe(0);
-      expect(interval.getDisplayName()).toBe('1度');
-    });
-
-    it('正常ケース: majorThird()が長3度を作成', () => {
-      const interval = Interval.majorThird();
-
-      expect(interval.type).toBe('major3rd');
-      expect(interval.semitones).toBe(4);
-      expect(interval.getDisplayName()).toBe('長3度');
-    });
-
-    it('正常ケース: minorThird()が短3度を作成', () => {
-      const interval = Interval.minorThird();
-
-      expect(interval.type).toBe('minor3rd');
-      expect(interval.semitones).toBe(3);
-      expect(interval.getDisplayName()).toBe('短3度');
-    });
-
-    it('正常ケース: perfectFifth()が完全5度を作成', () => {
-      const interval = Interval.perfectFifth();
-
-      expect(interval.type).toBe('perfect5th');
-      expect(interval.semitones).toBe(7);
-      expect(interval.getDisplayName()).toBe('完全5度');
-    });
-
-    it('正常ケース: minorSeventh()が短7度を作成', () => {
-      const interval = Interval.minorSeventh();
-
-      expect(interval.type).toBe('minor7th');
-      expect(interval.semitones).toBe(10);
-      expect(interval.getDisplayName()).toBe('短7度');
-    });
-
-    it('正常ケース: majorSeventh()が長7度を作成', () => {
-      const interval = Interval.majorSeventh();
-
-      expect(interval.type).toBe('major7th');
-      expect(interval.semitones).toBe(11);
-      expect(interval.getDisplayName()).toBe('長7度');
+      expect(doubleInverted.semitones).toBe(original.semitones);
     });
   });
 
   describe('音楽理論的特性', () => {
     it('正常ケース: トライアド構築に必要な音程', () => {
-      // メジャートライアド: 1度 + 長3度 + 完全5度
-      const majorTriadIntervals = [
-        Interval.unison(),
-        Interval.majorThird(),
-        Interval.perfectFifth(),
-      ];
+      // メジャートライアド: ルート + 長3度 + 完全5度
+      const majorTriadIntervals = [Interval.MajorThird, Interval.PerfectFifth];
 
-      expect(majorTriadIntervals[0].semitones).toBe(0);
-      expect(majorTriadIntervals[1].semitones).toBe(4);
-      expect(majorTriadIntervals[2].semitones).toBe(7);
+      expect(majorTriadIntervals[0].semitones).toBe(4);
+      expect(majorTriadIntervals[1].semitones).toBe(7);
     });
 
     it('正常ケース: マイナートライアド構築に必要な音程', () => {
-      // マイナートライアド: 1度 + 短3度 + 完全5度
-      const minorTriadIntervals = [
-        Interval.unison(),
-        Interval.minorThird(),
-        Interval.perfectFifth(),
-      ];
+      // マイナートライアド: ルート + 短3度 + 完全5度
+      const minorTriadIntervals = [Interval.MinorThird, Interval.PerfectFifth];
 
-      expect(minorTriadIntervals[0].semitones).toBe(0);
-      expect(minorTriadIntervals[1].semitones).toBe(3);
-      expect(minorTriadIntervals[2].semitones).toBe(7);
+      expect(minorTriadIntervals[0].semitones).toBe(3);
+      expect(minorTriadIntervals[1].semitones).toBe(7);
     });
 
     it('正常ケース: セブンスコード構築に必要な音程', () => {
-      // メジャー7th: 1度 + 長3度 + 完全5度 + 長7度
-      const major7thIntervals = [
-        Interval.unison(),
-        Interval.majorThird(),
-        Interval.perfectFifth(),
-        Interval.majorSeventh(),
-      ];
+      // メジャー7th: ルート + 長3度 + 完全5度 + 長7度
+      const major7thIntervals = [Interval.MajorThird, Interval.PerfectFifth, Interval.MajorSeventh];
 
       const semitones = major7thIntervals.map(i => i.semitones);
-      expect(semitones).toEqual([0, 4, 7, 11]);
+      expect(semitones).toEqual([4, 7, 11]);
     });
 
     it('境界値ケース: 12音階内での音程の特殊性', () => {
       // tritone（増4度/減5度）: 12音階の中点
-      const tritone = new Interval('tritone');
-      expect(tritone.semitones).toBe(6);
-      expect(tritone.semitones * 2).toBe(12); // オクターブ
+      expect(Interval.Tritone.semitones).toBe(6);
+      expect(Interval.Tritone.semitones * 2).toBe(12); // オクターブ
 
       // octave: 12音階の周期
-      const octave = new Interval('octave');
-      expect(octave.semitones).toBe(12);
+      expect(Interval.Octave.semitones).toBe(12);
     });
   });
 
-  describe('型安全性の検証', () => {
-    it('正常ケース: IntervalTypeの完全性', () => {
-      // 全てのIntervalTypeが定義されていることを確認
-      const allTypes: IntervalType[] = [
-        'unison',
-        'minor2nd',
-        'major2nd',
-        'minor3rd',
-        'major3rd',
-        'perfect4th',
-        'tritone',
-        'perfect5th',
-        'minor6th',
-        'major6th',
-        'minor7th',
-        'major7th',
-        'octave',
+  describe('実用例', () => {
+    it('正常ケース: 様々な音程の組み合わせ', () => {
+      // ドミナント7thコードの構成音程
+      const dom7Intervals = [
+        Interval.MajorThird, // 長3度
+        Interval.PerfectFifth, // 完全5度
+        Interval.MinorSeventh, // 短7度
       ];
 
-      // 全ての型でIntervalを作成できることを確認
-      allTypes.forEach(type => {
-        expect(() => new Interval(type)).not.toThrow();
-      });
+      const semitones = dom7Intervals.map(i => i.semitones);
+      expect(semitones).toEqual([4, 7, 10]);
+    });
 
-      // セミトーン数が0-12の範囲内であることを確認
-      allTypes.forEach(type => {
-        const interval = new Interval(type);
-        expect(interval.semitones).toBeGreaterThanOrEqual(0);
-        expect(interval.semitones).toBeLessThanOrEqual(12);
-      });
+    it('正常ケース: 音程の算術演算', () => {
+      // 長3度 + 短3度 = 完全5度（近似）
+      const majorThird = Interval.MajorThird.semitones;
+      const minorThird = Interval.MinorThird.semitones;
+      const sum = majorThird + minorThird;
+
+      expect(sum).toBe(7); // 完全5度
+      expect(sum).toBe(Interval.PerfectFifth.semitones);
     });
   });
 });
