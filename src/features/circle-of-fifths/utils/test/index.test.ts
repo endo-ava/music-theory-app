@@ -6,7 +6,6 @@ describe('utils index exports', () => {
     // validation モジュールのエクスポート確認
     expect(utilsIndex.validation).toBeDefined();
     expect(typeof utilsIndex.validation.isValidPosition).toBe('function');
-    expect(typeof utilsIndex.validation.isValidKey).toBe('function');
 
     // geometry モジュールのエクスポート確認
     expect(utilsIndex.geometry).toBeDefined();
@@ -20,10 +19,6 @@ describe('utils index exports', () => {
     expect(utilsIndex.pathGeneration).toBeDefined();
     expect(typeof utilsIndex.pathGeneration.generatePizzaSlicePath).toBe('function');
     expect(typeof utilsIndex.pathGeneration.generateThreeSegmentPaths).toBe('function');
-
-    // dataOperations モジュールのエクスポート確認
-    expect(utilsIndex.dataOperations).toBeDefined();
-    expect(typeof utilsIndex.dataOperations.getKeyInfo).toBe('function');
   });
 
   test('エクスポートの確認: ネームスペース形式でアクセス可能', () => {
@@ -45,7 +40,6 @@ describe('utils index exports', () => {
     // 各モジュールが異なるオブジェクトであることを確認
     expect(utilsIndex.validation).not.toBe(utilsIndex.geometry);
     expect(utilsIndex.geometry).not.toBe(utilsIndex.pathGeneration);
-    expect(utilsIndex.pathGeneration).not.toBe(utilsIndex.dataOperations);
-    expect(utilsIndex.dataOperations).not.toBe(utilsIndex.validation);
+    expect(utilsIndex.pathGeneration).not.toBe(utilsIndex.validation);
   });
 });
