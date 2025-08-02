@@ -69,12 +69,13 @@ export class CircleOfFifthsService {
    */
   private static generateKeySignature(position: number): string {
     if (position === 0) return '';
-    if (position <= 6) return `♯×${position}`;
+    if (position < 6) return `♯${position}`;
+    if (position === 6) return `♯♭${position}`;
 
     // F(11), B♭(10), E♭(9), A♭(8), D♭(7)
     // 12 - positionで♭の数が計算できる
     const flatCount = 12 - position;
-    return `♭×${flatCount}`;
+    return `♭${flatCount}`;
   }
 
   /**
