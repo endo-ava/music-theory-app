@@ -1,4 +1,4 @@
-import { Interval, Note, PitchClass } from '..';
+import { Interval, Note, PitchClass } from '../common';
 
 /**
  * コードの品質（レシピ）を定義する不変の値オブジェクト

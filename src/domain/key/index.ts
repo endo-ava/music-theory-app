@@ -1,4 +1,6 @@
-import { Chord, ChordQuality, PitchClass, Scale, ScalePattern } from '..';
+import { PitchClass, ScalePattern } from '../common';
+import { Scale } from '../scale';
+import { Chord, ChordQuality } from '../chord';
 
 /** 軽量なプレーンオブジェクト */
 export interface KeyDTO {
