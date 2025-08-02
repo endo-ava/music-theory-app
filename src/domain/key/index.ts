@@ -1,5 +1,13 @@
 import { Chord, ChordQuality, PitchClass, Scale, ScalePattern } from '..';
 
+/** 軽量なプレーンオブジェクト */
+export interface KeyDTO {
+  shortName: string;
+  keyName: string;
+  circleIndex: number;
+  isMajor: boolean;
+}
+
 /**
  * 調性を表現する集約（Aggregate Root）
  * 和声機能（Harmonic Function）に関する知識と責務を持つ
@@ -27,6 +35,33 @@ export class Key {
    */
   get keyName(): string {
     return `${this.tonic.name} ${this.pattern.name}`;
+  }
+
+  /**
+   * UI表示用の短いシンボル名（"C", "Am" など）を取得する
+   */
+  get shortName(): string {
+    const pattern = this.pattern;
+    const tonicName = this.tonic.name;
+
+    // パターンの性質に基づいて分岐する
+    switch (pattern.quality) {
+      case 'major':
+        return tonicName;
+
+      case 'minor':
+        return `${tonicName}m`;
+
+      case 'diminished':
+        return `${tonicName}dim`;
+
+      default:
+        return `${tonicName} ${pattern.name}`;
+    }
+  }
+
+  get isMajor(): boolean {
+    return this.pattern.quality === 'major';
   }
 
   /**
@@ -90,5 +125,17 @@ export class Key {
     const pattern = isMinor ? ScalePattern.Aeolian : ScalePattern.Major;
 
     return new Key(tonic, pattern);
+  }
+
+  /**
+   * サーバー/クライアント間で受け渡すためのプレーンオブジェクトに変換する
+   */
+  toJSON(): KeyDTO {
+    return {
+      shortName: this.shortName,
+      keyName: this.keyName,
+      circleIndex: this.tonic.circleOfFifthsIndex,
+      isMajor: this.isMajor,
+    };
   }
 }

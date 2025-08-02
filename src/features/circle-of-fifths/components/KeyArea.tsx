@@ -4,18 +4,18 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 import { ANIMATION } from '../constants/index';
 import { useKeyArea } from '../hooks/useKeyArea';
-import type { CircleSegment as CircleSegmentType, Point } from '@/features/circle-of-fifths/types';
+import type { Point } from '@/features/circle-of-fifths/types';
+import { CircleSegmentDTO } from '../../../domain/services/CircleOfFifths';
+import { KeyDTO } from '../../../domain';
 
 /**
  * 個別キーエリアコンポーネントのProps
  */
 export interface KeyAreaProps {
   /** キー名 */
-  keyName: string;
-  /** メジャーキーかどうか */
-  isMajor: boolean;
+  keyDTO: KeyDTO;
   /** セグメントの情報 */
-  segment: CircleSegmentType;
+  segment: CircleSegmentDTO;
   /** SVGパス */
   path: string;
   /** テキスト位置 */
@@ -34,14 +34,14 @@ export interface KeyAreaProps {
  * @returns キーエリアのJSX要素
  */
 export const KeyArea = memo<KeyAreaProps>(
-  ({ keyName, isMajor, segment, path, textPosition, textRotation }) => {
+  ({ keyDTO: key, segment, path, textPosition, textRotation }) => {
     // カスタムフックから状態とイベントハンドラを受け取る
-    const { states, handlers } = useKeyArea({ keyName, isMajor, segment });
+    const { states, handlers } = useKeyArea({ keyDTO: key, segment });
     const { fillClassName, textClassName } = states;
     const { handleClick, handleMouseEnter, handleMouseLeave } = handlers;
 
     // アニメーションの計算
-    const animationDelay = segment.position * ANIMATION.BASE_DELAY + (isMajor ? 0.1 : 0);
+    const animationDelay = segment.position * ANIMATION.BASE_DELAY + (key.isMajor ? 0.1 : 0);
     const textAnimationDelay = animationDelay + 0.3;
 
     return (
@@ -75,7 +75,7 @@ export const KeyArea = memo<KeyAreaProps>(
           animate={{ opacity: 1 }}
           transition={{ duration: ANIMATION.FADE_DURATION, delay: textAnimationDelay }}
         >
-          {keyName}
+          {key.shortName}
         </motion.text>
       </motion.g>
     );

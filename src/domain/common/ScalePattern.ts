@@ -1,13 +1,18 @@
 import { Interval } from './Interval';
 
+// スケールパターンの基本的な性質を定義する型
+type ScaleQuality = 'major' | 'minor' | 'diminished' | 'other';
+
 /**
  * 音階の設計図（インターバルパターン）を表現する値オブジェクト
  */
 export class ScalePattern {
+  public readonly quality: ScaleQuality;
   constructor(
     public readonly name: string,
     public readonly intervals: readonly Interval[]
   ) {
+    this.quality = this.determineQuality();
     Object.freeze(this);
   }
 
@@ -59,4 +64,29 @@ export class ScalePattern {
   static readonly Mixolydian = ScalePattern.Major.derive(5, 'Mixolydian');
   static readonly Aeolian = ScalePattern.Major.derive(6, 'Aeolian (Natural Minor)');
   static readonly Locrian = ScalePattern.Major.derive(7, 'Locrian');
+
+  /**
+   * インターバル配列から自身の基本的な性質（Major/Minorなど）を判定する
+   */
+  private determineQuality(): ScaleQuality {
+    // ルートからの各音のインターバル（半音数）をセットに格納する
+    const intervalsFromRoot = new Set<number>();
+    let cumulativeSemitones = 0;
+    for (const interval of this.intervals) {
+      cumulativeSemitones += interval.semitones;
+      intervalsFromRoot.add(cumulativeSemitones);
+    }
+
+    // セットに特定のインターバルが含まれているかチェックする
+    const hasMajorThird = intervalsFromRoot.has(Interval.MajorThird.semitones);
+    const hasMinorThird = intervalsFromRoot.has(Interval.MinorThird.semitones);
+    const hasPerfectFifth = intervalsFromRoot.has(Interval.PerfectFifth.semitones);
+    const hasDiminishedFifth = intervalsFromRoot.has(Interval.Tritone.semitones);
+
+    if (hasMajorThird && hasPerfectFifth) return 'major';
+    if (hasMinorThird && hasPerfectFifth) return 'minor';
+    if (hasMinorThird && hasDiminishedFifth) return 'diminished';
+
+    return 'other'; // 上記のいずれでもない場合
+  }
 }
