@@ -4,18 +4,15 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 import { ANIMATION } from '../constants/index';
 import { KeyArea } from './KeyArea';
-import type {
-  CircleSegment as CircleSegmentType,
-  Point,
-  SegmentPaths,
-} from '@/features/circle-of-fifths/types';
+import type { Point, SegmentPaths } from '@/features/circle-of-fifths/types';
+import { CircleSegmentDTO } from '../../../domain/services/CircleOfFifths';
 
 /**
  * セグメントコンポーネントのProps
  */
 export interface CircleSegmentProps {
   /** セグメントの情報 */
-  segment: CircleSegmentType;
+  segment: CircleSegmentDTO;
   paths: SegmentPaths;
   textPositions: {
     minorTextPos: Point;
@@ -47,8 +44,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
       <g>
         {/* マイナーキーエリア（クリック可能） */}
         <KeyArea
-          keyName={minorKey}
-          isMajor={false}
+          keyDTO={minorKey}
           segment={segment}
           path={paths.minorPath}
           textPosition={textPositions.minorTextPos}
@@ -57,8 +53,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
 
         {/* メジャーキーエリア（クリック可能） */}
         <KeyArea
-          keyName={majorKey}
-          isMajor={true}
+          keyDTO={majorKey}
           segment={segment}
           path={paths.majorPath}
           textPosition={textPositions.majorTextPos}

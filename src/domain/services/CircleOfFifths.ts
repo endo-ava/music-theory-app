@@ -1,4 +1,4 @@
-import { Key } from '../key';
+import { Key, KeyDTO } from '../key';
 
 /**
  * 五度圏のセグメント情報を表現するデータ構造
@@ -8,6 +8,16 @@ export interface CircleSegmentData {
   majorKey: Key;
   minorKey: Key;
   keySignature: string; // 調号
+}
+
+/**
+ * UIに渡すための、シリアライズ可能なセグメント情報
+ */
+export interface CircleSegmentDTO {
+  position: number;
+  majorKey: KeyDTO;
+  minorKey: KeyDTO;
+  keySignature: string;
 }
 
 /**
@@ -65,5 +75,23 @@ export class CircleOfFifthsService {
     // 12 - positionで♭の数が計算できる
     const flatCount = 12 - position;
     return `♭×${flatCount}`;
+  }
+
+  /**
+   * UI（クライアントコンポーネント）に渡すための、シリアライズ可能な12個の五度圏セグメント情報を生成して返す
+   */
+  static getSegmentDTOs(): readonly CircleSegmentDTO[] {
+    // 1. まず、リッチなドメインオブジェクトを生成する
+    const segments = this.getSegments();
+
+    // 2. 次に、それらをプレーンなDTOに変換する
+    const dtos = segments.map(segment => ({
+      position: segment.position,
+      majorKey: segment.majorKey.toJSON(),
+      minorKey: segment.minorKey.toJSON(),
+      keySignature: segment.keySignature,
+    }));
+
+    return dtos;
   }
 }
