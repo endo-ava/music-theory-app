@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { CIRCLE_SEGMENTS, CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
-import { CircleSegment, Point, SegmentPaths } from '@/features/circle-of-fifths/types';
+import { CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
+import { Point, SegmentPaths } from '@/features/circle-of-fifths/types';
 import { calculateTextPosition, calculateTextRotation } from '../utils/geometry';
 import { generateThreeSegmentPaths } from '../utils/pathGeneration';
+import { CircleOfFifthsService, CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 
 /**
  * 五度圏の単一セグメントを描画するためのデータセット。
@@ -10,7 +11,7 @@ import { generateThreeSegmentPaths } from '../utils/pathGeneration';
  */
 export interface SegmentData {
   /** 元となるセグメントの静的データ（キー、ポジションなど）。 */
-  segment: CircleSegment;
+  segment: CircleSegmentDTO;
   /** SVG <path> のd属性に使われる、描画用のパスデータ。 */
   paths: SegmentPaths;
   /** 各種テキスト要素（短調、長調、調号）の配置座標 (x, y)。 */
@@ -40,7 +41,7 @@ export const useCircleOfFifths = () => {
 
   // 全セグメントの描画データを一度の計算でまとめて生成し、メモ化する。(再レンダリング時の不要な計算コストを削減)
   const segments = useMemo<SegmentData[]>(() => {
-    return CIRCLE_SEGMENTS.map(segment => {
+    return CircleOfFifthsService.getSegmentDTOs().map(segment => {
       const { position } = segment;
 
       // 3つの同心円弧からなるセグメントのパスを生成

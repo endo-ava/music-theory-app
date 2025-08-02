@@ -1,7 +1,8 @@
 import { SegmentPaths, CircleOfFifthsError } from '@/features/circle-of-fifths/types';
-import { SEGMENT_COUNT, CIRCLE_LAYOUT } from '../constants/index';
+import { CIRCLE_LAYOUT } from '../constants/index';
 import { isValidPosition } from './validation';
 import { calculateAngle, normalizeAngle, polarToCartesian } from './geometry';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 /**
  * ピザ型ブロックのパスを生成
@@ -28,7 +29,7 @@ export const generatePizzaSlicePath = (
   }
 
   const startAngle = calculateAngle(position);
-  const endAngle = calculateAngle((position + 1) % SEGMENT_COUNT);
+  const endAngle = calculateAngle((position + 1) % CircleOfFifthsService.getSegmentCount());
 
   // 内側の円弧の開始点と終了点
   const innerStart = polarToCartesian(innerRadius, startAngle);
