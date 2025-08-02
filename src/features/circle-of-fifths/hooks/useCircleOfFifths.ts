@@ -3,7 +3,7 @@ import { CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
 import { Point, SegmentPaths } from '@/features/circle-of-fifths/types';
 import { calculateTextPosition, calculateTextRotation } from '../utils/geometry';
 import { generateThreeSegmentPaths } from '../utils/pathGeneration';
-import { CircleOfFifthsService, CircleSegmentDTO } from '../../../domain/services/CircleOfFifths';
+import { CircleOfFifthsService, CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 
 /**
  * 五度圏の単一セグメントを描画するためのデータセット。

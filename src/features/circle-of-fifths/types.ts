@@ -36,6 +36,27 @@ export interface SegmentPaths {
  */
 export type AnimationVariants = Variants;
 
+/**
+ * アニメーション遅延値の型
+ */
+export interface KeyAreaAnimations {
+  /** アニメーション遅延時間（秒） */
+  readonly animationDelay: number;
+  /** テキストアニメーション遅延時間（秒） */
+  readonly textAnimationDelay: number;
+}
+
+/**
+ * CSS クラス名の型定義
+ */
+export type FillClassName =
+  | 'fill-key-area-major'
+  | 'fill-key-area-minor'
+  | 'fill-key-area-selected'
+  | 'fill-key-area-hover';
+
+export type TextClassName = 'text-key-major font-key-major' | 'text-key-minor font-key-minor';
+
 // ============================================================================
 // エラー型定義（グローバルで使用）
 // ============================================================================

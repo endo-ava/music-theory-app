@@ -1,4 +1,4 @@
-import { CircleOfFifthsService } from '../../../domain/services/CircleOfFifths';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 /**
  * 位置が有効かどうかをチェック

@@ -2,6 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { generatePizzaSlicePath, generateThreeSegmentPaths } from '../pathGeneration';
 import { CircleOfFifthsError } from '@/features/circle-of-fifths/types';
 import { CIRCLE_LAYOUT } from '../../constants/index';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 describe('pathGeneration utils', () => {
   describe('generatePizzaSlicePath', () => {
@@ -20,7 +21,7 @@ describe('pathGeneration utils', () => {
     });
 
     test('正常ケース: 複数の位置で一貫したパス構造を生成', () => {
-      for (let position = 0; position < 12; position++) {
+      for (let position = 0; position < CircleOfFifthsService.getSegmentCount(); position++) {
         const path = generatePizzaSlicePath(position, 80, 150);
 
         // 各パスが適切な構造を持つことを確認
@@ -53,7 +54,9 @@ describe('pathGeneration utils', () => {
 
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => generatePizzaSlicePath(-1, 50, 100)).toThrow(CircleOfFifthsError);
-      expect(() => generatePizzaSlicePath(12, 50, 100)).toThrow(CircleOfFifthsError);
+      expect(() =>
+        generatePizzaSlicePath(CircleOfFifthsService.getSegmentCount(), 50, 100)
+      ).toThrow(CircleOfFifthsError);
 
       try {
         generatePizzaSlicePath(-1, 50, 100);
@@ -129,7 +132,9 @@ describe('pathGeneration utils', () => {
 
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => generateThreeSegmentPaths(-1, 120, 170, 200)).toThrow(CircleOfFifthsError);
-      expect(() => generateThreeSegmentPaths(12, 120, 170, 200)).toThrow(CircleOfFifthsError);
+      expect(() =>
+        generateThreeSegmentPaths(CircleOfFifthsService.getSegmentCount(), 120, 170, 200)
+      ).toThrow(CircleOfFifthsError);
 
       try {
         generateThreeSegmentPaths(-1, 120, 170, 200);
