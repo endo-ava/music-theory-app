@@ -2,7 +2,7 @@ import { SegmentPaths, CircleOfFifthsError } from '@/features/circle-of-fifths/t
 import { CIRCLE_LAYOUT } from '../constants/index';
 import { isValidPosition } from './validation';
 import { calculateAngle, normalizeAngle, polarToCartesian } from './geometry';
-import { CircleOfFifthsService } from '../../../domain/services/CircleOfFifths';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 /**
  * ピザ型ブロックのパスを生成

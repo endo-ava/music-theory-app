@@ -1,11 +1,12 @@
 import { describe, test, expect } from 'vitest';
 import { isValidPosition } from '../validation';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 describe('validation utils', () => {
   describe('isValidPosition', () => {
     test('正常ケース: 有効な位置（0-11）でtrueを返す', () => {
       // 0から11までの全ての位置をテスト
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < CircleOfFifthsService.getSegmentCount(); i++) {
         expect(isValidPosition(i)).toBe(true);
       }
     });
@@ -15,8 +16,8 @@ describe('validation utils', () => {
       expect(isValidPosition(-10)).toBe(false);
     });
 
-    test('境界値ケース: 12以上の数でfalseを返す', () => {
-      expect(isValidPosition(12)).toBe(false);
+    test('境界値ケース: getSegmentCount()以上の数でfalseを返す', () => {
+      expect(isValidPosition(CircleOfFifthsService.getSegmentCount())).toBe(false);
       expect(isValidPosition(100)).toBe(false);
     });
 

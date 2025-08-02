@@ -1,7 +1,7 @@
 import { Point, CircleOfFifthsError } from '@/features/circle-of-fifths/types';
 import { ANGLE_OFFSET, ANGLE_PER_SEGMENT } from '../constants/index';
 import { isValidPosition } from './validation';
-import { CircleOfFifthsService } from '../../../domain/services/CircleOfFifths';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 /**
  * 指定された位置の角度を計算

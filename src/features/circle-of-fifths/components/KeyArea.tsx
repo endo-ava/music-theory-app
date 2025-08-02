@@ -3,10 +3,11 @@
 import { memo } from 'react';
 import { motion } from 'motion/react';
 import { ANIMATION } from '../constants/index';
+
 import { useKeyArea } from '../hooks/useKeyArea';
 import type { Point } from '@/features/circle-of-fifths/types';
-import { CircleSegmentDTO } from '../../../domain/services/CircleOfFifths';
-import { KeyDTO } from '../../../domain';
+import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
+import { KeyDTO } from '@/domain';
 
 /**
  * 個別キーエリアコンポーネントのProps
@@ -22,6 +23,10 @@ export interface KeyAreaProps {
   textPosition: Point;
   /** テキスト回転角度 */
   textRotation: number;
+  /** アニメーション遅延時間（秒） */
+  animationDelay: number;
+  /** テキストアニメーション遅延時間（秒） */
+  textAnimationDelay: number;
 }
 
 /**
@@ -34,15 +39,19 @@ export interface KeyAreaProps {
  * @returns キーエリアのJSX要素
  */
 export const KeyArea = memo<KeyAreaProps>(
-  ({ keyDTO: key, segment, path, textPosition, textRotation }) => {
+  ({
+    keyDTO: key,
+    segment,
+    path,
+    textPosition,
+    textRotation,
+    animationDelay,
+    textAnimationDelay,
+  }) => {
     // カスタムフックから状態とイベントハンドラを受け取る
     const { states, handlers } = useKeyArea({ keyDTO: key, segment });
     const { fillClassName, textClassName } = states;
     const { handleClick, handleMouseEnter, handleMouseLeave } = handlers;
-
-    // アニメーションの計算
-    const animationDelay = segment.position * ANIMATION.BASE_DELAY + (key.isMajor ? 0.1 : 0);
-    const textAnimationDelay = animationDelay + 0.3;
 
     return (
       <motion.g
