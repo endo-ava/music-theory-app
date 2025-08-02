@@ -3,377 +3,287 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { Chord, type ChordType } from '..';
-import { Note, NoteName, Octave } from '../../types';
+import { Chord, ChordQuality } from '..';
+import { Note } from '../../common/Note';
+import { PitchClass } from '../../common/PitchClass';
 
 describe('Chord', () => {
-  describe('constructor', () => {
-    it('正常ケース: ルート音と和音タイプで和音を作成', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'major');
+  describe('コンストラクタ（ファクトリメソッド経由）', () => {
+    it('正常ケース: メジャーコードを生成', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.major(rootNote);
 
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('major');
-      expect(chord.notes.length).toBe(3); // トライアド
+      expect(chord.rootNote).toEqual(rootNote);
+      expect(chord.quality).toEqual(ChordQuality.MajorTriad);
+      expect(chord.constituentNotes.length).toBe(3); // トライアド
     });
 
-    it('正常ケース: 構成音を明示的に指定して和音を作成', () => {
-      const root = new Note('C', 4);
-      const notes = [new Note('C', 4), new Note('E', 4), new Note('G', 4)];
-      const chord = new Chord(root, 'major', notes);
+    it('正常ケース: マイナーコードを生成', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.minor(rootNote);
 
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('major');
-      expect(chord.notes).toEqual(notes);
+      expect(chord.rootNote).toEqual(rootNote);
+      expect(chord.quality).toEqual(ChordQuality.MinorTriad);
+      expect(chord.constituentNotes.length).toBe(3); // トライアド
     });
 
-    it('異常ケース: 構成音が空の配列でエラーをスロー', () => {
-      const root = new Note('C', 4);
-      const emptyNotes: Note[] = [];
+    it('正常ケース: ドミナント7thコードを生成', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.dominantSeventh(rootNote);
 
-      expect(() => new Chord(root, 'major', emptyNotes)).toThrow(
-        'Chord must have at least one note'
-      );
-    });
-
-    it('異常ケース: 最初の音がルート音でない場合エラーをスロー', () => {
-      const root = new Note('C', 4);
-      const invalidNotes = [
-        new Note('E', 4), // ルート音（C）ではない
-        new Note('G', 4),
-      ];
-
-      expect(() => new Chord(root, 'major', invalidNotes)).toThrow(
-        'First note must be the root note'
-      );
+      expect(chord.rootNote).toEqual(rootNote);
+      expect(chord.quality).toEqual(ChordQuality.DominantSeventh);
+      expect(chord.constituentNotes.length).toBe(4); // セブンス
     });
   });
 
   describe('name getter', () => {
-    it('正常ケース: 各和音タイプの正しい名前を返す', () => {
-      const root = new Note('C', 4);
-      const testCases: Array<[ChordType, string]> = [
-        ['major', 'C'],
-        ['minor', 'Cm'],
-        ['major7', 'Cmaj7'],
-        ['minor7', 'Cm7'],
-        ['dominant7', 'C7'],
-      ];
+    it('正常ケース: メジャーコードの名前', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.major(rootNote);
 
-      testCases.forEach(([chordType, expectedName]) => {
-        const chord = new Chord(root, chordType);
-        expect(chord.name).toBe(expectedName);
-      });
+      expect(chord.name).toBe('C');
+    });
+
+    it('正常ケース: マイナーコードの名前', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.minor(rootNote);
+
+      expect(chord.name).toBe('Cm');
+    });
+
+    it('正常ケース: ドミナント7thコードの名前', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.dominantSeventh(rootNote);
+
+      expect(chord.name).toBe('C7');
     });
 
     it('正常ケース: シャープ付きルート音の和音名', () => {
-      const root = new Note('F#', 4);
-      const testCases: Array<[ChordType, string]> = [
-        ['major', 'F#'],
-        ['minor', 'F#m'],
-        ['major7', 'F#maj7'],
-        ['minor7', 'F#m7'],
-        ['dominant7', 'F#7'],
-      ];
+      const rootPitch = PitchClass.fromCircleOfFifths(6); // F#
+      const rootNote = new Note(rootPitch, 4);
 
-      testCases.forEach(([chordType, expectedName]) => {
-        const chord = new Chord(root, chordType);
-        expect(chord.name).toBe(expectedName);
-      });
+      const majorChord = Chord.major(rootNote);
+      const minorChord = Chord.minor(rootNote);
+      const dom7Chord = Chord.dominantSeventh(rootNote);
+
+      expect(majorChord.name).toBe('F#');
+      expect(minorChord.name).toBe('F#m');
+      expect(dom7Chord.name).toBe('F#7');
     });
   });
 
   describe('toneNotations getter', () => {
-    it('正常ケース: Tone.js用文字列配列を返す', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'major');
+    it('正常ケース: メジャートライアドのTone.js用文字列配列', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.major(rootNote);
 
       expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4']);
     });
 
+    it('正常ケース: マイナートライアドのTone.js用文字列配列', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.minor(rootNote);
+
+      expect(chord.toneNotations).toEqual(['C4', 'D#4', 'G4']);
+    });
+
+    it('正常ケース: ドミナント7thのTone.js用文字列配列', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.dominantSeventh(rootNote);
+
+      expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4', 'A#4']);
+    });
+
     it('正常ケース: 異なるオクターブでの表記', () => {
-      const root = new Note('G', 3);
-      const chord = new Chord(root, 'minor');
+      const rootPitch = PitchClass.fromCircleOfFifths(1); // G
+      const rootNote = new Note(rootPitch, 3);
+      const chord = Chord.minor(rootNote);
 
       expect(chord.toneNotations).toEqual(['G3', 'A#3', 'D4']);
     });
   });
 
   describe('構成音生成テスト', () => {
-    it('正常ケース: メジャートライアドの構成音', () => {
-      const testCases: Array<[string, number, string[]]> = [
-        ['C', 4, ['C4', 'E4', 'G4']],
-        ['G', 4, ['G4', 'B4', 'D5']],
-        ['F', 4, ['F4', 'A4', 'C5']],
-        ['F#', 4, ['F#4', 'A#4', 'C#5']],
+    it('正常ケース: 各メジャートライアドの構成音', () => {
+      const testCases: Array<[number, string[]]> = [
+        [0, ['C4', 'E4', 'G4']], // C major
+        [1, ['G4', 'B4', 'D5']], // G major
+        [11, ['F4', 'A4', 'C5']], // F major
+        [6, ['F#4', 'A#4', 'C#5']], // F# major
       ];
 
-      testCases.forEach(([noteName, octave, expectedTones]) => {
-        const root = new Note(noteName as NoteName, octave as Octave);
-        const chord = new Chord(root, 'major');
+      testCases.forEach(([circleIndex, expectedTones]) => {
+        const rootPitch = PitchClass.fromCircleOfFifths(circleIndex);
+        const rootNote = new Note(rootPitch, 4);
+        const chord = Chord.major(rootNote);
         expect(chord.toneNotations).toEqual(expectedTones);
       });
     });
 
-    it('正常ケース: マイナートライアドの構成音', () => {
-      const testCases: Array<[string, number, string[]]> = [
-        ['C', 4, ['C4', 'D#4', 'G4']],
-        ['G', 4, ['G4', 'A#4', 'D5']],
-        ['A', 4, ['A4', 'C5', 'E5']],
-        ['F#', 4, ['F#4', 'A4', 'C#5']],
+    it('正常ケース: 各マイナートライアドの構成音', () => {
+      const testCases: Array<[number, string[]]> = [
+        [0, ['C4', 'D#4', 'G4']], // C minor
+        [1, ['G4', 'A#4', 'D5']], // G minor
+        [3, ['A4', 'C5', 'E5']], // A minor
+        [6, ['F#4', 'A4', 'C#5']], // F# minor
       ];
 
-      testCases.forEach(([noteName, octave, expectedTones]) => {
-        const root = new Note(noteName as NoteName, octave as Octave);
-        const chord = new Chord(root, 'minor');
+      testCases.forEach(([circleIndex, expectedTones]) => {
+        const rootPitch = PitchClass.fromCircleOfFifths(circleIndex);
+        const rootNote = new Note(rootPitch, 4);
+        const chord = Chord.minor(rootNote);
         expect(chord.toneNotations).toEqual(expectedTones);
       });
     });
+  });
 
-    it('正常ケース: メジャー7thコードの構成音', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'major7');
+  describe('五度圏ファクトリメソッド', () => {
+    it('正常ケース: 五度圏インデックスからメジャーコード生成', () => {
+      const chord = Chord.fromCircleOfFifths(0); // C major
 
-      expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4', 'B4']);
-      expect(chord.notes.length).toBe(4);
+      expect(chord.name).toBe('C');
+      expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4']);
     });
 
-    it('正常ケース: マイナー7thコードの構成音', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'minor7');
+    it('正常ケース: 五度圏インデックスから相対マイナーコード生成', () => {
+      const chord = Chord.relativeMinorFromCircleOfFifths(0); // A minor (relative to C major)
 
-      expect(chord.toneNotations).toEqual(['C4', 'D#4', 'G4', 'A#4']);
-      expect(chord.notes.length).toBe(4);
+      expect(chord.name).toBe('Am');
+      expect(chord.toneNotations).toEqual(['A3', 'C4', 'E4']);
     });
 
-    it('正常ケース: ドミナント7thコードの構成音', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'dominant7');
+    it('正常ケース: 異なる五度圏位置での相対マイナー', () => {
+      const testCases: Array<[number, string, string[]]> = [
+        [1, 'Em', ['E4', 'G4', 'B4']], // G major -> E minor
+        [2, 'Bm', ['B3', 'D4', 'F#4']], // D major -> B minor
+        [11, 'Dm', ['D4', 'F4', 'A4']], // F major -> D minor
+      ];
 
-      expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4', 'A#4']);
-      expect(chord.notes.length).toBe(4);
+      testCases.forEach(([circleIndex, expectedName, expectedTones]) => {
+        const chord = Chord.relativeMinorFromCircleOfFifths(circleIndex);
+        expect(chord.name).toBe(expectedName);
+        expect(chord.toneNotations).toEqual(expectedTones);
+      });
     });
   });
 
   describe('オクターブ処理', () => {
     it('正常ケース: オクターブを跨ぐ音程の処理', () => {
-      // B4から始まると、上の音はオクターブを跨ぐ
-      const root = new Note('B', 4);
-      const chord = new Chord(root, 'major');
+      const rootPitch = PitchClass.fromCircleOfFifths(5); // B
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.major(rootNote);
 
       expect(chord.toneNotations).toEqual(['B4', 'D#5', 'F#5']);
     });
 
     it('正常ケース: 低いオクターブでの和音', () => {
-      const root = new Note('C', 2);
-      const chord = new Chord(root, 'major');
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 2);
+      const chord = Chord.major(rootNote);
 
       expect(chord.toneNotations).toEqual(['C2', 'E2', 'G2']);
     });
 
     it('正常ケース: 高いオクターブでの和音', () => {
-      const root = new Note('G', 6);
-      const chord = new Chord(root, 'minor');
+      const rootPitch = PitchClass.fromCircleOfFifths(1); // G
+      const rootNote = new Note(rootPitch, 6);
+      const chord = Chord.minor(rootNote);
 
       expect(chord.toneNotations).toEqual(['G6', 'A#6', 'D7']);
     });
   });
 
-  describe('equals', () => {
-    it('正常ケース: 同じ和音でtrueを返す', () => {
-      const root = new Note('C', 4);
-      const chord1 = new Chord(root, 'major');
-      const chord2 = new Chord(root, 'major');
+  describe('ChordQuality.from ファクトリメソッド', () => {
+    it('正常ケース: MajorSeventhコード', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.from(rootNote, ChordQuality.MajorSeventh);
 
-      expect(chord1.equals(chord2)).toBe(true);
-    });
-
-    it('正常ケース: 異なるルート音でfalseを返す', () => {
-      const chord1 = new Chord(new Note('C', 4), 'major');
-      const chord2 = new Chord(new Note('G', 4), 'major');
-
-      expect(chord1.equals(chord2)).toBe(false);
-    });
-
-    it('正常ケース: 異なる和音タイプでfalseを返す', () => {
-      const root = new Note('C', 4);
-      const chord1 = new Chord(root, 'major');
-      const chord2 = new Chord(root, 'minor');
-
-      expect(chord1.equals(chord2)).toBe(false);
-    });
-
-    it('正常ケース: 異なるオクターブでfalseを返す', () => {
-      const chord1 = new Chord(new Note('C', 4), 'major');
-      const chord2 = new Chord(new Note('C', 5), 'major');
-
-      expect(chord1.equals(chord2)).toBe(false);
-    });
-  });
-
-  describe('getDisplay と getDescription', () => {
-    it('正常ケース: getDisplayが和音名を返す', () => {
-      const root = new Note('F#', 4);
-      const chord = new Chord(root, 'minor');
-
-      expect(chord.getDisplay()).toBe('F#m');
-      expect(chord.getDisplay()).toBe(chord.name);
-    });
-
-    it('正常ケース: getDescriptionが詳細説明を返す', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'major');
-
-      expect(chord.getDescription()).toBe('C (C, E, G)');
-    });
-
-    it('正常ケース: 7thコードの詳細説明', () => {
-      const root = new Note('C', 4);
-      const chord = new Chord(root, 'major7');
-
-      expect(chord.getDescription()).toBe('Cmaj7 (C, E, G, B)');
-    });
-  });
-
-  describe('toString', () => {
-    it('正常ケース: 正しい文字列表現を返す', () => {
-      const testCases: Array<[string, number, ChordType, string]> = [
-        ['C', 4, 'major', 'Chord(C)'],
-        ['F#', 4, 'minor', 'Chord(F#m)'],
-        ['G', 4, 'major7', 'Chord(Gmaj7)'],
-        ['A', 4, 'dominant7', 'Chord(A7)'],
-      ];
-
-      testCases.forEach(([noteName, octave, chordType, expectedString]) => {
-        const root = new Note(noteName as NoteName, octave as Octave);
-        const chord = new Chord(root, chordType);
-        expect(chord.toString()).toBe(expectedString);
-      });
-    });
-  });
-
-  describe('ファクトリーメソッド', () => {
-    it('正常ケース: major()ファクトリーメソッド', () => {
-      const root = new Note('C', 4);
-      const chord = Chord.major(root);
-
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('major');
-      expect(chord.name).toBe('C');
-      expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4']);
-    });
-
-    it('正常ケース: minor()ファクトリーメソッド', () => {
-      const root = new Note('A', 4);
-      const chord = Chord.minor(root);
-
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('minor');
-      expect(chord.name).toBe('Am');
-      expect(chord.toneNotations).toEqual(['A4', 'C5', 'E5']);
-    });
-
-    it('正常ケース: major7()ファクトリーメソッド', () => {
-      const root = new Note('C', 4);
-      const chord = Chord.major7(root);
-
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('major7');
       expect(chord.name).toBe('Cmaj7');
       expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4', 'B4']);
+      expect(chord.constituentNotes.length).toBe(4);
     });
 
-    it('正常ケース: minor7()ファクトリーメソッド', () => {
-      const root = new Note('D', 4);
-      const chord = Chord.minor7(root);
+    it('正常ケース: MinorSeventhコード', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.from(rootNote, ChordQuality.MinorSeventh);
 
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('minor7');
-      expect(chord.name).toBe('Dm7');
-      expect(chord.toneNotations).toEqual(['D4', 'F4', 'A4', 'C5']);
+      expect(chord.name).toBe('Cm7');
+      expect(chord.toneNotations).toEqual(['C4', 'D#4', 'G4', 'A#4']);
+      expect(chord.constituentNotes.length).toBe(4);
     });
 
-    it('正常ケース: dominant7()ファクトリーメソッド', () => {
-      const root = new Note('G', 4);
-      const chord = Chord.dominant7(root);
+    it('正常ケース: DiminishedTriadコード', () => {
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
+      const chord = Chord.from(rootNote, ChordQuality.DiminishedTriad);
 
-      expect(chord.root).toEqual(root);
-      expect(chord.type).toBe('dominant7');
-      expect(chord.name).toBe('G7');
-      expect(chord.toneNotations).toEqual(['G4', 'B4', 'D5', 'F5']);
+      expect(chord.name).toBe('Cdim');
+      expect(chord.toneNotations).toEqual(['C4', 'D#4', 'F#4']);
+      expect(chord.constituentNotes.length).toBe(3);
     });
   });
 
   describe('音楽理論的検証', () => {
     it('正常ケース: 基本トライアドの音程関係', () => {
-      const root = new Note('C', 4);
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
 
       // メジャートライアド: ルート + 長3度 + 完全5度
-      const majorChord = Chord.major(root);
-      const majorNotes = majorChord.notes.map(n => n.noteName);
+      const majorChord = Chord.major(rootNote);
+      const majorNotes = majorChord.constituentNotes.map(n => n._pitchClass.name);
       expect(majorNotes).toEqual(['C', 'E', 'G']);
 
       // マイナートライアド: ルート + 短3度 + 完全5度
-      const minorChord = Chord.minor(root);
-      const minorNotes = minorChord.notes.map(n => n.noteName);
+      const minorChord = Chord.minor(rootNote);
+      const minorNotes = minorChord.constituentNotes.map(n => n._pitchClass.name);
       expect(minorNotes).toEqual(['C', 'D#', 'G']);
     });
 
     it('正常ケース: セブンスコードの音程関係', () => {
-      const root = new Note('C', 4);
+      const rootPitch = PitchClass.fromCircleOfFifths(0); // C
+      const rootNote = new Note(rootPitch, 4);
 
       // メジャー7th: トライアド + 長7度
-      const maj7Chord = Chord.major7(root);
-      const maj7Notes = maj7Chord.notes.map(n => n.noteName);
+      const maj7Chord = Chord.from(rootNote, ChordQuality.MajorSeventh);
+      const maj7Notes = maj7Chord.constituentNotes.map(n => n._pitchClass.name);
       expect(maj7Notes).toEqual(['C', 'E', 'G', 'B']);
 
       // マイナー7th: マイナートライアド + 短7度
-      const min7Chord = Chord.minor7(root);
-      const min7Notes = min7Chord.notes.map(n => n.noteName);
+      const min7Chord = Chord.from(rootNote, ChordQuality.MinorSeventh);
+      const min7Notes = min7Chord.constituentNotes.map(n => n._pitchClass.name);
       expect(min7Notes).toEqual(['C', 'D#', 'G', 'A#']);
 
       // ドミナント7th: メジャートライアド + 短7度
-      const dom7Chord = Chord.dominant7(root);
-      const dom7Notes = dom7Chord.notes.map(n => n.noteName);
+      const dom7Chord = Chord.dominantSeventh(rootNote);
+      const dom7Notes = dom7Chord.constituentNotes.map(n => n._pitchClass.name);
       expect(dom7Notes).toEqual(['C', 'E', 'G', 'A#']);
     });
 
     it('正常ケース: 実際の楽曲で使用される和音進行', () => {
       // I-vi-IV-V進行（Cメジャーキー）
       const progression = [
-        Chord.major(new Note('C', 4)), // I (C major)
-        Chord.minor(new Note('A', 4)), // vi (A minor)
-        Chord.major(new Note('F', 4)), // IV (F major)
-        Chord.major(new Note('G', 4)), // V (G major)
+        Chord.fromCircleOfFifths(0), // I (C major)
+        Chord.relativeMinorFromCircleOfFifths(0), // vi (A minor - relative to C major)
+        Chord.fromCircleOfFifths(11), // IV (F major)
+        Chord.fromCircleOfFifths(1), // V (G major)
       ];
 
       expect(progression[0].name).toBe('C');
       expect(progression[1].name).toBe('Am');
       expect(progression[2].name).toBe('F');
       expect(progression[3].name).toBe('G');
-    });
-  });
-
-  describe('エラーハンドリング', () => {
-    it('異常ケース: 未サポートの和音タイプでエラー', () => {
-      const root = new Note('C', 4);
-
-      expect(() => new Chord(root, 'unsupported' as ChordType)).toThrow(
-        'Unsupported chord type: unsupported'
-      );
-    });
-
-    it('異常ケース: 無効なルート音でエラー', () => {
-      // Note自体の無効な音名は、Noteクラスでバリデーションされる
-      expect(() => new Note('X' as NoteName, 4)).toThrow('Invalid note name: X');
-    });
-
-    it('異常ケース: addIntervalで無効なルート音の場合にエラーをスロー', () => {
-      // Noteクラスのvalidationを回避してテスト用の無効なNoteを作成
-      const invalidRoot = { noteName: 'InvalidNote', octave: 4 } as unknown as Note;
-
-      // エラーが発生することを確認
-      expect(() => new Chord(invalidRoot, 'major')).toThrow('Invalid root note: InvalidNote');
     });
   });
 });

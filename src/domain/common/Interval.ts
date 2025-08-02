@@ -1,178 +1,36 @@
 /**
- * 音程の値オブジェクト
- */
-
-/**
- * セミトーン数による音程定義
- */
-export type Semitones = number;
-
-/**
- * 音程の種類
- */
-export type IntervalType =
-  | 'unison' // 1度（0セミトーン）
-  | 'minor2nd' // 短2度（1セミトーン）
-  | 'major2nd' // 長2度（2セミトーン）
-  | 'minor3rd' // 短3度（3セミトーン）
-  | 'major3rd' // 長3度（4セミトーン）
-  | 'perfect4th' // 完全4度（5セミトーン）
-  | 'tritone' // 増4度/減5度（6セミトーン）
-  | 'perfect5th' // 完全5度（7セミトーン）
-  | 'minor6th' // 短6度（8セミトーン）
-  | 'major6th' // 長6度（9セミトーン）
-  | 'minor7th' // 短7度（10セミトーン）
-  | 'major7th' // 長7度（11セミトーン）
-  | 'octave'; // オクターブ（12セミトーン）
-
-/**
- * 音程を表現する値オブジェクト
- *
- * 二つの音の間の距離を表現し、和音構築に使用される。
+ * 2音間の距離（関係性）を表現する不変の値オブジェクト
  */
 export class Interval {
-  private static readonly INTERVAL_MAP: Record<IntervalType, Semitones> = {
-    unison: 0,
-    minor2nd: 1,
-    major2nd: 2,
-    minor3rd: 3,
-    major3rd: 4,
-    perfect4th: 5,
-    tritone: 6,
-    perfect5th: 7,
-    minor6th: 8,
-    major6th: 9,
-    minor7th: 10,
-    major7th: 11,
-    octave: 12,
-  };
-
-  // fromSemitones用の逆引きマップ
-  private static readonly SEMITONE_TO_INTERVAL_TYPE: Record<Semitones, IntervalType> =
-    Object.entries(Interval.INTERVAL_MAP).reduce(
-      (acc, [key, value]) => {
-        acc[value] = key as IntervalType;
-        return acc;
-      },
-      {} as Record<Semitones, IntervalType>
-    );
-
-  constructor(private readonly _type: IntervalType) {
-    this.validateInterval(_type);
+  constructor(public readonly semitones: number) {
+    Object.freeze(this);
   }
+
+  // --- 12音程の定義 ---
+
+  // 便宜上の別名
+  static readonly Half = new Interval(1); // 半音
+  static readonly Whole = new Interval(2); // 全音
+
+  // 基本的な12音程
+  static readonly MinorSecond = new Interval(1); // 短2度
+  static readonly MajorSecond = new Interval(2); // 長2度
+  static readonly MinorThird = new Interval(3); // 短3度
+  static readonly MajorThird = new Interval(4); // 長3度
+  static readonly PerfectFourth = new Interval(5); // 完全4度
+  static readonly Tritone = new Interval(6); // 増4度 / 減5度
+  static readonly PerfectFifth = new Interval(7); // 完全5度
+  static readonly MinorSixth = new Interval(8); // 短6度
+  static readonly MajorSixth = new Interval(9); // 長6度
+  static readonly MinorSeventh = new Interval(10); // 短7度
+  static readonly MajorSeventh = new Interval(11); // 長7度
+  static readonly Octave = new Interval(12); // 完全8度 (オクターブ)
 
   /**
-   * 音程の種類
+   * インターバルの方向を反転させた新しいインスタンスを返す (例: +4 -> -4)
+   * @returns 方向が反転したInterval
    */
-  get type(): IntervalType {
-    return this._type;
-  }
-
-  /**
-   * セミトーン数
-   */
-  get semitones(): Semitones {
-    return Interval.INTERVAL_MAP[this._type];
-  }
-
-  /**
-   * 表示用名称
-   */
-  getDisplayName(): string {
-    const displayNames: Record<IntervalType, string> = {
-      unison: '1度',
-      minor2nd: '短2度',
-      major2nd: '長2度',
-      minor3rd: '短3度',
-      major3rd: '長3度',
-      perfect4th: '完全4度',
-      tritone: '増4度/減5度',
-      perfect5th: '完全5度',
-      minor6th: '短6度',
-      major6th: '長6度',
-      minor7th: '短7度',
-      major7th: '長7度',
-      octave: 'オクターブ',
-    };
-    return displayNames[this._type];
-  }
-
-  /**
-   * 他の音程との等価性をチェック
-   */
-  equals(other: Interval): boolean {
-    return this._type === other._type;
-  }
-
-  /**
-   * 文字列表現
-   */
-  toString(): string {
-    return `${this.getDisplayName()} (${this.semitones}半音)`;
-  }
-
-  /**
-   * 音程の妥当性検証
-   */
-  private validateInterval(type: IntervalType): void {
-    if (!(type in Interval.INTERVAL_MAP)) {
-      throw new Error(`Invalid interval type: ${type}`);
-    }
-  }
-
-  /**
-   * ファクトリーメソッド群
-   */
-  static unison(): Interval {
-    return new Interval('unison');
-  }
-  static minorSecond(): Interval {
-    return new Interval('minor2nd');
-  }
-  static majorSecond(): Interval {
-    return new Interval('major2nd');
-  }
-  static minorThird(): Interval {
-    return new Interval('minor3rd');
-  }
-  static majorThird(): Interval {
-    return new Interval('major3rd');
-  }
-  static perfectFourth(): Interval {
-    return new Interval('perfect4th');
-  }
-  static augmentedFourth(): Interval {
-    return new Interval('tritone');
-  }
-  static diminishedFifth(): Interval {
-    return new Interval('tritone');
-  }
-  static perfectFifth(): Interval {
-    return new Interval('perfect5th');
-  }
-  static minorSixth(): Interval {
-    return new Interval('minor6th');
-  }
-  static majorSixth(): Interval {
-    return new Interval('major6th');
-  }
-  static minorSeventh(): Interval {
-    return new Interval('minor7th');
-  }
-  static majorSeventh(): Interval {
-    return new Interval('major7th');
-  }
-
-  /**
-   * セミトーン数から音程を生成
-   * @param semitones - セミトーン数
-   * @returns 対応するIntervalインスタンス
-   */
-  static fromSemitones(semitones: Semitones): Interval {
-    const type = this.SEMITONE_TO_INTERVAL_TYPE[semitones];
-    if (type) {
-      return new Interval(type);
-    }
-    throw new Error(`No interval type found for ${semitones} semitones.`);
+  invert(): Interval {
+    return new Interval(-this.semitones);
   }
 }
