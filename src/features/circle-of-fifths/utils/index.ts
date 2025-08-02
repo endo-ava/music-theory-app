@@ -9,4 +9,5 @@
 export * as validation from './validation';
 export * as geometry from './geometry';
 export * as pathGeneration from './pathGeneration';
-export * as dataOperations from './dataOperations';
+export * as animations from './animations';
+export * as classNames from './classNames';

@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useKeyArea, type UseKeyAreaProps } from '../useKeyArea';
-import type { Key, CircleSegment } from '@/features/circle-of-fifths/types';
+import type { KeyDTO } from '@/domain/key';
+import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useCircleOfFifthsStore } from '../../store';
 import { useAudio } from '../useAudio';
 
@@ -32,16 +33,32 @@ const mockPlayMinorChordAtPosition = vi.fn();
 
 describe('useKeyArea', () => {
   // --- 3. テストで使う定数を準備 ---
-  const mockSegment: CircleSegment = {
+  const mockSegment: CircleSegmentDTO = {
     position: 0,
-    minorKey: '',
-    majorKey: '',
+    majorKey: {
+      shortName: 'C',
+      keyName: 'C Major',
+      circleIndex: 0,
+      isMajor: true,
+    },
+    minorKey: {
+      shortName: 'Am',
+      keyName: 'A Minor',
+      circleIndex: 9,
+      isMajor: false,
+    },
     keySignature: '',
   };
 
-  const defaultProps: UseKeyAreaProps = {
-    keyName: 'C',
+  const defaultKeyDTO: KeyDTO = {
+    shortName: 'C',
+    keyName: 'C Major',
+    circleIndex: 0,
     isMajor: true,
+  };
+
+  const defaultProps: UseKeyAreaProps = {
+    keyDTO: defaultKeyDTO,
     segment: mockSegment,
   };
 
@@ -83,7 +100,12 @@ describe('useKeyArea', () => {
   });
 
   it('正常ケース: 選択状態のキーで正しいクラス名が適用される', () => {
-    const selectedKeyData: Key = { name: 'C', isMajor: true, position: 0 };
+    const selectedKeyData: KeyDTO = {
+      shortName: 'C',
+      keyName: 'C Major',
+      circleIndex: 0,
+      isMajor: true,
+    };
     (useCircleOfFifthsStore as unknown as Mock).mockReturnValue({
       selectedKey: selectedKeyData, // 選択状態のキーを設定
       hoveredKey: null,
@@ -103,25 +125,29 @@ describe('useKeyArea', () => {
   it('正常ケース: handleClickがsetSelectedKeyとplayMajorChordAtPositionを呼び出す', async () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     await act(async () => {
-      await result.current.handlers.handleClick();
+      result.current.handlers.handleClick();
     });
-    expect(mockSetSelectedKey).toHaveBeenCalledWith({ name: 'C', isMajor: true, position: 0 });
+    expect(mockSetSelectedKey).toHaveBeenCalledWith(defaultKeyDTO);
     expect(mockPlayMajorChordAtPosition).toHaveBeenCalledWith(0);
     expect(mockPlayMinorChordAtPosition).not.toHaveBeenCalled();
   });
 
   it('正常ケース: handleClickがマイナーキーでplayMinorChordAtPositionを呼び出す', async () => {
-    const minorProps: UseKeyAreaProps = {
-      ...defaultProps,
-      keyName: 'Am',
+    const minorKeyDTO: KeyDTO = {
+      shortName: 'Am',
+      keyName: 'A Minor',
+      circleIndex: 9,
       isMajor: false,
+    };
+    const minorProps: UseKeyAreaProps = {
+      keyDTO: minorKeyDTO,
       segment: { ...mockSegment, position: 9 },
     };
     const { result } = renderHook(() => useKeyArea(minorProps));
     await act(async () => {
-      await result.current.handlers.handleClick();
+      result.current.handlers.handleClick();
     });
-    expect(mockSetSelectedKey).toHaveBeenCalledWith({ name: 'Am', isMajor: false, position: 9 });
+    expect(mockSetSelectedKey).toHaveBeenCalledWith(minorKeyDTO);
     expect(mockPlayMinorChordAtPosition).toHaveBeenCalledWith(9);
     expect(mockPlayMajorChordAtPosition).not.toHaveBeenCalled();
   });
@@ -131,7 +157,7 @@ describe('useKeyArea', () => {
     act(() => {
       result.current.handlers.handleMouseEnter();
     });
-    expect(mockSetHoveredKey).toHaveBeenCalledWith({ name: 'C', isMajor: true, position: 0 });
+    expect(mockSetHoveredKey).toHaveBeenCalledWith(defaultKeyDTO);
   });
 
   it('正常ケース: handleMouseLeaveがsetHoveredKey(null)を呼び出す', () => {
@@ -144,7 +170,12 @@ describe('useKeyArea', () => {
 
   // カバレッジ向上: ホバー状態のクラス名テスト（useKeyArea.ts 34-35行目）
   it('正常ケース: ホバー状態のキーで正しいクラス名が適用される', () => {
-    const hoveredKeyData: Key = { name: 'C', isMajor: true, position: 0 };
+    const hoveredKeyData: KeyDTO = {
+      shortName: 'C',
+      keyName: 'C Major',
+      circleIndex: 0,
+      isMajor: true,
+    };
     (useCircleOfFifthsStore as unknown as Mock).mockReturnValue({
       selectedKey: null, // 選択されていない
       hoveredKey: hoveredKeyData, // ホバー状態のキーを設定
