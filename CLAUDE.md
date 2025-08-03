@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `./docs/02.screenDesign.md` - 画面設計書(全体)
 - `./docs/screenDesigns/` - 画面設計書(個別)
 - `./docs/03.developmentAgreement.md` - **開発規約（最重要）**
+- `./docs/04.domainSystem.md` - 音楽理論ドメイン設計
 - `.github/PULL_REQUEST_TEMPLATE.md` - PRテンプレート
 - `.github/ISSUE_TEMPLATE/` - Issueテンプレート群
 
@@ -61,7 +62,7 @@ npm run build-storybook
 
 ## 技術スタック
 
-- **フロントエンド**: Next.js 15.x (App Router) + React 19.x + TypeScript 5.x
+- **フロントエンド**: Next.js 15.x (App Router) + React 19.x + TypeScript 5.x + Shadcn/ui
 - **スタイリング**: Tailwind CSS 4.x + clsx + tailwind-merge
 - **アニメーション**: Framer Motion (motion) 12.x
 - **状態管理**: Zustand 5.x
@@ -69,6 +70,12 @@ npm run build-storybook
 - **コード品質**: ESLint + Prettier + Husky + lint-staged
 
 ## プロジェクト構造とアーキテクチャ
+
+本プロジェクトは、複雑で豊かなドメイン知識を正確かつ堅牢にコードへ反映させるため、ドメイン駆動設計（DDD） の思想を全面的に採用している。
+
+音楽理論に関する中核的な概念（例: PitchClass, Interval, Scale, Chord, Keyなど）の定義や、それらの振る舞いに関するルールは、すべてこのドメイン層（src/domain ディレクトリ）に集約されている。
+
+音楽理論に関する仕様の確認や、機能追加を行う際は、まずこのドメイン層のモデルを参照すること。各ドメインオブジェクトの責務や関係性についての詳細は、別途[音楽理論ドメイン設計書](./docs/04.domainSystem.md)にまとめられている。
 
 ### ディレクトリ構成
 
@@ -80,10 +87,22 @@ src/
 │   ├── library/              # ライブラリページ
 │   └── tutorial/             # チュートリアルページ
 ├── components/               # UIコンテナ
-│   └── layouts/              # レイアウト専用コンポーネント
-│       ├── SidePanel/        # サイドパネルレイアウト
-│       ├── Canvas/           # メイン表示エリアレイアウト
-│       └── GlobalHeader/     # グローバルヘッダーレイアウト
+│   ├── layouts/              # レイアウト専用コンポーネント
+│   │   ├── SidePanel/        # サイドパネルレイアウト
+│   │   ├── Canvas/           # メイン表示エリアレイアウト
+│   │   ├── MobileBottomSheet/# モバイルボトムシートレイアウト
+│   │   └── GlobalHeader/     # グローバルヘッダーレイアウト
+│   └── ui/                   # shadcn/ui 用コンポーネント
+├── domain/                   # ドメイン
+│   ├── common/               # 共通の値オブジェクト
+│   │   ├── PitchClass.md     # ピッチクラスVO
+│   │   ├── Note.md           # NoteVO
+│   │   ├── Interval.md       # インターバルVO
+│   │   └── ScalePattern.md   # スケールパターンVO
+│   ├── scale/                # スケール集約
+│   ├── chord/                # コード集約
+│   ├── key/                  # キー集約
+│   └── services/             # ドメインサービス
 ├── features/                 # 機能Feature
 │   ├── view-controller/      # Hub切り替え機能
 │   ├── circle-of-fifths/     # 五度圏機能
@@ -99,6 +118,9 @@ src/
 │   │   └── utils/            # ユーティリティ関数
 │   └── chromatic-circle/     # クロマチック機能
 ├── shared/                   # 共通要素
+│   ├── components/           # 共通コンポーネント
+│   │   └── icons/          　# SVGアイコン
+│   ├── hooks/                # 共通フックス
 │   ├── constants/            # 共通定数
 │   ├── types/                # 共通型定義
 │   └── utils/                # 共通ユーティリティ

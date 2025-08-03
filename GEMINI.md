@@ -13,6 +13,7 @@ This file provides guidance to Gemini CLI when working with code in this reposit
 - `./docs/02.screenDesign.md` - 画面設計書(全体)
 - `./docs/screenDesigns/` - 画面設計書(個別)
 - `./docs/03.developmentAgreement.md` - **開発規約（最重要）**
+- `./docs/04.domainSystem.md` - 音楽理論ドメイン設計
 - `.github/PULL_REQUEST_TEMPLATE.md` - PRテンプレート
 - `.github/ISSUE_TEMPLATE/` - Issueテンプレート群
 
@@ -32,7 +33,7 @@ npm run dev
 npm run build
 
 # 本番サーバー起動
-npm run start
+npm start
 
 # リンター実行
 npm run lint
@@ -61,7 +62,7 @@ npm run build-storybook
 
 ## 技術スタック
 
-- **フロントエンド**: Next.js 15.x (App Router) + React 19.x + TypeScript 5.x
+- **フロントエンド**: Next.js 15.x (App Router) + React 19.x + TypeScript 5.x + Shadcn/ui
 - **スタイリング**: Tailwind CSS 4.x + clsx + tailwind-merge
 - **アニメーション**: Framer Motion (motion) 12.x
 - **状態管理**: Zustand 5.x
@@ -69,6 +70,12 @@ npm run build-storybook
 - **コード品質**: ESLint + Prettier + Husky + lint-staged
 
 ## プロジェクト構造とアーキテクチャ
+
+本プロジェクトは、複雑で豊かなドメイン知識を正確かつ堅牢にコードへ反映させるため、ドメイン駆動設計（DDD） の思想を全面的に採用している。
+
+音楽理論に関する中核的な概念（例: PitchClass, Interval, Scale, Chord, Keyなど）の定義や、それらの振る舞いに関するルールは、すべてこのドメイン層（src/domain ディレクトリ）に集約されている。
+
+音楽理論に関する仕様の確認や、機能追加を行う際は、まずこのドメイン層のモデルを参照すること。各ドメインオブジェクトの責務や関係性についての詳細は、別途[音楽理論ドメイン設計書](./docs/04.domainSystem.md)にまとめられている。
 
 ### ディレクトリ構成
 
@@ -80,10 +87,22 @@ src/
 │   ├── library/              # ライブラリページ
 │   └── tutorial/             # チュートリアルページ
 ├── components/               # UIコンテナ
-│   └── layouts/              # レイアウト専用コンポーネント
-│       ├── SidePanel/        # サイドパネルレイアウト
-│       ├── Canvas/           # メイン表示エリアレイアウト
-│       └── GlobalHeader/     # グローバルヘッダーレイアウト
+│   ├── layouts/              # レイアウト専用コンポーネント
+│   │   ├── SidePanel/        # サイドパネルレイアウト
+│   │   ├── Canvas/           # メイン表示エリアレイアウト
+│   │   ├── MobileBottomSheet/# モバイルボトムシートレイアウト
+│   │   └── GlobalHeader/     # グローバルヘッダーレイアウト
+│   └── ui/                   # shadcn/ui 用コンポーネント
+├── domain/                   # ドメイン
+│   ├── common/               # 共通の値オブジェクト
+│   │   ├── PitchClass.md     # ピッチクラスVO
+│   │   ├── Note.md           # NoteVO
+│   │   ├── Interval.md       # インターバルVO
+│   │   └── ScalePattern.md   # スケールパターンVO
+│   ├── scale/                # スケール集約
+│   ├── chord/                # コード集約
+│   ├── key/                  # キー集約
+│   └── services/             # ドメインサービス
 ├── features/                 # 機能Feature
 │   ├── view-controller/      # Hub切り替え機能
 │   ├── circle-of-fifths/     # 五度圏機能
@@ -99,6 +118,9 @@ src/
 │   │   └── utils/            # ユーティリティ関数
 │   └── chromatic-circle/     # クロマチック機能
 ├── shared/                   # 共通要素
+│   ├── components/           # 共通コンポーネント
+│   │   └── icons/          　# SVGアイコン
+│   ├── hooks/                # 共通フックス
 │   ├── constants/            # 共通定数
 │   ├── types/                # 共通型定義
 │   └── utils/                # 共通ユーティリティ
@@ -134,3 +156,46 @@ docs/                         # 設計書・要件定義
 ### PRレビュー対応について
 
 - github copilot等からレビューをもらうことがあるが、これは必ずしも鵜呑みにするのではなく、対応方針を自身で判断すること。柔軟に考え、対応不要と判断してもよい。ただしその場合はその理由を伝えること
+
+### Playwright MCP スクリーンショット設定
+
+#### 基本方針
+
+- 常に全画面（full_page: true）でスクリーンショットを取得する
+- ファイルサイズを最小化するため、品質とサイズを調整する
+- レスポンストークンサイズを制限内に収める
+
+#### スクリーンショット実行時の指示
+
+1. まずビューポートサイズを設定。何も指示が無ければ、1920x1080と設定する：
+
+```
+playwright:browser_set_viewport_size(width: 1920, height: 1080)
+```
+
+2. 以下の設定で全画面スクリーンショットを取得：
+
+```
+playwright:browser_take_screenshot(
+  filename: "[descriptive_name].jpg",
+  full_page: true,
+  quality: 70,
+  type: "jpeg",
+  raw: false
+)
+```
+
+#### 下記に一般的な画面サイズを記載する。例えば「スマホサイズで」と指示されたら下記のスマートフォンのサイズを設定する。
+
+- スマートフォン（一般的なサイズ）  
+  playwright:browser_set_viewport_size(width: 360, height: 800)
+- タブレット（10インチ）  
+  playwright:browser_set_viewport_size(width: 800, height: 1280)
+- FHD  
+  playwright:browser_set_viewport_size(width: 1920, height: 1080)
+- WQHD (2K)  
+  playwright:browser_set_viewport_size(width: 2560, height: 1440)
+- 4K  
+  playwright:browser_set_viewport_size(width: 3840, height: 2160)
+- ウルトラワイド  
+  playwright:browser_set_viewport_size(width: 3440, height: 1440)

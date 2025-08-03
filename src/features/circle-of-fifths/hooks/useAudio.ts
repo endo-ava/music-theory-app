@@ -1,38 +1,42 @@
 /**
  * 五度圏音響機能のカスタムフック
  */
-
-import { useCallback, useMemo } from 'react';
-import { AudioEngine, ChordBuilder, FifthsIndex } from '@/domain';
+import { useCallback } from 'react';
+import { Chord } from '@/domain/chord';
+import { AudioEngine } from '@/domain';
 
 /**
  * 音を鳴らすためのシンプルなフック
  */
 export const useAudio = () => {
-  const chordBuilder = useMemo(() => new ChordBuilder(), []);
-
   const playMajorChordAtPosition = useCallback(
-    async (fifthsIndex: FifthsIndex) => {
+    /**
+     * @param circleIndex 五度圏インデックス
+     */
+    async (circleIndex: number) => {
       try {
-        const chord = chordBuilder.buildMajorTriadFromPosition(fifthsIndex);
+        const chord = Chord.fromCircleOfFifths(circleIndex);
         await AudioEngine.playChord(chord);
       } catch (error) {
-        console.error(`Failed to play major chord at position ${fifthsIndex}:`, error);
+        console.error(`Failed to play major chord at position ${circleIndex}:`, error);
       }
     },
-    [chordBuilder]
+    []
   );
 
   const playMinorChordAtPosition = useCallback(
-    async (fifthsIndex: FifthsIndex) => {
+    /**
+     * @param circleIndex 五度圏インデックス
+     */
+    async (circleIndex: number) => {
       try {
-        const chord = chordBuilder.buildMinorTriadFromPosition(fifthsIndex);
+        const chord = Chord.relativeMinorFromCircleOfFifths(circleIndex);
         await AudioEngine.playChord(chord);
       } catch (error) {
-        console.error(`Failed to play minor chord at position ${fifthsIndex}:`, error);
+        console.error(`Failed to play minor chord at position ${circleIndex}:`, error);
       }
     },
-    [chordBuilder]
+    []
   );
 
   const setVolume = useCallback((db: number) => {

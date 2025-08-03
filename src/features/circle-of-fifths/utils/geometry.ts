@@ -1,6 +1,7 @@
 import { Point, CircleOfFifthsError } from '@/features/circle-of-fifths/types';
-import { SEGMENT_COUNT, ANGLE_OFFSET, ANGLE_PER_SEGMENT } from '../constants/index';
+import { ANGLE_OFFSET, ANGLE_PER_SEGMENT } from '../constants/index';
 import { isValidPosition } from './validation';
+import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 /**
  * 指定された位置の角度を計算
@@ -59,7 +60,7 @@ export const calculateTextPosition = (position: number, radius: number): Point =
     throw new CircleOfFifthsError(`Invalid radius: ${radius}`, 'INVALID_RADIUS');
   }
 
-  const angle = calculateAngle(position) + Math.PI / SEGMENT_COUNT; // セグメントの中心
+  const angle = calculateAngle(position) + Math.PI / CircleOfFifthsService.getSegmentCount(); // セグメントの中心
   return polarToCartesian(radius, angle);
 };
 
