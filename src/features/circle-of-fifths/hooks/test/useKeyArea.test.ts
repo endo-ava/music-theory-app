@@ -10,7 +10,7 @@ import { useAudio } from '../useAudio';
 vi.mock('@/features/circle-of-fifths/store');
 vi.mock('../useAudio');
 vi.mock('../useLongPress');
-vi.mock('@/stores/currentMusicalKeyStore');
+vi.mock('@/stores/currentKeyStore');
 // useKeyAreaが内部で使ってる他の依存関係も同様にモック宣言
 vi.mock('@/domain', async importOriginal => {
   const original = await importOriginal<typeof import('@/domain')>();
@@ -32,7 +32,7 @@ const mockSetSelectedKey = vi.fn();
 const mockSetHoveredKey = vi.fn();
 const mockPlayMajorChordAtPosition = vi.fn();
 const mockPlayMinorChordAtPosition = vi.fn();
-const mockSetCurrentMusicalKey = vi.fn();
+const mockSetCurrentKey = vi.fn();
 const mockOnClick = vi.fn();
 const mockOnMouseDown = vi.fn();
 const mockOnTouchStart = vi.fn();
@@ -99,10 +99,10 @@ describe('useKeyArea', () => {
       onTouchMove: vi.fn(),
     });
 
-    // currentMusicalKeyStoreのモック
-    const { useCurrentMusicalKeyStore } = await import('@/stores/currentMusicalKeyStore');
-    (useCurrentMusicalKeyStore as unknown as Mock).mockReturnValue({
-      setCurrentMusicalKey: mockSetCurrentMusicalKey,
+    // currentKeyStoreのモック
+    const { useCurrentKeyStore } = await import('@/stores/currentKeyStore');
+    (useCurrentKeyStore as unknown as Mock).mockReturnValue({
+      setCurrentKey: mockSetCurrentKey,
     });
   });
 
@@ -112,10 +112,14 @@ describe('useKeyArea', () => {
 
     expect(result.current).toHaveProperty('states');
     expect(result.current).toHaveProperty('handlers');
+    expect(result.current).toHaveProperty('ripple');
     expect(typeof result.current.handlers.onMouseEnter).toBe('function');
     expect(typeof result.current.handlers.onMouseLeave).toBe('function');
     expect(typeof result.current.handlers.onMouseDown).toBe('function');
     expect(typeof result.current.handlers.onTouchStart).toBe('function');
+    expect(typeof result.current.ripple.triggerRipple).toBe('function');
+    expect(typeof result.current.ripple.resetRipple).toBe('function');
+    expect(typeof result.current.ripple.isRippleActive).toBe('boolean');
   });
 
   // 2. 状態計算の確認
@@ -148,17 +152,17 @@ describe('useKeyArea', () => {
   });
 
   // 3. イベントハンドラーの確認
-  it('正常ケース: ロングプレスハンドラーが利用可能', () => {
+  it('正常ケース: ロングプレスハンドラーが利用可能', async () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     await act(async () => {
-      result.current.handlers.handleClick();
+      result.current.handlers.onClick();
     });
     expect(mockSetSelectedKey).toHaveBeenCalledWith(defaultKeyDTO);
     expect(mockPlayMajorChordAtPosition).toHaveBeenCalledWith(0);
     expect(mockPlayMinorChordAtPosition).not.toHaveBeenCalled();
   });
 
-  it('正常ケース: handleClickがマイナーキーでplayMinorChordAtPositionを呼び出す', async () => {
+  it('正常ケース: onClickがマイナーキーでplayMinorChordAtPositionを呼び出す', async () => {
     const minorKeyDTO: KeyDTO = {
       shortName: 'Am',
       keyName: 'A Minor',
@@ -171,7 +175,7 @@ describe('useKeyArea', () => {
     };
     const { result } = renderHook(() => useKeyArea(minorProps));
     await act(async () => {
-      result.current.handlers.handleClick();
+      result.current.handlers.onClick();
     });
     expect(mockSetSelectedKey).toHaveBeenCalledWith(minorKeyDTO);
     expect(mockPlayMinorChordAtPosition).toHaveBeenCalledWith(9);
@@ -181,8 +185,7 @@ describe('useKeyArea', () => {
   it('正常ケース: onMouseEnterがsetHoveredKeyを呼び出す', () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     act(() => {
-      const mockEvent = {} as React.MouseEvent;
-      result.current.handlers.onMouseEnter(mockEvent);
+      result.current.handlers.onMouseEnter();
     });
     expect(mockSetHoveredKey).toHaveBeenCalledWith(defaultKeyDTO);
   });
@@ -190,8 +193,7 @@ describe('useKeyArea', () => {
   it('正常ケース: onMouseLeaveがsetHoveredKey(null)を呼び出す', () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     act(() => {
-      const mockEvent = {} as React.MouseEvent;
-      result.current.handlers.onMouseLeave(mockEvent);
+      result.current.handlers.onMouseLeave();
     });
     expect(mockSetHoveredKey).toHaveBeenCalledWith(null);
   });

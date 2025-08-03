@@ -6,7 +6,7 @@ import { Chord, ChordQuality } from '../chord';
 export interface KeyDTO {
   shortName: string;
   keyName: string;
-  circleIndex: number;
+  circleOfFifthsIndex: number;
   isMajor: boolean;
 }
 
@@ -120,13 +120,11 @@ export class Key {
    * @param circleIndex 五度圏インデックス (C=0, G=1...)
    * @param isMinor マイナーキーかどうか
    */
-  static fromCircleOfFifths(circleIndex: number, isMinor: boolean): Key {
-    // マイナーの場合、五度圏のインデックスを短3度下にずらす (C Major -> A Minor)
-    const tonicIndex = isMinor ? circleIndex + 3 : circleIndex;
-    const tonic = PitchClass.fromCircleOfFifths(tonicIndex);
-    const pattern = isMinor ? ScalePattern.Aeolian : ScalePattern.Major;
-
-    return new Key(tonic, pattern);
+  static fromCircleOfFifths(circleIndex: number, isMajor: boolean): Key {
+    return new Key(
+      PitchClass.fromCircleOfFifths(circleIndex),
+      isMajor ? ScalePattern.Major : ScalePattern.Aeolian
+    );
   }
 
   /**
@@ -136,7 +134,7 @@ export class Key {
     return {
       shortName: this.shortName,
       keyName: this.keyName,
-      circleIndex: this.tonic.circleOfFifthsIndex,
+      circleOfFifthsIndex: this.tonic.circleOfFifthsIndex,
       isMajor: this.isMajor,
     };
   }
