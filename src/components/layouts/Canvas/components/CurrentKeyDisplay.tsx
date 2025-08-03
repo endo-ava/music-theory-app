@@ -1,6 +1,6 @@
 'use client';
 
-import { useCurrentMusicalKeyStore } from '@/stores/currentMusicalKeyStore';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { ClassNameProps } from '@/shared/types';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
@@ -16,14 +16,14 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
  * @returns CurrentKeyDisplay のJSX要素
  */
 export const CurrentKeyDisplay: React.FC<ClassNameProps> = ({ className }) => {
-  const { currentMusicalKey } = useCurrentMusicalKeyStore();
+  const { currentKey } = useCurrentKeyStore();
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <h1 className={className}>{currentMusicalKey.getDisplayName()}</h1>
+        <h1 className={className}>{currentKey.keyName}</h1>
       </TooltipTrigger>
-      <TooltipContent side="right">変更するには長押ししてください</TooltipContent>
+      <TooltipContent side="top">長押しでキー変更</TooltipContent>
     </Tooltip>
   );
 };

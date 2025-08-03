@@ -1,3 +1,4 @@
+import { Interval } from '../common';
 import { Key, KeyDTO } from '../key';
 
 /**
@@ -45,8 +46,8 @@ export class CircleOfFifthsService {
     for (let i = 0; i < this.getSegmentCount(); i++) {
       generatedSegments.push({
         position: i,
-        majorKey: Key.fromCircleOfFifths(i, false),
-        minorKey: Key.fromCircleOfFifths(i, true),
+        majorKey: Key.fromCircleOfFifths(i, true),
+        minorKey: Key.fromCircleOfFifths(i + Interval.MinorThird.semitones, false),
         keySignature: this.generateKeySignature(i),
       });
     }

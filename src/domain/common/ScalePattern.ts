@@ -62,7 +62,7 @@ export class ScalePattern {
   static readonly Phrygian = ScalePattern.Major.derive(3, 'Phrygian');
   static readonly Lydian = ScalePattern.Major.derive(4, 'Lydian');
   static readonly Mixolydian = ScalePattern.Major.derive(5, 'Mixolydian');
-  static readonly Aeolian = ScalePattern.Major.derive(6, 'Aeolian (Natural Minor)');
+  static readonly Aeolian = ScalePattern.Major.derive(6, 'Minor');
   static readonly Locrian = ScalePattern.Major.derive(7, 'Locrian');
 
   /**
