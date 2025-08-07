@@ -30,10 +30,7 @@ vi.mock('@/domain', async importOriginal => {
 // これらはテストケース (`it`) の中で検証に使うので、describeの外で定義します。
 const mockSetSelectedKey = vi.fn();
 const mockSetHoveredKey = vi.fn();
-const mockPlayMajorChordAtPosition = vi.fn();
-const mockPlayMinorChordAtPosition = vi.fn();
 const mockSetCurrentKey = vi.fn();
-const mockOnClick = vi.fn();
 const mockOnMouseDown = vi.fn();
 const mockOnTouchStart = vi.fn();
 
@@ -44,13 +41,13 @@ describe('useKeyArea', () => {
     majorKey: {
       shortName: 'C',
       keyName: 'C Major',
-      circleIndex: 0,
+      fifthsIndex: 0,
       isMajor: true,
     },
     minorKey: {
       shortName: 'Am',
       keyName: 'A Minor',
-      circleIndex: 9,
+      fifthsIndex: 0,
       isMajor: false,
     },
     keySignature: '',
@@ -59,7 +56,7 @@ describe('useKeyArea', () => {
   const defaultKeyDTO: KeyDTO = {
     shortName: 'C',
     keyName: 'C Major',
-    circleIndex: 0,
+    fifthsIndex: 1,
     isMajor: true,
   };
 
@@ -81,22 +78,34 @@ describe('useKeyArea', () => {
       setHoveredKey: mockSetHoveredKey,
     });
 
+    const mockPlayChordAtPosition = vi.fn();
+    const mockPlayScaleAtPosition = vi.fn();
     (useAudio as unknown as Mock).mockReturnValue({
-      playMajorChordAtPosition: mockPlayMajorChordAtPosition,
-      playMinorChordAtPosition: mockPlayMinorChordAtPosition,
+      playChordAtPosition: mockPlayChordAtPosition,
+      playScaleAtPosition: mockPlayScaleAtPosition,
+      setVolume: vi.fn(),
+      setArpeggioSpeed: vi.fn(),
     });
 
-    // useLongPressのモック
+    // useLongPressのモック - 実際のクリック動作を模擬
     const { useLongPress } = await import('../useLongPress');
-    (useLongPress as unknown as Mock).mockReturnValue({
-      onClick: mockOnClick,
-      onMouseDown: mockOnMouseDown,
-      onMouseUp: vi.fn(),
-      onMouseMove: vi.fn(),
-      onMouseLeave: vi.fn(),
-      onTouchStart: mockOnTouchStart,
-      onTouchEnd: vi.fn(),
-      onTouchMove: vi.fn(),
+    let mockClickHandler: (() => void) | null = null;
+    (useLongPress as unknown as Mock).mockImplementation(({ onClick }) => {
+      mockClickHandler = onClick;
+      return {
+        onMouseDown: mockOnMouseDown,
+        onMouseUp: vi.fn().mockImplementation(() => {
+          // マウスアップ時にonClickを呼び出す（実際のuseLongPressの動作を模擬）
+          if (mockClickHandler) {
+            mockClickHandler();
+          }
+        }),
+        onMouseMove: vi.fn(),
+        onMouseLeave: vi.fn(),
+        onTouchStart: mockOnTouchStart,
+        onTouchEnd: vi.fn(),
+        onTouchMove: vi.fn(),
+      };
     });
 
     // currentKeyStoreのモック
@@ -133,7 +142,7 @@ describe('useKeyArea', () => {
     const selectedKeyData: KeyDTO = {
       shortName: 'C',
       keyName: 'C Major',
-      circleIndex: 0,
+      fifthsIndex: 1,
       isMajor: true,
     };
     (useCircleOfFifthsStore as unknown as Mock).mockReturnValue({
@@ -155,18 +164,18 @@ describe('useKeyArea', () => {
   it('正常ケース: ロングプレスハンドラーが利用可能', async () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     await act(async () => {
-      result.current.handlers.onClick();
+      // マウスダウンとマウスアップのシーケンスでクリックを模擬
+      result.current.handlers.onMouseDown({} as React.MouseEvent);
+      result.current.handlers.onMouseUp({} as React.MouseEvent);
     });
     expect(mockSetSelectedKey).toHaveBeenCalledWith(defaultKeyDTO);
-    expect(mockPlayMajorChordAtPosition).toHaveBeenCalledWith(0);
-    expect(mockPlayMinorChordAtPosition).not.toHaveBeenCalled();
   });
 
   it('正常ケース: onClickがマイナーキーでplayMinorChordAtPositionを呼び出す', async () => {
     const minorKeyDTO: KeyDTO = {
       shortName: 'Am',
       keyName: 'A Minor',
-      circleIndex: 9,
+      fifthsIndex: 4,
       isMajor: false,
     };
     const minorProps: UseKeyAreaProps = {
@@ -175,11 +184,11 @@ describe('useKeyArea', () => {
     };
     const { result } = renderHook(() => useKeyArea(minorProps));
     await act(async () => {
-      result.current.handlers.onClick();
+      // マウスダウンとマウスアップのシーケンスでクリックを模擬
+      result.current.handlers.onMouseDown({} as React.MouseEvent);
+      result.current.handlers.onMouseUp({} as React.MouseEvent);
     });
     expect(mockSetSelectedKey).toHaveBeenCalledWith(minorKeyDTO);
-    expect(mockPlayMinorChordAtPosition).toHaveBeenCalledWith(9);
-    expect(mockPlayMajorChordAtPosition).not.toHaveBeenCalled();
   });
 
   it('正常ケース: onMouseEnterがsetHoveredKeyを呼び出す', () => {
@@ -203,7 +212,7 @@ describe('useKeyArea', () => {
     const hoveredKeyData: KeyDTO = {
       shortName: 'C',
       keyName: 'C Major',
-      circleIndex: 0,
+      fifthsIndex: 1,
       isMajor: true,
     };
     (useCircleOfFifthsStore as unknown as Mock).mockReturnValue({

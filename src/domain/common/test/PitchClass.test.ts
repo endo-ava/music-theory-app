@@ -8,8 +8,8 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0);
 
       expect(c.name).toBe('C');
-      expect(c.chromaticIndex).toBe(0);
-      expect(c.circleOfFifthsIndex).toBe(0);
+      expect(c.index).toBe(0);
+      expect(c.fifthsIndex).toBe(0);
     });
 
     it('正常ケース: 全ての音高クラスのプロパティが正しい', () => {
@@ -28,11 +28,11 @@ describe('PitchClass', () => {
         [11, 'F', 5, 11], // F
       ];
 
-      testCases.forEach(([fifthsIndex, expectedName, expectedChromatic, expectedFifths]) => {
+      testCases.forEach(([fifthsIndex, expectedName, expectedIndex, expectedFifths]) => {
         const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
         expect(pitchClass.name).toBe(expectedName);
-        expect(pitchClass.chromaticIndex).toBe(expectedChromatic);
-        expect(pitchClass.circleOfFifthsIndex).toBe(expectedFifths);
+        expect(pitchClass.index).toBe(expectedIndex);
+        expect(pitchClass.fifthsIndex).toBe(expectedFifths);
       });
     });
   });
@@ -50,8 +50,8 @@ describe('PitchClass', () => {
       const f = PitchClass.fromCircleOfFifths(11); // F
 
       expect(f.name).toBe('F');
-      expect(f.chromaticIndex).toBe(5);
-      expect(f.circleOfFifthsIndex).toBe(11);
+      expect(f.index).toBe(5);
+      expect(f.fifthsIndex).toBe(11);
     });
 
     it('異常ケース: 負の五度圏インデックスで処理', () => {
@@ -62,7 +62,7 @@ describe('PitchClass', () => {
     it('異常ケース: 範囲外の五度圏インデックスで処理', () => {
       // 現在の実装では循環的に処理されるため、エラーではなく正常に動作する
       const result = PitchClass.fromCircleOfFifths(12);
-      expect(result.name).toBe('C'); // 12 % 12 = 0 -> C
+      expect(result.name).toBe('C'); // 12 -> (12 * 7) % 12 = 0 -> C
     });
   });
 
@@ -72,7 +72,7 @@ describe('PitchClass', () => {
       const e = c.transposeBy(Interval.MajorThird);
 
       expect(e.name).toBe('E');
-      expect(e.chromaticIndex).toBe(4);
+      expect(e.index).toBe(4);
     });
 
     it('正常ケース: 完全5度上に移調', () => {
@@ -80,7 +80,7 @@ describe('PitchClass', () => {
       const g = c.transposeBy(Interval.PerfectFifth);
 
       expect(g.name).toBe('G');
-      expect(g.chromaticIndex).toBe(7);
+      expect(g.index).toBe(7);
     });
 
     it('正常ケース: 短3度下に移調（負の値）', () => {
@@ -88,7 +88,7 @@ describe('PitchClass', () => {
       const a = c.transposeBy(Interval.MinorThird.invert());
 
       expect(a.name).toBe('A');
-      expect(a.chromaticIndex).toBe(9);
+      expect(a.index).toBe(9);
     });
 
     it('正常ケース: オクターブを跨ぐ移調', () => {
@@ -96,7 +96,7 @@ describe('PitchClass', () => {
       const d = b.transposeBy(Interval.MinorThird);
 
       expect(d.name).toBe('D');
-      expect(d.chromaticIndex).toBe(2);
+      expect(d.index).toBe(2);
     });
 
     it('正常ケース: 大きな値での移調（正規化確認）', () => {
@@ -105,7 +105,7 @@ describe('PitchClass', () => {
       const b = c.transposeBy(majorSeventhPlus2Octaves);
 
       expect(b.name).toBe('B');
-      expect(b.chromaticIndex).toBe(11);
+      expect(b.index).toBe(11);
     });
   });
 
@@ -147,18 +147,18 @@ describe('PitchClass', () => {
 
     it('正常ケース: 半音階の順序が正しい', () => {
       const chromaticProgression = [
-        PitchClass.fromCircleOfFifths(0), // C (chromatic: 0)
-        PitchClass.fromCircleOfFifths(7), // C# (chromatic: 1)
-        PitchClass.fromCircleOfFifths(2), // D (chromatic: 2)
-        PitchClass.fromCircleOfFifths(9), // D# (chromatic: 3)
-        PitchClass.fromCircleOfFifths(4), // E (chromatic: 4)
+        PitchClass.fromCircleOfFifths(0), // C (index: 0)
+        PitchClass.fromCircleOfFifths(7), // C# (index: 1)
+        PitchClass.fromCircleOfFifths(2), // D (index: 2)
+        PitchClass.fromCircleOfFifths(9), // D# (index: 3)
+        PitchClass.fromCircleOfFifths(4), // E (index: 4)
       ];
 
-      expect(chromaticProgression[0].chromaticIndex).toBe(0);
-      expect(chromaticProgression[1].chromaticIndex).toBe(1);
-      expect(chromaticProgression[2].chromaticIndex).toBe(2);
-      expect(chromaticProgression[3].chromaticIndex).toBe(3);
-      expect(chromaticProgression[4].chromaticIndex).toBe(4);
+      expect(chromaticProgression[0].index).toBe(0);
+      expect(chromaticProgression[1].index).toBe(1);
+      expect(chromaticProgression[2].index).toBe(2);
+      expect(chromaticProgression[3].index).toBe(3);
+      expect(chromaticProgression[4].index).toBe(4);
     });
 
     it('正常ケース: 移調による音程関係の確認', () => {
@@ -189,8 +189,8 @@ describe('PitchClass', () => {
       const f = PitchClass.fromCircleOfFifths(11);
 
       expect(f.name).toBe('F');
-      expect(f.chromaticIndex).toBe(5);
-      expect(f.circleOfFifthsIndex).toBe(11);
+      expect(f.index).toBe(5);
+      expect(f.fifthsIndex).toBe(11);
     });
 
     it('境界値ケース: 0半音移調（変化なし）', () => {
@@ -198,7 +198,7 @@ describe('PitchClass', () => {
       const samePitch = c.transposeBy(new Interval(0));
 
       expect(samePitch.name).toBe('C');
-      expect(samePitch.chromaticIndex).toBe(0);
+      expect(samePitch.index).toBe(0);
     });
 
     it('境界値ケース: 完全オクターブ移調（12半音、変化なし）', () => {
@@ -206,7 +206,46 @@ describe('PitchClass', () => {
       const octaveTransposed = c.transposeBy(Interval.Octave);
 
       expect(octaveTransposed.name).toBe('C');
-      expect(octaveTransposed.chromaticIndex).toBe(0);
+      expect(octaveTransposed.index).toBe(0);
+    });
+  });
+
+  describe('エンハーモニック表記', () => {
+    it('正常ケース: getDisplayName(major)でフラット表記を返す', () => {
+      const cSharp = PitchClass.fromCircleOfFifths(7); // C#
+      expect(cSharp.getDisplayName('major')).toBe('D♭');
+      expect(cSharp.getDisplayName('minor')).toBe('C#');
+      expect(cSharp.getDisplayName('default')).toBe('C#');
+    });
+
+    it('正常ケース: 自然音は同じ表記を返す', () => {
+      const c = PitchClass.fromCircleOfFifths(0); // C
+      expect(c.getDisplayName('major')).toBe('C');
+      expect(c.getDisplayName('minor')).toBe('C');
+      expect(c.getDisplayName('default')).toBe('C');
+    });
+
+    it('正常ケース: 全ての変化音のエンハーモニック表記', () => {
+      const testCases = [
+        { fifthsIndex: 7, sharpName: 'C#', flatName: 'D♭' },
+        { fifthsIndex: 9, sharpName: 'D#', flatName: 'E♭' },
+        { fifthsIndex: 6, sharpName: 'F#', flatName: 'G♭' },
+        { fifthsIndex: 8, sharpName: 'G#', flatName: 'A♭' },
+        { fifthsIndex: 10, sharpName: 'A#', flatName: 'B♭' },
+      ];
+
+      testCases.forEach(({ fifthsIndex, sharpName, flatName }) => {
+        const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+        expect(pitchClass.getDisplayName('minor')).toBe(sharpName);
+        expect(pitchClass.getDisplayName('major')).toBe(flatName);
+      });
+    });
+
+    it('正常ケース: 後方互換性 - nameプロパティはsharpNameを返す', () => {
+      const cSharp = PitchClass.fromCircleOfFifths(7);
+      expect(cSharp.name).toBe('C#');
+      expect(cSharp.sharpName).toBe('C#');
+      expect(cSharp.flatName).toBe('D♭');
     });
   });
 });

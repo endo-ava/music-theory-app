@@ -24,13 +24,13 @@ export class Note {
    * @param interval 移調するインターバル
    */
   transposeBy(interval: Interval): Note {
-    const totalSemitones = this._pitchClass.chromaticIndex + this._octave * 12 + interval.semitones;
+    const totalSemitones = this._pitchClass.index + this._octave * 12 + interval.semitones;
 
     const newOctave = Math.floor(totalSemitones / 12);
     const newChromaticIndex = totalSemitones % 12;
 
     const newPitchClass = Object.values(PitchClass).find(
-      p => p instanceof PitchClass && p.chromaticIndex === newChromaticIndex
+      p => p instanceof PitchClass && p.index === newChromaticIndex
     );
 
     if (!newPitchClass) throw new Error('移調計算に失敗しました。');
