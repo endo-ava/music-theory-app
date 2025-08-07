@@ -114,3 +114,20 @@
     touch-action: pan-x pinch-zoom;
   }
 }
+
+/* ---------------------------------- */
+/* 3. 動的生成カラーシステム          */
+/* ---------------------------------- */
+/* 
+  12音×7モードの色相システム（84色）は、
+  layout.tsx でビルド時に動的生成されます。
+  
+  使用可能なクラス例:
+  - bg-key-c-lydian     （C Lydian）
+  - text-key-g-dorian   （G Dorian）  
+  - bg-key-fsharp-locrian（F# Locrian）
+  
+  色相: 五度圏順に30°ずつ（C=0°, G=30°...）
+  彩度: 85%固定
+  明度: Lydian(70%) → Locrian(40%)の階層
+*/

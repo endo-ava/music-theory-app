@@ -12,7 +12,7 @@ export interface SVGRippleEffectProps {
   centerX?: number;
   /** リップルの中心Y座標（SVG座標系） */
   centerY?: number;
-  /** リップルの色 */
+  /** リップルの色（CSS変数） */
   color?: string;
 }
 

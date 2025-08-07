@@ -9,6 +9,7 @@ import { SVGRippleEffect } from './SVGRippleEffect';
 import type { Point } from '@/features/circle-of-fifths/types';
 import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { KeyDTO } from '@/domain';
+import { getMusicColorKey } from '@/shared/utils/keyColorUtils';
 
 /**
  * 個別キーエリアコンポーネントのProps
@@ -52,6 +53,10 @@ export const KeyArea = memo<KeyAreaProps>(
     // カスタムフックから状態とイベントハンドラを受け取る
     const { states, handlers, ripple } = useKeyArea({ keyDTO: key, segment });
     const { fillClassName, textClassName } = states;
+
+    // 音楽色相システムからリップルエフェクト用のCSS変数を生成
+    const rippleColorKey = getMusicColorKey(key);
+    const rippleColor = `var(--color-${rippleColorKey})`;
 
     return (
       <motion.g
@@ -102,7 +107,7 @@ export const KeyArea = memo<KeyAreaProps>(
           isTriggered={ripple.isRippleActive}
           centerX={textPosition.x}
           centerY={textPosition.y}
-          color="rgba(255, 255, 25, 0.3)"
+          color={rippleColor}
           onAnimationComplete={ripple.resetRipple}
         />
       </motion.g>
