@@ -102,7 +102,7 @@ export const KeyArea = memo<KeyAreaProps>(
           isTriggered={ripple.isRippleActive}
           centerX={textPosition.x}
           centerY={textPosition.y}
-          color="rgba(255, 255, 255, 0.3)"
+          color="rgba(255, 255, 25, 0.3)"
           onAnimationComplete={ripple.resetRipple}
         />
       </motion.g>

@@ -57,7 +57,7 @@ export interface UseKeyAreaResult {
 export const useKeyArea = ({ keyDTO, segment }: UseKeyAreaProps): UseKeyAreaResult => {
   const { position } = segment;
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
-  const { playMajorChordAtPosition, playMinorChordAtPosition } = useAudio();
+  const { playChordAtPosition, playScaleAtPosition } = useAudio();
 
   // リップルエフェクトの状態管理
   const ripple = useRippleEffect();
@@ -75,8 +75,8 @@ export const useKeyArea = ({ keyDTO, segment }: UseKeyAreaProps): UseKeyAreaResu
     position,
     setSelectedKey,
     setHoveredKey,
-    playMajorChordAtPosition,
-    playMinorChordAtPosition,
+    playChordAtPosition,
+    playScaleAtPosition,
     onRippleTrigger: ripple.triggerRipple,
   });
 

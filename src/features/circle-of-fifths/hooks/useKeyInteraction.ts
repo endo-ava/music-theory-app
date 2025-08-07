@@ -6,7 +6,7 @@
  */
 
 import { useCallback } from 'react';
-import type { KeyDTO } from '@/domain';
+import { KeyDTO, ScalePattern } from '@/domain';
 import { useLongPress } from './useLongPress';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain/key';
@@ -23,10 +23,10 @@ export interface UseKeyInteractionProps {
   setSelectedKey: (key: KeyDTO) => void;
   /** ホバー状態を設定する関数 */
   setHoveredKey: (key: KeyDTO | null) => void;
-  /** メジャーコード再生関数 */
-  playMajorChordAtPosition: (position: number) => Promise<void>;
-  /** マイナーコード再生関数 */
-  playMinorChordAtPosition: (position: number) => Promise<void>;
+  /** コード再生関数 */
+  playChordAtPosition: (position: number, isMajor: boolean) => Promise<void>;
+  /** スケール再生関数 */
+  playScaleAtPosition: (position: number, scalePattern: ScalePattern) => Promise<void>;
   /** リップルエフェクトトリガー関数 */
   onRippleTrigger?: () => void;
 }
@@ -35,8 +35,6 @@ export interface UseKeyInteractionProps {
  * キーエリアのイベントハンドラ群
  */
 export interface KeyAreaHandlers {
-  /** クリックハンドラ */
-  readonly onClick: () => void;
   /** マウスエンターハンドラ */
   readonly onMouseEnter: () => void;
   /** マウスリーブハンドラ */
@@ -69,44 +67,37 @@ export function useKeyInteraction({
   position,
   setSelectedKey,
   setHoveredKey,
-  playMajorChordAtPosition,
-  playMinorChordAtPosition,
+  playChordAtPosition,
+  playScaleAtPosition,
   onRippleTrigger,
 }: UseKeyInteractionProps): KeyAreaHandlers {
   const { setCurrentKey } = useCurrentKeyStore();
 
-  // クリック時の処理をuseCallbackでメモ化
+  // "ショートクリック" のアクション
   const handleClick = useCallback(() => {
     setSelectedKey(keyDTO);
+    playChordAtPosition(position, keyDTO.isMajor);
+  }, [keyDTO, position, setSelectedKey, playChordAtPosition]);
 
-    // 音響再生: メジャーキーならメジャートライアド、マイナーキーならマイナートライアドを再生
-    const playChordFunction = keyDTO.isMajor ? playMajorChordAtPosition : playMinorChordAtPosition;
-    playChordFunction(position);
-  }, [keyDTO, position, setSelectedKey, playMajorChordAtPosition, playMinorChordAtPosition]);
-
-  // ロングプレス時の処理（ベースキー設定）
+  // "ロングプレス" のアクション
   const handleLongPress = useCallback(() => {
-    const key = Key.fromCircleOfFifths(keyDTO.circleOfFifthsIndex, keyDTO.isMajor);
+    const key = Key.fromCircleOfFifths(keyDTO.fifthsIndex, keyDTO.isMajor);
+    setSelectedKey(keyDTO);
     setCurrentKey(key);
-  }, [keyDTO, setCurrentKey]);
+    playScaleAtPosition(position, keyDTO.isMajor ? ScalePattern.Major : ScalePattern.Aeolian);
+  }, [keyDTO, position, setSelectedKey, setCurrentKey, playScaleAtPosition]); // `position` を依存配列に追加
 
-  // ロングプレス開始時の処理（リップルエフェクト用）
+  // ロングプレス開始時の処理
   const handleLongPressStart = useCallback(() => {
-    // リップルエフェクトをトリガー
     onRippleTrigger?.();
   }, [onRippleTrigger]);
 
-  // マウスエンター時の処理
+  // ホバー時の処理
   const handleMouseEnter = useCallback(() => {
     setHoveredKey(keyDTO);
   }, [setHoveredKey, keyDTO]);
 
-  // マウスリーブ時の処理
-  const handleMouseLeave = useCallback(() => {
-    setHoveredKey(null);
-  }, [setHoveredKey]);
-
-  // ロングプレス機能の統合
+  // すべての判定を useLongPress に委ねる
   const longPressHandlers = useLongPress({
     onClick: handleClick,
     onLongPress: handleLongPress,
@@ -114,23 +105,13 @@ export function useKeyInteraction({
     delay: 500,
   });
 
-  // Combined mouse leave handler that handles both hover state and long press cancellation
-  const combinedMouseLeave = useCallback(() => {
-    handleMouseLeave(); // Clear hover state
-    longPressHandlers.onMouseLeave(); // Cancel long press
-  }, [handleMouseLeave, longPressHandlers]);
+  const handleMouseLeave = useCallback(() => {
+    setHoveredKey(null);
+  }, [setHoveredKey]);
 
   return {
-    // Standard React event handlers (properly named for DOM elements)
-    onClick: handleClick,
     onMouseEnter: handleMouseEnter,
-    onMouseLeave: combinedMouseLeave,
-    // Long press handlers
-    onMouseDown: longPressHandlers.onMouseDown,
-    onMouseUp: longPressHandlers.onMouseUp,
-    onMouseMove: longPressHandlers.onMouseMove,
-    onTouchStart: longPressHandlers.onTouchStart,
-    onTouchEnd: longPressHandlers.onTouchEnd,
-    onTouchMove: longPressHandlers.onTouchMove,
+    ...longPressHandlers,
+    onMouseLeave: handleMouseLeave, // longPressHandlersのonMouseLeaveを上書き
   };
 }

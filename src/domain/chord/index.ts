@@ -92,7 +92,23 @@ export class Chord {
    * Tone.js用の音符表記配列
    */
   get toneNotations(): string[] {
-    return [...this.constituentNotes].map(note => note.toString);
+    return this.constituentNotes.map(note => note.toString);
+  }
+
+  /**
+   * 指定されたキーのルート音から各構成音へのInterval配列を返す
+   * @param keyRoot キーのルート音（PitchClass）
+   * @returns キールートからの各構成音のInterval配列
+   * @example
+   * // CキーにおけるG7コード (G, B, D, F) の場合
+   * // G: C→Gは完全5度 (P5)
+   * // B: C→Bは長7度 (M7)
+   * // D: C→Dは長2度 (M2)
+   * // F: C→Fは完全4度 (P4)
+   * // 結果: [P5, M7, M2, P4]
+   */
+  getIntervalsFromKey(keyRoot: PitchClass): Interval[] {
+    return this.constituentNotes.map(note => Interval.between(keyRoot, note._pitchClass));
   }
 
   /**
@@ -131,7 +147,7 @@ export class Chord {
    * @param pitchClass 判定対象のピッチクラス
    */
   private static getOptimizedOctave(pitchClass: PitchClass): number {
-    // G# (chromaticIndex: 8) 以上の音は低いオクターブにする
-    return pitchClass.chromaticIndex >= 8 ? 3 : 4;
+    // G# (index: 8) 以上の音は低いオクターブにする
+    return pitchClass.index >= 8 ? 3 : 4;
   }
 }

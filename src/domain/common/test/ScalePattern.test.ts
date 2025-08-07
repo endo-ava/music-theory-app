@@ -87,7 +87,7 @@ describe('ScalePattern', () => {
     it('正常ケース: Aeolianモードが正しく定義されている', () => {
       const aeolian = ScalePattern.Aeolian;
 
-      expect(aeolian.name).toBe('Aeolian (Natural Minor)');
+      expect(aeolian.name).toBe('Minor');
       expect(aeolian.intervals.length).toBe(7);
       expect(aeolian).toBeInstanceOf(ScalePattern);
     });
