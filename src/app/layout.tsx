@@ -22,6 +22,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Noto+Serif+JP&display=swap"
+          rel="stylesheet"
+        />
+
         <style
           dangerouslySetInnerHTML={{
             __html: `
