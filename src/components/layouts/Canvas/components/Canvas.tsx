@@ -24,10 +24,12 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
       aria-label="メイン表示エリア"
     >
       {/* 現在のベースキー表示 */}
-      <CurrentKeyDisplay className="text-center text-2xl lg:text-4xl" />
+      <div className="text-center">
+        <CurrentKeyDisplay />
+      </div>
 
       {/* 固定間隔 */}
-      <div className="h-8 flex-shrink-0 lg:h-12"></div>
+      <div className="h-1 flex-shrink-0 lg:h-4"></div>
 
       {/* Hub コンポーネント表示 */}
       <div

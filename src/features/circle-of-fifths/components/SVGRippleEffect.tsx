@@ -70,21 +70,23 @@ export const SVGRippleEffect: React.FC<SVGRippleEffectProps> = ({
             key={ripple.id}
             cx={centerX}
             cy={centerY}
-            fill={color}
-            stroke="none"
+            fill="none"
+            stroke={color}
             initial={{
               r: 0,
-              opacity: 0.8,
+              opacity: 1,
+              strokeWidth: 2,
             }}
             animate={{
               r: 100,
               opacity: 0,
+              strokeWidth: 0,
             }}
             exit={{
               opacity: 0,
             }}
             transition={{
-              duration: 0.6,
+              duration: 1,
               ease: 'easeOut',
             }}
             onAnimationComplete={() => removeRipple(ripple.id)}

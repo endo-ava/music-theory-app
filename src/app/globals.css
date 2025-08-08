@@ -5,10 +5,8 @@
 /* ---------------------------------- */
 @theme {
   /* フォントファミリー (font-family) */
-  --font-family-sans:
-    'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Arial',
-    'Yu Gothic', 'Meiryo', sans-serif;
-  --font-family-serif: 'Times New Roman', 'YuMincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'serif';
+  --font-family-sans: 'Noto Sans JP', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  --font-family-serif: 'Noto Serif JP', 'Times New Roman', 'Georgia', serif;
 
   /* カラーパレット (colors) */
   --color-bg-from: #111827;
@@ -77,13 +75,6 @@
     background-size: 100% 100%;
     /* 画面全体にの最小高さ（モバイルブラウザのアドレスバー考慮） */
     min-height: 100dvh;
-  }
-
-  /* 他にもh1やaタグなどのデフォルトスタイルをここで定義できる */
-  h1 {
-    font-family: theme('fontFamily.sans');
-    font-weight: var(--font-weight-title);
-    color: var(--color-text-secondary);
   }
 
   h1,
