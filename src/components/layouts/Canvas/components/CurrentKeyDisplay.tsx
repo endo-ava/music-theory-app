@@ -2,9 +2,8 @@
 
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { ClassNameProps } from '@/shared/types';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { ResponsiveHelpIcon } from '@/shared/components/ResponsiveHelpIcon';
 import { twMerge } from 'tailwind-merge';
-import { HelpCircle } from 'lucide-react';
 
 /**
  * 現在のスケール表示コンポーネント
@@ -22,22 +21,15 @@ export const CurrentKeyDisplay: React.FC<ClassNameProps> = ({ className }) => {
   const { currentKey } = useCurrentKeyStore();
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <div className={twMerge('relative inline-block', className)}>
-          {/* テキスト本体 */}
-          <h2 className="cursor-default pr-4 pb-2 text-2xl lg:text-4xl">{currentKey.keyName}</h2>
+    <div className={twMerge('relative inline-block', className)}>
+      {/* テキスト本体 */}
+      <h2 className="cursor-default pr-4 pb-2 text-2xl lg:text-4xl">{currentKey.keyName}</h2>
 
-          {/* 2. ヘルプアイコン モバイルでのみ表示(md:hidden) */}
-          <div className="absolute right-0 bottom-1 md:hidden">
-            <HelpCircle className="text-text-secondary size-4" />
-          </div>
-        </div>
-      </TooltipTrigger>
-
-      <TooltipContent side="right" sideOffset={8} className="font-sans">
-        キーセクションを長押しでキー変更
-      </TooltipContent>
-    </Tooltip>
+      {/* レスポンシブヘルプアイコン */}
+      <ResponsiveHelpIcon
+        helpText="キーセクションを長押しでキー変更"
+        className="absolute right-0 bottom-1"
+      />
+    </div>
   );
 };
