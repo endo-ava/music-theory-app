@@ -27,8 +27,8 @@ export const CurrentKeyDisplay: React.FC<ClassNameProps> = ({ className }) => {
 
       {/* レスポンシブヘルプアイコン */}
       <ResponsiveHelpIcon
-        helpText="キーセクションを長押しでキー変更"
-        className="absolute right-0 bottom-1"
+        helpText="キーセクション長押しでキー変更"
+        className="absolute right-1 bottom-1"
       />
     </div>
   );

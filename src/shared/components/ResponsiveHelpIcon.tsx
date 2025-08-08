@@ -43,8 +43,8 @@ export const ResponsiveHelpIcon: React.FC<ResponsiveHelpIconProps> = ({
           </PopoverTrigger>
           <PopoverContent
             side="right"
-            sideOffset={8}
-            className="w-auto px-2 py-1 font-sans text-[10px] leading-tight"
+            sideOffset={4}
+            className="w-auto px-2 py-1 font-sans text-[8px] leading-tight"
           >
             {helpText}
           </PopoverContent>
