@@ -16,9 +16,6 @@ export default function RootLayout({
   // ビルド時に12音×7モードの色相システムを生成
   const musicColorTheme = generateMusicColorTheme();
 
-  // デバッグ用：生成されたCSS変数を確認
-  console.log('🎨 Generated Music Color Theme:', musicColorTheme);
-
   return (
     <html lang="ja">
       <head>

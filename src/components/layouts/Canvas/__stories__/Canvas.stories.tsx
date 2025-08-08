@@ -109,8 +109,8 @@ export const AccessibilityTest: Story = {
     expect(mainArea).toBeInTheDocument();
     expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
 
-    // 見出しの階層構造確認
-    const heading = canvas.getByRole('heading', { level: 1 });
+    // 見出しの階層構造確認（CurrentKeyDisplayはh2要素を使用）
+    const heading = canvas.getByRole('heading', { level: 2 });
     expect(heading).toBeInTheDocument();
 
     // SVG要素の代替テキスト確認
