@@ -1,10 +1,17 @@
 import { useRef, useCallback } from 'react';
 
+// 定数定義
+/** 移動検知の閾値（ピクセル）- この距離を超えて移動するとロングプレスがキャンセルされる */
+const MOVEMENT_THRESHOLD = 10;
+
 /**
  * ロングプレスのオプション設定
  */
 interface UseLongPressOptions {
-  /** ロングプレス判定までの時間（ミリ秒） */
+  /**
+   * ロングプレス判定までの時間（ミリ秒）
+   * @default 500 - デフォルトは500ms（0.5秒）でロングプレスと判定
+   */
   delay?: number;
   /** ロングプレス開始時のコールバック */
   onLongPressStart?: () => void;
@@ -76,7 +83,7 @@ export const useLongPress = ({
 
   // 移動による判定（指定距離以上移動したらキャンセル）
   const checkMovement = useCallback(
-    (x: number, y: number, threshold = 10) => {
+    (x: number, y: number, threshold = MOVEMENT_THRESHOLD) => {
       if (!startPosition.current) return false;
 
       const deltaX = Math.abs(x - startPosition.current.x);
