@@ -3,6 +3,10 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
+// 定数定義
+/** リップル効果の最大半径（SVG単位） */
+const DEFAULT_MAX_RADIUS = 100;
+
 export interface SVGRippleEffectProps {
   /** リップル効果をトリガーするかどうか */
   isTriggered: boolean;
@@ -14,6 +18,8 @@ export interface SVGRippleEffectProps {
   centerY?: number;
   /** リップルの色（CSS変数） */
   color?: string;
+  /** リップル効果の最大半径（SVG単位） @default 100 */
+  maxRadius?: number;
 }
 
 interface RippleInstance {
@@ -33,6 +39,7 @@ export const SVGRippleEffect: React.FC<SVGRippleEffectProps> = ({
   centerX = 0,
   centerY = 0,
   color = 'rgba(255, 255, 255, 0.4)',
+  maxRadius = DEFAULT_MAX_RADIUS,
 }) => {
   const [ripples, setRipples] = useState<RippleInstance[]>([]);
   const [rippleId, setRippleId] = useState(0);
@@ -78,7 +85,7 @@ export const SVGRippleEffect: React.FC<SVGRippleEffectProps> = ({
               strokeWidth: 2,
             }}
             animate={{
-              r: 100,
+              r: maxRadius,
               opacity: 0,
               strokeWidth: 0,
             }}

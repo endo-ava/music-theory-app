@@ -54,7 +54,7 @@ export class Scale {
     const generated: Note[] = [rootNote];
     let currentNote = rootNote;
 
-    // パターンの最後のインターバルは次のオクターブのルートに戻るため、n-1回ループ
+    // パターンのすべてのインターバルを適用してスケールの構成音を生成
     for (let i = 0; i < this.pattern.intervals.length; i++) {
       const interval = this.pattern.intervals[i];
       const nextNote = currentNote.transposeBy(interval);
