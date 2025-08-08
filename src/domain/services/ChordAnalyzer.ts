@@ -1,4 +1,4 @@
-import { Chord, ChordQuality } from '../chord';
+import { Chord } from '../chord';
 import { Interval, Note, PitchClass } from '../common';
 
 // --- 定数と型定義 ---
@@ -21,7 +21,7 @@ interface TonalKey {
 }
 // Cメジャーキーの新しい定義
 
-const majorKeyHierarchical: TonalKey = {
+const _majorKeyHierarchical: TonalKey = {
   // root: PitchClass.C,
 
   nuclei: {
@@ -189,30 +189,30 @@ export function printAnalysis(
   console.log(`------------------------------------`);
 }
 
-// --- 実行デモ ---
-const analyzer = new ChordAnalyzer(majorKeyHierarchical);
+// // --- 実行デモ ---
+// const analyzer = new ChordAnalyzer(majorKeyHierarchical);
 
-// Case 1: G7 -> Cmaj7 (典型的なドミナントモーション)
-const G7: Chord = Chord.from(new Note(PitchClass.G, 4), ChordQuality.DominantSeventh);
-const C: Chord = Chord.from(new Note(PitchClass.C, 4), ChordQuality.MajorTriad);
+// // Case 1: G7 -> Cmaj7 (典型的なドミナントモーション)
+// const G7: Chord = Chord.from(new Note(PitchClass.G, 4), ChordQuality.DominantSeventh);
+// const C: Chord = Chord.from(new Note(PitchClass.C, 4), ChordQuality.MajorTriad);
 
-printAnalysis(analyzer, G7, C, PitchClass.C);
-// 予想される結果: Dominantの引力が非常に高く、Cmaj7への慣性も強い
+// printAnalysis(analyzer, G7, C, PitchClass.C);
+// // 予想される結果: Dominantの引力が非常に高く、Cmaj7への慣性も強い
 
-// Case 2: Db7 -> Cmaj7 (裏コード)
-const Db7: Chord = Chord.from(new Note(PitchClass.CSharp, 4), ChordQuality.DominantSeventh);
-printAnalysis(analyzer, Db7, C, PitchClass.C);
+// // Case 2: Db7 -> Cmaj7 (裏コード)
+// const Db7: Chord = Chord.from(new Note(PitchClass.CSharp, 4), ChordQuality.DominantSeventh);
+// printAnalysis(analyzer, Db7, C, PitchClass.C);
 
-// // 予想される結果: G7と同じくDominantの核(F,B)を持つため、引力はDominantに。さらに半音進行が多いため慣性も非常に強いはず。
+// // // 予想される結果: G7と同じくDominantの核(F,B)を持つため、引力はDominantに。さらに半音進行が多いため慣性も非常に強いはず。
 
-// // Case 3: C#dim -> Dm7 (経過和音)
-const CsharpDim: Chord = Chord.from(new Note(PitchClass.DSharp, 4), ChordQuality.DiminishedTriad);
-const Dm7: Chord = Chord.from(new Note(PitchClass.D, 4), ChordQuality.MinorSeventh);
-// // Dm7の構成音に合わせてC#dim7も4和音にするとより正確
-// const CsharpDim7_4: Chord = [noteToPitchClass('C#'), noteToPitchClass('E'), noteToPitchClass('G'), noteToPitchClass('Bb')];
-printAnalysis(analyzer, CsharpDim, Dm7, PitchClass.C);
+// // // Case 3: C#dim -> Dm7 (経過和音)
+// const CsharpDim: Chord = Chord.from(new Note(PitchClass.DSharp, 4), ChordQuality.DiminishedTriad);
+// const Dm7: Chord = Chord.from(new Note(PitchClass.D, 4), ChordQuality.MinorSeventh);
+// // // Dm7の構成音に合わせてC#dim7も4和音にするとより正確
+// // const CsharpDim7_4: Chord = [noteToPitchClass('C#'), noteToPitchClass('E'), noteToPitchClass('G'), noteToPitchClass('Bb')];
+// printAnalysis(analyzer, CsharpDim, Dm7, PitchClass.C);
 
-// 予想される結果: 引力はどの機能にも偏らないが、Dm7への慣性が非常に強いはず。
+// // 予想される結果: 引力はどの機能にも偏らないが、Dm7への慣性が非常に強いはず。
 
-const FSharpM7: Chord = Chord.from(new Note(PitchClass.FSharp, 4), ChordQuality.MajorSeventh);
-printAnalysis(analyzer, C, FSharpM7, PitchClass.C);
+// const FSharpM7: Chord = Chord.from(new Note(PitchClass.FSharp, 4), ChordQuality.MajorSeventh);
+// printAnalysis(analyzer, C, FSharpM7, PitchClass.C);

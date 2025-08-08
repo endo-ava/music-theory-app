@@ -85,7 +85,7 @@ export function useKeyInteraction({
     setSelectedKey(keyDTO);
     setCurrentKey(key);
     playScaleAtPosition(position, keyDTO.isMajor ? ScalePattern.Major : ScalePattern.Aeolian);
-  }, [keyDTO, position, setSelectedKey, setCurrentKey, playScaleAtPosition]); // `position` を依存配列に追加
+  }, [keyDTO, position, setSelectedKey, setCurrentKey, playScaleAtPosition]);
 
   // ロングプレス開始時の処理
   const handleLongPressStart = useCallback(() => {
