@@ -20,7 +20,7 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
       const notes = scale.getNotes();
 
-      expect(notes.length).toBe(7);
+      expect(notes.length).toBe(8);
       expect(notes[0]._octave).toBe(4); // デフォルトオクターブ
     });
 
@@ -41,8 +41,8 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
       const notes = scale.getNotes();
 
-      const expectedNames = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-      expect(notes.length).toBe(7);
+      const expectedNames = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'];
+      expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
         expect(note._pitchClass.name).toBe(expectedNames[index]);
@@ -55,8 +55,8 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
       const notes = scale.getNotes();
 
-      const expectedNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-      expect(notes.length).toBe(7);
+      const expectedNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'A'];
+      expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
         expect(note._pitchClass.name).toBe(expectedNames[index]);
@@ -69,8 +69,8 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
       const notes = scale.getNotes();
 
-      const expectedNames = ['G', 'A', 'B', 'C', 'D', 'E', 'F#'];
-      expect(notes.length).toBe(7);
+      const expectedNames = ['G', 'A', 'B', 'C', 'D', 'E', 'F#', 'G'];
+      expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
         expect(note._pitchClass.name).toBe(expectedNames[index]);
@@ -127,12 +127,12 @@ describe('Scale', () => {
       expect(note).toBeUndefined();
     });
 
-    it('異常ケース: 無効な度数（8）でundefinedを返す', () => {
+    it('異常ケース: 無効な度数（9）でundefinedを返す', () => {
       const root = PitchClass.fromCircleOfFifths(0); // C
       const pattern = ScalePattern.Major;
       const scale = new Scale(root, pattern);
 
-      const note = scale.getNoteForDegree(8);
+      const note = scale.getNoteForDegree(9);
       expect(note).toBeUndefined();
     });
 
@@ -190,8 +190,8 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
       const notes = scale.getNotes();
 
-      const expectedNames = ['G', 'A', 'B', 'C', 'D', 'E', 'F'];
-      expect(notes.length).toBe(7);
+      const expectedNames = ['G', 'A', 'B', 'C', 'D', 'E', 'F', 'G'];
+      expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
         expect(note._pitchClass.name).toBe(expectedNames[index]);
@@ -204,8 +204,8 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
       const notes = scale.getNotes();
 
-      const expectedNames = ['D', 'E', 'F', 'G', 'A', 'B', 'C'];
-      expect(notes.length).toBe(7);
+      const expectedNames = ['D', 'E', 'F', 'G', 'A', 'B', 'C', 'D'];
+      expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
         expect(note._pitchClass.name).toBe(expectedNames[index]);
@@ -226,14 +226,12 @@ describe('Scale', () => {
         const prev = notes[i - 1];
         const curr = notes[i];
         const semitones =
-          curr._pitchClass.chromaticIndex +
-          curr._octave * 12 -
-          (prev._pitchClass.chromaticIndex + prev._octave * 12);
+          curr._pitchClass.index + curr._octave * 12 - (prev._pitchClass.index + prev._octave * 12);
         intervals.push(semitones);
       }
 
-      // W-W-H-W-W-W-H (2-2-1-2-2-2) - 最後のインターバルは次のオクターブなので含まない
-      const expectedIntervals = [2, 2, 1, 2, 2, 2];
+      // W-W-H-W-W-W-H
+      const expectedIntervals = [2, 2, 1, 2, 2, 2, 1];
       expect(intervals).toEqual(expectedIntervals);
     });
 
@@ -248,14 +246,12 @@ describe('Scale', () => {
         const prev = notes[i - 1];
         const curr = notes[i];
         const semitones =
-          curr._pitchClass.chromaticIndex +
-          curr._octave * 12 -
-          (prev._pitchClass.chromaticIndex + prev._octave * 12);
+          curr._pitchClass.index + curr._octave * 12 - (prev._pitchClass.index + prev._octave * 12);
         intervals.push(semitones);
       }
 
-      // W-H-W-W-H-W-W (2-1-2-2-1-2) - 最後のインターバルは次のオクターブなので含まない
-      const expectedIntervals = [2, 1, 2, 2, 1, 2];
+      // W-H-W-W-H-W-W
+      const expectedIntervals = [2, 1, 2, 2, 1, 2, 2];
       expect(intervals).toEqual(expectedIntervals);
     });
   });
@@ -268,7 +264,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       expect(notes[0]._octave).toBe(0);
-      expect(notes.length).toBe(7);
+      expect(notes.length).toBe(8);
     });
 
     it('境界値ケース: 高オクターブでのスケール', () => {
@@ -278,7 +274,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       expect(notes[0]._octave).toBe(8);
-      expect(notes.length).toBe(7);
+      expect(notes.length).toBe(8);
     });
   });
 });

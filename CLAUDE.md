@@ -199,3 +199,41 @@ playwright:browser_take_screenshot(
   playwright:browser_set_viewport_size(width: 3840, height: 2160)
 - ウルトラワイド  
   playwright:browser_set_viewport_size(width: 3440, height: 1440)
+
+## Serena MCP 活用指針
+
+### 基本方針
+
+- **コードベースの理解・探索にはSerena MCPを積極的に活用する**
+- ファイル全体を読む前に、まずシンボル概要やパターン検索で効率的に情報収集する
+- 大きなファイルを読む必要がある場合は、事前にSerenaの概要ツールで構造を把握する
+
+### 優先的にSerenaを使用すべき場面
+
+1. **コードベース探索時**
+
+   - `mcp__serena__get_symbols_overview` でディレクトリやファイルの構造把握
+   - `mcp__serena__find_symbol` で特定のクラス・関数・型の検索
+   - `mcp__serena__search_for_pattern` でパターンマッチング検索
+
+2. **コード編集時**
+
+   - `mcp__serena__replace_symbol_body` でシンボル全体の置換
+   - `mcp__serena__insert_after_symbol` / `mcp__serena__insert_before_symbol` でコード挿入
+   - `mcp__serena__replace_regex` で部分的な置換
+
+3. **リファクタリング時**
+   - `mcp__serena__find_referencing_symbols` で参照箇所の特定
+   - 依存関係の理解と安全な変更の実施
+
+### トークン効率化のために
+
+- ファイル全体読み込み（Readツール）は最後の手段とする
+- まずSerenaの概要・検索ツールで必要な部分のみを特定してから読み込む
+- 同じファイルを複数回読まないよう、Serenaの情報を活用する
+
+### メモリ活用
+
+- プロジェクト情報はSerenaメモリに保存済み
+- `mcp__serena__read_memory` で必要な情報を効率的に取得
+- 新しい知見は `mcp__serena__write_memory` で継続的に蓄積

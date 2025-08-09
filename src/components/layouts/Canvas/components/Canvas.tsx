@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
-import { HubTitle } from './HubTitle';
+import { CurrentKeyDisplay } from './CurrentKeyDisplay';
 import { HubTypeController } from './HubTypeController';
 import { ClassNameProps } from '@/shared/types';
 import { ChromaticCircle } from '@/features/chromatic-circle';
@@ -23,11 +23,13 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
       )}
       aria-label="メイン表示エリア"
     >
-      {/* Hub タイトル */}
-      <HubTitle className="text-center text-2xl lg:text-4xl" />
+      {/* 現在のベースキー表示 */}
+      <div className="text-center">
+        <CurrentKeyDisplay />
+      </div>
 
       {/* 固定間隔 */}
-      <div className="h-8 flex-shrink-0 lg:h-12"></div>
+      <div className="h-1 flex-shrink-0 lg:h-4"></div>
 
       {/* Hub コンポーネント表示 */}
       <div

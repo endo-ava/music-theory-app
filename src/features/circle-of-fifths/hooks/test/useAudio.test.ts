@@ -24,16 +24,46 @@ vi.mock('@/domain/chord', () => {
         rootNote: { toString: 'A4' },
         toneNotations: ['A4', 'C4', 'E4'],
       }),
+      major: vi.fn().mockReturnValue({
+        toneNotations: ['C4', 'E4', 'G4'],
+      }),
+      minor: vi.fn().mockReturnValue({
+        toneNotations: ['C4', 'Eb4', 'G4'],
+      }),
     },
   };
 });
 
 vi.mock('@/domain', () => ({
   AudioEngine: {
-    playChord: vi.fn().mockResolvedValue(undefined),
+    playNotes: vi.fn().mockResolvedValue(undefined),
     setVolume: vi.fn(),
     setArpeggioSpeed: vi.fn(),
   },
+  PitchClass: {
+    fromCircleOfFifths: vi.fn().mockReturnValue({
+      index: 0,
+    }),
+  },
+  Note: vi.fn().mockImplementation((pitchClass, octave) => ({
+    pitchClass,
+    octave,
+  })),
+  Chord: {
+    major: vi.fn().mockReturnValue({
+      toneNotations: ['C4', 'E4', 'G4'],
+    }),
+    minor: vi.fn().mockReturnValue({
+      toneNotations: ['C4', 'Eb4', 'G4'],
+    }),
+  },
+  Interval: {
+    MinorThird: {
+      semitones: 3,
+    },
+  },
+  Scale: vi.fn(),
+  ScalePattern: vi.fn(),
 }));
 
 describe('useAudio', () => {
@@ -45,13 +75,13 @@ describe('useAudio', () => {
     it('正常ケース: フックが正しい関数群を返す', () => {
       const { result } = renderHook(() => useAudio());
 
-      expect(result.current).toHaveProperty('playMajorChordAtPosition');
-      expect(result.current).toHaveProperty('playMinorChordAtPosition');
+      expect(result.current).toHaveProperty('playChordAtPosition');
+      expect(result.current).toHaveProperty('playScaleAtPosition');
       expect(result.current).toHaveProperty('setVolume');
       expect(result.current).toHaveProperty('setArpeggioSpeed');
 
-      expect(typeof result.current.playMajorChordAtPosition).toBe('function');
-      expect(typeof result.current.playMinorChordAtPosition).toBe('function');
+      expect(typeof result.current.playChordAtPosition).toBe('function');
+      expect(typeof result.current.playScaleAtPosition).toBe('function');
       expect(typeof result.current.setVolume).toBe('function');
       expect(typeof result.current.setArpeggioSpeed).toBe('function');
     });
@@ -64,29 +94,39 @@ describe('useAudio', () => {
       const secondRender = result.current;
 
       // 関数の参照が安定している（useCallbackが効いている）
-      expect(firstRender.playMajorChordAtPosition).toBe(secondRender.playMajorChordAtPosition);
-      expect(firstRender.playMinorChordAtPosition).toBe(secondRender.playMinorChordAtPosition);
+      expect(firstRender.playChordAtPosition).toBe(secondRender.playChordAtPosition);
+      expect(firstRender.playScaleAtPosition).toBe(secondRender.playScaleAtPosition);
       expect(firstRender.setVolume).toBe(secondRender.setVolume);
       expect(firstRender.setArpeggioSpeed).toBe(secondRender.setArpeggioSpeed);
     });
   });
 
-  describe('playMajorChordAtPosition', () => {
+  describe('playChordAtPosition', () => {
     it('正常ケース: 五度圏ポジションからメジャーコードを再生', async () => {
-      const { Chord } = await import('@/domain/chord');
       const { AudioEngine } = await import('@/domain');
       const { result } = renderHook(() => useAudio());
 
       await act(async () => {
-        await result.current.playMajorChordAtPosition(0);
+        await result.current.playChordAtPosition(0, true);
       });
 
-      expect(Chord.fromCircleOfFifths).toHaveBeenCalledWith(0);
-      expect(AudioEngine.playChord).toHaveBeenCalledTimes(1);
+      expect(AudioEngine.playNotes).toHaveBeenCalledWith(['C4', 'E4', 'G4'], false);
+      expect(AudioEngine.playNotes).toHaveBeenCalledTimes(1);
+    });
+
+    it('正常ケース: 五度圏ポジションからマイナーコードを再生', async () => {
+      const { AudioEngine } = await import('@/domain');
+      const { result } = renderHook(() => useAudio());
+
+      await act(async () => {
+        await result.current.playChordAtPosition(0, false);
+      });
+
+      expect(AudioEngine.playNotes).toHaveBeenCalledWith(['C4', 'Eb4', 'G4'], false);
+      expect(AudioEngine.playNotes).toHaveBeenCalledTimes(1);
     });
 
     it('正常ケース: 異なる五度圏ポジションでの再生', async () => {
-      const { Chord } = await import('@/domain/chord');
       const { AudioEngine } = await import('@/domain');
       const { result } = renderHook(() => useAudio());
 
@@ -94,16 +134,11 @@ describe('useAudio', () => {
 
       for (const position of positions) {
         await act(async () => {
-          await result.current.playMajorChordAtPosition(position);
+          await result.current.playChordAtPosition(position, true);
         });
       }
 
-      // 各ポジションでfromCircleOfFifthsが呼ばれる
-      positions.forEach(position => {
-        expect(Chord.fromCircleOfFifths).toHaveBeenCalledWith(position);
-      });
-
-      expect(AudioEngine.playChord).toHaveBeenCalledTimes(positions.length);
+      expect(AudioEngine.playNotes).toHaveBeenCalledTimes(positions.length);
     });
 
     it('異常ケース: コード生成でエラーが発生した場合のハンドリング', async () => {
@@ -111,17 +146,17 @@ describe('useAudio', () => {
       const { result } = renderHook(() => useAudio());
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      // Chord.fromCircleOfFifthsがエラーをスロー
-      vi.mocked(Chord.fromCircleOfFifths).mockImplementationOnce(() => {
+      // Chord.majorがエラーをスロー
+      vi.mocked(Chord.major).mockImplementationOnce(() => {
         throw new Error('Chord creation failed');
       });
 
       await act(async () => {
-        await result.current.playMajorChordAtPosition(0);
+        await result.current.playChordAtPosition(0, true);
       });
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Failed to play major chord at position 0:',
+        'Failed to play major chord at position 0, isMajor:true:',
         expect.any(Error)
       );
 
@@ -133,71 +168,15 @@ describe('useAudio', () => {
       const { result } = renderHook(() => useAudio());
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      // AudioEngine.playChordがエラーをスロー
-      vi.mocked(AudioEngine.playChord).mockRejectedValueOnce(new Error('Audio playback failed'));
+      // AudioEngine.playNotesがエラーをスロー
+      vi.mocked(AudioEngine.playNotes).mockRejectedValueOnce(new Error('Audio playback failed'));
 
       await act(async () => {
-        await result.current.playMajorChordAtPosition(0);
+        await result.current.playChordAtPosition(0, true);
       });
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Failed to play major chord at position 0:',
-        expect.any(Error)
-      );
-
-      consoleErrorSpy.mockRestore();
-    });
-  });
-
-  describe('playMinorChordAtPosition', () => {
-    it('正常ケース: 五度圏ポジションからマイナーコードを再生', async () => {
-      const { Chord } = await import('@/domain/chord');
-      const { AudioEngine } = await import('@/domain');
-      const { result } = renderHook(() => useAudio());
-
-      await act(async () => {
-        await result.current.playMinorChordAtPosition(0);
-      });
-
-      expect(Chord.relativeMinorFromCircleOfFifths).toHaveBeenCalledWith(0);
-      expect(AudioEngine.playChord).toHaveBeenCalledTimes(1);
-    });
-
-    it('正常ケース: 複数のマイナーコード再生', async () => {
-      const { Chord } = await import('@/domain/chord');
-      const { AudioEngine } = await import('@/domain');
-      const { result } = renderHook(() => useAudio());
-
-      const positions = [0, 3, 7];
-
-      for (const position of positions) {
-        await act(async () => {
-          await result.current.playMinorChordAtPosition(position);
-        });
-      }
-
-      // 各ポジションでrelativeMinorFromCircleOfFifthsが呼ばれる
-      positions.forEach(position => {
-        expect(Chord.relativeMinorFromCircleOfFifths).toHaveBeenCalledWith(position);
-      });
-
-      expect(AudioEngine.playChord).toHaveBeenCalledTimes(positions.length);
-    });
-
-    it('異常ケース: マイナーコード再生時のエラーハンドリング', async () => {
-      const { AudioEngine } = await import('@/domain');
-      const { result } = renderHook(() => useAudio());
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-      // AudioEngine.playChordがエラーをスロー
-      vi.mocked(AudioEngine.playChord).mockRejectedValueOnce(new Error('Audio playback failed'));
-
-      await act(async () => {
-        await result.current.playMinorChordAtPosition(0);
-      });
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Failed to play minor chord at position 0:',
+        'Failed to play major chord at position 0, isMajor:true:',
         expect.any(Error)
       );
 
@@ -278,14 +257,14 @@ describe('useAudio', () => {
 
       // コードを再生
       await act(async () => {
-        await result.current.playMajorChordAtPosition(1);
-        await result.current.playMinorChordAtPosition(2);
+        await result.current.playChordAtPosition(1, true);
+        await result.current.playChordAtPosition(2, false);
       });
 
       // 設定が正しく反映され、音楽が再生される
       expect(AudioEngine.setVolume).toHaveBeenCalledWith(-3);
       expect(AudioEngine.setArpeggioSpeed).toHaveBeenCalledWith(150);
-      expect(AudioEngine.playChord).toHaveBeenCalledTimes(2);
+      expect(AudioEngine.playNotes).toHaveBeenCalledTimes(2);
     });
   });
 });

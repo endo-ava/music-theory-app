@@ -6,7 +6,7 @@ import { Chord, ChordQuality } from '../chord';
 export interface KeyDTO {
   shortName: string;
   keyName: string;
-  circleIndex: number;
+  fifthsIndex: number;
   isMajor: boolean;
 }
 
@@ -36,7 +36,10 @@ export class Key {
    * Keyの名前（"C Major", "A Minor"など）を取得する
    */
   get keyName(): string {
-    return `${this.tonic.name} ${this.pattern.name}`;
+    // 音楽理論慣習に従い、メジャーは♭表記、マイナーは#表記を使用
+    const context = this.pattern.quality === 'major' ? 'major' : 'minor';
+    const tonicName = this.tonic.getDisplayName(context);
+    return `${tonicName} ${this.pattern.name}`;
   }
 
   /**
@@ -44,7 +47,9 @@ export class Key {
    */
   get shortName(): string {
     const pattern = this.pattern;
-    const tonicName = this.tonic.name;
+    // 音楽理論慣習に従い、メジャーは♭表記、マイナーは#表記を使用
+    const context = pattern.quality === 'major' ? 'major' : 'minor';
+    const tonicName = this.tonic.getDisplayName(context);
 
     // パターンの性質に基づいて分岐する
     switch (pattern.quality) {
@@ -118,15 +123,13 @@ export class Key {
   /**
    * 五度圏インデックスからKeyを生成する
    * @param circleIndex 五度圏インデックス (C=0, G=1...)
-   * @param isMinor マイナーキーかどうか
+   * @param isMajor メジャーキーかどうか
    */
-  static fromCircleOfFifths(circleIndex: number, isMinor: boolean): Key {
-    // マイナーの場合、五度圏のインデックスを短3度下にずらす (C Major -> A Minor)
-    const tonicIndex = isMinor ? circleIndex + 3 : circleIndex;
-    const tonic = PitchClass.fromCircleOfFifths(tonicIndex);
-    const pattern = isMinor ? ScalePattern.Aeolian : ScalePattern.Major;
-
-    return new Key(tonic, pattern);
+  static fromCircleOfFifths(circleIndex: number, isMajor: boolean): Key {
+    return new Key(
+      PitchClass.fromCircleOfFifths(circleIndex),
+      isMajor ? ScalePattern.Major : ScalePattern.Aeolian
+    );
   }
 
   /**
@@ -136,7 +139,7 @@ export class Key {
     return {
       shortName: this.shortName,
       keyName: this.keyName,
-      circleIndex: this.tonic.circleOfFifthsIndex,
+      fifthsIndex: this.tonic.fifthsIndex,
       isMajor: this.isMajor,
     };
   }

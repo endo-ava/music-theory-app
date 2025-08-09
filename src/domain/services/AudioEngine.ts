@@ -3,7 +3,6 @@
  */
 
 import * as Tone from 'tone';
-import { Chord } from '../chord';
 
 /**
  * 音響アセット設定
@@ -42,16 +41,16 @@ export class AudioEngine {
   static config = {
     volume: -10, // 音量 (dB)
     arpeggioDelay: 100, // アルペジオ間隔 (ms)
+    arpeggioDelaySlow: 150, // アルペジオ間隔 (ms)
     release: 1.5, // ノートの長さ (秒)
   };
 
   /**
-   * 和音をアルペジオで再生
+   * note listをアルペジオで再生
    */
-  static async playChord(chord: Chord): Promise<void> {
+  static async playNotes(notes: string[], isScale: boolean): Promise<void> {
     await this.ensureSampler();
-
-    const notes = chord.toneNotations;
+    const delay = isScale ? this.config.arpeggioDelaySlow : this.config.arpeggioDelay;
 
     // アルペジオ再生
     notes.forEach((note, i) => {
@@ -64,7 +63,7 @@ export class AudioEngine {
 
           this.sampler.triggerAttackRelease(note, this.config.release);
         }
-      }, i * this.config.arpeggioDelay);
+      }, i * delay);
     });
   }
 
