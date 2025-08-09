@@ -5,9 +5,11 @@ import { motion } from 'motion/react';
 import { ANIMATION } from '../constants/index';
 
 import { useKeyArea } from '../hooks/useKeyArea';
+import { SVGRippleEffect } from './SVGRippleEffect';
 import type { Point } from '@/features/circle-of-fifths/types';
 import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { KeyDTO } from '@/domain';
+import { getMusicColorKey } from '@/shared/utils/keyColorUtils';
 
 /**
  * 個別キーエリアコンポーネントのProps
@@ -49,21 +51,28 @@ export const KeyArea = memo<KeyAreaProps>(
     textAnimationDelay,
   }) => {
     // カスタムフックから状態とイベントハンドラを受け取る
-    const { states, handlers } = useKeyArea({ keyDTO: key, segment });
+    const { states, handlers, ripple } = useKeyArea({ keyDTO: key, segment });
     const { fillClassName, textClassName } = states;
-    const { handleClick, handleMouseEnter, handleMouseLeave } = handlers;
+
+    // 音楽色相システムからリップルエフェクト用のCSS変数を生成
+    const rippleColorKey = getMusicColorKey(key);
+    const rippleColor = `var(--color-${rippleColorKey})`;
 
     return (
       <motion.g
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
-        style={{ cursor: 'pointer' }}
+        style={{
+          cursor: 'pointer',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          MozUserSelect: 'none',
+          msUserSelect: 'none',
+        }}
         whileHover={{ scale: ANIMATION.HOVER_SCALE }}
         whileTap={{ scale: ANIMATION.TAP_SCALE }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: ANIMATION.FADE_DURATION, delay: animationDelay }}
+        {...handlers}
       >
         <motion.path
           className={`stroke-border border ${fillClassName}`}
@@ -79,13 +88,28 @@ export const KeyArea = memo<KeyAreaProps>(
           textAnchor="middle"
           dominantBaseline="middle"
           transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
-          style={{ pointerEvents: 'none' }}
+          style={{
+            pointerEvents: 'none',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: ANIMATION.FADE_DURATION, delay: textAnimationDelay }}
         >
           {key.shortName}
         </motion.text>
+
+        {/* リップルエフェクト */}
+        <SVGRippleEffect
+          isTriggered={ripple.isRippleActive}
+          centerX={textPosition.x}
+          centerY={textPosition.y}
+          color={rippleColor}
+          onAnimationComplete={ripple.resetRipple}
+        />
       </motion.g>
     );
   }

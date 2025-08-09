@@ -5,10 +5,8 @@
 /* ---------------------------------- */
 @theme {
   /* フォントファミリー (font-family) */
-  --font-family-sans:
-    'Helvetica Neue', 'Helvetica', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Arial',
-    'Yu Gothic', 'Meiryo', sans-serif;
-  --font-family-serif: 'Times New Roman', 'YuMincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'serif';
+  --font-family-sans: 'Noto Sans JP', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+  --font-family-serif: 'Noto Serif JP', 'Times New Roman', 'Georgia', serif;
 
   /* カラーパレット (colors) */
   --color-bg-from: #111827;
@@ -79,13 +77,6 @@
     min-height: 100dvh;
   }
 
-  /* 他にもh1やaタグなどのデフォルトスタイルをここで定義できる */
-  h1 {
-    font-family: theme('fontFamily.sans');
-    font-weight: var(--font-weight-title);
-    color: var(--color-text-secondary);
-  }
-
   h1,
   h2,
   h3,
@@ -114,3 +105,20 @@
     touch-action: pan-x pinch-zoom;
   }
 }
+
+/* ---------------------------------- */
+/* 3. 動的生成カラーシステム          */
+/* ---------------------------------- */
+/* 
+  12音×7モードの色相システム（84色）は、
+  layout.tsx でビルド時に動的生成されます。
+  
+  使用可能なクラス例:
+  - bg-key-c-lydian     （C Lydian）
+  - text-key-g-dorian   （G Dorian）  
+  - bg-key-fsharp-locrian（F# Locrian）
+  
+  色相: 五度圏順に30°ずつ（C=0°, G=30°...）
+  彩度: 85%固定
+  明度: Lydian(70%) → Locrian(40%)の階層
+*/

@@ -27,8 +27,8 @@ describe('Key', () => {
       const key = new Key(tonic, pattern);
 
       expect(key.tonic.name).toBe('A');
-      expect(key.pattern.name).toBe('Aeolian (Natural Minor)');
-      expect(key.keyName).toBe('A Aeolian (Natural Minor)');
+      expect(key.pattern.name).toBe('Minor');
+      expect(key.keyName).toBe('A Minor');
     });
   });
 
@@ -44,7 +44,7 @@ describe('Key', () => {
       );
 
       expect(cMajor.keyName).toBe('C Major');
-      expect(dMinor.keyName).toBe('D Aeolian (Natural Minor)');
+      expect(dMinor.keyName).toBe('D Minor');
     });
   });
 
@@ -85,12 +85,12 @@ describe('Key', () => {
   describe('特定和音取得メソッド', () => {
     it('正常ケース: トニックコードを正しく取得', () => {
       const key = new Key(
-        PitchClass.fromCircleOfFifths(1), // G
+        PitchClass.fromCircleOfFifths(0), // G
         ScalePattern.Major
       );
 
       const tonicChord = key.getTonicChord();
-      expect(tonicChord.name).toBe('G');
+      expect(tonicChord.name).toBe('C');
       expect(tonicChord.quality).toBe(ChordQuality.MajorTriad);
     });
 
@@ -119,7 +119,7 @@ describe('Key', () => {
 
   describe('fromCircleOfFifths ファクトリメソッド', () => {
     it('正常ケース: 五度圏インデックスからメジャーキーを生成', () => {
-      const key = Key.fromCircleOfFifths(1, false); // G Major
+      const key = Key.fromCircleOfFifths(1, true); // G Major
 
       expect(key.tonic.name).toBe('G');
       expect(key.pattern).toBe(ScalePattern.Major);
@@ -127,11 +127,11 @@ describe('Key', () => {
     });
 
     it('正常ケース: 五度圏インデックスからマイナーキーを生成', () => {
-      const key = Key.fromCircleOfFifths(0, true); // A Minor (C Majorの相対マイナー)
+      const key = Key.fromCircleOfFifths(0, false); // C Minor
 
-      expect(key.tonic.name).toBe('A');
+      expect(key.tonic.name).toBe('C');
       expect(key.pattern).toBe(ScalePattern.Aeolian);
-      expect(key.keyName).toBe('A Aeolian (Natural Minor)');
+      expect(key.keyName).toBe('C Minor');
     });
 
     it('正常ケース: 全ての五度圏インデックスでキーを生成可能', () => {
@@ -157,15 +157,47 @@ describe('Key', () => {
   describe('境界値テスト', () => {
     it('境界値ケース: 全ての五度圏ポジションでのキー作成', () => {
       const expectedMajorKeys = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
-      const expectedMinorKeys = ['A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F', 'C', 'G', 'D'];
+      const expectedMinorKeys = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
 
       for (let i = 0; i < 12; i++) {
-        const majorKey = Key.fromCircleOfFifths(i, false);
-        const minorKey = Key.fromCircleOfFifths(i, true);
+        const majorKey = Key.fromCircleOfFifths(i, true);
+        const minorKey = Key.fromCircleOfFifths(i, false);
 
         expect(majorKey.tonic.name).toBe(expectedMajorKeys[i]);
         expect(minorKey.tonic.name).toBe(expectedMinorKeys[i]);
       }
+    });
+
+    it('エンハーモニック表記: メジャーキーは♭表記、マイナーキーは#表記', () => {
+      // メジャーキーの表記テスト（♭表記を使用）
+      const majorKeys = [
+        { position: 0, expectedShortName: 'C', expectedKeyName: 'C Major' },
+        { position: 7, expectedShortName: 'D♭', expectedKeyName: 'D♭ Major' },
+        { position: 8, expectedShortName: 'A♭', expectedKeyName: 'A♭ Major' },
+        { position: 10, expectedShortName: 'B♭', expectedKeyName: 'B♭ Major' },
+        { position: 6, expectedShortName: 'G♭', expectedKeyName: 'G♭ Major' },
+      ];
+
+      majorKeys.forEach(({ position, expectedShortName, expectedKeyName }) => {
+        const key = Key.fromCircleOfFifths(position, true);
+        expect(key.shortName).toBe(expectedShortName);
+        expect(key.keyName).toBe(expectedKeyName);
+      });
+
+      // マイナーキーの表記テスト（#表記を使用）
+      const minorKeys = [
+        { position: 0, expectedShortName: 'Cm', expectedKeyName: 'C Minor' },
+        { position: 7, expectedShortName: 'C#m', expectedKeyName: 'C# Minor' },
+        { position: 8, expectedShortName: 'G#m', expectedKeyName: 'G# Minor' },
+        { position: 10, expectedShortName: 'A#m', expectedKeyName: 'A# Minor' },
+        { position: 6, expectedShortName: 'F#m', expectedKeyName: 'F# Minor' },
+      ];
+
+      minorKeys.forEach(({ position, expectedShortName, expectedKeyName }) => {
+        const key = Key.fromCircleOfFifths(position, false);
+        expect(key.shortName).toBe(expectedShortName);
+        expect(key.keyName).toBe(expectedKeyName);
+      });
     });
   });
 
@@ -215,7 +247,7 @@ describe('Key', () => {
       ];
 
       testKeys.forEach(({ circleIndex, name }) => {
-        const key = Key.fromCircleOfFifths(circleIndex, false);
+        const key = Key.fromCircleOfFifths(circleIndex, true);
         const tonic = key.getTonicChord();
 
         expect(tonic.name).toBe(name);

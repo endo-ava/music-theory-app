@@ -40,6 +40,13 @@ export class Scale {
   }
 
   /**
+   * Tone.js用の音符表記配列
+   */
+  get toneNotations(): string[] {
+    return this.notes.map(note => note.toString);
+  }
+
+  /**
    * ルート音とパターンから、具体的な構成音の配列を生成する
    * @param rootNote ルート音（オクターブ情報を含む）
    */
@@ -47,8 +54,8 @@ export class Scale {
     const generated: Note[] = [rootNote];
     let currentNote = rootNote;
 
-    // パターンの最後のインターバルは次のオクターブのルートに戻るため、n-1回ループ
-    for (let i = 0; i < this.pattern.intervals.length - 1; i++) {
+    // パターンのすべてのインターバルを適用してスケールの構成音を生成
+    for (let i = 0; i < this.pattern.intervals.length; i++) {
       const interval = this.pattern.intervals[i];
       const nextNote = currentNote.transposeBy(interval);
       generated.push(nextNote);

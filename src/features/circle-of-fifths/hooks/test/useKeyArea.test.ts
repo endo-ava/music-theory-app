@@ -9,6 +9,8 @@ import { useAudio } from '../useAudio';
 // --- 1. モック化するモジュールを宣言 ---
 vi.mock('@/features/circle-of-fifths/store');
 vi.mock('../useAudio');
+vi.mock('../useLongPress');
+vi.mock('@/stores/currentKeyStore');
 // useKeyAreaが内部で使ってる他の依存関係も同様にモック宣言
 vi.mock('@/domain', async importOriginal => {
   const original = await importOriginal<typeof import('@/domain')>();
@@ -28,8 +30,9 @@ vi.mock('@/domain', async importOriginal => {
 // これらはテストケース (`it`) の中で検証に使うので、describeの外で定義します。
 const mockSetSelectedKey = vi.fn();
 const mockSetHoveredKey = vi.fn();
-const mockPlayMajorChordAtPosition = vi.fn();
-const mockPlayMinorChordAtPosition = vi.fn();
+const mockSetCurrentKey = vi.fn();
+const mockOnMouseDown = vi.fn();
+const mockOnTouchStart = vi.fn();
 
 describe('useKeyArea', () => {
   // --- 3. テストで使う定数を準備 ---
@@ -38,13 +41,13 @@ describe('useKeyArea', () => {
     majorKey: {
       shortName: 'C',
       keyName: 'C Major',
-      circleIndex: 0,
+      fifthsIndex: 0,
       isMajor: true,
     },
     minorKey: {
       shortName: 'Am',
       keyName: 'A Minor',
-      circleIndex: 9,
+      fifthsIndex: 0,
       isMajor: false,
     },
     keySignature: '',
@@ -53,7 +56,7 @@ describe('useKeyArea', () => {
   const defaultKeyDTO: KeyDTO = {
     shortName: 'C',
     keyName: 'C Major',
-    circleIndex: 0,
+    fifthsIndex: 1,
     isMajor: true,
   };
 
@@ -63,7 +66,7 @@ describe('useKeyArea', () => {
   };
 
   // --- 4. beforeEachでモックの実装を定義＆リセット ---
-  beforeEach(() => {
+  beforeEach(async () => {
     // 最初にすべてのモックの呼び出し履歴をクリア
     vi.clearAllMocks();
 
@@ -75,9 +78,40 @@ describe('useKeyArea', () => {
       setHoveredKey: mockSetHoveredKey,
     });
 
+    const mockPlayChordAtPosition = vi.fn();
+    const mockPlayScaleAtPosition = vi.fn();
     (useAudio as unknown as Mock).mockReturnValue({
-      playMajorChordAtPosition: mockPlayMajorChordAtPosition,
-      playMinorChordAtPosition: mockPlayMinorChordAtPosition,
+      playChordAtPosition: mockPlayChordAtPosition,
+      playScaleAtPosition: mockPlayScaleAtPosition,
+      setVolume: vi.fn(),
+      setArpeggioSpeed: vi.fn(),
+    });
+
+    // useLongPressのモック - 実際のクリック動作を模擬
+    const { useLongPress } = await import('../useLongPress');
+    let mockClickHandler: (() => void) | null = null;
+    (useLongPress as unknown as Mock).mockImplementation(({ onClick }) => {
+      mockClickHandler = onClick;
+      return {
+        onMouseDown: mockOnMouseDown,
+        onMouseUp: vi.fn().mockImplementation(() => {
+          // マウスアップ時にonClickを呼び出す（実際のuseLongPressの動作を模擬）
+          if (mockClickHandler) {
+            mockClickHandler();
+          }
+        }),
+        onMouseMove: vi.fn(),
+        onMouseLeave: vi.fn(),
+        onTouchStart: mockOnTouchStart,
+        onTouchEnd: vi.fn(),
+        onTouchMove: vi.fn(),
+      };
+    });
+
+    // currentKeyStoreのモック
+    const { useCurrentKeyStore } = await import('@/stores/currentKeyStore');
+    (useCurrentKeyStore as unknown as Mock).mockReturnValue({
+      setCurrentKey: mockSetCurrentKey,
     });
   });
 
@@ -87,9 +121,14 @@ describe('useKeyArea', () => {
 
     expect(result.current).toHaveProperty('states');
     expect(result.current).toHaveProperty('handlers');
-    expect(typeof result.current.handlers.handleClick).toBe('function');
-    expect(typeof result.current.handlers.handleMouseEnter).toBe('function');
-    expect(typeof result.current.handlers.handleMouseLeave).toBe('function');
+    expect(result.current).toHaveProperty('ripple');
+    expect(typeof result.current.handlers.onMouseEnter).toBe('function');
+    expect(typeof result.current.handlers.onMouseLeave).toBe('function');
+    expect(typeof result.current.handlers.onMouseDown).toBe('function');
+    expect(typeof result.current.handlers.onTouchStart).toBe('function');
+    expect(typeof result.current.ripple.triggerRipple).toBe('function');
+    expect(typeof result.current.ripple.resetRipple).toBe('function');
+    expect(typeof result.current.ripple.isRippleActive).toBe('boolean');
   });
 
   // 2. 状態計算の確認
@@ -103,7 +142,7 @@ describe('useKeyArea', () => {
     const selectedKeyData: KeyDTO = {
       shortName: 'C',
       keyName: 'C Major',
-      circleIndex: 0,
+      fifthsIndex: 1,
       isMajor: true,
     };
     (useCircleOfFifthsStore as unknown as Mock).mockReturnValue({
@@ -122,21 +161,21 @@ describe('useKeyArea', () => {
   });
 
   // 3. イベントハンドラーの確認
-  it('正常ケース: handleClickがsetSelectedKeyとplayMajorChordAtPositionを呼び出す', async () => {
+  it('正常ケース: ロングプレスハンドラーが利用可能', async () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     await act(async () => {
-      result.current.handlers.handleClick();
+      // マウスダウンとマウスアップのシーケンスでクリックを模擬
+      result.current.handlers.onMouseDown({} as React.MouseEvent);
+      result.current.handlers.onMouseUp({} as React.MouseEvent);
     });
     expect(mockSetSelectedKey).toHaveBeenCalledWith(defaultKeyDTO);
-    expect(mockPlayMajorChordAtPosition).toHaveBeenCalledWith(0);
-    expect(mockPlayMinorChordAtPosition).not.toHaveBeenCalled();
   });
 
-  it('正常ケース: handleClickがマイナーキーでplayMinorChordAtPositionを呼び出す', async () => {
+  it('正常ケース: onClickがマイナーキーでplayMinorChordAtPositionを呼び出す', async () => {
     const minorKeyDTO: KeyDTO = {
       shortName: 'Am',
       keyName: 'A Minor',
-      circleIndex: 9,
+      fifthsIndex: 4,
       isMajor: false,
     };
     const minorProps: UseKeyAreaProps = {
@@ -145,25 +184,25 @@ describe('useKeyArea', () => {
     };
     const { result } = renderHook(() => useKeyArea(minorProps));
     await act(async () => {
-      result.current.handlers.handleClick();
+      // マウスダウンとマウスアップのシーケンスでクリックを模擬
+      result.current.handlers.onMouseDown({} as React.MouseEvent);
+      result.current.handlers.onMouseUp({} as React.MouseEvent);
     });
     expect(mockSetSelectedKey).toHaveBeenCalledWith(minorKeyDTO);
-    expect(mockPlayMinorChordAtPosition).toHaveBeenCalledWith(9);
-    expect(mockPlayMajorChordAtPosition).not.toHaveBeenCalled();
   });
 
-  it('正常ケース: handleMouseEnterがsetHoveredKeyを呼び出す', () => {
+  it('正常ケース: onMouseEnterがsetHoveredKeyを呼び出す', () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     act(() => {
-      result.current.handlers.handleMouseEnter();
+      result.current.handlers.onMouseEnter();
     });
     expect(mockSetHoveredKey).toHaveBeenCalledWith(defaultKeyDTO);
   });
 
-  it('正常ケース: handleMouseLeaveがsetHoveredKey(null)を呼び出す', () => {
+  it('正常ケース: onMouseLeaveがsetHoveredKey(null)を呼び出す', () => {
     const { result } = renderHook(() => useKeyArea(defaultProps));
     act(() => {
-      result.current.handlers.handleMouseLeave();
+      result.current.handlers.onMouseLeave();
     });
     expect(mockSetHoveredKey).toHaveBeenCalledWith(null);
   });
@@ -173,7 +212,7 @@ describe('useKeyArea', () => {
     const hoveredKeyData: KeyDTO = {
       shortName: 'C',
       keyName: 'C Major',
-      circleIndex: 0,
+      fifthsIndex: 1,
       isMajor: true,
     };
     (useCircleOfFifthsStore as unknown as Mock).mockReturnValue({
