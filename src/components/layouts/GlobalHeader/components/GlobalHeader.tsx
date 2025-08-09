@@ -22,7 +22,7 @@ const navigationLinks: NavigationLink[] = [
  */
 export const GlobalHeader: React.FC = () => {
   return (
-    <header className="border-header-border bg-bg-from relative flex min-h-[var(--header-height)] w-full items-center border-b px-6 py-4 lg:px-8">
+    <header className="border-border bg-bg-from relative flex min-h-[var(--header-height-min)] w-full items-center border-b px-6 md:py-4">
       {/* ロゴエリア - 左端配置、Hubページへのリンク */}
       <div className="flex-1">
         <Logo />
