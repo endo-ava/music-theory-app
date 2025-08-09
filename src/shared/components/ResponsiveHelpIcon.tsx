@@ -55,7 +55,7 @@ export const ResponsiveHelpIcon: React.FC<ResponsiveHelpIconProps> = ({
       <div className="hidden md:block">
         <Tooltip>
           <TooltipTrigger asChild>
-            <div>
+            <div className="mx-[-4]">
               <HelpCircle className={twMerge('text-text-secondary', desktopIconSize)} />
             </div>
           </TooltipTrigger>
