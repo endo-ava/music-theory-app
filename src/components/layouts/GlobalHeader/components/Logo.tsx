@@ -13,7 +13,7 @@ export const Logo: React.FC = () => {
   return (
     <Link
       href="/"
-      className="text-header-logo font-header-logo hover:text-header-logo-hover focus-visible:ring-header-border flex-shrink-0 rounded-sm transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent"
+      className="text-text-primary hover:text-text-secondary focus-visible:ring-border flex-shrink-0 rounded-sm text-xs font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent md:text-sm"
     >
       Music Theory App
     </Link>
