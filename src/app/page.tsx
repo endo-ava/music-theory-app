@@ -24,7 +24,7 @@ export default function Home() {
       <main className="flex flex-1">
         {/* デスクトップ */}
         {/* Left: Side Panel */}
-        <SidePanel className="hidden w-fit max-w-[42rem] min-w-[32rem] pl-8 md:block" />
+        <SidePanel className="mt-16 hidden w-fit max-w-[42rem] min-w-[38rem] pl-28 md:block" />
         {/* Right: Canvas */}
         <Canvas className="hidden flex-1 md:block" />
 
