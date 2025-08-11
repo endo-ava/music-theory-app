@@ -71,7 +71,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
                   onClick={() => {
                     setActiveSnapPoint(SNAP_POINTS.LOWEST);
                   }}
-                  className="text-text-secondary hover:text-text-primary flex h-8 w-8 items-center justify-center rounded-md transition-colors"
+                  className="text-secondary-foreground hover:text-foreground flex h-8 w-8 items-center justify-center rounded-md transition-colors"
                   aria-label="閉じる"
                   type="button"
                 >
@@ -92,7 +92,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             <div className="flex-1 overflow-y-auto p-6">
               {activeTab === 'view' && <ViewController />}
               {activeTab === 'layer' && (
-                <div className="text-text-primary">レイヤー設定のコンテンツがここに入ります。</div>
+                <div className="text-foreground">レイヤー設定のコンテンツがここに入ります。</div>
               )}
             </div>
           </div>

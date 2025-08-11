@@ -43,15 +43,15 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
         // モバイル用の基本スタイル
         isMobile && 'block w-full text-left',
         // フォントスタイリング - 統一感のある読みやすさ
-        'text-header-nav font-header-nav',
+        'text-base font-medium',
         // カラー - アクティブ状態に応じた色分け
         isActive
-          ? 'text-header-nav-link-active bg-header-nav-link-active-bg'
-          : 'text-header-nav-link hover:text-header-nav-link-hover hover:bg-header-nav-link-active-bg',
+          ? 'text-foreground bg-accent'
+          : 'text-secondary-foreground hover:text-foreground hover:bg-muted',
         // トランジション - スムーズなインタラクション
         'transition-colors duration-200',
         // アクセシビリティ - キーボードナビゲーション対応（視覚的に控えめに）
-        'focus-visible:ring-header-border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
+        'focus-visible:border-border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
         'rounded-sm focus-visible:ring-offset-transparent',
         // パディング - クリック領域の拡大（デスクトップとモバイルで差別化）
         isMobile ? 'px-3 py-2' : 'px-2 py-1'

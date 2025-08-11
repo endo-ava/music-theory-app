@@ -32,11 +32,11 @@ export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ isOpen, onCl
         // サイズとパディング
         'p-2',
         // カラー
-        'text-header-nav-link hover:bg-header-nav-link-active-bg hover:text-header-nav-link-hover',
+        'text-foreground hover:bg-accent',
         // トランジション
         'transition-colors duration-150',
         // アクセシビリティ
-        'focus-visible:ring-header-border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 md:hidden',
+        'focus-visible:ring-border focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 md:hidden',
         'rounded-sm focus-visible:ring-offset-transparent'
       )}
       aria-label={isOpen ? 'メニューを閉じる' : 'メニューを開く'}
