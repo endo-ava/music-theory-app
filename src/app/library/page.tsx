@@ -60,7 +60,7 @@ export default function LibraryPage() {
             </section>
 
             {/* インタラクティブ機能エリア */}
-            <section className="bg-card rounded-lg border p-6">
+            {/* <section className="bg-card rounded-lg border p-6">
               <h2 className="mb-4 text-2xl font-semibold">インタラクティブ機能</h2>
               <div className="text-muted-foreground">
                 <p>今後実装予定：</p>
@@ -71,7 +71,7 @@ export default function LibraryPage() {
                   <li>ハブ画面へのクイックアクセス</li>
                 </ul>
               </div>
-            </section>
+            </section> */}
           </div>
         </div>
       </main>
