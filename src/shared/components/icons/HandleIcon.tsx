@@ -24,7 +24,7 @@ export interface HandleIconProps {
 export const HandleIcon: React.FC<HandleIconProps> = ({
   width = 32,
   height = 6,
-  className = 'text-text-secondary',
+  className = 'text-foreground',
 }) => (
   <svg
     width={width}

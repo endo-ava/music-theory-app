@@ -48,8 +48,8 @@ export const BottomSheetTabNavigation: React.FC<BottomSheetTabNavigationProps> =
           className={twMerge(
             'flex-1 py-3 text-center text-sm font-medium transition-colors',
             activeTab === tab.id
-              ? 'text-text-primary border-primary border-b-2'
-              : 'text-text-secondary hover:text-text-primary'
+              ? 'text-foreground border-b-1'
+              : 'text-secondary-foreground hover:text-foreground'
           )}
           onClick={() => onTabChange(tab.id)}
           aria-pressed={activeTab === tab.id}

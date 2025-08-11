@@ -32,7 +32,7 @@ export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ isOpen, onCl
         // サイズとパディング
         'p-2',
         // カラー
-        'text-text-secondary hover:bg-key-area-selected hover:text-text-muted',
+        'text-foreground hover:bg-accent',
         // トランジション
         'transition-colors duration-150',
         // アクセシビリティ
