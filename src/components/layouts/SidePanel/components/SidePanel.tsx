@@ -39,7 +39,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({ className, isVisible = tru
       aria-label="サイドパネル"
     >
       <section
-        className="border-border bg-background-muted mt-8 overflow-y-auto rounded-lg border p-8 backdrop-blur-sm"
+        className="border-border bg-card overflow-y-auto rounded-lg border p-8 backdrop-blur-sm"
         aria-label="コントロールパネル"
       >
         {/* C-1: View Controller（クライアントコンポーネント） */}

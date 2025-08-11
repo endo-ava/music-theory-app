@@ -47,7 +47,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="bg-header-bg border-header-border absolute top-full right-0 left-0 z-50 border-t shadow-lg backdrop-blur-sm md:hidden"
+          className="border-border absolute top-full right-0 left-0 z-50 border-t shadow-lg backdrop-blur-sm md:hidden"
         >
           <div className="space-y-2 px-6 py-4">
             {navigationLinks.map(link => (

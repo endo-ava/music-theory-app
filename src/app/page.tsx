@@ -19,12 +19,12 @@ import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet
  */
 export default function Home() {
   return (
-    <div className="flex h-[calc(100dvh-var(--header-height))] flex-col">
+    <div className="flex h-[calc(100dvh-var(--header-height-min))] flex-col">
       {/* 2-column layout: Side Panel + Canvas */}
       <main className="flex flex-1">
         {/* デスクトップ */}
         {/* Left: Side Panel */}
-        <SidePanel className="hidden w-fit max-w-[var(--sidebar-width-max)] min-w-[var(--sidebar-width-min)] pl-8 md:block" />
+        <SidePanel className="mt-16 hidden w-fit max-w-[42rem] min-w-[38rem] pl-28 md:block" />
         {/* Right: Canvas */}
         <Canvas className="hidden flex-1 md:block" />
 
