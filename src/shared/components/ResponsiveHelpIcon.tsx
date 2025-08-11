@@ -38,7 +38,7 @@ export const ResponsiveHelpIcon: React.FC<ResponsiveHelpIconProps> = ({
         <Popover>
           <PopoverTrigger asChild>
             <button className="mx-[-4]">
-              <HelpCircle className={twMerge('text-text-secondary', mobileIconSize)} />
+              <HelpCircle className={twMerge('text-secondary-foreground', mobileIconSize)} />
             </button>
           </PopoverTrigger>
           <PopoverContent
@@ -56,7 +56,7 @@ export const ResponsiveHelpIcon: React.FC<ResponsiveHelpIconProps> = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="mx-[-4]">
-              <HelpCircle className={twMerge('text-text-secondary', desktopIconSize)} />
+              <HelpCircle className={twMerge('text-secondary-foreground', desktopIconSize)} />
             </div>
           </TooltipTrigger>
           <TooltipContent side="right" sideOffset={8} className="font-sans">

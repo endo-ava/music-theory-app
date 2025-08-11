@@ -18,27 +18,14 @@ export const ChromaticCircle: React.FC<ClassNameProps> = ({ className }) => {
           <div className="border-border bg-background-muted mx-auto mb-8 flex h-48 w-48 items-center justify-center rounded-full border-2 border-dashed">
             <div className="text-center">
               <div className="mb-2 text-4xl">🎵</div>
-              <div className="text-text-secondary text-sm">実装準備中</div>
+              <div className="text-secondary-foreground text-sm">実装準備中</div>
             </div>
           </div>
 
           {/* 説明テキスト */}
           <div className="space-y-4">
-            <h3 className="text-text-primary text-lg font-semibold">クロマチックサークル</h3>
-            <p className="text-text-secondary text-sm leading-relaxed">
-              半音階で配置された音の輪を表示します。
-              <br />
-              12の音が等間隔で配置され、各音の関係性を
-              <br />
-              視覚的に理解することができます。
-            </p>
-            <div className="bg-background-muted mt-6 rounded-md p-4">
-              <p className="text-text-muted text-xs">
-                📝 このコンポーネントは現在開発中です。
-                <br />
-                将来的にはインタラクティブなクロマチックサークルが表示されます。
-              </p>
-            </div>
+            <h3 className="text-foreground text-lg font-semibold">クロマチックサークル</h3>
+            <p className="text-secondary-foreground text-sm leading-relaxed">準備中</p>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ export const ViewController: React.FC<ViewControllerProps> = ({ className, title
   return (
     <div className={twMerge('space-y-4', className)}>
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
-      <h2 className="text-text-primary hidden text-lg md:block">{title}</h2>
+      <h2 className="text-foreground hidden text-lg md:block">{title}</h2>
 
       {/* Hub ラジオグループ - 子コンポーネントに分離 */}
       <HubRadioGroup
@@ -44,7 +44,7 @@ export const ViewController: React.FC<ViewControllerProps> = ({ className, title
 
       {/* 選択されたHubの説明 */}
       {selectedOption && (
-        <p id={`${selectedOption.value}-description`} className="text-text-secondary text-sm">
+        <p id={`${selectedOption.value}-description`} className="text-secondary-foreground text-sm">
           <span className="font-medium">{selectedOption.label}:</span> {selectedOption.description}
         </p>
       )}

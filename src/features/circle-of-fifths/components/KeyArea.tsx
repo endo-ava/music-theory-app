@@ -82,7 +82,7 @@ export const KeyArea = memo<KeyAreaProps>(
           transition={{ duration: ANIMATION.FADE_DURATION, delay: animationDelay }}
         />
         <motion.text
-          className={`fill-text-primary ${textClassName}`}
+          className={`fill-foreground ${textClassName}`}
           x={textPosition.x}
           y={textPosition.y}
           textAnchor="middle"

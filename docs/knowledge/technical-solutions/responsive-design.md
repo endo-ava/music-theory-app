@@ -109,7 +109,7 @@ export const ThemedComponent: React.FC = () => {
       'text-title',    // --font-size-title
 
       // カラー
-      'text-primary',  // --color-primary
+      'foreground',  // --color-primary
       'bg-secondary'   // --color-secondary
     )}>
       コンテンツ

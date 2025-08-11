@@ -17,7 +17,7 @@ export default function RootLayout({
   const musicColorTheme = generateMusicColorTheme();
 
   return (
-    <html lang="ja">
+    <html lang="ja" className="dark">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Noto+Serif+JP&display=swap"
