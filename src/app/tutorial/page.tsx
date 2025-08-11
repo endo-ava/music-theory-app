@@ -21,7 +21,7 @@ export default function TutorialPage() {
           {/* チュートリアルコンテンツ一覧 */}
           <div className="space-y-6">
             {/* チュートリアル1 */}
-            <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
+            {/* <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
               <header className="mb-4">
                 <h2 className="text-foreground mb-2 text-2xl font-semibold">
                   ピタゴラス音律から平均律へ：音階はどうやって生まれたか
@@ -44,10 +44,10 @@ export default function TutorialPage() {
                   <li>インタラクティブな音程比較機能</li>
                 </ul>
               </div>
-            </article>
+            </article> */}
 
             {/* チュートリアル2 */}
-            <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
+            {/* <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
               <header className="mb-4">
                 <h2 className="text-foreground mb-2 text-2xl font-semibold">
                   ブルースの魔法：ブルース進行とブルーノートスケールの解剖
@@ -70,10 +70,10 @@ export default function TutorialPage() {
                   <li>実際の楽曲での使用例</li>
                 </ul>
               </div>
-            </article>
+            </article> */}
 
             {/* チュートリアル3 */}
-            <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
+            {/* <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
               <header className="mb-4">
                 <h2 className="text-foreground mb-2 text-2xl font-semibold">
                   モード入門：スケールの性格を変える7つの魔法
@@ -96,10 +96,10 @@ export default function TutorialPage() {
                   <li>作曲での活用方法</li>
                 </ul>
               </div>
-            </article>
+            </article> */}
 
             {/* 今後の予定 */}
-            <section className="bg-muted rounded-lg p-6">
+            {/* <section className="bg-muted rounded-lg p-6">
               <h2 className="text-foreground mb-3 text-xl font-semibold">
                 今後追加予定のチュートリアル
               </h2>
@@ -109,7 +109,7 @@ export default function TutorialPage() {
                 <div>• 音色の秘密：倍音と楽器の個性</div>
                 <div>• 世界の音楽：異なる文化の音階システム</div>
               </div>
-            </section>
+            </section> */}
           </div>
         </div>
       </main>

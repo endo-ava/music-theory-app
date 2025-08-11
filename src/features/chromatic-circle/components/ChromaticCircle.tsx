@@ -15,7 +15,7 @@ export const ChromaticCircle: React.FC<ClassNameProps> = ({ className }) => {
       <div className="flex h-full w-full items-center justify-center">
         <div className="max-w-md text-center">
           {/* プレースホルダー円 */}
-          <div className="border-border bg-background-muted mx-auto mb-8 flex h-48 w-48 items-center justify-center rounded-full border-2 border-dashed">
+          <div className="border-border bg-muted mx-auto mb-8 flex h-48 w-48 items-center justify-center rounded-full border-2 border-dashed">
             <div className="text-center">
               <div className="mb-2 text-4xl">🎵</div>
               <div className="text-secondary-foreground text-sm">実装準備中</div>
