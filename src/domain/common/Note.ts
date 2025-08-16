@@ -20,6 +20,14 @@ export class Note {
   }
 
   /**
+   * 絶対ピッチ値（MIDI番号に相当する整数値）
+   * C0 = 0, C#0 = 1, ..., C4 = 48, C5 = 60, ...
+   */
+  get absolutePitch(): number {
+    return this._octave * 12 + this._pitchClass.index;
+  }
+
+  /**
    * 指定されたインターバル分だけ移調した新しいNoteを返す
    * @param interval 移調するインターバル
    */
@@ -36,5 +44,26 @@ export class Note {
     if (!newPitchClass) throw new Error('移調計算に失敗しました。');
 
     return new Note(newPitchClass, newOctave);
+  }
+
+  /**
+   * 他のNoteと等しいかどうかを判定する
+   * 同じピッチクラスと同じオクターブを持つ場合に等しいとみなす
+   * @param other 比較対象のNote
+   * @returns 等しい場合はtrue、そうでなければfalse
+   */
+  equals(other: Note): boolean {
+    if (!(other instanceof Note)) return false;
+
+    return this._pitchClass.index === other._pitchClass.index && this._octave === other._octave;
+  }
+
+  /**
+   * Note配列を絶対ピッチの低い順にソートする
+   * @param notes ソート対象のNote配列
+   * @returns ソートされた新しい配列
+   */
+  static sortByPitch(notes: Note[]): Note[] {
+    return [...notes].sort((a, b) => a.absolutePitch - b.absolutePitch);
   }
 }

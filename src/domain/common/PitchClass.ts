@@ -91,6 +91,15 @@ export class PitchClass {
   }
 
   /**
+   * 他のPitchClassとの等価性を判定する
+   * @param other 比較対象のPitchClass
+   * @returns 同じ音名クラスかどうか
+   */
+  equals(other: PitchClass): boolean {
+    return this.index === other.index;
+  }
+
+  /**
    * 文字列表現を返す（Tone.js用）
    */
   toString(): string {

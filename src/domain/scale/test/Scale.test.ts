@@ -213,6 +213,123 @@ describe('Scale', () => {
     });
   });
 
+  describe('getDegreeInfo', () => {
+    it('正常ケース: スケール上の音の度数を取得', () => {
+      const root = PitchClass.fromCircleOfFifths(0); // C
+      const pattern = ScalePattern.Major; // C, D, E, F, G, A, B, C
+      const scale = new Scale(root, pattern);
+
+      // スケール上の音をテスト
+      const testCases = [
+        { pitchClass: PitchClass.C, expectedDegree: 1, expectedAlteration: 'natural' }, // C = 1度
+        { pitchClass: PitchClass.D, expectedDegree: 2, expectedAlteration: 'natural' }, // D = 2度
+        { pitchClass: PitchClass.E, expectedDegree: 3, expectedAlteration: 'natural' }, // E = 3度
+        { pitchClass: PitchClass.F, expectedDegree: 4, expectedAlteration: 'natural' }, // F = 4度
+        { pitchClass: PitchClass.G, expectedDegree: 5, expectedAlteration: 'natural' }, // G = 5度
+        { pitchClass: PitchClass.A, expectedDegree: 6, expectedAlteration: 'natural' }, // A = 6度
+        { pitchClass: PitchClass.B, expectedDegree: 7, expectedAlteration: 'natural' }, // B = 7度
+      ];
+
+      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
+        const result = scale.getDegreeInfo(pitchClass);
+        expect(result.degree).toBe(expectedDegree);
+        expect(result.alteration).toBe(expectedAlteration);
+      });
+    });
+
+    it('正常ケース: スケール上外の音の度数を取得（シャープ系）', () => {
+      const root = PitchClass.fromCircleOfFifths(0); // C
+      const pattern = ScalePattern.Major; // C, D, E, F, G, A, B, C
+      const scale = new Scale(root, pattern);
+
+      // シャープした音をテスト
+      const testCases = [
+        { pitchClass: PitchClass.CSharp, expectedDegree: 1, expectedAlteration: 'sharp' }, // C# = #1度
+        { pitchClass: PitchClass.DSharp, expectedDegree: 2, expectedAlteration: 'sharp' }, // D# = #2度
+        { pitchClass: PitchClass.FSharp, expectedDegree: 4, expectedAlteration: 'sharp' }, // F# = #4度
+        { pitchClass: PitchClass.GSharp, expectedDegree: 5, expectedAlteration: 'sharp' }, // G# = #5度
+        { pitchClass: PitchClass.ASharp, expectedDegree: 6, expectedAlteration: 'sharp' }, // A# = #6度
+      ];
+
+      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
+        const result = scale.getDegreeInfo(pitchClass);
+        expect(result.degree).toBe(expectedDegree);
+        expect(result.alteration).toBe(expectedAlteration);
+      });
+    });
+
+    it('正常ケース: スケール上外の音の度数を取得（フラット系）', () => {
+      const root = PitchClass.fromCircleOfFifths(0); // C
+      const pattern = ScalePattern.Major; // C, D, E, F, G, A, B, C
+      const scale = new Scale(root, pattern);
+
+      // フラットした音をテスト（エンハーモニック等価）
+      const testCases = [
+        { pitchClass: PitchClass.CSharp, expectedDegree: 1, expectedAlteration: 'sharp' }, // C# = #1度
+        { pitchClass: PitchClass.DSharp, expectedDegree: 2, expectedAlteration: 'sharp' }, // D# = #2度
+        { pitchClass: PitchClass.GSharp, expectedDegree: 5, expectedAlteration: 'sharp' }, // G# = #5度
+        { pitchClass: PitchClass.ASharp, expectedDegree: 6, expectedAlteration: 'sharp' }, // A# = #6度
+      ];
+
+      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
+        const result = scale.getDegreeInfo(pitchClass);
+        expect(result.degree).toBe(expectedDegree);
+        expect(result.alteration).toBe(expectedAlteration);
+      });
+    });
+
+    it('正常ケース: 異なるスケールでのdegree情報取得', () => {
+      const root = PitchClass.fromCircleOfFifths(1); // G
+      const pattern = ScalePattern.Major; // G, A, B, C, D, E, F#, G
+      const scale = new Scale(root, pattern);
+
+      // Gメジャースケール上の音をテスト
+      const testCases = [
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(1),
+          expectedDegree: 1,
+          expectedAlteration: 'natural',
+        }, // G = 1度
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(3),
+          expectedDegree: 2,
+          expectedAlteration: 'natural',
+        }, // A = 2度
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(5),
+          expectedDegree: 3,
+          expectedAlteration: 'natural',
+        }, // B = 3度
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(0),
+          expectedDegree: 4,
+          expectedAlteration: 'natural',
+        }, // C = 4度
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(2),
+          expectedDegree: 5,
+          expectedAlteration: 'natural',
+        }, // D = 5度
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(4),
+          expectedDegree: 6,
+          expectedAlteration: 'natural',
+        }, // E = 6度
+        {
+          pitchClass: PitchClass.fromCircleOfFifths(6),
+          expectedDegree: 7,
+          expectedAlteration: 'natural',
+        }, // F# = 7度
+      ];
+
+      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
+        const result = scale.getDegreeInfo(pitchClass);
+        expect(result.degree).toBe(expectedDegree);
+        expect(result.alteration).toBe(expectedAlteration);
+      });
+    });
+  });
+
   describe('音楽理論的検証', () => {
     it('正常ケース: メジャースケールの音程関係', () => {
       const root = PitchClass.fromCircleOfFifths(0); // C

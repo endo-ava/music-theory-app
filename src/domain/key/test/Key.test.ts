@@ -17,7 +17,7 @@ describe('Key', () => {
       const key = new Key(tonic, pattern);
 
       expect(key.tonic.name).toBe('C');
-      expect(key.pattern.name).toBe('Major');
+      expect(key.scale.pattern.name).toBe('Major');
       expect(key.keyName).toBe('C Major');
     });
 
@@ -27,7 +27,7 @@ describe('Key', () => {
       const key = new Key(tonic, pattern);
 
       expect(key.tonic.name).toBe('A');
-      expect(key.pattern.name).toBe('Minor');
+      expect(key.scale.pattern.name).toBe('Minor');
       expect(key.keyName).toBe('A Minor');
     });
   });
@@ -122,7 +122,7 @@ describe('Key', () => {
       const key = Key.fromCircleOfFifths(1, true); // G Major
 
       expect(key.tonic.name).toBe('G');
-      expect(key.pattern).toBe(ScalePattern.Major);
+      expect(key.scale.pattern).toBe(ScalePattern.Major);
       expect(key.keyName).toBe('G Major');
     });
 
@@ -130,7 +130,7 @@ describe('Key', () => {
       const key = Key.fromCircleOfFifths(0, false); // C Minor
 
       expect(key.tonic.name).toBe('C');
-      expect(key.pattern).toBe(ScalePattern.Aeolian);
+      expect(key.scale.pattern).toBe(ScalePattern.Aeolian);
       expect(key.keyName).toBe('C Minor');
     });
 
@@ -149,8 +149,8 @@ describe('Key', () => {
         ScalePattern.Major
       );
 
-      expect(key.primaryScale.root.name).toBe('C');
-      expect(key.primaryScale.pattern).toBe(ScalePattern.Major);
+      expect(key.scale.root.name).toBe('C');
+      expect(key.scale.pattern).toBe(ScalePattern.Major);
     });
   });
 
