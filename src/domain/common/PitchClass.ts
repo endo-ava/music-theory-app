@@ -1,3 +1,4 @@
+import { Key } from '..';
 import { Interval } from './Interval';
 
 /**
@@ -14,27 +15,24 @@ export class PitchClass {
   ) {}
 
   /**
-   * デフォルトの音名表記（後方互換性のため）
-   * シャープ表記を使用
+   * Key (Major)  KeySig   1  2  3  4  5  6  7
+   * -------------------------------------------
+   * - C    0      C  D  E  F  G  A  B
+   * - G    1♯     G  A  B  C  D  E  F♯
+   * - D    2♯     D  E  F♯ G  A  B  C♯
+   * - A    3♯     A  B  C♯ D  E  F♯ G♯
+   * - E    4♯     E  F♯ G♯ A  B  C♯ D♯
+   * - B    5♯     B  C♯ D♯ E  F♯ G♯ A♯
+   * - G♭   6♭     G♭ A♭ B♭ C♭ D♭ E♭ F
+   * - D♭   5♭     D♭ E♭ F  G♭ A♭ B♭ C
+   * - A♭   4♭     A♭ B♭ C  D♭ E♭ F  G
+   * - E♭   3♭     E♭ F  G  A♭ B♭ C  D
+   * - B♭   2♭     B♭ C  D  E♭ F  G  A
+   * - F    1♭     F  G  A  B♭ C  D  E
    */
-  get name(): string {
-    return this.sharpName;
-  }
-
-  /**
-   * 文脈に応じた適切な音名表記を取得
-   * @param context 表記の文脈
-   * @returns 適切な音名表記
-   */
-  getDisplayName(context: 'major' | 'minor' | 'default' = 'default'): string {
-    switch (context) {
-      case 'major':
-        return this.flatName;
-      case 'minor':
-        return this.sharpName;
-      default:
-        return this.sharpName;
-    }
+  public getNameFor(key: Key): string {
+    // メジャーキーの場合は調号に基づいて適切な表記を選択
+    return key.keySignature === 'sharp' ? this.sharpName : this.flatName;
   }
 
   // 全ての音名を静的プロパティとして定義・保持（エンハーモニック対応）
@@ -100,9 +98,9 @@ export class PitchClass {
   }
 
   /**
-   * 文字列表現を返す（Tone.js用）
+   * 文字列表現
    */
   toString(): string {
-    return this.name;
+    return this.sharpName;
   }
 }
