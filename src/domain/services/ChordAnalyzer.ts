@@ -180,7 +180,7 @@ export function printAnalysis(
   const gravity = analyzer.calculateGravity(chord, keyRoot);
   const inertia = analyzer.calculateInertia(chord, nextChord);
 
-  console.log(`--- Analysis for Chord [${chord.name}] in Key [${keyRoot.name}] ---`);
+  console.log(`--- Analysis for Chord [${chord.name}] in Key [${keyRoot.sharpName}] ---`);
   console.log(`Tonal Gravity:`);
   console.log(`  - Tonic:       ${(gravity.tonic * 100).toFixed(1)}%`);
   console.log(`  - Subdominant: ${(gravity.subdominant * 100).toFixed(1)}%`);

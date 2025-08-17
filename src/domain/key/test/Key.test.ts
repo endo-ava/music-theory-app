@@ -16,7 +16,7 @@ describe('Key', () => {
       const pattern = ScalePattern.Major;
       const key = new Key(tonic, pattern);
 
-      expect(key.tonic.name).toBe('C');
+      expect(key.tonic.sharpName).toBe('C');
       expect(key.scale.pattern.name).toBe('Major');
       expect(key.keyName).toBe('C Major');
     });
@@ -26,7 +26,7 @@ describe('Key', () => {
       const pattern = ScalePattern.Aeolian;
       const key = new Key(tonic, pattern);
 
-      expect(key.tonic.name).toBe('A');
+      expect(key.tonic.sharpName).toBe('A');
       expect(key.scale.pattern.name).toBe('Minor');
       expect(key.keyName).toBe('A Minor');
     });
@@ -57,17 +57,17 @@ describe('Key', () => {
 
       // I度 - C Major
       const iChord = key.getDiatonicChord(1);
-      expect(iChord.name).toBe('C');
+      expect(iChord.getNameFor(key)).toBe('C');
       expect(iChord.quality).toBe(ChordQuality.MajorTriad);
 
       // V度 - G Major
       const vChord = key.getDiatonicChord(5);
-      expect(vChord.name).toBe('G');
+      expect(vChord.getNameFor(key)).toBe('G');
       expect(vChord.quality).toBe(ChordQuality.MajorTriad);
 
       // vi度 - A Minor
       const viChord = key.getDiatonicChord(6);
-      expect(viChord.name).toBe('Am');
+      expect(viChord.getNameFor(key)).toBe('Am');
       expect(viChord.quality).toBe(ChordQuality.MinorTriad);
     });
 
@@ -90,7 +90,7 @@ describe('Key', () => {
       );
 
       const tonicChord = key.getTonicChord();
-      expect(tonicChord.name).toBe('C');
+      expect(tonicChord.getNameFor(key)).toBe('C');
       expect(tonicChord.quality).toBe(ChordQuality.MajorTriad);
     });
 
@@ -101,7 +101,7 @@ describe('Key', () => {
       );
 
       const dominantChord = key.getDominantChord();
-      expect(dominantChord.name).toBe('G');
+      expect(dominantChord.getNameFor(key)).toBe('G');
       expect(dominantChord.quality).toBe(ChordQuality.MajorTriad);
     });
 
@@ -112,7 +112,7 @@ describe('Key', () => {
       );
 
       const subdominantChord = key.getSubdominantChord();
-      expect(subdominantChord.name).toBe('F');
+      expect(subdominantChord.getNameFor(key)).toBe('F');
       expect(subdominantChord.quality).toBe(ChordQuality.MajorTriad);
     });
   });
@@ -121,7 +121,7 @@ describe('Key', () => {
     it('正常ケース: 五度圏インデックスからメジャーキーを生成', () => {
       const key = Key.fromCircleOfFifths(1, true); // G Major
 
-      expect(key.tonic.name).toBe('G');
+      expect(key.tonic.sharpName).toBe('G');
       expect(key.scale.pattern).toBe(ScalePattern.Major);
       expect(key.keyName).toBe('G Major');
     });
@@ -129,7 +129,7 @@ describe('Key', () => {
     it('正常ケース: 五度圏インデックスからマイナーキーを生成', () => {
       const key = Key.fromCircleOfFifths(0, false); // C Minor
 
-      expect(key.tonic.name).toBe('C');
+      expect(key.tonic.sharpName).toBe('C');
       expect(key.scale.pattern).toBe(ScalePattern.Aeolian);
       expect(key.keyName).toBe('C Minor');
     });
@@ -149,7 +149,7 @@ describe('Key', () => {
         ScalePattern.Major
       );
 
-      expect(key.scale.root.name).toBe('C');
+      expect(key.scale.root.sharpName).toBe('C');
       expect(key.scale.pattern).toBe(ScalePattern.Major);
     });
   });
@@ -163,8 +163,8 @@ describe('Key', () => {
         const majorKey = Key.fromCircleOfFifths(i, true);
         const minorKey = Key.fromCircleOfFifths(i, false);
 
-        expect(majorKey.tonic.name).toBe(expectedMajorKeys[i]);
-        expect(minorKey.tonic.name).toBe(expectedMinorKeys[i]);
+        expect(majorKey.tonic.sharpName).toBe(expectedMajorKeys[i]);
+        expect(minorKey.tonic.sharpName).toBe(expectedMinorKeys[i]);
       }
     });
 
@@ -216,10 +216,10 @@ describe('Key', () => {
         key.getDiatonicChord(5), // G Major
       ];
 
-      expect(progression[0].name).toBe('C');
-      expect(progression[1].name).toBe('Am');
-      expect(progression[2].name).toBe('F');
-      expect(progression[3].name).toBe('G');
+      expect(progression[0].getNameFor(key)).toBe('C');
+      expect(progression[1].getNameFor(key)).toBe('Am');
+      expect(progression[2].getNameFor(key)).toBe('F');
+      expect(progression[3].getNameFor(key)).toBe('G');
     });
 
     it('正常ケース: 相対調関係の確認', () => {
@@ -233,8 +233,8 @@ describe('Key', () => {
       );
 
       // C MajorとA Minorは相対調（同じ調号）
-      expect(cMajor.tonic.name).toBe('C');
-      expect(aMinor.tonic.name).toBe('A');
+      expect(cMajor.tonic.sharpName).toBe('C');
+      expect(aMinor.tonic.sharpName).toBe('A');
     });
   });
 
@@ -250,7 +250,7 @@ describe('Key', () => {
         const key = Key.fromCircleOfFifths(circleIndex, true);
         const tonic = key.getTonicChord();
 
-        expect(tonic.name).toBe(name);
+        expect(tonic.rootNote._pitchClass.sharpName).toBe(name);
         expect(tonic.quality).toBe(ChordQuality.MajorTriad);
       });
     });

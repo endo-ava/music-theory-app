@@ -34,10 +34,10 @@ const createChordInfo = (selectedKey: KeyDTO | null, currentKey: Key): SelectedC
   if (!analysis) return null;
 
   return {
-    name: `${chord.name} (${analysis.roman})`,
-    degreeName: analysis.roman,
+    name: `${chord.getNameFor(currentKey)} (${analysis.romanDegreeName})`,
+    degreeName: analysis.romanDegreeName,
     chord: chord,
-    constituentNotes: chord.constituentNotes.map(note => note._pitchClass.name),
+    constituentNotes: chord.constituentNotes.map(note => note._pitchClass.sharpName),
     function: analysis.function as string,
     keyContext: `in ${currentKey.keyName}`,
   };

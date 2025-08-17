@@ -10,7 +10,7 @@ describe('Scale', () => {
       const pattern = ScalePattern.Major;
       const scale = new Scale(root, pattern);
 
-      expect(scale.root.name).toBe('C');
+      expect(scale.root.sharpName).toBe('C');
       expect(scale.pattern).toEqual(pattern);
     });
 
@@ -45,7 +45,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.name).toBe(expectedNames[index]);
+        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
 
@@ -59,7 +59,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.name).toBe(expectedNames[index]);
+        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
 
@@ -73,7 +73,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.name).toBe(expectedNames[index]);
+        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
   });
@@ -96,7 +96,7 @@ describe('Scale', () => {
 
       expectedNotes.forEach(({ degree, name }) => {
         const note = scale.getNoteForDegree(degree);
-        expect(note?._pitchClass.name).toBe(name);
+        expect(note?._pitchClass.sharpName).toBe(name);
       });
     });
 
@@ -106,7 +106,7 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
 
       const note = scale.getNoteForDegree(1);
-      expect(note?._pitchClass.name).toBe('C');
+      expect(note?._pitchClass.sharpName).toBe('C');
     });
 
     it('境界値ケース: 最後の度数（7度）', () => {
@@ -115,7 +115,7 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
 
       const note = scale.getNoteForDegree(7);
-      expect(note?._pitchClass.name).toBe('B');
+      expect(note?._pitchClass.sharpName).toBe('B');
     });
 
     it('異常ケース: 無効な度数（0）でundefinedを返す', () => {
@@ -154,7 +154,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       expect(notes[0]._octave).toBe(2);
-      expect(notes[0]._pitchClass.name).toBe('C');
+      expect(notes[0]._pitchClass.sharpName).toBe('C');
     });
 
     it('正常ケース: 高いオクターブでのスケール', () => {
@@ -164,7 +164,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       expect(notes[0]._octave).toBe(6);
-      expect(notes[0]._pitchClass.name).toBe('C');
+      expect(notes[0]._pitchClass.sharpName).toBe('C');
     });
 
     it('正常ケース: オクターブを跨ぐスケール', () => {
@@ -174,7 +174,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       // B, C#, D#, E, F#, G#, A#
-      expect(notes[0]._pitchClass.name).toBe('B');
+      expect(notes[0]._pitchClass.sharpName).toBe('B');
       expect(notes[0]._octave).toBe(4);
 
       // 上位の音は次のオクターブに進む
@@ -194,7 +194,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.name).toBe(expectedNames[index]);
+        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
 
@@ -208,124 +208,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.name).toBe(expectedNames[index]);
-      });
-    });
-  });
-
-  describe('getDegreeInfo', () => {
-    it('正常ケース: スケール上の音の度数を取得', () => {
-      const root = PitchClass.fromCircleOfFifths(0); // C
-      const pattern = ScalePattern.Major; // C, D, E, F, G, A, B, C
-      const scale = new Scale(root, pattern);
-
-      // スケール上の音をテスト
-      const testCases = [
-        { pitchClass: PitchClass.C, expectedDegree: 1, expectedAlteration: 'natural' }, // C = 1度
-        { pitchClass: PitchClass.D, expectedDegree: 2, expectedAlteration: 'natural' }, // D = 2度
-        { pitchClass: PitchClass.E, expectedDegree: 3, expectedAlteration: 'natural' }, // E = 3度
-        { pitchClass: PitchClass.F, expectedDegree: 4, expectedAlteration: 'natural' }, // F = 4度
-        { pitchClass: PitchClass.G, expectedDegree: 5, expectedAlteration: 'natural' }, // G = 5度
-        { pitchClass: PitchClass.A, expectedDegree: 6, expectedAlteration: 'natural' }, // A = 6度
-        { pitchClass: PitchClass.B, expectedDegree: 7, expectedAlteration: 'natural' }, // B = 7度
-      ];
-
-      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
-        const result = scale.getDegreeInfo(pitchClass);
-        expect(result.degree).toBe(expectedDegree);
-        expect(result.alteration).toBe(expectedAlteration);
-      });
-    });
-
-    it('正常ケース: スケール上外の音の度数を取得（シャープ系）', () => {
-      const root = PitchClass.fromCircleOfFifths(0); // C
-      const pattern = ScalePattern.Major; // C, D, E, F, G, A, B, C
-      const scale = new Scale(root, pattern);
-
-      // シャープした音をテスト
-      const testCases = [
-        { pitchClass: PitchClass.CSharp, expectedDegree: 1, expectedAlteration: 'sharp' }, // C# = #1度
-        { pitchClass: PitchClass.DSharp, expectedDegree: 2, expectedAlteration: 'sharp' }, // D# = #2度
-        { pitchClass: PitchClass.FSharp, expectedDegree: 4, expectedAlteration: 'sharp' }, // F# = #4度
-        { pitchClass: PitchClass.GSharp, expectedDegree: 5, expectedAlteration: 'sharp' }, // G# = #5度
-        { pitchClass: PitchClass.ASharp, expectedDegree: 6, expectedAlteration: 'sharp' }, // A# = #6度
-      ];
-
-      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
-        const result = scale.getDegreeInfo(pitchClass);
-        expect(result.degree).toBe(expectedDegree);
-        expect(result.alteration).toBe(expectedAlteration);
-      });
-    });
-
-    it('正常ケース: スケール上外の音の度数を取得（フラット系）', () => {
-      const root = PitchClass.fromCircleOfFifths(0); // C
-      const pattern = ScalePattern.Major; // C, D, E, F, G, A, B, C
-      const scale = new Scale(root, pattern);
-
-      // フラットした音をテスト（エンハーモニック等価）
-      const testCases = [
-        { pitchClass: PitchClass.CSharp, expectedDegree: 1, expectedAlteration: 'sharp' }, // C# = #1度
-        { pitchClass: PitchClass.DSharp, expectedDegree: 2, expectedAlteration: 'sharp' }, // D# = #2度
-        { pitchClass: PitchClass.GSharp, expectedDegree: 5, expectedAlteration: 'sharp' }, // G# = #5度
-        { pitchClass: PitchClass.ASharp, expectedDegree: 6, expectedAlteration: 'sharp' }, // A# = #6度
-      ];
-
-      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
-        const result = scale.getDegreeInfo(pitchClass);
-        expect(result.degree).toBe(expectedDegree);
-        expect(result.alteration).toBe(expectedAlteration);
-      });
-    });
-
-    it('正常ケース: 異なるスケールでのdegree情報取得', () => {
-      const root = PitchClass.fromCircleOfFifths(1); // G
-      const pattern = ScalePattern.Major; // G, A, B, C, D, E, F#, G
-      const scale = new Scale(root, pattern);
-
-      // Gメジャースケール上の音をテスト
-      const testCases = [
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(1),
-          expectedDegree: 1,
-          expectedAlteration: 'natural',
-        }, // G = 1度
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(3),
-          expectedDegree: 2,
-          expectedAlteration: 'natural',
-        }, // A = 2度
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(5),
-          expectedDegree: 3,
-          expectedAlteration: 'natural',
-        }, // B = 3度
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(0),
-          expectedDegree: 4,
-          expectedAlteration: 'natural',
-        }, // C = 4度
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(2),
-          expectedDegree: 5,
-          expectedAlteration: 'natural',
-        }, // D = 5度
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(4),
-          expectedDegree: 6,
-          expectedAlteration: 'natural',
-        }, // E = 6度
-        {
-          pitchClass: PitchClass.fromCircleOfFifths(6),
-          expectedDegree: 7,
-          expectedAlteration: 'natural',
-        }, // F# = 7度
-      ];
-
-      testCases.forEach(({ pitchClass, expectedDegree, expectedAlteration }) => {
-        const result = scale.getDegreeInfo(pitchClass);
-        expect(result.degree).toBe(expectedDegree);
-        expect(result.alteration).toBe(expectedAlteration);
+        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
   });

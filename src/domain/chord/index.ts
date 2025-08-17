@@ -1,5 +1,5 @@
 import { Interval, Note, PitchClass } from '../common';
-import type { KeyDTO } from '../key';
+import type { Key, KeyDTO } from '../key';
 
 /**
  * コードの品質（レシピ）を定義する不変の値オブジェクト
@@ -67,16 +67,11 @@ export class ChordQuality {
 
   /**
    * ローマ数字での表記を取得する
-   * @param degree スケール度数（1-7）
-   * @returns ローマ数字表記
+   * @param degreeName rootのディグリーネーム（Ⅰ ~ Ⅶ）
+   * @returns コードのディグリーネーム
    */
-  toRomanNumeral(degree: number): string {
-    if (degree < 1 || degree > 7) {
-      throw new Error(`度数は1-7の範囲で指定してください: ${degree}`);
-    }
-
-    const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-    let roman = numerals[degree - 1];
+  getChordDegreeName(degreeName: string): string {
+    let roman = degreeName;
 
     // コード品質に応じて表記を調整する
     switch (this.nameSuffix) {
@@ -103,7 +98,6 @@ export class ChordQuality {
 export class Chord {
   public readonly rootNote: Note;
   public readonly constituentNotes: readonly Note[];
-  public readonly name: string;
   public readonly quality: ChordQuality;
 
   /**
@@ -112,7 +106,6 @@ export class Chord {
   private constructor(rootNote: Note, quality: ChordQuality) {
     this.rootNote = rootNote;
     this.quality = quality;
-    this.name = `${rootNote._pitchClass.name}${quality.nameSuffix}`;
 
     // ルート音と、ルート音を各インターバルで移調した音で構成音を生成
     const notes = [rootNote];
@@ -122,6 +115,11 @@ export class Chord {
     this.constituentNotes = Object.freeze(notes);
 
     Object.freeze(this);
+  }
+
+  /** 与えられたKey文脈におけるChord Nameを取得する */
+  public getNameFor(key: Key): string {
+    return `${this.rootNote._pitchClass.getNameFor(key)}${this.quality.nameSuffix}`;
   }
 
   /**
