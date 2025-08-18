@@ -30,10 +30,7 @@ export class Interval {
     return names[normalizedSemitones] || `Unknown(${this.semitones})`;
   }
 
-  // --- 12音程の定義 ---
-
   // 便宜上の別名
-
   static readonly Half = new Interval(1); // 半音
   static readonly Whole = new Interval(2); // 全音
 
@@ -74,5 +71,33 @@ export class Interval {
     }
 
     return new Interval(semitones);
+  }
+
+  /**
+   * 2つのIntervalが等しいかどうかを判定する
+   * @param other 比較対象のInterval
+   * @returns 等しい場合true
+   */
+  equals(other: Interval): boolean {
+    return this.semitones === other.semitones;
+  }
+
+  /**
+   * 2つのIntervalを半音数で比較する関数
+   * @param a 比較対象のInterval1
+   * @param b 比較対象のInterval2
+   * @returns a < b なら負の値、a > b なら正の値、等しければ0
+   */
+  static compare(a: Interval, b: Interval): number {
+    return a.semitones - b.semitones;
+  }
+
+  /**
+   * Interval配列を半音数の昇順でソートする
+   * @param intervals ソート対象のInterval配列
+   * @returns ソートされた新しい配列
+   */
+  static sort(intervals: Interval[]): Interval[] {
+    return [...intervals].sort(Interval.compare);
   }
 }

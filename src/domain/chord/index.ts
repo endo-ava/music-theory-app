@@ -1,20 +1,11 @@
 import { Interval, Note, PitchClass } from '../common';
+import type { Key, KeyDTO } from '../key';
 
 /**
  * コードの品質（レシピ）を定義する不変の値オブジェクト
  * 例：メジャートライアドは「ルート音、長3度、完全5度」というレシピを持つ
  */
 export class ChordQuality {
-  constructor(
-    /** 例: "Major Triad", "m7" */
-    public readonly nameSuffix: string,
-    /** ルート音からのインターバルの配列 */
-    public readonly intervals: readonly Interval[]
-  ) {
-    Object.freeze(this);
-  }
-
-  // --- 一般的なコード品質の定義 ---
   static readonly MajorTriad = new ChordQuality('', [Interval.MajorThird, Interval.PerfectFifth]);
   static readonly MinorTriad = new ChordQuality('m', [Interval.MinorThird, Interval.PerfectFifth]);
   static readonly DominantSeventh = new ChordQuality('7', [
@@ -36,6 +27,69 @@ export class ChordQuality {
     Interval.MinorThird,
     Interval.Tritone,
   ]);
+
+  /** 全てのqualities */
+  private static readonly qualities: readonly ChordQuality[] = [
+    this.MajorTriad,
+    this.MinorTriad,
+    this.DominantSeventh,
+    this.MajorSeventh,
+    this.MinorSeventh,
+    this.DiminishedTriad,
+  ];
+  public readonly nameSuffix: string;
+  public readonly intervals: readonly Interval[];
+
+  private constructor(nameSuffix: string, intervals: readonly Interval[]) {
+    this.nameSuffix = nameSuffix;
+    // 渡された配列をソートして不変にする
+    this.intervals = Object.freeze(Interval.sort(intervals as Interval[]));
+    Object.freeze(this);
+  }
+
+  /**
+   * 与えられたインターバル配列がこのクオリティと一致するか判定する
+   */
+  public matches(intervalsToCompare: Interval[]): boolean {
+    if (this.intervals.length !== intervalsToCompare.length) {
+      return false;
+    }
+    const sortedToCompare = Interval.sort(intervalsToCompare);
+    return this.intervals.every((interval, i) => interval.equals(sortedToCompare[i]));
+  }
+
+  /**
+   * インターバル配列から、合致するChordQualityを検索する
+   */
+  public static findByIntervals(intervals: Interval[]): ChordQuality | null {
+    return this.qualities.find(quality => quality.matches(intervals)) || null;
+  }
+
+  /**
+   * ローマ数字での表記を取得する
+   * @param degreeName rootのディグリーネーム（Ⅰ ~ Ⅶ）
+   * @returns コードのディグリーネーム
+   */
+  getChordDegreeName(degreeName: string): string {
+    let roman = degreeName;
+
+    // コード品質に応じて表記を調整する
+    switch (this.nameSuffix) {
+      case 'dim':
+        roman += '°';
+        break;
+      case 'half-diminished':
+        roman += 'ø';
+        break;
+      case 'aug':
+        roman += '+';
+        break;
+      default:
+        roman += this.nameSuffix;
+    }
+
+    return roman;
+  }
 }
 
 /**
@@ -44,7 +98,6 @@ export class ChordQuality {
 export class Chord {
   public readonly rootNote: Note;
   public readonly constituentNotes: readonly Note[];
-  public readonly name: string;
   public readonly quality: ChordQuality;
 
   /**
@@ -53,7 +106,6 @@ export class Chord {
   private constructor(rootNote: Note, quality: ChordQuality) {
     this.rootNote = rootNote;
     this.quality = quality;
-    this.name = `${rootNote._pitchClass.name}${quality.nameSuffix}`;
 
     // ルート音と、ルート音を各インターバルで移調した音で構成音を生成
     const notes = [rootNote];
@@ -63,6 +115,18 @@ export class Chord {
     this.constituentNotes = Object.freeze(notes);
 
     Object.freeze(this);
+  }
+
+  /** 与えられたKey文脈におけるChord Nameを取得する */
+  public getNameFor(key: Key): string {
+    return `${this.rootNote._pitchClass.getNameFor(key.keySignature)}${this.quality.nameSuffix}`;
+  }
+
+  /** 五度圏表示用のコード名 メジャーは♭、マイナーは♯ */
+  public getNameForCircleOfFifth(): string {
+    return this.quality.nameSuffix === ''
+      ? `${this.rootNote._pitchClass.flatName}${this.quality.nameSuffix}`
+      : `${this.rootNote._pitchClass.sharpName}${this.quality.nameSuffix}`;
   }
 
   /**
@@ -112,42 +176,99 @@ export class Chord {
   }
 
   /**
-   * 五度圏インデックスからメジャーコードを生成する
-   * @param circleIndex 五度圏インデックス (C=0, G=1...)
-   * @param octave オクターブ（未指定時は音名に応じて最適化）
+   * KeyDTOからトニックコード（主和音）を生成する
+   * @param keyDTO キーDTO（五度圏上の選択されたキー情報）
+   * @param octave オクターブ（デフォルト: 4）
+   * @returns キーに対応するトニックコード
    */
-  static fromCircleOfFifths(circleIndex: number, octave?: number): Chord {
-    const rootPitch = PitchClass.fromCircleOfFifths(circleIndex);
-    const finalOctave = octave ?? this.getOptimizedOctave(rootPitch);
-    const rootNote = new Note(rootPitch, finalOctave);
-    return Chord.major(rootNote);
+  static fromKeyDTO(keyDTO: KeyDTO, octave: number = 4): Chord {
+    // KeyDTOの五度圏インデックスからPitchClassを取得
+    const rootPitchClass = PitchClass.fromCircleOfFifths(keyDTO.fifthsIndex);
+
+    // 最適なオクターブを決定（指定されていない場合）
+    const finalOctave = octave ?? this.getOptimizedOctave(rootPitchClass);
+
+    // ルート音を生成
+    const rootNote = new Note(rootPitchClass, finalOctave);
+
+    // キーの種類に応じてコードを生成
+    if (keyDTO.isMajor) {
+      return Chord.major(rootNote);
+    } else {
+      return Chord.minor(rootNote);
+    }
   }
 
   /**
-   * 五度圏インデックスから、その相対マイナーコードを生成する
-   * @param circleIndex 五度圏インデックス (C=0 の場合、Amが生成される)
-   * @param octave オクターブ（未指定時は音名に応じて最適化）
+   * 構成音配列からChordを生成する
+   * @param constituentNotes 構成音配列（最低音がルート音として扱われる）
+   * @throws Error 構成音配列が空の場合
+   * @throws Error 認識可能なコード品質が見つからない場合
    */
-  static relativeMinorFromCircleOfFifths(circleIndex: number, octave?: number): Chord {
-    // 相対マイナーのルート音を取得（メジャーキーから短3度下）
-    const majorRoot = PitchClass.fromCircleOfFifths(circleIndex);
-    const minorRoot = majorRoot.transposeBy(Interval.MinorThird.invert()); // 短3度下に移調
+  static fromNotes(constituentNotes: Note[]): Chord {
+    // バリデーション
+    if (constituentNotes.length === 0) {
+      throw new Error('構成音配列が空です');
+    }
 
-    const finalOctave = octave ?? this.getOptimizedOctave(minorRoot);
-    const rootNote = new Note(minorRoot, finalOctave);
-    return Chord.minor(rootNote);
+    // null/undefinedを除外
+    const validNotes = constituentNotes.filter(note => note && note._pitchClass);
+    if (validNotes.length === 0) {
+      throw new Error('有効な構成音が見つかりません');
+    }
+
+    // 最低音をルート音として決定
+    const sortedNotes = Note.sortByPitch(validNotes);
+    const rootNote = sortedNotes[0];
+
+    // ルート音以外の音を使って、ルートからのインターバル配列を生成
+    const intervals = sortedNotes
+      .slice(1) // ルート音自身は除く
+      .map(note => Interval.between(rootNote._pitchClass, note._pitchClass));
+
+    // 既知のコード品質と一致するかチェック
+    const quality = ChordQuality.findByIntervals(intervals);
+    if (!quality) {
+      const intervalNames = intervals.map(i => i.name).join(', ');
+      throw new Error(`認識可能なコード品質が見つかりません。インターバル: [${intervalNames}]`);
+    }
+
+    return new Chord(rootNote, quality);
   }
 
   // =========================================================
   // プライベート・ヘルパーメソッド
   // =========================================================
 
+  // オクターブ決定の閾値定数
+  private static readonly HIGH_PITCH_THRESHOLD_INDEX = 8; // G# (index: 8)
+  private static readonly LOW_OCTAVE = 3;
+  private static readonly HIGH_OCTAVE = 4;
+
   /**
    * ルート音の音名から最適なオクターブを決定 (G#/A♭以上は3、それ以下は4)
    * @param pitchClass 判定対象のピッチクラス
    */
-  private static getOptimizedOctave(pitchClass: PitchClass): number {
-    // G# (index: 8) 以上の音は低いオクターブにする
-    return pitchClass.index >= 8 ? 3 : 4;
+  static getOptimizedOctave(pitchClass: PitchClass): number {
+    // G# (index: HIGH_PITCH_THRESHOLD_INDEX) 以上の音は低いオクターブにする
+    return pitchClass.index >= Chord.HIGH_PITCH_THRESHOLD_INDEX
+      ? Chord.LOW_OCTAVE
+      : Chord.HIGH_OCTAVE;
+  }
+
+  /**
+   * 2つのChordが等しいかどうかを判定する
+   * @param other 比較対象のChord
+   * @returns 等しい場合true
+   */
+  equals(other: Chord): boolean {
+    if (!other || !(other instanceof Chord)) {
+      return false;
+    }
+
+    // ルート音とコード品質が同じかチェック
+    return (
+      this.rootNote._pitchClass.equals(other.rootNote._pitchClass) && this.quality === other.quality
+    );
   }
 }

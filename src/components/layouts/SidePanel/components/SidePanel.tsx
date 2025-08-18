@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { ViewController } from '@/features/view-controller';
+import { InformationPanel } from '@/features/information-panel';
 import type { ClassNameProps } from '@/shared/types';
 
 /**
@@ -14,8 +15,10 @@ export interface SidePanelProps extends ClassNameProps {
  * Side Panel サイドパネルコンポーネント
  *
  * Hub画面左側に配置されるサイドパネル。
- * 現在はViewController（C-1）のみを含み、将来的にLayerController（C-2）、
- * InformationPanel（C-3）が追加される予定。
+ * 3つのコンポーネントを上から順に配置：
+ * C-1: InformationPanel（選択情報パネル）
+ * C-2: LayerController（レイヤー・コントローラー）※将来実装
+ * C-3: ViewController（ビュー・コントローラー）
  * レイアウトサイズは外部制御、内部は描画責任のみ
  *
  * @param props - コンポーネントのプロパティ
@@ -42,12 +45,14 @@ export const SidePanel: React.FC<SidePanelProps> = ({ className, isVisible = tru
         className="border-border bg-card overflow-y-auto rounded-lg border p-8 backdrop-blur-sm"
         aria-label="コントロールパネル"
       >
-        {/* C-1: View Controller（クライアントコンポーネント） */}
-        <ViewController />
+        {/* C-1: Information Panel（選択情報パネル） */}
+        <InformationPanel className="mb-8" />
 
         {/* 将来の拡張エリア */}
-        {/* C-2: Layer Controller */}
-        {/* C-3: Information Panel */}
+        {/* C-2: Layer Controller（レイヤー・コントローラー） */}
+
+        {/* C-3: View Controller（ビュー・コントローラー） */}
+        <ViewController />
       </section>
     </aside>
   );

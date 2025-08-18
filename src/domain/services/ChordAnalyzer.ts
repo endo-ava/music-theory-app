@@ -1,3 +1,4 @@
+import { Key, ScalePattern } from '..';
 import { Chord } from '../chord';
 import { Interval, Note, PitchClass } from '../common';
 
@@ -179,13 +180,18 @@ export function printAnalysis(
 ) {
   const gravity = analyzer.calculateGravity(chord, keyRoot);
   const inertia = analyzer.calculateInertia(chord, nextChord);
+  const cMajar = new Key(PitchClass.C, ScalePattern.Major);
 
-  console.log(`--- Analysis for Chord [${chord.name}] in Key [${keyRoot.name}] ---`);
+  console.log(
+    `--- Analysis for Chord [${chord.getNameFor(cMajar)}] in Key [${keyRoot.sharpName}] ---`
+  );
   console.log(`Tonal Gravity:`);
   console.log(`  - Tonic:       ${(gravity.tonic * 100).toFixed(1)}%`);
   console.log(`  - Subdominant: ${(gravity.subdominant * 100).toFixed(1)}%`);
   console.log(`  - Dominant:    ${(gravity.dominant * 100).toFixed(1)}%`);
-  console.log(`Voice-Leading Inertia (to [${nextChord.name}]): ${inertia.toFixed(3)}`);
+  console.log(
+    `Voice-Leading Inertia (to [${nextChord.getNameFor(cMajar)}]): ${inertia.toFixed(3)}`
+  );
   console.log(`------------------------------------`);
 }
 

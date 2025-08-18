@@ -30,7 +30,7 @@ const MODE_NAMES = ['lydian', 'ionian', 'mixolydian', 'dorian', 'aeolian', 'phry
 export function generateMusicColorTheme(): string {
   const variables = PITCH_CLASSES.flatMap((pitchClass, pitchIndex) =>
     MODE_NAMES.map((mode, modeIndex) => {
-      const pitchName = pitchClass.name.toLowerCase().replace('#', 'sharp');
+      const pitchName = pitchClass.sharpName.toLowerCase().replace('#', 'sharp');
       const hue = pitchIndex * 30;
       const lightness = MODE_LIGHTNESS[modeIndex];
       return `  --color-key-${pitchName}-${mode}: hsl(${hue}, 85%, ${lightness}%);`;
