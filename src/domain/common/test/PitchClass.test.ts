@@ -211,7 +211,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(cMajorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(cMajorKey.keySignature)).toBe(expectedName);
         });
       });
 
@@ -231,7 +231,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(gFlatMajorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(gFlatMajorKey.keySignature)).toBe(expectedName);
         });
       });
 
@@ -251,7 +251,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(bFlatMajorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(bFlatMajorKey.keySignature)).toBe(expectedName);
         });
       });
     });
@@ -271,7 +271,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(cMajorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(cMajorKey.keySignature)).toBe(expectedName);
         });
       });
 
@@ -289,7 +289,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(fMajorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(fMajorKey.keySignature)).toBe(expectedName);
         });
       });
     });
@@ -305,12 +305,12 @@ describe('PitchClass', () => {
         const bFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(10), ScalePattern.Major); // flat系
 
         // sharp系キーでは C# 表記
-        expect(dbCsharpPitch.getNameFor(gMajorKey)).toBe('C#');
-        expect(dbCsharpPitch.getNameFor(aMajorKey)).toBe('C#');
+        expect(dbCsharpPitch.getNameFor(gMajorKey.keySignature)).toBe('C#');
+        expect(dbCsharpPitch.getNameFor(aMajorKey.keySignature)).toBe('C#');
 
         // flat系キーでは D♭ 表記
-        expect(dbCsharpPitch.getNameFor(fMajorKey)).toBe('D♭');
-        expect(dbCsharpPitch.getNameFor(bFlatMajorKey)).toBe('D♭');
+        expect(dbCsharpPitch.getNameFor(fMajorKey.keySignature)).toBe('D♭');
+        expect(dbCsharpPitch.getNameFor(bFlatMajorKey.keySignature)).toBe('D♭');
       });
 
       it('正常ケース: 複数のエンハーモニック音での表記確認', () => {
@@ -327,8 +327,8 @@ describe('PitchClass', () => {
 
         enharmoinicPairs.forEach(({ fifthsIndex, sharpName, flatName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(gMajorKey)).toBe(sharpName);
-          expect(pitchClass.getNameFor(fMajorKey)).toBe(flatName);
+          expect(pitchClass.getNameFor(gMajorKey.keySignature)).toBe(sharpName);
+          expect(pitchClass.getNameFor(fMajorKey.keySignature)).toBe(flatName);
         });
       });
     });
@@ -340,7 +340,7 @@ describe('PitchClass', () => {
         // 全ての五度圏ポジション（0-11）をテスト
         for (let i = 0; i < 12; i++) {
           const pitchClass = PitchClass.fromCircleOfFifths(i);
-          const name = pitchClass.getNameFor(cMajorKey);
+          const name = pitchClass.getNameFor(cMajorKey.keySignature);
 
           // 空文字列や null ではないことを確認
           expect(name).toBeTruthy();
@@ -365,7 +365,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(aMinorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(aMinorKey.keySignature)).toBe(expectedName);
         });
       });
 
@@ -385,7 +385,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(fSharpMinorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(fSharpMinorKey.keySignature)).toBe(expectedName);
         });
       });
 
@@ -403,7 +403,7 @@ describe('PitchClass', () => {
 
         testCases.forEach(({ fifthsIndex, expectedName }) => {
           const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-          expect(pitchClass.getNameFor(aMinorKey)).toBe(expectedName);
+          expect(pitchClass.getNameFor(aMinorKey.keySignature)).toBe(expectedName);
         });
       });
     });

@@ -119,7 +119,7 @@ export class Chord {
 
   /** 与えられたKey文脈におけるChord Nameを取得する */
   public getNameFor(key: Key): string {
-    return `${this.rootNote._pitchClass.getNameFor(key)}${this.quality.nameSuffix}`;
+    return `${this.rootNote._pitchClass.getNameFor(key.keySignature)}${this.quality.nameSuffix}`;
   }
 
   /** 五度圏表示用のコード名 メジャーは♭、マイナーは♯ */
@@ -240,13 +240,20 @@ export class Chord {
   // プライベート・ヘルパーメソッド
   // =========================================================
 
+  // オクターブ決定の閾値定数
+  private static readonly HIGH_PITCH_THRESHOLD_INDEX = 8; // G# (index: 8)
+  private static readonly LOW_OCTAVE = 3;
+  private static readonly HIGH_OCTAVE = 4;
+
   /**
    * ルート音の音名から最適なオクターブを決定 (G#/A♭以上は3、それ以下は4)
    * @param pitchClass 判定対象のピッチクラス
    */
   static getOptimizedOctave(pitchClass: PitchClass): number {
-    // G# (index: 8) 以上の音は低いオクターブにする
-    return pitchClass.index >= 8 ? 3 : 4;
+    // G# (index: HIGH_PITCH_THRESHOLD_INDEX) 以上の音は低いオクターブにする
+    return pitchClass.index >= Chord.HIGH_PITCH_THRESHOLD_INDEX
+      ? Chord.LOW_OCTAVE
+      : Chord.HIGH_OCTAVE;
   }
 
   /**
