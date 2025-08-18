@@ -1,5 +1,17 @@
 import { PitchClass, ScalePattern, Note } from '../common';
 
+/** スケールにおける度数と調号変化の状態
+ * 例：
+ * F#m in D Majar -> degree:3, alteration:natural
+ * F in D Majar -> degree:3, alteration:flat
+ */
+export type DegreeInfo = {
+  /** スケール上の度数 (1-7) */
+  degree: number;
+  /** 変化の状態 ('natural'はダイアトニック音そのもの) */
+  alteration: 'sharp' | 'flat' | 'natural';
+};
+
 /**
  * 具体的な音階を表す集約（Aggregate Root）
  */

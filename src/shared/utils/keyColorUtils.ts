@@ -12,7 +12,7 @@ import type { KeyDTO } from '@/domain';
  */
 export function getMusicColorKey(keyDTO: KeyDTO): string {
   const pitchClass = PitchClass.fromCircleOfFifths(keyDTO.fifthsIndex);
-  const pitchName = pitchClass.name.toLowerCase().replace('#', 'sharp');
+  const pitchName = pitchClass.sharpName.toLowerCase().replace('#', 'sharp');
   const mode = keyDTO.isMajor ? 'ionian' : 'aeolian';
 
   return `key-${pitchName}-${mode}`;

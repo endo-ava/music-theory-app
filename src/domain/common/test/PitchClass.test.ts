@@ -1,13 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import { PitchClass } from '../PitchClass';
 import { Interval } from '../Interval';
+import { Key } from '../../key';
+import { ScalePattern } from '../ScalePattern';
 
 describe('PitchClass', () => {
   describe('基本プロパティ', () => {
     it('正常ケース: 各音高クラスが正しいプロパティを持つ', () => {
       const c = PitchClass.fromCircleOfFifths(0);
 
-      expect(c.name).toBe('C');
+      expect(c.sharpName).toBe('C');
       expect(c.index).toBe(0);
       expect(c.fifthsIndex).toBe(0);
     });
@@ -30,7 +32,7 @@ describe('PitchClass', () => {
 
       testCases.forEach(([fifthsIndex, expectedName, expectedIndex, expectedFifths]) => {
         const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-        expect(pitchClass.name).toBe(expectedName);
+        expect(pitchClass.sharpName).toBe(expectedName);
         expect(pitchClass.index).toBe(expectedIndex);
         expect(pitchClass.fifthsIndex).toBe(expectedFifths);
       });
@@ -42,14 +44,14 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0);
       const g = PitchClass.fromCircleOfFifths(1);
 
-      expect(c.name).toBe('C');
-      expect(g.name).toBe('G');
+      expect(c.sharpName).toBe('C');
+      expect(g.sharpName).toBe('G');
     });
 
     it('境界値ケース: 範囲内の最大値でPitchClassを作成', () => {
       const f = PitchClass.fromCircleOfFifths(11); // F
 
-      expect(f.name).toBe('F');
+      expect(f.sharpName).toBe('F');
       expect(f.index).toBe(5);
       expect(f.fifthsIndex).toBe(11);
     });
@@ -62,7 +64,7 @@ describe('PitchClass', () => {
     it('異常ケース: 範囲外の五度圏インデックスで処理', () => {
       // 現在の実装では循環的に処理されるため、エラーではなく正常に動作する
       const result = PitchClass.fromCircleOfFifths(12);
-      expect(result.name).toBe('C'); // 12 -> (12 * 7) % 12 = 0 -> C
+      expect(result.sharpName).toBe('C'); // 12 -> (12 * 7) % 12 = 0 -> C
     });
   });
 
@@ -71,7 +73,7 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0); // C
       const e = c.transposeBy(Interval.MajorThird);
 
-      expect(e.name).toBe('E');
+      expect(e.sharpName).toBe('E');
       expect(e.index).toBe(4);
     });
 
@@ -79,7 +81,7 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0); // C
       const g = c.transposeBy(Interval.PerfectFifth);
 
-      expect(g.name).toBe('G');
+      expect(g.sharpName).toBe('G');
       expect(g.index).toBe(7);
     });
 
@@ -87,7 +89,7 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0); // C
       const a = c.transposeBy(Interval.MinorThird.invert());
 
-      expect(a.name).toBe('A');
+      expect(a.sharpName).toBe('A');
       expect(a.index).toBe(9);
     });
 
@@ -95,7 +97,7 @@ describe('PitchClass', () => {
       const b = PitchClass.fromCircleOfFifths(5); // B
       const d = b.transposeBy(Interval.MinorThird);
 
-      expect(d.name).toBe('D');
+      expect(d.sharpName).toBe('D');
       expect(d.index).toBe(2);
     });
 
@@ -104,27 +106,8 @@ describe('PitchClass', () => {
       const majorSeventhPlus2Octaves = Interval.MajorSeventh; // 基本の長7度のみテスト
       const b = c.transposeBy(majorSeventhPlus2Octaves);
 
-      expect(b.name).toBe('B');
+      expect(b.sharpName).toBe('B');
       expect(b.index).toBe(11);
-    });
-  });
-
-  describe('文字列表現', () => {
-    it('正常ケース: toString()で音高クラス名を返す', () => {
-      const c = PitchClass.fromCircleOfFifths(0);
-      const fSharp = PitchClass.fromCircleOfFifths(6);
-
-      expect(c.toString()).toBe('C');
-      expect(fSharp.toString()).toBe('F#');
-    });
-
-    it('正常ケース: 全ての音高クラスの文字列表現', () => {
-      const expectedNames = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
-
-      expectedNames.forEach((expectedName, index) => {
-        const pitchClass = PitchClass.fromCircleOfFifths(index);
-        expect(pitchClass.toString()).toBe(expectedName);
-      });
     });
   });
 
@@ -138,11 +121,11 @@ describe('PitchClass', () => {
         PitchClass.fromCircleOfFifths(4), // E (A + 完全5度)
       ];
 
-      expect(fifthsProgression[0].name).toBe('C');
-      expect(fifthsProgression[1].name).toBe('G');
-      expect(fifthsProgression[2].name).toBe('D');
-      expect(fifthsProgression[3].name).toBe('A');
-      expect(fifthsProgression[4].name).toBe('E');
+      expect(fifthsProgression[0].sharpName).toBe('C');
+      expect(fifthsProgression[1].sharpName).toBe('G');
+      expect(fifthsProgression[2].sharpName).toBe('D');
+      expect(fifthsProgression[3].sharpName).toBe('A');
+      expect(fifthsProgression[4].sharpName).toBe('E');
     });
 
     it('正常ケース: 半音階の順序が正しい', () => {
@@ -179,7 +162,7 @@ describe('PitchClass', () => {
 
       majorScaleIntervals.forEach((interval, index) => {
         const transposed = c.transposeBy(interval);
-        expect(transposed.name).toBe(expectedNotes[index]);
+        expect(transposed.sharpName).toBe(expectedNotes[index]);
       });
     });
   });
@@ -188,7 +171,7 @@ describe('PitchClass', () => {
     it('境界値ケース: 最後の五度圏インデックス（F）', () => {
       const f = PitchClass.fromCircleOfFifths(11);
 
-      expect(f.name).toBe('F');
+      expect(f.sharpName).toBe('F');
       expect(f.index).toBe(5);
       expect(f.fifthsIndex).toBe(11);
     });
@@ -197,7 +180,7 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0);
       const samePitch = c.transposeBy(new Interval(0));
 
-      expect(samePitch.name).toBe('C');
+      expect(samePitch.sharpName).toBe('C');
       expect(samePitch.index).toBe(0);
     });
 
@@ -205,47 +188,224 @@ describe('PitchClass', () => {
       const c = PitchClass.fromCircleOfFifths(0);
       const octaveTransposed = c.transposeBy(Interval.Octave);
 
-      expect(octaveTransposed.name).toBe('C');
+      expect(octaveTransposed.sharpName).toBe('C');
       expect(octaveTransposed.index).toBe(0);
     });
   });
 
-  describe('エンハーモニック表記', () => {
-    it('正常ケース: getDisplayName(major)でフラット表記を返す', () => {
-      const cSharp = PitchClass.fromCircleOfFifths(7); // C#
-      expect(cSharp.getDisplayName('major')).toBe('D♭');
-      expect(cSharp.getDisplayName('minor')).toBe('C#');
-      expect(cSharp.getDisplayName('default')).toBe('C#');
-    });
+  describe('getNameFor メソッド', () => {
+    describe('ダイアトニック音の表記', () => {
+      it('正常ケース: Cメジャーキーでのダイアトニック音', () => {
+        const cMajorKey = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
 
-    it('正常ケース: 自然音は同じ表記を返す', () => {
-      const c = PitchClass.fromCircleOfFifths(0); // C
-      expect(c.getDisplayName('major')).toBe('C');
-      expect(c.getDisplayName('minor')).toBe('C');
-      expect(c.getDisplayName('default')).toBe('C');
-    });
+        // Cメジャースケール: C, D, E, F, G, A, B
+        const testCases = [
+          { fifthsIndex: 0, expectedName: 'C' }, // C
+          { fifthsIndex: 2, expectedName: 'D' }, // D
+          { fifthsIndex: 4, expectedName: 'E' }, // E
+          { fifthsIndex: 11, expectedName: 'F' }, // F
+          { fifthsIndex: 1, expectedName: 'G' }, // G
+          { fifthsIndex: 3, expectedName: 'A' }, // A
+          { fifthsIndex: 5, expectedName: 'B' }, // B
+        ];
 
-    it('正常ケース: 全ての変化音のエンハーモニック表記', () => {
-      const testCases = [
-        { fifthsIndex: 7, sharpName: 'C#', flatName: 'D♭' },
-        { fifthsIndex: 9, sharpName: 'D#', flatName: 'E♭' },
-        { fifthsIndex: 6, sharpName: 'F#', flatName: 'G♭' },
-        { fifthsIndex: 8, sharpName: 'G#', flatName: 'A♭' },
-        { fifthsIndex: 10, sharpName: 'A#', flatName: 'B♭' },
-      ];
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(cMajorKey.keySignature)).toBe(expectedName);
+        });
+      });
 
-      testCases.forEach(({ fifthsIndex, sharpName, flatName }) => {
-        const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-        expect(pitchClass.getDisplayName('minor')).toBe(sharpName);
-        expect(pitchClass.getDisplayName('major')).toBe(flatName);
+      it('正常ケース: G♭メジャーキー（flat系）でのダイアトニック音', () => {
+        const gFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(6), ScalePattern.Major);
+
+        // G♭メジャースケール: G♭, A♭, B♭, C♭, D♭, E♭, F
+        const testCases = [
+          { fifthsIndex: 6, expectedName: 'G♭' }, // G♭
+          { fifthsIndex: 8, expectedName: 'A♭' }, // A♭
+          { fifthsIndex: 10, expectedName: 'B♭' }, // B♭
+          { fifthsIndex: 5, expectedName: 'B' }, // C♭(B)
+          { fifthsIndex: 7, expectedName: 'D♭' }, // D♭
+          { fifthsIndex: 9, expectedName: 'E♭' }, // E♭
+          { fifthsIndex: 11, expectedName: 'F' }, // F
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(gFlatMajorKey.keySignature)).toBe(expectedName);
+        });
+      });
+
+      it('正常ケース: B♭メジャーキー（flat系）でのダイアトニック音', () => {
+        const bFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(10), ScalePattern.Major);
+
+        // B♭メジャースケール: B♭, C, D, E♭, F, G, A
+        const testCases = [
+          { fifthsIndex: 10, expectedName: 'B♭' }, // B♭ (flat系なのでflatName)
+          { fifthsIndex: 0, expectedName: 'C' }, // C
+          { fifthsIndex: 2, expectedName: 'D' }, // D
+          { fifthsIndex: 9, expectedName: 'E♭' }, // E♭ (flat系なのでflatName)
+          { fifthsIndex: 11, expectedName: 'F' }, // F
+          { fifthsIndex: 1, expectedName: 'G' }, // G
+          { fifthsIndex: 3, expectedName: 'A' }, // A
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(bFlatMajorKey.keySignature)).toBe(expectedName);
+        });
       });
     });
 
-    it('正常ケース: 後方互換性 - nameプロパティはsharpNameを返す', () => {
-      const cSharp = PitchClass.fromCircleOfFifths(7);
-      expect(cSharp.name).toBe('C#');
-      expect(cSharp.sharpName).toBe('C#');
-      expect(cSharp.flatName).toBe('D♭');
+    describe('ノンダイアトニック音の表記', () => {
+      it('正常ケース: Cメジャーキーでのノンダイアトニック音（sharp表記）', () => {
+        const cMajorKey = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+
+        // ノンダイアトニック音: C♯, D♯, F♯, G♯, A♯
+        const testCases = [
+          { fifthsIndex: 7, expectedName: 'C#' }, // C♯
+          { fifthsIndex: 9, expectedName: 'D#' }, // D♯
+          { fifthsIndex: 6, expectedName: 'F#' }, // F♯
+          { fifthsIndex: 8, expectedName: 'G#' }, // G♯
+          { fifthsIndex: 10, expectedName: 'A#' }, // A♯
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(cMajorKey.keySignature)).toBe(expectedName);
+        });
+      });
+
+      it('正常ケース: Fメジャーキー（flat系）でのノンダイアトニック音（flat表記）', () => {
+        const fMajorKey = new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major);
+
+        // ノンダイアトニック音（flat表記を期待）
+        const testCases = [
+          { fifthsIndex: 7, expectedName: 'D♭' }, // C♯/D♭
+          { fifthsIndex: 9, expectedName: 'E♭' }, // D♯/E♭
+          { fifthsIndex: 6, expectedName: 'G♭' }, // F♯/G♭
+          { fifthsIndex: 8, expectedName: 'A♭' }, // G♯/A♭
+          { fifthsIndex: 10, expectedName: 'B♭' }, // A♯/B♭
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(fMajorKey.keySignature)).toBe(expectedName);
+        });
+      });
+    });
+
+    describe('エンハーモニック表記の確認', () => {
+      it('正常ケース: 同じ音高でも異なるキーで異なる表記', () => {
+        // D♭/C♯ の音（fifthsIndex: 7）
+        const dbCsharpPitch = PitchClass.fromCircleOfFifths(7);
+
+        const gMajorKey = new Key(PitchClass.fromCircleOfFifths(1), ScalePattern.Major); // sharp系
+        const aMajorKey = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Major); // sharp系
+        const fMajorKey = new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major); // flat系
+        const bFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(10), ScalePattern.Major); // flat系
+
+        // sharp系キーでは C# 表記
+        expect(dbCsharpPitch.getNameFor(gMajorKey.keySignature)).toBe('C#');
+        expect(dbCsharpPitch.getNameFor(aMajorKey.keySignature)).toBe('C#');
+
+        // flat系キーでは D♭ 表記
+        expect(dbCsharpPitch.getNameFor(fMajorKey.keySignature)).toBe('D♭');
+        expect(dbCsharpPitch.getNameFor(bFlatMajorKey.keySignature)).toBe('D♭');
+      });
+
+      it('正常ケース: 複数のエンハーモニック音での表記確認', () => {
+        const gMajorKey = new Key(PitchClass.fromCircleOfFifths(1), ScalePattern.Major); // sharp系
+        const fMajorKey = new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major); // flat系
+
+        const enharmoinicPairs = [
+          { fifthsIndex: 7, sharpName: 'C#', flatName: 'D♭' },
+          { fifthsIndex: 9, sharpName: 'D#', flatName: 'E♭' },
+          { fifthsIndex: 6, sharpName: 'F#', flatName: 'G♭' },
+          { fifthsIndex: 8, sharpName: 'G#', flatName: 'A♭' },
+          { fifthsIndex: 10, sharpName: 'A#', flatName: 'B♭' },
+        ];
+
+        enharmoinicPairs.forEach(({ fifthsIndex, sharpName, flatName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(gMajorKey.keySignature)).toBe(sharpName);
+          expect(pitchClass.getNameFor(fMajorKey.keySignature)).toBe(flatName);
+        });
+      });
+    });
+
+    describe('境界値・エッジケース', () => {
+      it('正常ケース: 全ての五度圏ポジションでの表記確認', () => {
+        const cMajorKey = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+
+        // 全ての五度圏ポジション（0-11）をテスト
+        for (let i = 0; i < 12; i++) {
+          const pitchClass = PitchClass.fromCircleOfFifths(i);
+          const name = pitchClass.getNameFor(cMajorKey.keySignature);
+
+          // 空文字列や null ではないことを確認
+          expect(name).toBeTruthy();
+          expect(typeof name).toBe('string');
+          expect(name.length).toBeGreaterThan(0);
+        }
+      });
+
+      it('正常ケース: Aマイナーキー（sharp系）でのダイアトニック音', () => {
+        const aMinorKey = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+
+        // Aマイナースケール: A, B, C, D, E, F, G
+        const testCases = [
+          { fifthsIndex: 3, expectedName: 'A' }, // A
+          { fifthsIndex: 5, expectedName: 'B' }, // B
+          { fifthsIndex: 0, expectedName: 'C' }, // C
+          { fifthsIndex: 2, expectedName: 'D' }, // D
+          { fifthsIndex: 4, expectedName: 'E' }, // E
+          { fifthsIndex: 11, expectedName: 'F' }, // F
+          { fifthsIndex: 1, expectedName: 'G' }, // G
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(aMinorKey.keySignature)).toBe(expectedName);
+        });
+      });
+
+      it('正常ケース: G♭マイナーキー（flat系）でのダイアトニック音', () => {
+        const fSharpMinorKey = new Key(PitchClass.fromCircleOfFifths(6), ScalePattern.Aeolian);
+
+        // F#マイナースケール: G♭, A♭, A, B, D♭, D, E
+        const testCases = [
+          { fifthsIndex: 6, expectedName: 'G♭' }, // G♭
+          { fifthsIndex: 8, expectedName: 'A♭' }, // A♭
+          { fifthsIndex: 3, expectedName: 'A' }, // A
+          { fifthsIndex: 5, expectedName: 'B' }, // B
+          { fifthsIndex: 7, expectedName: 'D♭' }, // D♭
+          { fifthsIndex: 2, expectedName: 'D' }, // D
+          { fifthsIndex: 4, expectedName: 'E' }, // E
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(fSharpMinorKey.keySignature)).toBe(expectedName);
+        });
+      });
+
+      it('正常ケース: マイナーキーでのノンダイアトニック音（sharp表記）', () => {
+        const aMinorKey = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+
+        // Aマイナーキーのノンダイアトニック音（#表記を期待）
+        const testCases = [
+          { fifthsIndex: 10, expectedName: 'A#' }, // A#/B♭
+          { fifthsIndex: 7, expectedName: 'C#' }, // C#/D♭
+          { fifthsIndex: 9, expectedName: 'D#' }, // D#/E♭
+          { fifthsIndex: 6, expectedName: 'F#' }, // F#/G♭
+          { fifthsIndex: 8, expectedName: 'G#' }, // G#/A♭
+        ];
+
+        testCases.forEach(({ fifthsIndex, expectedName }) => {
+          const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+          expect(pitchClass.getNameFor(aMinorKey.keySignature)).toBe(expectedName);
+        });
+      });
     });
   });
 });

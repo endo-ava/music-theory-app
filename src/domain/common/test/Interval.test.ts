@@ -144,4 +144,136 @@ describe('Interval', () => {
       expect(sum).toBe(Interval.PerfectFifth.semitones);
     });
   });
+
+  describe('equals メソッド', () => {
+    it('正常ケース: 同じ半音数のIntervalは等しい', () => {
+      const interval1 = new Interval(4);
+      const interval2 = new Interval(4);
+
+      expect(interval1.equals(interval2)).toBe(true);
+      expect(interval2.equals(interval1)).toBe(true);
+    });
+
+    it('正常ケース: 異なる半音数のIntervalは等しくない', () => {
+      const interval1 = new Interval(3); // 短3度
+      const interval2 = new Interval(4); // 長3度
+
+      expect(interval1.equals(interval2)).toBe(false);
+      expect(interval2.equals(interval1)).toBe(false);
+    });
+
+    it('正常ケース: 負の値を含む比較', () => {
+      const positive = new Interval(5);
+      const negative = new Interval(-5);
+      const zero = new Interval(0);
+
+      expect(positive.equals(negative)).toBe(false);
+      expect(positive.equals(zero)).toBe(false);
+      expect(negative.equals(zero)).toBe(false);
+    });
+
+    it('正常ケース: 静的プロパティとの比較', () => {
+      const majorThird = new Interval(4);
+
+      expect(majorThird.equals(Interval.MajorThird)).toBe(true);
+      expect(majorThird.equals(Interval.MinorThird)).toBe(false);
+    });
+  });
+
+  describe('静的メソッド', () => {
+    describe('compare', () => {
+      it('正常ケース: 半音数による比較', () => {
+        const minor3rd = Interval.MinorThird; // 3半音
+        const major3rd = Interval.MajorThird; // 4半音
+        const perfect5th = Interval.PerfectFifth; // 7半音
+
+        expect(Interval.compare(minor3rd, major3rd)).toBeLessThan(0);
+        expect(Interval.compare(major3rd, minor3rd)).toBeGreaterThan(0);
+        expect(Interval.compare(major3rd, major3rd)).toBe(0);
+
+        expect(Interval.compare(minor3rd, perfect5th)).toBeLessThan(0);
+        expect(Interval.compare(perfect5th, minor3rd)).toBeGreaterThan(0);
+      });
+
+      it('正常ケース: 負の値を含む比較', () => {
+        const negative = new Interval(-3);
+        const positive = new Interval(3);
+        const zero = new Interval(0);
+
+        expect(Interval.compare(negative, zero)).toBeLessThan(0);
+        expect(Interval.compare(zero, positive)).toBeLessThan(0);
+        expect(Interval.compare(negative, positive)).toBeLessThan(0);
+      });
+    });
+
+    describe('sort', () => {
+      it('正常ケース: 半音数昇順でソート', () => {
+        const intervals = [
+          Interval.PerfectFifth, // 7半音
+          Interval.MinorThird, // 3半音
+          Interval.MajorSeventh, // 11半音
+          Interval.Root, // 0半音
+          Interval.MajorThird, // 4半音
+        ];
+
+        const sorted = Interval.sort(intervals);
+
+        expect(sorted.map(i => i.semitones)).toEqual([0, 3, 4, 7, 11]);
+        expect(sorted[0]).toBe(Interval.Root);
+        expect(sorted[1]).toBe(Interval.MinorThird);
+        expect(sorted[2]).toBe(Interval.MajorThird);
+        expect(sorted[3]).toBe(Interval.PerfectFifth);
+        expect(sorted[4]).toBe(Interval.MajorSeventh);
+      });
+
+      it('正常ケース: 元の配列は変更されない', () => {
+        const intervals = [Interval.PerfectFifth, Interval.MinorThird, Interval.MajorThird];
+        const originalOrder = intervals.map(i => i.semitones);
+
+        const sorted = Interval.sort(intervals);
+
+        // 元の配列は変更されていない
+        expect(intervals.map(i => i.semitones)).toEqual(originalOrder);
+        // ソート結果は異なる
+        expect(sorted.map(i => i.semitones)).toEqual([3, 4, 7]);
+      });
+
+      it('正常ケース: 負の値を含むソート', () => {
+        const intervals = [
+          new Interval(5),
+          new Interval(-3),
+          new Interval(0),
+          new Interval(-7),
+          new Interval(2),
+        ];
+
+        const sorted = Interval.sort(intervals);
+        expect(sorted.map(i => i.semitones)).toEqual([-7, -3, 0, 2, 5]);
+      });
+
+      it('エッジケース: 空の配列', () => {
+        const sorted = Interval.sort([]);
+        expect(sorted).toEqual([]);
+      });
+
+      it('エッジケース: 単一要素', () => {
+        const intervals = [Interval.MajorThird];
+        const sorted = Interval.sort(intervals);
+
+        expect(sorted.length).toBe(1);
+        expect(sorted[0]).toBe(Interval.MajorThird);
+      });
+
+      it('正常ケース: 同じ半音数の場合は元の順序を保持', () => {
+        const interval1 = new Interval(4);
+        const interval2 = new Interval(4);
+        const intervals = [interval1, interval2];
+
+        const sorted = Interval.sort(intervals);
+
+        expect(sorted[0]).toBe(interval1); // 元の順序を保持
+        expect(sorted[1]).toBe(interval2);
+      });
+    });
+  });
 });
