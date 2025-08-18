@@ -76,42 +76,57 @@ export const SelectedElementArea: React.FC<ClassNameProps> = ({ className }) => 
   return (
     <div
       className={twMerge('bg-card border-foreground rounded-lg border p-4', className)}
-      aria-label="選択コード"
+      aria-label="Selected Chord"
     >
-      <h3 className="text-secondary-foreground text-sm font-semibold">選択コード</h3>
+      <h3 className="text-secondary-foreground text-sm font-semibold">Selected Chord</h3>
 
       {selectedChordInfo ? (
         // 選択時の詳細情報表示
         <div className="space-y-4">
-          {/* 選択要素と度数名の表示 */}
-          <div className="border-border border-b pb-3 text-center">
-            <h4 className="text-foreground mb-1 text-lg font-bold">{selectedChordInfo.name}</h4>
-            <p className="text-secondary-foreground text-xs">{selectedChordInfo.keyContext}</p>
+          {/* 上段：選択コード、構成音 */}
+          <div className="border-border border-b pb-3">
+            <div className="mb-1 flex items-center">
+              <div className="flex-1"></div>
+              <div className="flex-1 text-center">
+                <h4 className="text-foreground text-lg font-bold">
+                  {selectedChordInfo.chord.getNameForCircleOfFifth()}
+                </h4>
+              </div>
+              <div className="flex flex-1 justify-end pr-4">
+                <div className="text-xs">
+                  <span className="text-secondary-foreground">▶ 構成音:</span>
+                  <span className="text-foreground ml-1">
+                    {selectedChordInfo.constituentNotes.join(', ')}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* コード詳細情報と再生ボタン */}
+          {/* 下段：Key解釈: Degree Name, Function */}
           <div className="relative">
-            <div className="space-y-3 text-xs">
+            <div className="space-y-2 text-xs">
               <div>
-                <span className="text-secondary-foreground">機能:</span>
-                <span className="text-foreground ml-2 text-sm">{selectedChordInfo.function}</span>
+                <span className="text-foreground text-sm">In {currentKey.shortName} Key</span>
               </div>
               <div>
-                <span className="text-secondary-foreground">構成音:</span>
-                <span className="text-foreground ml-2 text-sm">
-                  {selectedChordInfo.constituentNotes.join(', ')}
-                </span>
+                <span className="text-secondary-foreground pl-2">▶ DegreeName:</span>
+                <span className="text-foreground ml-2 text-sm">{selectedChordInfo.degreeName}</span>
+              </div>
+              <div>
+                <span className="text-secondary-foreground pl-2">▶ Function:</span>
+                <span className="text-foreground ml-2 text-sm">{selectedChordInfo.function}</span>
               </div>
             </div>
 
             {/* 音声再生ボタン（右下配置） */}
             <button
               className="bg-muted hover:bg-accent text-muted-foreground absolute right-0 bottom-0 flex cursor-pointer items-center gap-1 rounded-md px-2 py-1 text-xs transition-colors"
-              aria-label="コードを再生"
+              aria-label="Play chord"
               onClick={handlePlayChord}
             >
               <span>🔊</span>
-              <span>再生</span>
+              <span>Play</span>
             </button>
           </div>
         </div>
