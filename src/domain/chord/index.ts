@@ -122,6 +122,13 @@ export class Chord {
     return `${this.rootNote._pitchClass.getNameFor(key)}${this.quality.nameSuffix}`;
   }
 
+  /** 五度圏表示用のコード名 メジャーは♭、マイナーは♯ */
+  public getNameForCircleOfFifth(): string {
+    return this.quality.nameSuffix === ''
+      ? `${this.rootNote._pitchClass.flatName}${this.quality.nameSuffix}`
+      : `${this.rootNote._pitchClass.sharpName}${this.quality.nameSuffix}`;
+  }
+
   /**
    * ルート音とコード品質からChordを生成する
    * @param rootNote ルート音
