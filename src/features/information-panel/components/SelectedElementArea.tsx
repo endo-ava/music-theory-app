@@ -28,7 +28,7 @@ const createChordInfo = (selectedKey: KeyDTO | null, currentKey: Key): SelectedC
   if (!selectedKey || !currentKey) return null;
 
   const pitchClass = PitchClass.fromCircleOfFifths(selectedKey.fifthsIndex);
-  const chord = Chord.fromKeyDTO(selectedKey, pitchClass.index >= 9 ? 3 : 4);
+  const chord = Chord.fromKeyDTO(selectedKey, Chord.getOptimizedOctave(pitchClass));
 
   const analysis = currentKey.analyzeChord(chord);
   if (!analysis) return null;

@@ -1,4 +1,3 @@
-import { Key } from '..';
 import { Interval } from './Interval';
 
 /**
@@ -30,9 +29,12 @@ export class PitchClass {
    * - B♭   2♭     B♭ C  D  E♭ F  G  A
    * - F    1♭     F  G  A  B♭ C  D  E
    */
-  public getNameFor(key: Key): string {
-    // メジャーキーの場合は調号に基づいて適切な表記を選択
-    return key.keySignature === 'sharp' ? this.sharpName : this.flatName;
+  public getNameFor(keySignature: 'sharp' | 'flat' | 'natural'): string {
+    // 調号に基づいて適切な表記を選択
+    if (keySignature === 'sharp') return this.sharpName;
+    if (keySignature === 'flat') return this.flatName;
+    // naturalの場合はデフォルトでsharp表記を使用
+    return this.sharpName;
   }
 
   // 全ての音名を静的プロパティとして定義・保持（エンハーモニック対応）

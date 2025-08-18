@@ -53,6 +53,9 @@ export class Key {
   // ローマ数字定数
   private static readonly ROMAN_NUMERALS = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ', 'Ⅶ'] as const;
 
+  // 五度圏でのシャープ系とフラット系の境界
+  private static readonly SHARP_FLAT_BOUNDARY = 6; // F#/G♭(6)が境界
+
   // ノンダイアトニック音のディグリーネームマップ
   public static readonly NON_DIATONIC_DEGREE_MAP: NonDiatonicDegreeMap = {
     Major: {
@@ -87,7 +90,7 @@ export class Key {
     this.scale = new Scale(tonic, scalePattern);
     // 五度圏でのシャープ系とフラット系の判定
     // C(0)からB(5)まではシャープ系、F#/G♭(6)からF(11)まではフラット系
-    this.keySignature = this.tonic.fifthsIndex < 6 ? 'sharp' : 'flat';
+    this.keySignature = this.tonic.fifthsIndex < Key.SHARP_FLAT_BOUNDARY ? 'sharp' : 'flat';
   }
 
   /**
@@ -281,9 +284,9 @@ export class Key {
     );
 
     // ベースレターから度数を特定
-    const baseLetter = pitchClassToAnalyze.getNameFor(this).charAt(0);
+    const baseLetter = pitchClassToAnalyze.getNameFor(this.keySignature).charAt(0);
     const baseLetterIndex = scaleNotes.findIndex(
-      note => note._pitchClass.getNameFor(this).charAt(0) === baseLetter
+      note => note._pitchClass.getNameFor(this.keySignature).charAt(0) === baseLetter
     );
     const baseDegree = baseLetterIndex + 1;
 
@@ -361,8 +364,11 @@ export class Key {
     const keyType = this.isMajor ? 'major' : 'minor';
     const functionMap = functionMappings[keyType];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (functionMap as any)[degree] || 'Other';
+    if (degree >= 1 && degree <= 7) {
+      type DegreeKey = keyof typeof functionMap;
+      return functionMap[degree as DegreeKey];
+    }
+    return 'Other';
   }
 
   // === F. シリアライゼーション ===
