@@ -53,6 +53,17 @@ export class Key {
   // ローマ数字定数
   private static readonly ROMAN_NUMERALS = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ', 'Ⅶ'] as const;
 
+  // 日本語度数名定数
+  private static readonly JAPANESE_SCALE_DEGREE_NAMES = [
+    '主音',
+    '上主音',
+    '中音',
+    '下属音',
+    '属音',
+    '下中音',
+    '導音',
+  ] as const;
+
   // 五度圏でのシャープ系とフラット系の境界
   private static readonly SHARP_FLAT_BOUNDARY = 6; // F#/G♭(6)が境界
 
@@ -161,6 +172,14 @@ export class Key {
    */
   public static getDegreeNameFromNumber(degree: number): string {
     return Key.ROMAN_NUMERALS[degree - 1];
+  }
+
+  /**
+   * 日本語の音度名を取得する静的メソッド
+   * @returns 日本語の度数名配列（主音、上主音、中音、下属音、属音、下中音、導音）
+   */
+  public static getJapaneseScaleDegreeNames(): readonly string[] {
+    return Key.JAPANESE_SCALE_DEGREE_NAMES;
   }
 
   // === C. ダイアトニックコード関連（集約の主要責務） ===
@@ -310,6 +329,38 @@ export class Key {
         degreeName,
       };
     }
+  }
+
+  /**
+   * 関連調を取得するメソッド
+   * @returns 関連調の情報（平行調、同主調、属調、下属調）
+   */
+  public getRelatedKeys(): {
+    relative: Key; // 平行調
+    parallel: Key; // 同主調
+    dominant: Key; // 属調
+    subdominant: Key; // 下属調
+  } {
+    // インデックスを12で正規化して範囲内に収める
+    const normalizeIndex = (index: number): number => ((index % 12) + 12) % 12;
+
+    const relativeTonic = this.isMajor
+      ? PitchClass.fromCircleOfFifths(normalizeIndex(this.tonic.fifthsIndex + 3)) // メジャーの場合、+3で相対マイナー
+      : PitchClass.fromCircleOfFifths(normalizeIndex(this.tonic.fifthsIndex - 3)); // マイナーの場合、-3で相対メジャー
+
+    const parallelPattern = this.isMajor ? ScalePattern.Aeolian : ScalePattern.Major;
+
+    const dominantTonic = PitchClass.fromCircleOfFifths(normalizeIndex(this.tonic.fifthsIndex + 1));
+    const subdominantTonic = PitchClass.fromCircleOfFifths(
+      normalizeIndex(this.tonic.fifthsIndex - 1)
+    );
+
+    return {
+      relative: new Key(relativeTonic, this.isMajor ? ScalePattern.Aeolian : ScalePattern.Major),
+      parallel: new Key(this.tonic, parallelPattern),
+      dominant: new Key(dominantTonic, this.scale.pattern),
+      subdominant: new Key(subdominantTonic, this.scale.pattern),
+    };
   }
 
   // === E. 内部ヘルパーメソッド ===
