@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import type { ClassNameProps } from '@/shared/types';
 import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
 import { useCustomTouchHandler } from '../hooks/useCustomTouchHandler';
+import { InformationPanel } from '../../../../features/information-panel';
 
 // propsの型定義
 interface MobileBottomSheetProps extends ClassNameProps {
@@ -90,10 +91,11 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
 
             {/* コンテンツエリア */}
             <div className="flex-1 overflow-y-auto p-6">
-              {activeTab === 'view' && <ViewController />}
               {activeTab === 'layer' && (
                 <div className="text-foreground">レイヤー設定のコンテンツがここに入ります。</div>
               )}
+              {activeTab === 'info' && <InformationPanel />}
+              {activeTab === 'view' && <ViewController />}
             </div>
           </div>
         </VaulDrawer.Content>
