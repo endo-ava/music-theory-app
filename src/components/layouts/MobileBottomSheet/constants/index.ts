@@ -11,8 +11,9 @@ import { Tab } from '../types';
  * @type {Tab[]}
  */
 export const TABS: Tab[] = [
-  { id: 'view', label: 'View' },
   { id: 'layer', label: 'Layer' },
+  { id: 'info', label: 'info' },
+  { id: 'view', label: 'View' },
 ];
 
 /**
