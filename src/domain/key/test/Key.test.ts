@@ -255,4 +255,94 @@ describe('Key', () => {
       });
     });
   });
+
+  describe('getRelatedKeys メソッド', () => {
+    it('正常ケース: C Majorの関連調を正しく取得', () => {
+      const cMajor = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+      const relatedKeys = cMajor.getRelatedKeys();
+
+      // 平行調: A minor (C Major の平行調)
+      expect(relatedKeys.relative.tonic.sharpName).toBe('A');
+      expect(relatedKeys.relative.isMajor).toBe(false);
+      expect(relatedKeys.relative.keyName).toBe('A Minor');
+
+      // 同主調: C minor (同じトニック、異なるモード)
+      expect(relatedKeys.parallel.tonic.sharpName).toBe('C');
+      expect(relatedKeys.parallel.isMajor).toBe(false);
+      expect(relatedKeys.parallel.keyName).toBe('C Minor');
+
+      // 属調: G major (V度のキー)
+      expect(relatedKeys.dominant.tonic.sharpName).toBe('G');
+      expect(relatedKeys.dominant.isMajor).toBe(true);
+      expect(relatedKeys.dominant.keyName).toBe('G Major');
+
+      // 下属調: F major (IV度のキー)
+      expect(relatedKeys.subdominant.tonic.sharpName).toBe('F');
+      expect(relatedKeys.subdominant.isMajor).toBe(true);
+      expect(relatedKeys.subdominant.keyName).toBe('F Major');
+    });
+
+    it('正常ケース: A minorの関連調を正しく取得', () => {
+      const aMinor = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+      const relatedKeys = aMinor.getRelatedKeys();
+
+      // 平行調: C major (A minor の平行調)
+      expect(relatedKeys.relative.tonic.sharpName).toBe('C');
+      expect(relatedKeys.relative.isMajor).toBe(true);
+      expect(relatedKeys.relative.keyName).toBe('C Major');
+
+      // 同主調: A major (同じトニック、異なるモード)
+      expect(relatedKeys.parallel.tonic.sharpName).toBe('A');
+      expect(relatedKeys.parallel.isMajor).toBe(true);
+      expect(relatedKeys.parallel.keyName).toBe('A Major');
+
+      // 属調: E minor (V度のキー)
+      expect(relatedKeys.dominant.tonic.sharpName).toBe('E');
+      expect(relatedKeys.dominant.isMajor).toBe(false);
+      expect(relatedKeys.dominant.keyName).toBe('E Minor');
+
+      // 下属調: D minor (IV度のキー)
+      expect(relatedKeys.subdominant.tonic.sharpName).toBe('D');
+      expect(relatedKeys.subdominant.isMajor).toBe(false);
+      expect(relatedKeys.subdominant.keyName).toBe('D Minor');
+    });
+
+    it('境界値ケース: フラット系キー(F# Major)の関連調', () => {
+      const fsSharpMajor = new Key(PitchClass.fromCircleOfFifths(6), ScalePattern.Major);
+      const relatedKeys = fsSharpMajor.getRelatedKeys();
+
+      // 平行調: D# minor
+      expect(relatedKeys.relative.tonic.sharpName).toBe('D#');
+      expect(relatedKeys.relative.isMajor).toBe(false);
+
+      // 同主調: F# minor
+      expect(relatedKeys.parallel.tonic.sharpName).toBe('F#');
+      expect(relatedKeys.parallel.isMajor).toBe(false);
+
+      // 属調: C# major
+      expect(relatedKeys.dominant.tonic.sharpName).toBe('C#');
+      expect(relatedKeys.dominant.isMajor).toBe(true);
+
+      // 下属調: B major
+      expect(relatedKeys.subdominant.tonic.sharpName).toBe('B');
+      expect(relatedKeys.subdominant.isMajor).toBe(true);
+    });
+  });
+
+  describe('getJapaneseScaleDegreeNames 静的メソッド', () => {
+    it('正常ケース: 日本語度数名配列を正しく返す', () => {
+      const degreeNames = Key.getJapaneseScaleDegreeNames();
+
+      expect(degreeNames).toEqual(['主音', '上主音', '中音', '下属音', '属音', '下中音', '導音']);
+      expect(degreeNames.length).toBe(7);
+    });
+
+    it('正常ケース: 常に同じ参照を返す', () => {
+      const degreeNames1 = Key.getJapaneseScaleDegreeNames();
+      const degreeNames2 = Key.getJapaneseScaleDegreeNames();
+
+      // 同じ参照を返すことを確認（メモ化されている）
+      expect(degreeNames1).toBe(degreeNames2);
+    });
+  });
 });
