@@ -81,9 +81,9 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
               <TableCell key={index}>
                 <button
                   className={buttonClassName}
-                  aria-label={`Play note ${note._pitchClass.getNameFor(currentKey.keySignature)}`}
+                  aria-label={`Play note ${note.getNameFor(currentKey.keySignature)}`}
                 >
-                  {note._pitchClass.getNameFor(currentKey.keySignature)}
+                  {note.getNameFor(currentKey.keySignature)}
                 </button>
               </TableCell>
             ))}

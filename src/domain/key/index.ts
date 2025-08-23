@@ -183,6 +183,16 @@ export class Key {
     return Key.JAPANESE_SCALE_DEGREE_NAMES;
   }
 
+  /**
+   * 五度圏インデックスを0-11の範囲に正規化する
+   * 五度圏計算で使用される共通ユーティリティ関数
+   * @param index 正規化したいインデックス
+   * @returns 0-11の範囲に正規化されたインデックス
+   */
+  public static normalizeIndex(index: number): number {
+    return ((index % 12) + 12) % 12;
+  }
+
   // === C. ダイアトニックコード関連（集約の主要責務） ===
 
   /**
@@ -342,18 +352,17 @@ export class Key {
     dominant: Key; // 属調
     subdominant: Key; // 下属調
   } {
-    // インデックスを12で正規化して範囲内に収める
-    const normalizeIndex = (index: number): number => ((index % 12) + 12) % 12;
-
     const relativeTonic = this.isMajor
-      ? PitchClass.fromCircleOfFifths(normalizeIndex(this.tonic.fifthsIndex + 3)) // メジャーの場合、+3で相対マイナー
-      : PitchClass.fromCircleOfFifths(normalizeIndex(this.tonic.fifthsIndex - 3)); // マイナーの場合、-3で相対メジャー
+      ? PitchClass.fromCircleOfFifths(Key.normalizeIndex(this.tonic.fifthsIndex + 3)) // メジャーの場合、+3で相対マイナー
+      : PitchClass.fromCircleOfFifths(Key.normalizeIndex(this.tonic.fifthsIndex - 3)); // マイナーの場合、-3で相対メジャー
 
     const parallelPattern = this.isMajor ? ScalePattern.Aeolian : ScalePattern.Major;
 
-    const dominantTonic = PitchClass.fromCircleOfFifths(normalizeIndex(this.tonic.fifthsIndex + 1));
+    const dominantTonic = PitchClass.fromCircleOfFifths(
+      Key.normalizeIndex(this.tonic.fifthsIndex + 1)
+    );
     const subdominantTonic = PitchClass.fromCircleOfFifths(
-      normalizeIndex(this.tonic.fifthsIndex - 1)
+      Key.normalizeIndex(this.tonic.fifthsIndex - 1)
     );
 
     return {
