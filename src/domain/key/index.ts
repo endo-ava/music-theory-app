@@ -1,6 +1,7 @@
 import { Interval, PitchClass, ScalePattern } from '../common';
 import { Scale } from '../scale';
-import { Chord, ChordQuality } from '../chord';
+import { Chord } from '../chord';
+import { ChordPattern } from '../common';
 
 /** 調号 */
 type keySignature = 'sharp' | 'flat' | 'natural';
@@ -239,7 +240,7 @@ export class Key {
     const interval3 = Interval.between(root._pitchClass, third._pitchClass);
     const interval5 = Interval.between(root._pitchClass, fifth._pitchClass);
 
-    const quality = ChordQuality.findByIntervals([interval3, interval5]);
+    const quality = ChordPattern.findByIntervals([interval3, interval5]);
     if (!quality) throw new Error('未知のコード品質');
 
     return Chord.from(root, quality);

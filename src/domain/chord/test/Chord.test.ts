@@ -4,7 +4,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { Chord, ChordQuality } from '..';
+import { Chord } from '..';
+import { ChordPattern } from '../../common';
 import { Note } from '../../common/Note';
 import { PitchClass } from '../../common/PitchClass';
 import { Key } from '../../key';
@@ -18,7 +19,7 @@ describe('Chord', () => {
       const chord = Chord.major(rootNote);
 
       expect(chord.rootNote).toEqual(rootNote);
-      expect(chord.quality).toEqual(ChordQuality.MajorTriad);
+      expect(chord.quality).toEqual(ChordPattern.MajorTriad);
       expect(chord.constituentNotes.length).toBe(3); // トライアド
     });
 
@@ -28,7 +29,7 @@ describe('Chord', () => {
       const chord = Chord.minor(rootNote);
 
       expect(chord.rootNote).toEqual(rootNote);
-      expect(chord.quality).toEqual(ChordQuality.MinorTriad);
+      expect(chord.quality).toEqual(ChordPattern.MinorTriad);
       expect(chord.constituentNotes.length).toBe(3); // トライアド
     });
 
@@ -38,7 +39,7 @@ describe('Chord', () => {
       const chord = Chord.dominantSeventh(rootNote);
 
       expect(chord.rootNote).toEqual(rootNote);
-      expect(chord.quality).toEqual(ChordQuality.DominantSeventh);
+      expect(chord.quality).toEqual(ChordPattern.DominantSeventh);
       expect(chord.constituentNotes.length).toBe(4); // セブンス
     });
   });
@@ -172,7 +173,7 @@ describe('Chord', () => {
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'C'
       );
-      expect(chord.quality).toEqual(ChordQuality.MajorTriad);
+      expect(chord.quality).toEqual(ChordPattern.MajorTriad);
       expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4']);
     });
 
@@ -188,7 +189,7 @@ describe('Chord', () => {
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'Cm'
       );
-      expect(chord.quality).toEqual(ChordQuality.MinorTriad);
+      expect(chord.quality).toEqual(ChordPattern.MinorTriad);
       expect(chord.toneNotations).toEqual(['C4', 'D#4', 'G4']);
     });
 
@@ -205,7 +206,7 @@ describe('Chord', () => {
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'C7'
       );
-      expect(chord.quality).toEqual(ChordQuality.DominantSeventh);
+      expect(chord.quality).toEqual(ChordPattern.DominantSeventh);
       expect(chord.toneNotations).toEqual(['C4', 'E4', 'G4', 'A#4']);
     });
 
@@ -221,7 +222,7 @@ describe('Chord', () => {
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'Cdim'
       );
-      expect(chord.quality).toEqual(ChordQuality.DiminishedTriad);
+      expect(chord.quality).toEqual(ChordPattern.DiminishedTriad);
     });
 
     it('エラーケース: 空の構成音配列', () => {
@@ -244,11 +245,11 @@ describe('Chord', () => {
     });
   });
 
-  describe('ChordQuality.from ファクトリメソッド', () => {
+  describe('ChordPattern.from ファクトリメソッド', () => {
     it('正常ケース: MajorSeventhコード', () => {
       const rootPitch = PitchClass.fromCircleOfFifths(0); // C
       const rootNote = new Note(rootPitch, 4);
-      const chord = Chord.from(rootNote, ChordQuality.MajorSeventh);
+      const chord = Chord.from(rootNote, ChordPattern.MajorSeventh);
 
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'Cmaj7'
@@ -260,7 +261,7 @@ describe('Chord', () => {
     it('正常ケース: MinorSeventhコード', () => {
       const rootPitch = PitchClass.fromCircleOfFifths(0); // C
       const rootNote = new Note(rootPitch, 4);
-      const chord = Chord.from(rootNote, ChordQuality.MinorSeventh);
+      const chord = Chord.from(rootNote, ChordPattern.MinorSeventh);
 
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'Cm7'
@@ -272,7 +273,7 @@ describe('Chord', () => {
     it('正常ケース: DiminishedTriadコード', () => {
       const rootPitch = PitchClass.fromCircleOfFifths(0); // C
       const rootNote = new Note(rootPitch, 4);
-      const chord = Chord.from(rootNote, ChordQuality.DiminishedTriad);
+      const chord = Chord.from(rootNote, ChordPattern.DiminishedTriad);
 
       expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
         'Cdim'
@@ -350,7 +351,7 @@ describe('Chord', () => {
       const rootNote1 = new Note(rootPitch, 4);
       const rootNote2 = new Note(rootPitch, 4);
       const chord1 = Chord.major(rootNote1);
-      const chord2 = Chord.from(rootNote2, ChordQuality.MajorTriad);
+      const chord2 = Chord.from(rootNote2, ChordPattern.MajorTriad);
 
       expect(chord1.equals(chord2)).toBe(true);
     });
@@ -392,12 +393,12 @@ describe('Chord', () => {
       const rootNote = new Note(rootPitch, 4);
 
       // メジャー7th: トライアド + 長7度
-      const maj7Chord = Chord.from(rootNote, ChordQuality.MajorSeventh);
+      const maj7Chord = Chord.from(rootNote, ChordPattern.MajorSeventh);
       const maj7Notes = maj7Chord.constituentNotes.map(n => n._pitchClass.sharpName);
       expect(maj7Notes).toEqual(['C', 'E', 'G', 'B']);
 
       // マイナー7th: マイナートライアド + 短7度
-      const min7Chord = Chord.from(rootNote, ChordQuality.MinorSeventh);
+      const min7Chord = Chord.from(rootNote, ChordPattern.MinorSeventh);
       const min7Notes = min7Chord.constituentNotes.map(n => n._pitchClass.sharpName);
       expect(min7Notes).toEqual(['C', 'D#', 'G', 'A#']);
 
