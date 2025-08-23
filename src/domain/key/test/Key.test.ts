@@ -7,7 +7,7 @@ import { describe, it, expect } from 'vitest';
 import { Key } from '../index';
 import { PitchClass } from '../../common/PitchClass';
 import { ScalePattern } from '../../common/ScalePattern';
-import { ChordQuality } from '../../chord';
+import { ChordPattern } from '../../common';
 
 describe('Key', () => {
   describe('constructor', () => {
@@ -58,17 +58,17 @@ describe('Key', () => {
       // I度 - C Major
       const iChord = key.getDiatonicChord(1);
       expect(iChord.getNameFor(key)).toBe('C');
-      expect(iChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(iChord.quality).toBe(ChordPattern.MajorTriad);
 
       // V度 - G Major
       const vChord = key.getDiatonicChord(5);
       expect(vChord.getNameFor(key)).toBe('G');
-      expect(vChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(vChord.quality).toBe(ChordPattern.MajorTriad);
 
       // vi度 - A Minor
       const viChord = key.getDiatonicChord(6);
       expect(viChord.getNameFor(key)).toBe('Am');
-      expect(viChord.quality).toBe(ChordQuality.MinorTriad);
+      expect(viChord.quality).toBe(ChordPattern.MinorTriad);
     });
 
     it('異常ケース: 無効な度数でエラーをスロー', () => {
@@ -91,7 +91,7 @@ describe('Key', () => {
 
       const tonicChord = key.getTonicChord();
       expect(tonicChord.getNameFor(key)).toBe('C');
-      expect(tonicChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(tonicChord.quality).toBe(ChordPattern.MajorTriad);
     });
 
     it('正常ケース: ドミナントコードを正しく取得', () => {
@@ -102,7 +102,7 @@ describe('Key', () => {
 
       const dominantChord = key.getDominantChord();
       expect(dominantChord.getNameFor(key)).toBe('G');
-      expect(dominantChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(dominantChord.quality).toBe(ChordPattern.MajorTriad);
     });
 
     it('正常ケース: サブドミナントコードを正しく取得', () => {
@@ -113,7 +113,7 @@ describe('Key', () => {
 
       const subdominantChord = key.getSubdominantChord();
       expect(subdominantChord.getNameFor(key)).toBe('F');
-      expect(subdominantChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(subdominantChord.quality).toBe(ChordPattern.MajorTriad);
     });
   });
 
@@ -251,7 +251,7 @@ describe('Key', () => {
         const tonic = key.getTonicChord();
 
         expect(tonic.rootNote._pitchClass.sharpName).toBe(name);
-        expect(tonic.quality).toBe(ChordQuality.MajorTriad);
+        expect(tonic.quality).toBe(ChordPattern.MajorTriad);
       });
     });
   });
