@@ -78,14 +78,14 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
           {/* 音名行 */}
           <TableRow>
             {scaleNotes.slice(0, 7).map((note, index) => (
-              <TableHead key={index}>
+              <TableCell key={index}>
                 <button
                   className={buttonClassName}
                   aria-label={`Play note ${note._pitchClass.getNameFor(currentKey.keySignature)}`}
                 >
                   {note._pitchClass.getNameFor(currentKey.keySignature)}
                 </button>
-              </TableHead>
+              </TableCell>
             ))}
           </TableRow>
         </TableBody>
