@@ -13,6 +13,15 @@ export class Note {
   }
 
   /**
+   * 指定された調号設定に基づいて音名を取得する
+   * @param keySignature 調号設定（sharp/flat/natural）
+   * @returns 適切な表記での音名
+   */
+  getNameFor(keySignature: 'sharp' | 'flat' | 'natural'): string {
+    return this._pitchClass.getNameFor(keySignature);
+  }
+
+  /**
    * Tone.jsで使用する文字列表現（例: "C4", "F#3"）
    */
   get toString(): string {
