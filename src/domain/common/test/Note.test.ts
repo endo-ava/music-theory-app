@@ -43,6 +43,74 @@ describe('Note', () => {
     });
   });
 
+  describe('getNameFor メソッド', () => {
+    it('正常ケース: sharp調号での音名取得', () => {
+      const testCases = [
+        { circleIndex: 0, expected: 'C' }, // C
+        { circleIndex: 7, expected: 'C#' }, // C#
+        { circleIndex: 2, expected: 'D' }, // D
+        { circleIndex: 9, expected: 'D#' }, // D#
+        { circleIndex: 4, expected: 'E' }, // E
+        { circleIndex: 11, expected: 'F' }, // F
+        { circleIndex: 6, expected: 'F#' }, // F#
+        { circleIndex: 1, expected: 'G' }, // G
+        { circleIndex: 8, expected: 'G#' }, // G#
+        { circleIndex: 3, expected: 'A' }, // A
+        { circleIndex: 10, expected: 'A#' }, // A#
+        { circleIndex: 5, expected: 'B' }, // B
+      ];
+
+      testCases.forEach(({ circleIndex, expected }) => {
+        const pitchClass = PitchClass.fromCircleOfFifths(circleIndex);
+        const note = new Note(pitchClass, 4);
+        expect(note.getNameFor('sharp')).toBe(expected);
+      });
+    });
+
+    it('正常ケース: flat調号での音名取得', () => {
+      const testCases = [
+        { circleIndex: 0, expected: 'C' }, // C
+        { circleIndex: 7, expected: 'D♭' }, // D♭
+        { circleIndex: 2, expected: 'D' }, // D
+        { circleIndex: 9, expected: 'E♭' }, // E♭
+        { circleIndex: 4, expected: 'E' }, // E
+        { circleIndex: 11, expected: 'F' }, // F
+        { circleIndex: 6, expected: 'G♭' }, // G♭
+        { circleIndex: 1, expected: 'G' }, // G
+        { circleIndex: 8, expected: 'A♭' }, // A♭
+        { circleIndex: 3, expected: 'A' }, // A
+        { circleIndex: 10, expected: 'B♭' }, // B♭
+        { circleIndex: 5, expected: 'B' }, // B
+      ];
+
+      testCases.forEach(({ circleIndex, expected }) => {
+        const pitchClass = PitchClass.fromCircleOfFifths(circleIndex);
+        const note = new Note(pitchClass, 4);
+        expect(note.getNameFor('flat')).toBe(expected);
+      });
+    });
+
+    it('正常ケース: natural調号での音名取得', () => {
+      const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
+      const cSharpPitchClass = PitchClass.fromCircleOfFifths(7); // C#
+
+      const cNote = new Note(cPitchClass, 4);
+      const cSharpNote = new Note(cSharpPitchClass, 4);
+
+      expect(cNote.getNameFor('natural')).toBe('C');
+      expect(cSharpNote.getNameFor('natural')).toBe('C#'); // naturalでもsharpが表示される
+    });
+
+    it('正常ケース: エンハーモニック等価性の確認', () => {
+      const cSharpPitchClass = PitchClass.fromCircleOfFifths(7); // C#/D♭
+      const note = new Note(cSharpPitchClass, 4);
+
+      expect(note.getNameFor('sharp')).toBe('C#');
+      expect(note.getNameFor('flat')).toBe('D♭');
+      // 同じ音だが調号によって表記が変わる
+    });
+  });
+
   describe('toString getter', () => {
     it('正常ケース: Tone.js用の正しい文字列表現を返す', () => {
       const testCases = [

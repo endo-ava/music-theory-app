@@ -7,7 +7,7 @@ import { describe, it, expect } from 'vitest';
 import { Key } from '../index';
 import { PitchClass } from '../../common/PitchClass';
 import { ScalePattern } from '../../common/ScalePattern';
-import { ChordQuality } from '../../chord';
+import { ChordPattern } from '../../common';
 
 describe('Key', () => {
   describe('constructor', () => {
@@ -58,17 +58,17 @@ describe('Key', () => {
       // I度 - C Major
       const iChord = key.getDiatonicChord(1);
       expect(iChord.getNameFor(key)).toBe('C');
-      expect(iChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(iChord.quality).toBe(ChordPattern.MajorTriad);
 
       // V度 - G Major
       const vChord = key.getDiatonicChord(5);
       expect(vChord.getNameFor(key)).toBe('G');
-      expect(vChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(vChord.quality).toBe(ChordPattern.MajorTriad);
 
       // vi度 - A Minor
       const viChord = key.getDiatonicChord(6);
       expect(viChord.getNameFor(key)).toBe('Am');
-      expect(viChord.quality).toBe(ChordQuality.MinorTriad);
+      expect(viChord.quality).toBe(ChordPattern.MinorTriad);
     });
 
     it('異常ケース: 無効な度数でエラーをスロー', () => {
@@ -91,7 +91,7 @@ describe('Key', () => {
 
       const tonicChord = key.getTonicChord();
       expect(tonicChord.getNameFor(key)).toBe('C');
-      expect(tonicChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(tonicChord.quality).toBe(ChordPattern.MajorTriad);
     });
 
     it('正常ケース: ドミナントコードを正しく取得', () => {
@@ -102,7 +102,7 @@ describe('Key', () => {
 
       const dominantChord = key.getDominantChord();
       expect(dominantChord.getNameFor(key)).toBe('G');
-      expect(dominantChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(dominantChord.quality).toBe(ChordPattern.MajorTriad);
     });
 
     it('正常ケース: サブドミナントコードを正しく取得', () => {
@@ -113,7 +113,7 @@ describe('Key', () => {
 
       const subdominantChord = key.getSubdominantChord();
       expect(subdominantChord.getNameFor(key)).toBe('F');
-      expect(subdominantChord.quality).toBe(ChordQuality.MajorTriad);
+      expect(subdominantChord.quality).toBe(ChordPattern.MajorTriad);
     });
   });
 
@@ -251,8 +251,98 @@ describe('Key', () => {
         const tonic = key.getTonicChord();
 
         expect(tonic.rootNote._pitchClass.sharpName).toBe(name);
-        expect(tonic.quality).toBe(ChordQuality.MajorTriad);
+        expect(tonic.quality).toBe(ChordPattern.MajorTriad);
       });
+    });
+  });
+
+  describe('getRelatedKeys メソッド', () => {
+    it('正常ケース: C Majorの関連調を正しく取得', () => {
+      const cMajor = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+      const relatedKeys = cMajor.getRelatedKeys();
+
+      // 平行調: A minor (C Major の平行調)
+      expect(relatedKeys.relative.tonic.sharpName).toBe('A');
+      expect(relatedKeys.relative.isMajor).toBe(false);
+      expect(relatedKeys.relative.keyName).toBe('A Minor');
+
+      // 同主調: C minor (同じトニック、異なるモード)
+      expect(relatedKeys.parallel.tonic.sharpName).toBe('C');
+      expect(relatedKeys.parallel.isMajor).toBe(false);
+      expect(relatedKeys.parallel.keyName).toBe('C Minor');
+
+      // 属調: G major (V度のキー)
+      expect(relatedKeys.dominant.tonic.sharpName).toBe('G');
+      expect(relatedKeys.dominant.isMajor).toBe(true);
+      expect(relatedKeys.dominant.keyName).toBe('G Major');
+
+      // 下属調: F major (IV度のキー)
+      expect(relatedKeys.subdominant.tonic.sharpName).toBe('F');
+      expect(relatedKeys.subdominant.isMajor).toBe(true);
+      expect(relatedKeys.subdominant.keyName).toBe('F Major');
+    });
+
+    it('正常ケース: A minorの関連調を正しく取得', () => {
+      const aMinor = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+      const relatedKeys = aMinor.getRelatedKeys();
+
+      // 平行調: C major (A minor の平行調)
+      expect(relatedKeys.relative.tonic.sharpName).toBe('C');
+      expect(relatedKeys.relative.isMajor).toBe(true);
+      expect(relatedKeys.relative.keyName).toBe('C Major');
+
+      // 同主調: A major (同じトニック、異なるモード)
+      expect(relatedKeys.parallel.tonic.sharpName).toBe('A');
+      expect(relatedKeys.parallel.isMajor).toBe(true);
+      expect(relatedKeys.parallel.keyName).toBe('A Major');
+
+      // 属調: E minor (V度のキー)
+      expect(relatedKeys.dominant.tonic.sharpName).toBe('E');
+      expect(relatedKeys.dominant.isMajor).toBe(false);
+      expect(relatedKeys.dominant.keyName).toBe('E Minor');
+
+      // 下属調: D minor (IV度のキー)
+      expect(relatedKeys.subdominant.tonic.sharpName).toBe('D');
+      expect(relatedKeys.subdominant.isMajor).toBe(false);
+      expect(relatedKeys.subdominant.keyName).toBe('D Minor');
+    });
+
+    it('境界値ケース: フラット系キー(F# Major)の関連調', () => {
+      const fsSharpMajor = new Key(PitchClass.fromCircleOfFifths(6), ScalePattern.Major);
+      const relatedKeys = fsSharpMajor.getRelatedKeys();
+
+      // 平行調: D# minor
+      expect(relatedKeys.relative.tonic.sharpName).toBe('D#');
+      expect(relatedKeys.relative.isMajor).toBe(false);
+
+      // 同主調: F# minor
+      expect(relatedKeys.parallel.tonic.sharpName).toBe('F#');
+      expect(relatedKeys.parallel.isMajor).toBe(false);
+
+      // 属調: C# major
+      expect(relatedKeys.dominant.tonic.sharpName).toBe('C#');
+      expect(relatedKeys.dominant.isMajor).toBe(true);
+
+      // 下属調: B major
+      expect(relatedKeys.subdominant.tonic.sharpName).toBe('B');
+      expect(relatedKeys.subdominant.isMajor).toBe(true);
+    });
+  });
+
+  describe('getJapaneseScaleDegreeNames 静的メソッド', () => {
+    it('正常ケース: 日本語度数名配列を正しく返す', () => {
+      const degreeNames = Key.getJapaneseScaleDegreeNames();
+
+      expect(degreeNames).toEqual(['主音', '上主音', '中音', '下属音', '属音', '下中音', '導音']);
+      expect(degreeNames.length).toBe(7);
+    });
+
+    it('正常ケース: 常に同じ参照を返す', () => {
+      const degreeNames1 = Key.getJapaneseScaleDegreeNames();
+      const degreeNames2 = Key.getJapaneseScaleDegreeNames();
+
+      // 同じ参照を返すことを確認（メモ化されている）
+      expect(degreeNames1).toBe(degreeNames2);
     });
   });
 });
