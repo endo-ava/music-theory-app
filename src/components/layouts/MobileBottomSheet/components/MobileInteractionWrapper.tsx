@@ -14,7 +14,7 @@ export function MobileInteractionWrapper({ children }: MobileInteractionWrapperP
     SNAP_POINTS.LOWEST
   );
   // タブ用のstate
-  const [activeTab, setActiveTab] = useState<string>(TABS[1].id);
+  const [activeTab, setActiveTab] = useState<string>(TABS[0].id);
 
   // Memoized onClick handler for background click
   const handleBackgroundClick = useCallback(() => {

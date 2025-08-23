@@ -12,8 +12,8 @@ import { SelectedElementArea } from './SelectedElementArea';
  * コンテキストに応じた情報ハブとして機能する。
  *
  * パネルは役割が異なる以下の2つのエリアに明確に分割される：
- * - レイヤー概念エリア (上段): 現在アクティブなレイヤーの概念説明
- * - 選択要素エリア (下段): Canvas上で選択した具体的な要素の詳細情報
+ * - 選択要素エリア (上段): Canvas上で選択した具体的な要素の詳細情報
+ * - レイヤー概念エリア (下段): 現在アクティブなレイヤーの概念説明
  *
  * @param props - コンポーネントのプロパティ
  * @returns InformationPanel のJSX要素
@@ -22,13 +22,13 @@ export const InformationPanel: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div className={twMerge('space-y-4', className)} aria-label="選択情報パネル">
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
-      <h2 className="text-foreground hidden text-lg md:block">Infomation</h2>
+      {/* <h2 className="text-foreground hidden text-lg md:block"></h2> */}
 
-      {/* C-1-1: レイヤー概念エリア (上段) */}
-      <LayerConceptArea />
-
-      {/* C-1-2: 選択要素エリア (下段) */}
+      {/* C-1-1: 選択要素エリア (上段) */}
       <SelectedElementArea />
+
+      {/* C-1-2: レイヤー概念エリア (下段) */}
+      <LayerConceptArea />
     </div>
   );
 };

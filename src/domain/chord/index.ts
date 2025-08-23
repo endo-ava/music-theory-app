@@ -1,96 +1,5 @@
-import { Interval, Note, PitchClass } from '../common';
+import { ChordPattern, Interval, Note, PitchClass } from '../common';
 import type { Key, KeyDTO } from '../key';
-
-/**
- * コードの品質（レシピ）を定義する不変の値オブジェクト
- * 例：メジャートライアドは「ルート音、長3度、完全5度」というレシピを持つ
- */
-export class ChordQuality {
-  static readonly MajorTriad = new ChordQuality('', [Interval.MajorThird, Interval.PerfectFifth]);
-  static readonly MinorTriad = new ChordQuality('m', [Interval.MinorThird, Interval.PerfectFifth]);
-  static readonly DominantSeventh = new ChordQuality('7', [
-    Interval.MajorThird,
-    Interval.PerfectFifth,
-    Interval.MinorSeventh,
-  ]);
-  static readonly MajorSeventh = new ChordQuality('maj7', [
-    Interval.MajorThird,
-    Interval.PerfectFifth,
-    Interval.MajorSeventh,
-  ]);
-  static readonly MinorSeventh = new ChordQuality('m7', [
-    Interval.MinorThird,
-    Interval.PerfectFifth,
-    Interval.MinorSeventh,
-  ]);
-  static readonly DiminishedTriad = new ChordQuality('dim', [
-    Interval.MinorThird,
-    Interval.Tritone,
-  ]);
-
-  /** 全てのqualities */
-  private static readonly qualities: readonly ChordQuality[] = [
-    this.MajorTriad,
-    this.MinorTriad,
-    this.DominantSeventh,
-    this.MajorSeventh,
-    this.MinorSeventh,
-    this.DiminishedTriad,
-  ];
-  public readonly nameSuffix: string;
-  public readonly intervals: readonly Interval[];
-
-  private constructor(nameSuffix: string, intervals: readonly Interval[]) {
-    this.nameSuffix = nameSuffix;
-    // 渡された配列をソートして不変にする
-    this.intervals = Object.freeze(Interval.sort(intervals as Interval[]));
-    Object.freeze(this);
-  }
-
-  /**
-   * 与えられたインターバル配列がこのクオリティと一致するか判定する
-   */
-  public matches(intervalsToCompare: Interval[]): boolean {
-    if (this.intervals.length !== intervalsToCompare.length) {
-      return false;
-    }
-    const sortedToCompare = Interval.sort(intervalsToCompare);
-    return this.intervals.every((interval, i) => interval.equals(sortedToCompare[i]));
-  }
-
-  /**
-   * インターバル配列から、合致するChordQualityを検索する
-   */
-  public static findByIntervals(intervals: Interval[]): ChordQuality | null {
-    return this.qualities.find(quality => quality.matches(intervals)) || null;
-  }
-
-  /**
-   * ローマ数字での表記を取得する
-   * @param degreeName rootのディグリーネーム（Ⅰ ~ Ⅶ）
-   * @returns コードのディグリーネーム
-   */
-  getChordDegreeName(degreeName: string): string {
-    let roman = degreeName;
-
-    // コード品質に応じて表記を調整する
-    switch (this.nameSuffix) {
-      case 'dim':
-        roman += '°';
-        break;
-      case 'half-diminished':
-        roman += 'ø';
-        break;
-      case 'aug':
-        roman += '+';
-        break;
-      default:
-        roman += this.nameSuffix;
-    }
-
-    return roman;
-  }
-}
 
 /**
  * 和音を表現する集約（Aggregate Root）
@@ -98,12 +7,12 @@ export class ChordQuality {
 export class Chord {
   public readonly rootNote: Note;
   public readonly constituentNotes: readonly Note[];
-  public readonly quality: ChordQuality;
+  public readonly quality: ChordPattern;
 
   /**
    * Chordのインスタンス化はファクトリメソッド経由で行うため、privateにする
    */
-  private constructor(rootNote: Note, quality: ChordQuality) {
+  private constructor(rootNote: Note, quality: ChordPattern) {
     this.rootNote = rootNote;
     this.quality = quality;
 
@@ -134,22 +43,22 @@ export class Chord {
    * @param rootNote ルート音
    * @param quality コード品質（レシピ）
    */
-  static from(rootNote: Note, quality: ChordQuality): Chord {
+  static from(rootNote: Note, quality: ChordPattern): Chord {
     return new Chord(rootNote, quality);
   }
 
   // ファクトリメソッド
 
   static major(rootNote: Note): Chord {
-    return new Chord(rootNote, ChordQuality.MajorTriad);
+    return new Chord(rootNote, ChordPattern.MajorTriad);
   }
 
   static minor(rootNote: Note): Chord {
-    return new Chord(rootNote, ChordQuality.MinorTriad);
+    return new Chord(rootNote, ChordPattern.MinorTriad);
   }
 
   static dominantSeventh(rootNote: Note): Chord {
-    return new Chord(rootNote, ChordQuality.DominantSeventh);
+    return new Chord(rootNote, ChordPattern.DominantSeventh);
   }
 
   /**
@@ -227,7 +136,7 @@ export class Chord {
       .map(note => Interval.between(rootNote._pitchClass, note._pitchClass));
 
     // 既知のコード品質と一致するかチェック
-    const quality = ChordQuality.findByIntervals(intervals);
+    const quality = ChordPattern.findByIntervals(intervals);
     if (!quality) {
       const intervalNames = intervals.map(i => i.name).join(', ');
       throw new Error(`認識可能なコード品質が見つかりません。インターバル: [${intervalNames}]`);
