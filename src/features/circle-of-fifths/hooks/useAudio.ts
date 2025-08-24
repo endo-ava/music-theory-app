@@ -2,8 +2,7 @@
  * 五度圏音響機能のカスタムフック
  */
 import { useCallback } from 'react';
-import { Chord } from '@/domain/chord';
-import { AudioEngine, Interval, Note, PitchClass, Scale, ScalePattern } from '@/domain';
+import { AudioEngine, Chord, Interval, Note, PitchClass, Scale, ScalePattern } from '@/domain';
 
 /**
  * 音を鳴らすためのシンプルなフック
@@ -12,15 +11,12 @@ export const useAudio = () => {
   const playChordAtPosition = useCallback(async (position: number, isMajor: boolean) => {
     try {
       const fifthsIndex = isMajor ? position : position + Interval.MinorThird.semitones;
-      const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-      const note = new Note(pitchClass, pitchClass.index >= 9 ? 3 : 4);
-      const chord = isMajor ? Chord.major(note) : Chord.minor(note);
-      await AudioEngine.playNotes(chord.toneNotations, false);
+      const rootPitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+      const rootNote = new Note(rootPitchClass);
+      const chord = isMajor ? Chord.major(rootNote) : Chord.minor(rootNote);
+      await AudioEngine.play(chord);
     } catch (error) {
-      console.error(
-        `Failed to play major chord at position ${position}, isMajor:${isMajor}:`,
-        error
-      );
+      console.error(`Failed to play chord at position ${position}, isMajor:${isMajor}:`, error);
     }
   }, []);
 
@@ -28,11 +24,11 @@ export const useAudio = () => {
     try {
       const fifthsIndex =
         scalePattern.quality === 'major' ? position : position + Interval.MinorThird.semitones;
-      const pitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
-      const scale = new Scale(pitchClass, scalePattern, pitchClass.index >= 9 ? 3 : 4);
-      await AudioEngine.playNotes(scale.toneNotations, true);
+      const rootPitchClass = PitchClass.fromCircleOfFifths(fifthsIndex);
+      const scale = new Scale(rootPitchClass, scalePattern);
+      await AudioEngine.play(scale);
     } catch (error) {
-      console.error(`Failed to play minor chord at position ${position}:`, error);
+      console.error(`Failed to play scale at position ${position}:`, error);
     }
   }, []);
 

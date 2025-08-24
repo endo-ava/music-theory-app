@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { ClassNameProps } from '@/shared/types';
 import { twMerge } from 'tailwind-merge';
-import { Key } from '@/domain';
+import { Key, AudioEngine, Note, type DiatonicChordInfo } from '@/domain';
 import {
   Table,
   TableBody,
@@ -35,14 +35,49 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
   // 関連調
   const relatedKeys = useMemo(() => currentKey.getRelatedKeys(), [currentKey]);
 
+  // コード再生
+  const handlePlayChord = async (chordInfo: DiatonicChordInfo) => {
+    try {
+      await AudioEngine.play(chordInfo.chord);
+    } catch (error) {
+      console.error('コード再生に失敗しました:', error);
+    }
+  };
+  // 単音再生
+  const handlePlayNote = async (note: Note) => {
+    try {
+      await AudioEngine.play(note);
+    } catch (error) {
+      console.error('音再生に失敗しました:', error);
+    }
+  };
+  // スケール再生
+  const handlePlayScale = async (key: Key) => {
+    try {
+      await AudioEngine.play(key.scale);
+    } catch (error) {
+      console.error('スケール再生に失敗しました:', error);
+    }
+  };
+
   return (
     <div
-      className={twMerge('bg-card border-foreground space-y-6 rounded-lg border p-4', className)}
-      aria-label="レイヤー概念エリア"
+      className={twMerge('bg-card border-foreground space-y-4 rounded-lg border p-4', className)}
+      aria-label="Selected Key"
     >
       {/* キー情報ヘッダー */}
-      <div className="border-border border-b pb-2 text-center">
-        <h2 className="text-foreground text-lg font-bold">{currentKey.keyName}</h2>
+      <div className="border-border mb-2 border-b pb-2">
+        <div className="text-secondary-foreground -mb-2 text-xs">Selected Key</div>
+        <div className="text-center">
+          <button
+            className="text-foreground hover:bg-accent rounded px-2 py-1 text-lg font-bold transition-colors"
+            onClick={() => handlePlayScale(currentKey)}
+            aria-label={`Play ${currentKey.keyName} Key`}
+          >
+            {currentKey.keyName}
+          </button>
+        </div>
+        {/* <h2 className="text-foreground text-lg font-bold">{currentKey.keyName}</h2> */}
       </div>
 
       {/* ダイアトニックスケール & コード */}
@@ -62,6 +97,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
               <TableCell key={index}>
                 <button
                   className={buttonClassName}
+                  onClick={() => handlePlayChord(chordInfo)}
                   aria-label={`Play chord ${chordInfo.chord.getNameFor(currentKey)}`}
                 >
                   {chordInfo.chord.getNameFor(currentKey)}
@@ -81,6 +117,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
               <TableCell key={index}>
                 <button
                   className={buttonClassName}
+                  onClick={() => handlePlayNote(note)}
                   aria-label={`Play note ${note.getNameFor(currentKey.keySignature)}`}
                 >
                   {note.getNameFor(currentKey.keySignature)}
@@ -119,6 +156,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
             <TableCell>
               <button
                 className={buttonClassName}
+                onClick={() => handlePlayScale(relatedKeys.relative)}
                 aria-label={`Play ${relatedKeys.relative.shortName} key`}
               >
                 {relatedKeys.relative.shortName}
@@ -127,6 +165,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
             <TableCell>
               <button
                 className={buttonClassName}
+                onClick={() => handlePlayScale(relatedKeys.parallel)}
                 aria-label={`Play ${relatedKeys.parallel.shortName} key`}
               >
                 {relatedKeys.parallel.shortName}
@@ -135,6 +174,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
             <TableCell>
               <button
                 className={buttonClassName}
+                onClick={() => handlePlayScale(relatedKeys.dominant)}
                 aria-label={`Play ${relatedKeys.dominant.shortName} key`}
               >
                 {relatedKeys.dominant.shortName}
@@ -143,6 +183,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
             <TableCell>
               <button
                 className={buttonClassName}
+                onClick={() => handlePlayScale(relatedKeys.subdominant)}
                 aria-label={`Play ${relatedKeys.subdominant.shortName} key`}
               >
                 {relatedKeys.subdominant.shortName}
