@@ -62,10 +62,10 @@ export class Chord {
   }
 
   /**
-   * Tone.js用の音符表記配列
+   * コードの構成音リストを取得する
    */
-  get toneNotations(): string[] {
-    return this.constituentNotes.map(note => note.toString);
+  getNotes(): readonly Note[] {
+    return this.constituentNotes;
   }
 
   /**
@@ -94,11 +94,8 @@ export class Chord {
     // KeyDTOの五度圏インデックスからPitchClassを取得
     const rootPitchClass = PitchClass.fromCircleOfFifths(keyDTO.fifthsIndex);
 
-    // 最適なオクターブを決定（指定されていない場合）
-    const finalOctave = octave ?? this.getOptimizedOctave(rootPitchClass);
-
-    // ルート音を生成
-    const rootNote = new Note(rootPitchClass, finalOctave);
+    // ルート音を生成（オクターブ最適化はAudioEngineで処理）
+    const rootNote = new Note(rootPitchClass, octave);
 
     // キーの種類に応じてコードを生成
     if (keyDTO.isMajor) {
@@ -143,26 +140,6 @@ export class Chord {
     }
 
     return new Chord(rootNote, quality);
-  }
-
-  // =========================================================
-  // プライベート・ヘルパーメソッド
-  // =========================================================
-
-  // オクターブ決定の閾値定数
-  private static readonly HIGH_PITCH_THRESHOLD_INDEX = 8; // G# (index: 8)
-  private static readonly LOW_OCTAVE = 3;
-  private static readonly HIGH_OCTAVE = 4;
-
-  /**
-   * ルート音の音名から最適なオクターブを決定 (G#/A♭以上は3、それ以下は4)
-   * @param pitchClass 判定対象のピッチクラス
-   */
-  static getOptimizedOctave(pitchClass: PitchClass): number {
-    // G# (index: HIGH_PITCH_THRESHOLD_INDEX) 以上の音は低いオクターブにする
-    return pitchClass.index >= Chord.HIGH_PITCH_THRESHOLD_INDEX
-      ? Chord.LOW_OCTAVE
-      : Chord.HIGH_OCTAVE;
   }
 
   /**
