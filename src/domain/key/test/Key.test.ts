@@ -329,17 +329,59 @@ describe('Key', () => {
     });
   });
 
-  describe('getJapaneseScaleDegreeNames 静的メソッド', () => {
-    it('正常ケース: 日本語度数名配列を正しく返す', () => {
-      const degreeNames = Key.getJapaneseScaleDegreeNames();
+  describe('japaneseScaleDegreeNames getter', () => {
+    it('正常ケース: メジャーキーの日本語度数名配列を正しく返す', () => {
+      const cMajor = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+      const majorDegreeNames = cMajor.japaneseScaleDegreeNames;
 
-      expect(degreeNames).toEqual(['主音', '上主音', '中音', '下属音', '属音', '下中音', '導音']);
-      expect(degreeNames.length).toBe(7);
+      expect(majorDegreeNames).toEqual([
+        '主音',
+        '上主音',
+        '中音',
+        '下属音',
+        '属音',
+        '下中音',
+        '導音',
+      ]);
+      expect(majorDegreeNames.length).toBe(7);
     });
 
-    it('正常ケース: 常に同じ参照を返す', () => {
-      const degreeNames1 = Key.getJapaneseScaleDegreeNames();
-      const degreeNames2 = Key.getJapaneseScaleDegreeNames();
+    it('正常ケース: マイナーキーの日本語度数名配列を正しく返す', () => {
+      const aMinor = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+      const minorDegreeNames = aMinor.japaneseScaleDegreeNames;
+
+      expect(minorDegreeNames).toEqual([
+        '主音',
+        '上主音',
+        '中音',
+        '下属音',
+        '属音',
+        '下中音',
+        '下主音',
+      ]);
+      expect(minorDegreeNames.length).toBe(7);
+    });
+
+    it('正常ケース: 異なるメジャーキーでも同じ度数名を返す', () => {
+      const cMajor = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+      const gMajor = new Key(PitchClass.fromCircleOfFifths(1), ScalePattern.Major);
+
+      expect(cMajor.japaneseScaleDegreeNames).toEqual(gMajor.japaneseScaleDegreeNames);
+    });
+
+    it('正常ケース: 常に同じ参照を返す（メジャーキー）', () => {
+      const cMajor = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+      const degreeNames1 = cMajor.japaneseScaleDegreeNames;
+      const degreeNames2 = cMajor.japaneseScaleDegreeNames;
+
+      // 同じ参照を返すことを確認（メモ化されている）
+      expect(degreeNames1).toBe(degreeNames2);
+    });
+
+    it('正常ケース: 常に同じ参照を返す（マイナーキー）', () => {
+      const aMinor = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+      const degreeNames1 = aMinor.japaneseScaleDegreeNames;
+      const degreeNames2 = aMinor.japaneseScaleDegreeNames;
 
       // 同じ参照を返すことを確認（メモ化されている）
       expect(degreeNames1).toBe(degreeNames2);
