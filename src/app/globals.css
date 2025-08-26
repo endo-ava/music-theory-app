@@ -49,6 +49,7 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.885 0 0);
   --muted: oklch(0.269 0 0);
+  --selected: oklch(0.45 0 0);
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.55 0 0);
   --accent-foreground: oklch(0.985 0 0);
@@ -83,6 +84,7 @@
   --color-card: var(--card);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
+  --color-selected: var(--selected);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-border: var(--border);

@@ -1,7 +1,7 @@
 /**
  * 音楽カラーシステムを使用したスタイリングフック
  */
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 import type { Key, KeyDTO } from '@/domain';
 
@@ -44,6 +44,27 @@ export const useMusicColorText = (
     return {
       textColor,
       textStyle: { color: textColor },
+    };
+  }, [key]);
+};
+
+/**
+ * 音楽カラーシステムを使用してaccent色を動的に設定するフック
+ * @param key - 対象のキー（Key または KeyDTO）
+ */
+export const useMusicColorAccent = (key: Key | KeyDTO | null): void => {
+  React.useEffect(() => {
+    const cssVariable = getMusicColorVariable(key);
+    // CSS変数--accentを動的に更新
+    document.documentElement.style.setProperty('--accent', cssVariable);
+
+    // クリーンアップ関数でデフォルト値に戻す
+    return () => {
+      // ダークモードかどうかで適切なデフォルト値を設定
+      const isDark = document.documentElement.classList.contains('dark');
+      const defaultAccent = isDark ? 'oklch(0.55 0 0)' : 'oklch(0.97 0 0)';
+
+      document.documentElement.style.setProperty('--accent', defaultAccent);
     };
   }, [key]);
 };

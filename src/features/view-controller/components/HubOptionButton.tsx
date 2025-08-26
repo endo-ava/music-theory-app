@@ -1,5 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import type { HubType } from '@/shared/types';
+import { useMusicColorAccent } from '../../../shared/hooks/useMusicColorStyles';
+import { useCurrentKeyStore } from '../../../stores/currentKeyStore';
 
 /**
  * Hub オプションボタンのProps
@@ -36,6 +38,8 @@ export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
   describedById,
   tabIndex,
 }) => {
+  const { currentKey } = useCurrentKeyStore();
+  useMusicColorAccent(currentKey);
   return (
     <button
       onClick={() => onClick(value)}
@@ -46,7 +50,7 @@ export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
         // 状態別スタイル（条件を明確に分離）
         isSelected
           ? 'bg-accent text-foreground border-border border shadow-sm'
-          : 'text-secondary-foreground hover:bg-accent hover:text-foreground'
+          : 'text-secondary-foreground hover:bg-muted hover:text-foreground'
       )}
       role="radio"
       aria-checked={isSelected}

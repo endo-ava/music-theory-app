@@ -89,7 +89,7 @@ export const SelectedElementArea: React.FC<ClassNameProps> = ({ className }) => 
             {/* Center row */}
             <div className="-mb-2 text-center">
               <button
-                className="text-foreground hover:bg-accent rounded px-2 py-1 text-lg font-bold transition-colors"
+                className="text-foreground hover:bg-selected rounded px-2 py-1 text-lg font-bold transition-colors"
                 onClick={handlePlayChord}
                 aria-label={`Play ${selectedChordInfo.chord.getNameForCircleOfFifth()} chord`}
               >

@@ -27,7 +27,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
   // 現在のキー
   const { currentKey } = useCurrentKeyStore();
   // 共通ボタンスタイル
-  const buttonClassName = 'hover:bg-accent transition-colors rounded px-2 py-1 w-full';
+  const buttonClassName = 'hover:bg-selected transition-colors rounded px-2 py-1 w-full';
   // ダイアトニックスケールノート
   const scaleNotes = useMemo(() => currentKey.scale.getNotes(), [currentKey]);
   // ダイアトニックコード
@@ -70,7 +70,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
         <div className="text-secondary-foreground -mb-2 text-xs">Selected Key</div>
         <div className="text-center">
           <button
-            className="text-foreground hover:bg-accent rounded px-2 py-1 text-lg font-bold transition-colors"
+            className="text-foreground hover:bg-selected rounded px-2 py-1 text-lg font-bold transition-colors"
             onClick={() => handlePlayScale(currentKey)}
             aria-label={`Play ${currentKey.keyName} Key`}
           >
