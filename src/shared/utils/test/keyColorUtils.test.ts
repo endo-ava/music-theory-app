@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { getMusicColorKey } from '../keyColorUtils';
+import { getMusicColorKey } from '../musicColorSystem';
 import type { KeyDTO } from '@/domain';
 
 describe('keyColorUtils', () => {
