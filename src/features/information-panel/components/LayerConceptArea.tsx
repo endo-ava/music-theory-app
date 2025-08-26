@@ -107,7 +107,7 @@ export const LayerConceptArea: React.FC<ClassNameProps> = ({ className }) => {
           </TableRow>
           {/* 日本語音度名行 */}
           <TableRow>
-            {Key.getJapaneseScaleDegreeNames().map((degreeName, index) => (
+            {currentKey.japaneseScaleDegreeNames.map((degreeName, index) => (
               <TableCell key={index}>{degreeName}</TableCell>
             ))}
           </TableRow>
