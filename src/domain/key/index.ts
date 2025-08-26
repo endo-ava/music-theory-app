@@ -55,6 +55,7 @@ export class Key {
   private static readonly ROMAN_NUMERALS = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ', 'Ⅶ'] as const;
 
   // 日本語度数名定数
+  // TODO: ナチュラルマイナーの場合、道音は、「下主音 / サブトニック」になる
   private static readonly JAPANESE_SCALE_DEGREE_NAMES = [
     '主音',
     '上主音',
