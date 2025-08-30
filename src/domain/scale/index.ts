@@ -52,13 +52,6 @@ export class Scale {
   }
 
   /**
-   * Tone.js用の音符表記配列
-   */
-  get toneNotations(): string[] {
-    return this.notes.map(note => note.toString);
-  }
-
-  /**
    * ルート音とパターンから、具体的な構成音の配列を生成する
    * @param rootNote ルート音（オクターブ情報を含む）
    */

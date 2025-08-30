@@ -33,7 +33,7 @@ describe('AudioEngine', () => {
 
     // AudioEngineの内部状態をリセット
     (AudioEngine as any).sampler = null;
-    AudioEngine.config = {
+    (AudioEngine as any).config = {
       volume: -10,
       arpeggioDelay: 100,
       arpeggioDelaySlow: 150,
@@ -48,7 +48,7 @@ describe('AudioEngine', () => {
   describe('setVolume', () => {
     it('正常ケース: 音量設定がconfigに反映される', () => {
       AudioEngine.setVolume(-5);
-      expect(AudioEngine.config.volume).toBe(-5);
+      expect((AudioEngine as any).config.volume).toBe(-5);
     });
 
     it('境界値ケース: 極端な音量値', () => {
@@ -56,7 +56,7 @@ describe('AudioEngine', () => {
 
       testCases.forEach(volume => {
         AudioEngine.setVolume(volume);
-        expect(AudioEngine.config.volume).toBe(volume);
+        expect((AudioEngine as any).config.volume).toBe(volume);
       });
     });
   });
@@ -67,7 +67,7 @@ describe('AudioEngine', () => {
 
       testCases.forEach(speed => {
         AudioEngine.setArpeggioSpeed(speed);
-        expect(AudioEngine.config.arpeggioDelay).toBe(speed);
+        expect((AudioEngine as any).config.arpeggioDelay).toBe(speed);
       });
     });
 
@@ -76,7 +76,7 @@ describe('AudioEngine', () => {
 
       testCases.forEach(speed => {
         AudioEngine.setArpeggioSpeed(speed);
-        expect(AudioEngine.config.arpeggioDelay).toBe(50);
+        expect((AudioEngine as any).config.arpeggioDelay).toBe(50);
       });
     });
 
@@ -85,26 +85,26 @@ describe('AudioEngine', () => {
 
       testCases.forEach(speed => {
         AudioEngine.setArpeggioSpeed(speed);
-        expect(AudioEngine.config.arpeggioDelay).toBe(500);
+        expect((AudioEngine as any).config.arpeggioDelay).toBe(500);
       });
     });
   });
 
-  describe('playNotes', () => {
+  describe('play', () => {
     it('正常ケース: 和音再生インターフェースのテスト', async () => {
       const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
       const chord = Chord.major(new Note(cPitchClass, 4));
 
       // エラーなく実行されることを確認
-      await expect(AudioEngine.playNotes(chord.toneNotations, false)).resolves.toBeUndefined();
+      await expect(AudioEngine.play(chord)).resolves.toBeUndefined();
     });
   });
 
   describe('config初期値', () => {
     it('正常ケース: デフォルト設定値の確認', () => {
-      expect(AudioEngine.config.volume).toBe(-10);
-      expect(AudioEngine.config.arpeggioDelay).toBe(100);
-      expect(AudioEngine.config.release).toBe(1.5);
+      expect((AudioEngine as any).config.volume).toBe(-10);
+      expect((AudioEngine as any).config.arpeggioDelay).toBe(100);
+      expect((AudioEngine as any).config.release).toBe(1.5);
     });
   });
 
@@ -115,13 +115,13 @@ describe('AudioEngine', () => {
       AudioEngine.setArpeggioSpeed(200);
 
       // 変更された設定の確認
-      expect(AudioEngine.config.volume).toBe(-15);
-      expect(AudioEngine.config.arpeggioDelay).toBe(200);
+      expect((AudioEngine as any).config.volume).toBe(-15);
+      expect((AudioEngine as any).config.arpeggioDelay).toBe(200);
 
       // 新しい設定で和音を再生
       const gPitchClass = PitchClass.fromCircleOfFifths(1); // G
       const chord = Chord.major(new Note(gPitchClass, 4));
-      await expect(AudioEngine.playNotes(chord.toneNotations, false)).resolves.toBeUndefined();
+      await expect(AudioEngine.play(chord)).resolves.toBeUndefined();
     });
 
     it('正常ケース: 設定のリセット動作', () => {
@@ -130,8 +130,8 @@ describe('AudioEngine', () => {
       AudioEngine.setArpeggioSpeed(50);
 
       // テストのbeforeEachでリセットされることを想定
-      expect(AudioEngine.config.volume).toBe(-25);
-      expect(AudioEngine.config.arpeggioDelay).toBe(50);
+      expect((AudioEngine as any).config.volume).toBe(-25);
+      expect((AudioEngine as any).config.arpeggioDelay).toBe(50);
     });
   });
 
@@ -146,7 +146,7 @@ describe('AudioEngine', () => {
       // すべての和音タイプで再生可能
       for (const chord of chords) {
         expect(chord).toBeInstanceOf(Chord);
-        await expect(AudioEngine.playNotes(chord.toneNotations, false)).resolves.toBeUndefined();
+        await expect(AudioEngine.play(chord)).resolves.toBeUndefined();
       }
     });
 
@@ -155,7 +155,7 @@ describe('AudioEngine', () => {
 
       volumes.forEach(volume => {
         expect(() => AudioEngine.setVolume(volume)).not.toThrow();
-        expect(typeof AudioEngine.config.volume).toBe('number');
+        expect(typeof (AudioEngine as any).config.volume).toBe('number');
       });
     });
 
@@ -164,7 +164,7 @@ describe('AudioEngine', () => {
 
       speeds.forEach(speed => {
         expect(() => AudioEngine.setArpeggioSpeed(speed)).not.toThrow();
-        expect(typeof AudioEngine.config.arpeggioDelay).toBe('number');
+        expect(typeof (AudioEngine as any).config.arpeggioDelay).toBe('number');
       });
     });
   });
@@ -181,7 +181,7 @@ describe('AudioEngine', () => {
 
       // 連続して再生
       for (const chord of progression) {
-        await expect(AudioEngine.playNotes(chord.toneNotations, false)).resolves.toBeUndefined();
+        await expect(AudioEngine.play(chord)).resolves.toBeUndefined();
       }
     });
 
@@ -197,7 +197,7 @@ describe('AudioEngine', () => {
 
       const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
       const chord = Chord.major(new Note(cPitchClass, 4));
-      await AudioEngine.playNotes(chord.toneNotations, false);
+      await AudioEngine.play(chord);
 
       // Tone.start()が呼ばれることを確認（64-65行目のカバレッジ）
       expect(mockTone.start).toHaveBeenCalled();
@@ -211,7 +211,7 @@ describe('AudioEngine', () => {
       // いくつかの和音を再生
       const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
       const chord = Chord.major(new Note(cPitchClass, 4));
-      await AudioEngine.playNotes(chord.toneNotations, false);
+      await AudioEngine.play(chord);
 
       // 途中で設定変更
       AudioEngine.setVolume(-8);
@@ -220,11 +220,11 @@ describe('AudioEngine', () => {
       // 変更後の設定で再生
       const aPitchClass = PitchClass.fromCircleOfFifths(9); // A
       const minorChord = Chord.minor(new Note(aPitchClass, 4));
-      await AudioEngine.playNotes(minorChord.toneNotations, false);
+      await AudioEngine.play(minorChord);
 
       // 最終的な設定の確認
-      expect(AudioEngine.config.volume).toBe(-8);
-      expect(AudioEngine.config.arpeggioDelay).toBe(80);
+      expect((AudioEngine as any).config.volume).toBe(-8);
+      expect((AudioEngine as any).config.arpeggioDelay).toBe(80);
     });
 
     it('正常ケース: 異なるオクターブでの再生', async () => {
@@ -233,7 +233,7 @@ describe('AudioEngine', () => {
 
       for (const octave of octaves) {
         const chord = Chord.major(new Note(cPitchClass, octave));
-        await expect(AudioEngine.playNotes(chord.toneNotations, false)).resolves.toBeUndefined();
+        await expect(AudioEngine.play(chord)).resolves.toBeUndefined();
       }
     });
   });

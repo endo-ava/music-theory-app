@@ -7,7 +7,7 @@ import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 import { Chord } from '@/domain/chord';
 import { AudioEngine } from '@/domain/services/AudioEngine';
-import { Key, KeyDTO, PitchClass } from '../../../domain';
+import { Key, KeyDTO } from '../../../domain';
 
 /**
  * 選択されたコード情報の型定義
@@ -27,8 +27,7 @@ type SelectedChordInfo = {
 const createChordInfo = (selectedKey: KeyDTO | null, currentKey: Key): SelectedChordInfo | null => {
   if (!selectedKey || !currentKey) return null;
 
-  const pitchClass = PitchClass.fromCircleOfFifths(selectedKey.fifthsIndex);
-  const chord = Chord.fromKeyDTO(selectedKey, Chord.getOptimizedOctave(pitchClass));
+  const chord = Chord.fromKeyDTO(selectedKey);
 
   const analysis = currentKey.analyzeChord(chord);
   if (!analysis) return null;
@@ -67,7 +66,7 @@ export const SelectedElementArea: React.FC<ClassNameProps> = ({ className }) => 
     if (!selectedChordInfo) return;
 
     try {
-      await AudioEngine.playNotes(selectedChordInfo.chord.toneNotations, false);
+      await AudioEngine.play(selectedChordInfo.chord);
     } catch (error) {
       console.error('コード再生に失敗しました:', error);
     }
@@ -90,7 +89,7 @@ export const SelectedElementArea: React.FC<ClassNameProps> = ({ className }) => 
             {/* Center row */}
             <div className="-mb-2 text-center">
               <button
-                className="text-foreground hover:bg-accent rounded px-2 py-1 text-lg font-bold transition-colors"
+                className="text-foreground hover:bg-selected rounded px-2 py-1 text-lg font-bold transition-colors"
                 onClick={handlePlayChord}
                 aria-label={`Play ${selectedChordInfo.chord.getNameForCircleOfFifth()} chord`}
               >

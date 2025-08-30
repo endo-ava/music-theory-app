@@ -7,7 +7,7 @@ import { PitchClass } from './PitchClass';
 export class Note {
   constructor(
     public readonly _pitchClass: PitchClass,
-    public readonly _octave: number
+    public readonly _octave: number = 4
   ) {
     Object.freeze(this);
   }

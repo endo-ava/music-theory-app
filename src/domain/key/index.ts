@@ -54,8 +54,8 @@ export class Key {
   // ローマ数字定数
   private static readonly ROMAN_NUMERALS = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ', 'Ⅶ'] as const;
 
-  // 日本語度数名定数
-  private static readonly JAPANESE_SCALE_DEGREE_NAMES = [
+  // 日本語度数名定数（メジャーキー用）
+  private static readonly JAPANESE_SCALE_DEGREE_NAMES_MAJOR = [
     '主音',
     '上主音',
     '中音',
@@ -63,6 +63,17 @@ export class Key {
     '属音',
     '下中音',
     '導音',
+  ] as const;
+
+  // 日本語度数名定数（マイナーキー用）
+  private static readonly JAPANESE_SCALE_DEGREE_NAMES_MINOR = [
+    '主音',
+    '上主音',
+    '中音',
+    '下属音',
+    '属音',
+    '下中音',
+    '下主音', // ナチュラルマイナーの場合、第7音は「下主音」になる
   ] as const;
 
   // 五度圏でのシャープ系とフラット系の境界
@@ -149,6 +160,18 @@ export class Key {
     return this.scale.pattern.quality === 'major';
   }
 
+  /**
+   * 日本語の音度名を取得する静的メソッド（オーバーロード）
+   * メジャーキーでは第7音は「導音」、マイナーキーでは「下主音」となる
+   * @param isMajor メジャーキーかどうか（省略時はメジャーキーとして扱う）
+   * @returns 日本語の度数名配列
+   */
+  get japaneseScaleDegreeNames(): readonly string[] {
+    return this.isMajor
+      ? Key.JAPANESE_SCALE_DEGREE_NAMES_MAJOR
+      : Key.JAPANESE_SCALE_DEGREE_NAMES_MINOR;
+  }
+
   // === B. 静的ファクトリーメソッド・ユーティリティ ===
 
   /**
@@ -173,14 +196,6 @@ export class Key {
    */
   public static getDegreeNameFromNumber(degree: number): string {
     return Key.ROMAN_NUMERALS[degree - 1];
-  }
-
-  /**
-   * 日本語の音度名を取得する静的メソッド
-   * @returns 日本語の度数名配列（主音、上主音、中音、下属音、属音、下中音、導音）
-   */
-  public static getJapaneseScaleDegreeNames(): readonly string[] {
-    return Key.JAPANESE_SCALE_DEGREE_NAMES;
   }
 
   /**

@@ -9,7 +9,7 @@ import { SVGRippleEffect } from './SVGRippleEffect';
 import type { Point } from '@/features/circle-of-fifths/types';
 import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { KeyDTO } from '@/domain';
-import { getMusicColorKey } from '@/shared/utils/keyColorUtils';
+import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 
 /**
  * 個別キーエリアコンポーネントのProps
@@ -55,8 +55,7 @@ export const KeyArea = memo<KeyAreaProps>(
     const { fillClassName, textClassName } = states;
 
     // 音楽色相システムからリップルエフェクト用のCSS変数を生成
-    const rippleColorKey = getMusicColorKey(key);
-    const rippleColor = `var(--color-${rippleColorKey})`;
+    const rippleColor = getMusicColorVariable(key);
 
     return (
       <motion.g
