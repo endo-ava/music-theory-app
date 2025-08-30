@@ -46,7 +46,7 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
         'text-base font-medium',
         // カラー - アクティブ状態に応じた色分け
         isActive
-          ? 'text-foreground bg-accent'
+          ? 'text-foreground bg-selected'
           : 'text-secondary-foreground hover:text-foreground hover:bg-muted',
         // トランジション - スムーズなインタラクション
         'transition-colors duration-200',
