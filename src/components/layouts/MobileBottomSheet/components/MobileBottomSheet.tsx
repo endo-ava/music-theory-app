@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import type { ClassNameProps } from '@/shared/types';
 import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
 import { useCustomTouchHandler } from '../hooks/useCustomTouchHandler';
-import { InformationPanel } from '../../../../features/information-panel';
+import { InformationPanel } from '../../ThreeColumnLayout/components/InformationPanel';
 
 // propsの型定義
 interface MobileBottomSheetProps extends ClassNameProps {

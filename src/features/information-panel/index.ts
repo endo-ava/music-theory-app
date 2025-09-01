@@ -6,6 +6,5 @@
  * 動的に情報を提示するコンポーネント群を提供する
  */
 
-export { InformationPanel } from './components/InformationPanel';
 export { LayerConceptArea } from './components/LayerConceptArea';
 export { SelectedElementArea } from './components/SelectedElementArea';

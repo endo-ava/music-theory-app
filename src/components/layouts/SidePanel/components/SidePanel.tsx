@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import { ViewController } from '@/features/view-controller';
-import { InformationPanel } from '@/features/information-panel';
 import type { ClassNameProps } from '@/shared/types';
+import { InformationPanel } from '../../ThreeColumnLayout';
 
 /**
  * Side Panel コンポーネントのProps
@@ -45,8 +45,8 @@ export const SidePanel: React.FC<SidePanelProps> = ({ className, isVisible = tru
         className="border-border bg-card overflow-y-auto rounded-lg border p-8 backdrop-blur-sm"
         aria-label="コントロールパネル"
       >
-        {/* C-1: Information Panel（選択情報パネル） */}
-        <InformationPanel className="mb-8" />
+        {/* C-1: Information Panel（情報パネル） */}
+        <InformationPanel />
 
         {/* 将来の拡張エリア */}
         {/* C-2: Layer Controller（レイヤー・コントローラー） */}
