@@ -87,6 +87,7 @@
   --color-selected: var(--selected);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-border: var(--border);
 
   /* 五度圏専用カラー */
