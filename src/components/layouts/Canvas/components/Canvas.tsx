@@ -18,7 +18,7 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
       className={twMerge(
-        'flex h-full min-h-[400px] w-full flex-col bg-transparent p-4 lg:p-8',
+        'md:border-border flex h-full min-h-[400px] w-full flex-col rounded-lg p-6 md:border',
         className
       )}
       aria-label="メイン表示エリア"

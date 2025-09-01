@@ -29,7 +29,7 @@ export const ViewController: React.FC<ViewControllerProps> = ({ className, title
     useViewController();
 
   return (
-    <div className={twMerge('space-y-4', className)}>
+    <div className={twMerge('space-y-2', className)}>
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
       <h2 className="text-foreground hidden text-lg md:block">{title}</h2>
 

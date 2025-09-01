@@ -1,5 +1,5 @@
 import { Canvas } from '@/components/layouts/Canvas';
-import { SidePanel } from '@/components/layouts/SidePanel';
+import { ThreeColumnLayout } from '@/components/layouts/ThreeColumnLayout';
 
 import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet';
 
@@ -8,7 +8,7 @@ import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet
  *
  * Hub画面のメインレイアウトを提供する。
  * レスポンシブ対応：
- * - デスクトップ：SidePanelとCanvasの2カラムレイアウト（Tailwindで制御）
+ * - デスクトップ：3分割レイアウト（ThreeColumnLayout）
  * - モバイル：Canvas全画面 + MobileBottomSheet（BottomSheet + トリガーボタン）
  *
  * アーキテクチャ設計：
@@ -20,15 +20,11 @@ import { MobileInteractionWrapper } from '@/components/layouts/MobileBottomSheet
 export default function Home() {
   return (
     <div className="flex h-[calc(100dvh-var(--header-height-min))] flex-col">
-      {/* 2-column layout: Side Panel + Canvas */}
-      <main className="flex flex-1">
-        {/* デスクトップ */}
-        {/* Left: Side Panel */}
-        <SidePanel className="mt-16 hidden w-fit max-w-[42rem] min-w-[38rem] pl-28 md:block" />
-        {/* Right: Canvas */}
-        <Canvas className="hidden flex-1 md:block" />
+      <main className="flex-1 p-6">
+        {/* デスクトップ：3分割レイアウト */}
+        <ThreeColumnLayout className="hidden md:flex" />
 
-        {/* モバイル */}
+        {/* モバイル：既存の実装を維持 */}
         <div className="flex-1 md:hidden">
           <MobileInteractionWrapper>
             <Canvas className="flex-1" />
