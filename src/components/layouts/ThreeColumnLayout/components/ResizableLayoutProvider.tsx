@@ -2,18 +2,18 @@
 
 import React from 'react';
 import { Panel, PanelGroup } from 'react-resizable-panels';
-import { twMerge } from 'tailwind-merge';
 
 import { ClassNameProps } from '@/shared/types';
+
 import { ResizeHandle } from './ResizeHandle';
 import { LayoutResetButton } from './LayoutResetButton';
 
 interface ResizableLayoutProviderProps extends ClassNameProps {
-  /** 左パネルコンテンツ (Controller) */
+  /** 左パネルコンテンツ - 操作制御 (ControllerPanel) */
   leftPanel: React.ReactNode;
-  /** 中央パネルコンテンツ (Canvas) */
+  /** 中央パネルコンテンツ - メイン表示エリア (Canvas) */
   centerPanel: React.ReactNode;
-  /** 右パネルコンテンツ (Info) */
+  /** 右パネルコンテンツ - 詳細情報表示 (InformationPanel) */
   rightPanel: React.ReactNode;
 }
 
@@ -30,7 +30,7 @@ export const ResizableLayoutProvider: React.FC<ResizableLayoutProviderProps> = (
   rightPanel,
 }) => {
   return (
-    <div className={twMerge('relative h-full', className)}>
+    <div className={className} aria-label="デスクトップ用3分割レイアウト">
       <PanelGroup direction="horizontal" autoSaveId="three-column-layout">
         {/* Left: Controller Panel */}
         <Panel defaultSize={25} minSize={15} className="min-w-[200px]">

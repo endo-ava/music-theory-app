@@ -8,15 +8,16 @@ import { InformationPanel } from './InformationPanel';
 import { ResizableLayoutProvider } from './ResizableLayoutProvider';
 
 /**
- * 3分割レイアウトコンポーネント（Server Component）
+ * デスクトップ用3分割レイアウトコンポーネント
  *
  * Composition Patternを採用し、ResizableLayoutProviderでラップすることで：
  * - リサイザブル機能はClient Componentで提供
  * - コンテンツ部分はServer Componentのまま維持
  *
- * 左: コントローラーパネル（ViewController等）
- * 中央: キャンバス（五度圏・クロマチック円）
- * 右: 情報パネル（SelectedElementArea + LayerConceptArea）
+ * 構成:
+ * - 左: ControllerPanel（ViewController等）- リサイザブル
+ * - 中央: Canvas（五度圏・クロマチック円）- リサイザブル
+ * - 右: InformationPanel（詳細情報）- リサイザブル
  */
 export const ThreeColumnLayout: React.FC<ClassNameProps> = ({ className }) => {
   return (
