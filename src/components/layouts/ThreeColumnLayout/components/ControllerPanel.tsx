@@ -13,7 +13,7 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <aside
       className={twMerge(
-        'bg-card border-border space-y-4 overflow-y-auto rounded-lg border p-6 backdrop-blur-sm',
+        'md:bg-card md:border-border space-y-4 overflow-y-auto border-transparent bg-transparent p-6 md:rounded-lg md:border md:backdrop-blur-sm',
         className
       )}
       aria-label="コントローラーパネル"

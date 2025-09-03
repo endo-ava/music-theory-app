@@ -27,7 +27,7 @@ export interface BottomSheetTabNavigationProps {
  *
  * ボトムシートのタブナビゲーションを表示する。
  * 複数のタブを切り替えることができ、アクティブなタブを強調表示する。
- *
+ * @deprecated
  * @param props - コンポーネントのプロパティ
  * @returns BottomSheetTabNavigationのJSX要素
  */

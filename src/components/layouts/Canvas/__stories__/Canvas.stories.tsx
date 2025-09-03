@@ -157,8 +157,8 @@ export const ResponsiveTest: Story = {
     expect(mainArea).toBeInTheDocument();
     expect(mainArea).toHaveClass('w-full', 'h-full');
 
-    // モバイル対応のパディング確認
-    expect(mainArea).toHaveClass('p-4', 'lg:p-8');
+    // パディング設定確認
+    expect(mainArea).toHaveClass('p-6');
 
     // フレックスレイアウト確認
     expect(mainArea).toHaveClass('flex', 'flex-col');
