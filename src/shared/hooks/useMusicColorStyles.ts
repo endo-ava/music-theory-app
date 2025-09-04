@@ -58,11 +58,11 @@ export const useMusicColorAccent = (key: Key | KeyDTO | null): void => {
     // CSS変数--accentを動的に更新
     document.documentElement.style.setProperty('--accent', cssVariable);
 
-    // 明るいキー（G,D,A,E,B,G♭）は黒、それ以外は白を設定
+    // 明るいキー（G,D,A,E,B,G♭(f#)）は黒、それ以外は白を設定
     // CSS変数名からキー名を抽出（例: "var(--color-key-d-ionian)" -> "d", "var(--color-key-gsharp-ionian)" -> "gsharp"）
     const keyMatch = cssVariable.match(/--color-key-([a-z]+(?:sharp|flat)?)-/);
     const extractedKey = keyMatch ? keyMatch[1] : '';
-    // sharp/flatも含めた明るいキー判定（G♭=gflat）
+    // sharp/flatも含めた明るいキー判定
     const isLightKey = ['g', 'd', 'a', 'e', 'b', 'fsharp'].includes(extractedKey);
     const foregroundColor = isLightKey ? 'oklch(0.205 0 0)' : 'oklch(0.985 0 0)';
     document.documentElement.style.setProperty('--accent-foreground', foregroundColor);
