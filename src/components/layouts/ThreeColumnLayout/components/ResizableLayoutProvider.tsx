@@ -6,7 +6,6 @@ import { Panel, PanelGroup } from 'react-resizable-panels';
 import { ClassNameProps } from '@/shared/types';
 
 import { ResizeHandle } from './ResizeHandle';
-import { LayoutResetButton } from './LayoutResetButton';
 
 interface ResizableLayoutProviderProps extends ClassNameProps {
   /** 左パネルコンテンツ - 操作制御 (ControllerPanel) */
@@ -16,6 +15,9 @@ interface ResizableLayoutProviderProps extends ClassNameProps {
   /** 右パネルコンテンツ - 詳細情報表示 (InformationPanel) */
   rightPanel: React.ReactNode;
 }
+
+/** デフォルトレイアウト: [左25%, 中央50%, 右25%] */
+const DEFAULT_LAYOUT = [25, 50, 25] as const;
 
 /**
  * リサイザブルレイアウトプロバイダー (Client Component)
@@ -33,7 +35,7 @@ export const ResizableLayoutProvider: React.FC<ResizableLayoutProviderProps> = (
     <div className={className} aria-label="デスクトップ用3分割レイアウト">
       <PanelGroup direction="horizontal" autoSaveId="three-column-layout">
         {/* Left: Controller Panel */}
-        <Panel defaultSize={25} minSize={15} className="min-w-[200px]">
+        <Panel defaultSize={DEFAULT_LAYOUT[0]} minSize={15} className="min-w-[200px]">
           <div className="h-full">{leftPanel}</div>
         </Panel>
 
@@ -41,7 +43,7 @@ export const ResizableLayoutProvider: React.FC<ResizableLayoutProviderProps> = (
         <ResizeHandle id="controller-canvas-divider" />
 
         {/* Center: Canvas */}
-        <Panel defaultSize={50} minSize={30} className="min-w-[300px]">
+        <Panel defaultSize={DEFAULT_LAYOUT[1]} minSize={30} className="min-w-[300px]">
           <div className="h-full min-w-0">{centerPanel}</div>
         </Panel>
 
@@ -49,13 +51,10 @@ export const ResizableLayoutProvider: React.FC<ResizableLayoutProviderProps> = (
         <ResizeHandle id="canvas-info-divider" />
 
         {/* Right: Info Panel */}
-        <Panel defaultSize={25} minSize={15} className="min-w-[200px]">
+        <Panel defaultSize={DEFAULT_LAYOUT[2]} minSize={15} className="min-w-[200px]">
           <div className="h-full">{rightPanel}</div>
         </Panel>
       </PanelGroup>
-
-      {/* Layout Reset Button */}
-      <LayoutResetButton position="top-right" />
     </div>
   );
 };

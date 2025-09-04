@@ -32,7 +32,6 @@
 - **リサイザブル機能**: react-resizable-panelsによる動的なパネルサイズ調整
 - **レイアウト永続化**: ユーザーのパネルサイズ設定を自動保存・復元
 - **SSR最適化**: Composition Patternによる Server/Client Component 分離
-- **リセット機能**: ワンクリックでデフォルトレイアウトに復元
 
 ## アーキテクチャ
 
@@ -49,7 +48,6 @@ graph TD
     B --> D[Canvas - メイン表示エリア]
     B --> E[InformationPanel - 詳細情報]
     B --> F[ResizeHandle - リサイズハンドル]
-    B --> G[LayoutResetButton - リセットボタン]
 
     F --> H[ResizeHandle#1 - Controller/Canvas間]
     F --> I[ResizeHandle#2 - Canvas/Info間]
@@ -60,7 +58,6 @@ graph TD
     style D fill:#f3e5f5
     style E fill:#f3e5f5
     style F fill:#fff3e0
-    style G fill:#fff3e0
 ```
 
 ### データフロー図
@@ -75,7 +72,6 @@ flowchart LR
     C -->|PanelGroup| G[react-resizable-panels]
     G -->|自動保存| H[localStorage]
     G -->|リサイズ状態| I[ResizeHandle × 2]
-    C -->|リセット機能| J[LayoutResetButton]
 ```
 
 ### ファイル構造
@@ -89,7 +85,6 @@ src/components/layouts/ThreeColumnLayout/
 │   ├── ControllerPanel.tsx                  # 左パネル（操作制御）
 │   ├── InformationPanel.tsx                 # 右パネル（詳細情報）
 │   ├── ResizeHandle.tsx                     # リサイズハンドル
-│   └── LayoutResetButton.tsx                # レイアウトリセットボタン
 └── index.ts                                  # エクスポート統合
 ```
 
@@ -164,16 +159,13 @@ interface ResizableLayoutProviderProps extends ClassNameProps {
 
 #### 公開メソッド
 
-| メソッド名    | 引数 | 戻り値 | 説明                                 |
-| ------------- | ---- | ------ | ------------------------------------ |
-| `resetLayout` | なし | `void` | レイアウトをデフォルト状態にリセット |
+現在は公開メソッドはありません。レイアウト操作はreact-resizable-panelsのネイティブ機能により提供されます。
 
 #### イベント
 
-| イベント名 | ペイロード            | 説明                       |
-| ---------- | --------------------- | -------------------------- |
-| `onResize` | `{ sizes: number[] }` | パネルサイズ変更時に発火   |
-| `onReset`  | なし                  | レイアウトリセット時に発火 |
+| イベント名 | ペイロード            | 説明                     |
+| ---------- | --------------------- | ------------------------ |
+| `onResize` | `{ sizes: number[] }` | パネルサイズ変更時に発火 |
 
 ## 使用方法
 
@@ -221,7 +213,7 @@ Server ComponentとClient Componentの境界を最適化するため、Compositi
 
 ### 4. ユーザー体験重視
 
-レイアウト設定の永続化により、ユーザーの作業環境を維持。リセット機能による簡単な初期化、直感的なリサイズ操作による快適なワークフローを実現。
+レイアウト設定の永続化により、ユーザーの作業環境を維持。直感的なリサイズ操作による快適なワークフローを実現。
 
 ### 5. パフォーマンス最適化
 
@@ -258,8 +250,6 @@ react-resizable-panelsの効率的な実装により、スムーズなリサイ�
 // リサイズハンドル
 <ResizeHandle aria-label="パネルサイズ調整" />
 
-// リセットボタン
-<LayoutResetButton aria-label="レイアウトをデフォルトに戻す" />
 ```
 
 ### キーボード操作
