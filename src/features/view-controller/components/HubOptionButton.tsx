@@ -49,7 +49,7 @@ export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
         'focus:ring-foreground focus:ring-1 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none',
         // 状態別スタイル（条件を明確に分離）
         isSelected
-          ? 'bg-accent text-foreground border-border border shadow-sm'
+          ? 'bg-accent text-accent-foreground border-border border shadow-sm'
           : 'text-secondary-foreground hover:bg-muted hover:text-foreground'
       )}
       role="radio"
