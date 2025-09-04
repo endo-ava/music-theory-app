@@ -8,6 +8,7 @@ interface MobileInteractionWrapperProps {
   children: React.ReactNode;
 }
 
+/** @deprecated */
 export function MobileInteractionWrapper({ children }: MobileInteractionWrapperProps) {
   // スナップポイント用のstate
   const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(

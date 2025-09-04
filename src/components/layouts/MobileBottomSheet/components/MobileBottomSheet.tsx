@@ -2,29 +2,27 @@
 
 import React from 'react';
 import { Drawer as VaulDrawer } from 'vaul';
-import { ViewController } from '@/features/view-controller';
-import { BottomSheetTabNavigation } from './BottomSheetTabNavigation';
-import { SNAP_POINTS, TABS } from '../constants';
+import { SNAP_POINTS } from '../constants';
 import { cn } from '@/lib/utils';
 import type { ClassNameProps } from '@/shared/types';
 import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
 import { useCustomTouchHandler } from '../hooks/useCustomTouchHandler';
-import { InformationPanel } from '../../../../features/information-panel';
+import { ControllerPanel } from '../../ThreeColumnLayout';
 
-// propsの型定義
+// propsの型定義 - Controller専用に簡素化
 interface MobileBottomSheetProps extends ClassNameProps {
   activeSnapPoint: number | string | null;
   setActiveSnapPoint: (point: number | string | null) => void;
-  activeTab: string;
-  onTabChange: (tabId: string) => void;
+  // タブ機能は削除（後方互換性のため残すが使用しない）
+  activeTab?: string;
+  onTabChange?: (tabId: string) => void;
 }
 
 export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   className,
   activeSnapPoint,
   setActiveSnapPoint,
-  activeTab,
-  onTabChange,
+  // activeTab, onTabChange は不要（Controller専用）
 }) => {
   // カスタムタッチハンドラーでvaulの判定をバイパス
   const { touchHandlers } = useCustomTouchHandler({
@@ -63,10 +61,13 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             <div className="border-border border-b px-4 pt-3 pb-4">
               {/* ドラッグ用のハンドルアイコン */}
               <HandleIcon className="mx-auto mb-3" />
-              <VaulDrawer.Title className="sr-only">ボトムシート</VaulDrawer.Title>
+              <VaulDrawer.Title className="sr-only">コントローラー</VaulDrawer.Title>
+              <VaulDrawer.Description className="sr-only">
+                音楽理論ビューの切り替えとコントロールパネル
+              </VaulDrawer.Description>
               <div className="flex items-center justify-between">
-                {/* 左側のスペーサー */}
-                <div className="w-8" />
+                {/* Controller Title */}
+                <h3 className="text-foreground text-sm">Controller</h3>
                 {/* キャンセルボタン */}
                 <button
                   onClick={() => {
@@ -80,22 +81,11 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
                   <CloseIcon className="h-4 w-4" />
                 </button>
               </div>
-
-              {/* Tab Navigation */}
-              <BottomSheetTabNavigation
-                tabs={TABS}
-                activeTab={activeTab}
-                onTabChange={onTabChange}
-              />
             </div>
 
             {/* コンテンツエリア */}
             <div className="flex-1 overflow-y-auto p-6">
-              {activeTab === 'layer' && (
-                <div className="text-foreground">レイヤー設定のコンテンツがここに入ります。</div>
-              )}
-              {activeTab === 'info' && <InformationPanel />}
-              {activeTab === 'view' && <ViewController />}
+              <ControllerPanel />
             </div>
           </div>
         </VaulDrawer.Content>
