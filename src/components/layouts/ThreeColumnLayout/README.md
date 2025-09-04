@@ -96,7 +96,6 @@ src/components/layouts/ThreeColumnLayout/
 - `@/features/view-controller` - Hub切り替えコントローラー
 - `@/features/information-panel` - 選択要素・レイヤー概念表示
 - `@/shared/types` - 共通型定義（ClassNameProps）
-- `@/stores/layoutStore` - レイアウト状態管理
 
 #### 外部依存
 
