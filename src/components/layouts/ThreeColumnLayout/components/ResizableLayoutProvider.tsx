@@ -33,7 +33,7 @@ export const ResizableLayoutProvider: React.FC<ResizableLayoutProviderProps> = (
 }) => {
   return (
     <div className={className} aria-label="デスクトップ用3分割レイアウト">
-      <PanelGroup direction="horizontal" autoSaveId="three-column-layout">
+      <PanelGroup direction="horizontal" autoSaveId="three-column-layout" className="h-full">
         {/* Left: Controller Panel */}
         <Panel defaultSize={DEFAULT_LAYOUT[0]} minSize={15} className="min-w-[200px]">
           <div className="h-full">{leftPanel}</div>
