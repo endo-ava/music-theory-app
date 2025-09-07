@@ -51,19 +51,19 @@ export class PitchClass {
   public static readonly ASharp = new PitchClass('A#', 'B♭', 10, 10);
   public static readonly B = new PitchClass('B', 'B', 11, 5);
 
-  private static readonly ALL_PITCH_CLASSES = [
+  public static readonly ALL_PITCH_CLASSES = [
     PitchClass.C,
-    PitchClass.CSharp,
-    PitchClass.D,
-    PitchClass.DSharp,
-    PitchClass.E,
-    PitchClass.F,
-    PitchClass.FSharp,
     PitchClass.G,
-    PitchClass.GSharp,
+    PitchClass.D,
     PitchClass.A,
-    PitchClass.ASharp,
+    PitchClass.E,
     PitchClass.B,
+    PitchClass.FSharp,
+    PitchClass.CSharp,
+    PitchClass.GSharp,
+    PitchClass.DSharp,
+    PitchClass.ASharp,
+    PitchClass.F,
   ];
 
   /**

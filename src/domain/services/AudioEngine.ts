@@ -5,7 +5,7 @@
 import * as Tone from 'tone';
 import { Note, PitchClass } from '../common';
 import { Chord } from '../chord';
-import { Scale } from '..';
+import { Scale } from '../scale';
 
 /**
  * 音響アセット設定

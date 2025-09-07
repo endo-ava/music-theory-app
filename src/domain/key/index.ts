@@ -113,7 +113,10 @@ export class Key {
     this.scale = new Scale(tonic, scalePattern);
     // 五度圏でのシャープ系とフラット系の判定
     // C(0)からB(5)まではシャープ系、F#/G♭(6)からF(11)まではフラット系
-    this.keySignature = this.tonic.fifthsIndex < Key.SHARP_FLAT_BOUNDARY ? 'sharp' : 'flat';
+    const normalizedIndex = this.isMajor
+      ? this.tonic.fifthsIndex
+      : Key.normalizeIndex(this.tonic.fifthsIndex - 3);
+    this.keySignature = normalizedIndex < Key.SHARP_FLAT_BOUNDARY ? 'sharp' : 'flat';
   }
 
   /**
