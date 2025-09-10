@@ -6,31 +6,38 @@ import { SNAP_POINTS } from '../constants';
 import { cn } from '@/lib/utils';
 import type { ClassNameProps } from '@/shared/types';
 import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
-import { useCustomTouchHandler } from '../hooks/useCustomTouchHandler';
 import { ControllerPanel } from '../../ThreeColumnLayout';
+import { RemoveScroll } from 'react-remove-scroll';
 
 // propsの型定義 - Controller専用に簡素化
 interface MobileBottomSheetProps extends ClassNameProps {
   activeSnapPoint: number | string | null;
   setActiveSnapPoint: (point: number | string | null) => void;
-  // タブ機能は削除（後方互換性のため残すが使用しない）
-  activeTab?: string;
-  onTabChange?: (tabId: string) => void;
 }
 
+/**
+ * モバイル用ボトムシートコンポーネント
+ *
+ * @description
+ * Vaulライブラリを使用したドラッグ可能なボトムシート。
+ * Controller機能専用に最適化され、3段階のスナップポイント（最小・中央・展開）を提供。
+ *
+ * @features
+ * - 3段階スナップポイント（6%, 50%, 85%）
+ * - ドラッグハンドル付きヘッダー
+ * - 背景オーバーレイタップで最小化
+ * - 動的ビューポート対応（h-dvh）
+ * - Controller専用UI（ControllerPanel統合）
+ *
+ * @param className - 追加のCSSクラス
+ * @param activeSnapPoint - 現在のスナップポイント位置
+ * @param setActiveSnapPoint - スナップポイント変更関数
+ */
 export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   className,
   activeSnapPoint,
   setActiveSnapPoint,
-  // activeTab, onTabChange は不要（Controller専用）
 }) => {
-  // カスタムタッチハンドラーでvaulの判定をバイパス
-  const { touchHandlers } = useCustomTouchHandler({
-    activeSnapPoint,
-    setActiveSnapPoint,
-    isEnabled: true,
-  });
-
   return (
     <VaulDrawer.Root
       shouldScaleBackground
@@ -40,54 +47,52 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
       closeThreshold={0.25} // ドローワーの高さの25%がドラッグされると閉じる
-      scrollLockTimeout={0} // スクロールロックが適用されるまでの遅延時間
+      scrollLockTimeout={0} // スクロールロックが適用されるまでの遅延時間（背景スクロール防止）
+      preventScrollRestoration={true} // ボトムシート閉じる際のスクロール位置復元を防ぐ
       defaultOpen
     >
       <VaulDrawer.Portal>
         <VaulDrawer.Overlay
-          className="fixed inset-0 z-50 bg-black/40"
+          className="fixed inset-0 z-50 h-dvh w-full bg-black/40"
           onClick={() => setActiveSnapPoint(SNAP_POINTS.LOWEST)}
         />
         <VaulDrawer.Content
           className={cn(
-            'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-full flex-col rounded-t-[10px] border',
+            'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-dvh flex-col rounded-t-[10px] border',
             'bg-background-muted/80 border-border backdrop-blur-sm',
             className
           )}
         >
-          {/* カスタムタッチハンドラー用ラッパー（vaulとの競合回避） */}
-          <div className="flex h-full flex-col" {...touchHandlers}>
-            {/* ヘッダー */}
-            <div className="border-border border-b px-4 pt-3 pb-4">
-              {/* ドラッグ用のハンドルアイコン */}
-              <HandleIcon className="mx-auto mb-3" />
-              <VaulDrawer.Title className="sr-only">コントローラー</VaulDrawer.Title>
-              <VaulDrawer.Description className="sr-only">
-                音楽理論ビューの切り替えとコントロールパネル
-              </VaulDrawer.Description>
-              <div className="flex items-center justify-between">
-                {/* Controller Title */}
-                <h3 className="text-foreground text-sm">Controller</h3>
-                {/* キャンセルボタン */}
-                <button
-                  onClick={() => {
-                    setActiveSnapPoint(SNAP_POINTS.LOWEST);
-                  }}
-                  className="text-secondary-foreground hover:text-foreground flex h-8 w-8 items-center justify-center rounded-md transition-colors"
-                  aria-label="閉じる"
-                  type="button"
-                >
-                  {/* Xアイコン */}
-                  <CloseIcon className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* コンテンツエリア */}
-            <div className="flex-1 overflow-y-auto p-6">
-              <ControllerPanel />
+          {/* ヘッダー */}
+          <div className="border-border border-b px-4 pt-3 pb-4">
+            {/* ドラッグ用のハンドルアイコン */}
+            <HandleIcon className="mx-auto mb-3" />
+            <VaulDrawer.Title className="sr-only">コントローラー</VaulDrawer.Title>
+            <VaulDrawer.Description className="sr-only">
+              音楽理論ビューの切り替えとコントロールパネル
+            </VaulDrawer.Description>
+            <div className="flex items-center justify-between">
+              {/* Controller Title */}
+              <h3 className="text-foreground text-sm">Controller</h3>
+              {/* キャンセルボタン */}
+              <button
+                onClick={() => {
+                  setActiveSnapPoint(SNAP_POINTS.LOWEST);
+                }}
+                className="text-secondary-foreground hover:text-foreground flex h-8 w-8 items-center justify-center rounded-md transition-colors"
+                aria-label="閉じる"
+                type="button"
+              >
+                {/* Xアイコン */}
+                <CloseIcon className="h-4 w-4" />
+              </button>
             </div>
           </div>
+
+          {/* コンテンツエリア */}
+          <RemoveScroll as="div" className="flex-1 overflow-y-auto p-6">
+            <ControllerPanel />
+          </RemoveScroll>
         </VaulDrawer.Content>
       </VaulDrawer.Portal>
     </VaulDrawer.Root>
