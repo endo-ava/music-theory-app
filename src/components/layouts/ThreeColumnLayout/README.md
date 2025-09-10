@@ -140,9 +140,9 @@ interface ResizableLayoutProviderProps extends ClassNameProps {
 
 | パネル           | デフォルトサイズ | 最小サイズ | 最小幅 | 説明             |
 | ---------------- | ---------------- | ---------- | ------ | ---------------- |
-| ControllerPanel  | 25%              | 15%        | 200px  | 操作制御エリア   |
+| ControllerPanel  | 23%              | 15%        | 200px  | 操作制御エリア   |
 | Canvas           | 50%              | 30%        | 300px  | メイン表示エリア |
-| InformationPanel | 25%              | 15%        | 200px  | 詳細情報エリア   |
+| InformationPanel | 27%              | 15%        | 200px  | 詳細情報エリア   |
 
 #### 永続化設定
 

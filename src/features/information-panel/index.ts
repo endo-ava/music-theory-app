@@ -6,5 +6,5 @@
  * 動的に情報を提示するコンポーネント群を提供する
  */
 
-export { LayerConceptArea } from './components/LayerConceptArea';
-export { SelectedElementArea } from './components/SelectedElementArea';
+export { CurrentKeyInfo } from './components/CurrentKeyInfo';
+export { SelectedElementInfo } from './components/SelectedElementInfo';

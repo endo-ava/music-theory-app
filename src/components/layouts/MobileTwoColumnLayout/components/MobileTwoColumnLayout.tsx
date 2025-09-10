@@ -3,24 +3,21 @@ import React from 'react';
 import { Canvas } from '@/components/layouts/Canvas';
 import { InformationPanel } from '@/components/layouts/ThreeColumnLayout/components/InformationPanel';
 import { ClassNameProps } from '@/shared/types';
-
-import { MobileBottomSheetProvider } from './MobileBottomSheetProvider';
+import { MobileTwoColumnProvider } from './MobileTwoColumnProvider';
 
 /**
  * モバイル用2分割レイアウトコンポーネント
  *
- * Composition Patternを採用し、MobileBottomSheetProviderでラップすることで：
- * - BottomSheet機能はClient Componentで提供
- * - コンテンツ部分はServer Componentのまま維持
+ * MobileTwoColumnProviderを使用してBottomSheet機能を提供：
+ * - 上部: Canvas（メイン表示エリア）
+ * - 下部: InformationPanel（詳細情報）
+ * - BottomSheet: Controller用モバイルUI
  *
- * 構成:
- * - 上部: Canvas（メイン表示エリア）- SSRで固定高さ
- * - 下部: InformationPanel（詳細情報）- SSRでスクロール可能
- * - BottomSheet: Controller用モバイルUI - Client Componentで状態管理
+ * ThreeColumnLayoutとの一貫性を保つため、Provider命名規則を採用。
  */
 export const MobileTwoColumnLayout: React.FC<ClassNameProps> = ({ className }) => {
   return (
-    <MobileBottomSheetProvider
+    <MobileTwoColumnProvider
       className={className}
       topPanel={<Canvas />}
       bottomPanel={<InformationPanel />}
