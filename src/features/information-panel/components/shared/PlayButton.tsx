@@ -27,7 +27,17 @@ export const PlayButton: React.FC<PlayButtonProps> = ({
 }) => {
   return (
     <button
-      className={twMerge('hover:bg-selected rounded px-2 py-1 transition-colors', className)}
+      className={twMerge(
+        // ベーススタイル
+        'rounded px-2 py-1 transition-all duration-150 ease-out',
+        // ホバー（デスクトップ）
+        'hover:bg-selected',
+        // アクティブ（タップ時）
+        'active:bg-selected active:scale-95',
+        // フォーカス（キーボードナビゲーション）
+        'focus-visible:ring-2 focus-visible:outline-none',
+        className
+      )}
       onClick={onClick}
       aria-label={ariaLabel}
     >
