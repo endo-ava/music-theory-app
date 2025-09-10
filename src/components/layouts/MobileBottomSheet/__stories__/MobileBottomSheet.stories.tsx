@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, expect } from '@storybook/test';
-import { MobileInteractionWrapper } from '../components/MobileInteractionWrapper';
+import { MobileTwoColumnProvider } from '@/components/layouts/MobileTwoColumnLayout';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 
-const meta: Meta<typeof MobileInteractionWrapper> = {
+const meta: Meta<typeof MobileTwoColumnProvider> = {
   title: 'Components/Layouts/MobileBottomSheet',
-  component: MobileInteractionWrapper,
+  component: MobileTwoColumnProvider,
   parameters: {
     layout: 'fullscreen',
     backgrounds: {

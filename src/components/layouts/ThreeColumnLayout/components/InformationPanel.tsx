@@ -14,7 +14,7 @@ export const InformationPanel: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <aside
       className={twMerge(
-        'bg-card border-border overflow-y-auto rounded-lg border p-6 backdrop-blur-sm',
+        'bg-card border-border overflow-y-auto rounded-lg border p-2 backdrop-blur-sm md:p-6',
         className
       )}
       aria-label="情報パネル"

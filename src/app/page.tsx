@@ -24,7 +24,7 @@ export default function Home() {
       <ThreeColumnLayout className="hidden h-[var(--content-height-full)] p-6 md:flex" />
 
       {/* モバイル： 2分割レイアウト */}
-      <MobileTwoColumnLayout className="flex-1 md:hidden" />
+      <MobileTwoColumnLayout className="h-dvh md:hidden" />
     </>
   );
 }
