@@ -10,7 +10,7 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
       <table
         data-slot="table"
         className={cn(
-          'border-secondary-foreground w-full caption-bottom [border-collapse:separate] border-spacing-0 rounded border text-sm',
+          'border-secondary-foreground w-full caption-bottom border-separate border-spacing-0 rounded border text-sm',
           className
         )}
         {...props}
