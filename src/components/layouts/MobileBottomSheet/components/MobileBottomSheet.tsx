@@ -40,15 +40,15 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
 }) => {
   return (
     <VaulDrawer.Root
-      shouldScaleBackground
+      shouldScaleBackground={false}
       dismissible={false}
       modal={false}
       activeSnapPoint={activeSnapPoint}
       setActiveSnapPoint={setActiveSnapPoint}
       snapPoints={[SNAP_POINTS.LOWEST, SNAP_POINTS.HALF, SNAP_POINTS.EXPANDED]}
-      closeThreshold={0.25} // ドローワーの高さの25%がドラッグされると閉じる
-      scrollLockTimeout={0} // スクロールロックが適用されるまでの遅延時間（背景スクロール防止）
-      preventScrollRestoration={true} // ボトムシート閉じる際のスクロール位置復元を防ぐ
+      closeThreshold={0.35} // RemoveScrollとの組み合わせで適切な閾値に調整
+      scrollLockTimeout={50} // RemoveScrollとの協調のため最小限の遅延
+      preventScrollRestoration={true} // RemoveScrollとの組み合わせで安定化
       defaultOpen
     >
       <VaulDrawer.Portal>
@@ -89,8 +89,13 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             </div>
           </div>
 
-          {/* コンテンツエリア */}
-          <RemoveScroll as="div" className="flex-1 overflow-y-auto p-6">
+          {/* コンテンツエリア - 条件付きRemoveScrollで背景スクロールを適切に制御 */}
+          <RemoveScroll
+            enabled={activeSnapPoint !== SNAP_POINTS.LOWEST}
+            allowPinchZoom
+            as="div"
+            className="flex-1 overflow-y-auto p-6"
+          >
             <ControllerPanel />
           </RemoveScroll>
         </VaulDrawer.Content>
