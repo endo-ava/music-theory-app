@@ -107,6 +107,8 @@
 
   /* ヘッダーレイアウト */
   --header-height-min: 3rem;
+  --header-height-actual: calc(var(--header-height-min) + 2rem); /* min-height + py-4 */
+  --content-height-full: calc(100dvh - var(--header-height-actual));
 }
 
 /* ベーススタイル */

@@ -1,21 +1,3 @@
-import { Tab } from '../types';
-
-/**
- * ボトムシートのタブナビゲーション定義
- *
- * @description
- * モバイルボトムシート内で表示されるタブの設定。
- * 各タブには一意のIDとユーザーに表示されるラベルが含まれます。
- *
- * @constant TABS
- * @type {Tab[]}
- */
-export const TABS: Tab[] = [
-  { id: 'layer', label: 'Layer' },
-  { id: 'info', label: 'info' },
-  { id: 'view', label: 'View' },
-];
-
 /**
  * ボトムシートのスナップポイント設定
  *
@@ -27,10 +9,10 @@ export const TABS: Tab[] = [
  * @readonly
  */
 export const SNAP_POINTS = {
-  /** 最小化状態：画面の6%の高さに表示 */
-  LOWEST: 0.06,
-  /** 中間状態：画面の40%の高さに表示  */
-  HALF: 0.4,
-  /** 展開状態：画面の90%の高さに表示 */
-  EXPANDED: 0.9,
+  /** 最小化状態：画面の8%の高さに表示（視認性改善） */
+  LOWEST: 0.08,
+  /** 中間状態：画面の50%の高さに表示（真の中央） */
+  HALF: 0.5,
+  /** 展開状態：画面の85%の高さに表示（操作しやすい高さ） */
+  EXPANDED: 0.85,
 } as const;

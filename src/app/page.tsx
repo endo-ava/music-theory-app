@@ -9,7 +9,9 @@ import { MobileTwoColumnLayout } from '@/components/layouts/MobileTwoColumnLayou
  * - デスクトップ：3分割レイアウト（Canvas中央 + Controller左 + Information右）
  * - モバイル：2分割レイアウト（Canvas上 + Information下） + BottomSheet（Controller）
  *
- * アーキテクチャ設計：
+ * レイアウト設計：
+ * - ヘッダー高さを除いた残り全領域を3カラムで使用
+ * - --content-height-full CSS変数でヘッダーの実際の高さを動的に計算
  * - UI Container/Feature分離：モバイルレイアウトはlayouts配下で完全分離
  * - SSR活用：Push Client Components to the leaves
  *
@@ -17,14 +19,12 @@ import { MobileTwoColumnLayout } from '@/components/layouts/MobileTwoColumnLayou
  */
 export default function Home() {
   return (
-    <div className="flex h-[calc(100dvh-var(--header-height-min))] flex-col">
-      <main className="flex-1">
-        {/* デスクトップ：3分割レイアウト */}
-        <ThreeColumnLayout className="hidden p-6 md:flex" />
+    <>
+      {/* デスクトップ：3分割レイアウト */}
+      <ThreeColumnLayout className="hidden h-[var(--content-height-full)] p-6 md:flex" />
 
-        {/* モバイル： 2分割レイアウト */}
-        <MobileTwoColumnLayout className="md:hidden" />
-      </main>
-    </div>
+      {/* モバイル： 2分割レイアウト */}
+      <MobileTwoColumnLayout className="h-dvh md:hidden" />
+    </>
   );
 }

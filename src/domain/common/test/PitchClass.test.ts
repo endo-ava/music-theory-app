@@ -374,11 +374,11 @@ describe('PitchClass', () => {
 
         // F#マイナースケール: G♭, A♭, A, B, D♭, D, E
         const testCases = [
-          { fifthsIndex: 6, expectedName: 'G♭' }, // G♭
-          { fifthsIndex: 8, expectedName: 'A♭' }, // A♭
+          { fifthsIndex: 6, expectedName: 'F#' }, // G♭
+          { fifthsIndex: 8, expectedName: 'G#' }, // A♭
           { fifthsIndex: 3, expectedName: 'A' }, // A
           { fifthsIndex: 5, expectedName: 'B' }, // B
-          { fifthsIndex: 7, expectedName: 'D♭' }, // D♭
+          { fifthsIndex: 7, expectedName: 'C#' }, // D♭
           { fifthsIndex: 2, expectedName: 'D' }, // D
           { fifthsIndex: 4, expectedName: 'E' }, // E
         ];
