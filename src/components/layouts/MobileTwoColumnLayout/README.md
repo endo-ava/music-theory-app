@@ -77,8 +77,6 @@ src/components/layouts/MobileTwoColumnLayout/
 ├── components/                               # コンポーネント群
 │   ├── MobileTwoColumnLayout.tsx            # メインコンポーネント
 │   └── MobileBottomSheetProvider.tsx        # プロバイダーコンポーネント
-├── hooks/                                    # カスタムフック
-│   └── useMobileBottomSheet.ts              # BottomSheet状態管理
 └── index.ts                                  # エクスポート統合
 ```
 
@@ -107,12 +105,15 @@ interface MobileTwoColumnLayoutProps extends ClassNameProps {
   /** カスタムクラス名 */
   className?: string;
 }
+
+// 注意：MobileTwoColumnLayoutは実際にはpropsを受け取らず、
+// 内部で固定的にCanvasコンポーネントとInformationPanelを使用します
 ```
 
-#### MobileBottomSheetProvider
+#### MobileTwoColumnProvider
 
 ```typescript
-interface MobileBottomSheetProviderProps extends ClassNameProps {
+interface MobileTwoColumnProviderProps extends ClassNameProps {
   /** 上部パネルコンテンツ - メイン表示エリア (Canvas) */
   topPanel: React.ReactNode;
 
@@ -128,16 +129,16 @@ interface MobileBottomSheetProviderProps extends ClassNameProps {
 
 #### ローカル状態 (useMobileBottomSheet)
 
+MobileTwoColumnProviderは、MobileBottomSheetパッケージの`useMobileBottomSheet`フックを使用してBottomSheetの状態を管理します。
+
 ```typescript
-interface MobileBottomSheetState {
+// @/components/layouts/MobileBottomSheet からインポート
+interface UseMobileBottomSheetReturn {
   // BottomSheetのスナップポイント状態
   activeSnapPoint: number | string | null;
 
   // スナップポイント設定関数
   setActiveSnapPoint: (point: number | string | null) => void;
-
-  // 背景クリック処理
-  handleBackgroundClick: () => void;
 }
 ```
 
@@ -161,6 +162,7 @@ import { MobileTwoColumnLayout } from '@/components/layouts/MobileTwoColumnLayou
 function MobileApp() {
   return (
     <div className="h-screen">
+      {/* MobileTwoColumnLayoutは内部でCanvasとInformationPanelを固定で使用 */}
       <MobileTwoColumnLayout className="bg-background" />
     </div>
   );
@@ -177,6 +179,24 @@ function CustomMobileLayout() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <MobileTwoColumnLayout className="mx-auto max-w-md shadow-lg" />
     </div>
+  );
+}
+```
+
+### Provider パターンでの直接使用
+
+```tsx
+import { MobileTwoColumnProvider } from '@/components/layouts/MobileTwoColumnLayout';
+import { Canvas } from '@/components/layouts/Canvas';
+import { InformationPanel } from '@/components/layouts/ThreeColumnLayout/components/InformationPanel';
+
+function CustomProviderExample() {
+  return (
+    <MobileTwoColumnProvider
+      className="custom-layout"
+      topPanel={<Canvas />}
+      bottomPanel={<InformationPanel />}
+    />
   );
 }
 ```
