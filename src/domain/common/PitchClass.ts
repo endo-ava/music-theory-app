@@ -51,6 +51,13 @@ export class PitchClass {
   public static readonly ASharp = new PitchClass('A#', 'B♭', 10, 10);
   public static readonly B = new PitchClass('B', 'B', 11, 5);
 
+  /**
+   * Circle of Fifths ordered pitch class array
+   *
+   * This ordering follows the Circle of Fifths progression (C-G-D-A-E-B-F#-C#-G#-D#-A#-F)
+   * rather than chromatic ordering, which is essential for music theory calculations
+   * and chord progression analysis.
+   */
   public static readonly ALL_PITCH_CLASSES = [
     PitchClass.C,
     PitchClass.G,

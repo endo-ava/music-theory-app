@@ -43,6 +43,7 @@ export const MobileTwoColumnProvider: React.FC<MobileTwoColumnProviderProps> = (
         <div className="min-h-[300px]">{topPanel}</div>
 
         {/* Bottom: Information Panel - スクロール可能（SSR） */}
+        {/* overflow-y-visible: Prevents individual scrolling conflicts with MobileBottomSheet scroll behavior */}
         <div className="min-h-[200px] flex-1 overflow-y-visible px-4">{bottomPanel}</div>
       </div>
 

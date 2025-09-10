@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { SNAP_POINTS } from '../constants';
 
 /**
@@ -15,23 +15,8 @@ export const useMobileBottomSheet = () => {
     SNAP_POINTS.LOWEST
   );
 
-  // 背景スクロール制御：ボトムシート展開時は背景スクロールを無効化
-  useEffect(() => {
-    const body = document.body;
-
-    if (activeSnapPoint === SNAP_POINTS.LOWEST) {
-      // 最小化時：背景スクロール有効化
-      body.style.overflow = 'auto';
-    } else {
-      // 展開時：背景スクロール無効化（五度圏クリックは modal=false により可能）
-      body.style.overflow = 'hidden';
-    }
-
-    // クリーンアップ：コンポーネントアンマウント時に元に戻す
-    return () => {
-      body.style.overflow = 'auto';
-    };
-  }, [activeSnapPoint]);
+  // 背景スクロール制御は完全にRemoveScrollに委譲
+  // 手動制御による競合を避けるため、ここでのDOM操作は行わない
 
   return {
     activeSnapPoint,
