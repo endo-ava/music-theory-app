@@ -15,7 +15,7 @@ describe('currentKeyStore', () => {
   it('初期状態はC Majorキーである', () => {
     const { result } = renderHook(() => useCurrentKeyStore());
 
-    expect(result.current.currentKey.tonic.sharpName).toBe('C');
+    expect(result.current.currentKey.centerPitch.sharpName).toBe('C');
     expect(result.current.currentKey.isMajor).toBe(true);
     expect(result.current.currentKey.keyName).toBe('C Major');
   });
@@ -28,7 +28,7 @@ describe('currentKeyStore', () => {
       result.current.setCurrentKey(newKey);
     });
 
-    expect(result.current.currentKey.tonic.sharpName).toBe('G');
+    expect(result.current.currentKey.centerPitch.sharpName).toBe('G');
     expect(result.current.currentKey.isMajor).toBe(true);
     expect(result.current.currentKey.keyName).toBe('G Major');
   });
@@ -45,14 +45,14 @@ describe('currentKeyStore', () => {
       result.current.setCurrentKey(Key.fromCircleOfFifths(4, false)); // E Minor
     });
 
-    expect(result.current.currentKey.tonic.sharpName).toBe('E');
+    expect(result.current.currentKey.centerPitch.sharpName).toBe('E');
 
     // デフォルトにリセット
     act(() => {
       result.current.resetToDefault();
     });
 
-    expect(result.current.currentKey.tonic.sharpName).toBe('C');
+    expect(result.current.currentKey.centerPitch.sharpName).toBe('C');
     expect(result.current.currentKey.isMajor).toBe(true);
   });
 

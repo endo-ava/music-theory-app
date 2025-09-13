@@ -1,7 +1,7 @@
 import { Interval } from './Interval';
 
 // スケールパターンの基本的な性質を定義する型
-type ScaleQuality = 'major' | 'minor' | 'diminished' | 'other';
+export type ScaleQuality = 'major' | 'minor' | 'diminished' | 'other';
 
 /**
  * 音階の設計図（インターバルパターン）を表現する値オブジェクト

@@ -7,7 +7,6 @@ import { Key, KeyDTO } from '@/domain/key';
 import { Chord } from '@/domain/chord';
 import { PitchClass } from '@/domain/common/PitchClass';
 import { Note } from '@/domain/common/Note';
-import { ScalePattern } from '@/domain/common/ScalePattern';
 import { ChordPattern } from '@/domain/common/ChordPattern';
 
 // ストーリー用ヘルパー関数：C Majorキー内でのコードの正しい位置を計算
@@ -150,7 +149,7 @@ export const WithSelectedChord: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Gコードを選択状態に設定
@@ -217,7 +216,7 @@ export const WithMinorChord: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Aminorコードを選択状態に設定
@@ -267,7 +266,7 @@ export const WithDiminishedChord: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Bdimコードを選択状態に設定
@@ -321,7 +320,7 @@ export const DifferentKeyContext: Story = {
   decorators: [
     Story => {
       // A minorキーを設定
-      const aMinorKey = new Key(PitchClass.A, ScalePattern.Aeolian);
+      const aMinorKey = Key.minor(PitchClass.A);
       useCurrentKeyStore.getState().setCurrentKey(aMinorKey);
 
       // Gコードを選択状態に設定
@@ -366,7 +365,7 @@ export const AccessibilityTest: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Cコードを選択状態に設定

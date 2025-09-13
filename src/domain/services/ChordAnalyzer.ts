@@ -1,4 +1,4 @@
-import { Key, ScalePattern } from '..';
+import { Key } from '..'; // Removed ScalePattern - using Key factory methods now;
 import { Chord } from '../chord';
 import { Interval, Note, PitchClass } from '../common';
 
@@ -180,7 +180,7 @@ export function printAnalysis(
 ) {
   const gravity = analyzer.calculateGravity(chord, keyRoot);
   const inertia = analyzer.calculateInertia(chord, nextChord);
-  const cMajar = new Key(PitchClass.C, ScalePattern.Major);
+  const cMajar = Key.major(PitchClass.C);
 
   console.log(
     `--- Analysis for Chord [${chord.getNameFor(cMajar)}] in Key [${keyRoot.sharpName}] ---`

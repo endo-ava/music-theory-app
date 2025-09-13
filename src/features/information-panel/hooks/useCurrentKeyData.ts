@@ -36,7 +36,7 @@ export const useCurrentKeyData = () => {
   /**
    * ダイアトニックコード情報配列
    */
-  const diatonicChords = useMemo(() => currentKey.diatonicChords, [currentKey]);
+  const diatonicChords = useMemo(() => currentKey.getDiatonicChordsInfo(), [currentKey]);
 
   /**
    * 関連調情報

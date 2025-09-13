@@ -9,7 +9,6 @@ import { ChordPattern } from '../../common';
 import { Note } from '../../common/Note';
 import { PitchClass } from '../../common/PitchClass';
 import { Key } from '../../key';
-import { ScalePattern } from '../../common/ScalePattern';
 
 describe('Chord', () => {
   describe('コンストラクタ（ファクトリメソッド経由）', () => {
@@ -83,9 +82,7 @@ describe('Chord', () => {
       const keyDTO = { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true };
       const chord = Chord.fromKeyDTO(keyDTO); // C major
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'C'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('C');
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'E4', 'G4']);
     });
 
@@ -93,9 +90,7 @@ describe('Chord', () => {
       const keyDTO = { shortName: 'Am', keyName: 'A Minor', fifthsIndex: 3, isMajor: false }; // A minor
       const chord = Chord.fromKeyDTO(keyDTO);
 
-      expect(
-        chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian))
-      ).toBe('Am');
+      expect(chord.getNameFor(Key.minor(PitchClass.fromCircleOfFifths(3)))).toBe('Am');
       expect(chord.getNotes().map(note => note.toString)).toEqual(['A4', 'C5', 'E5']);
     });
   });
@@ -136,9 +131,7 @@ describe('Chord', () => {
 
       const chord = Chord.fromNotes(constituentNotes);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'C'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('C');
       expect(chord.quality).toEqual(ChordPattern.MajorTriad);
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'E4', 'G4']);
     });
@@ -152,9 +145,7 @@ describe('Chord', () => {
 
       const chord = Chord.fromNotes(constituentNotes);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'Cm'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('Cm');
       expect(chord.quality).toEqual(ChordPattern.MinorTriad);
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'D#4', 'G4']);
     });
@@ -169,9 +160,7 @@ describe('Chord', () => {
 
       const chord = Chord.fromNotes(constituentNotes);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'C7'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('C7');
       expect(chord.quality).toEqual(ChordPattern.DominantSeventh);
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'E4', 'G4', 'A#4']);
     });
@@ -185,9 +174,7 @@ describe('Chord', () => {
 
       const chord = Chord.fromNotes(constituentNotes);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'Cdim'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('Cdim');
       expect(chord.quality).toEqual(ChordPattern.DiminishedTriad);
     });
 
@@ -217,9 +204,7 @@ describe('Chord', () => {
       const rootNote = new Note(rootPitch, 4);
       const chord = Chord.from(rootNote, ChordPattern.MajorSeventh);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'Cmaj7'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('Cmaj7');
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'E4', 'G4', 'B4']);
       expect(chord.constituentNotes.length).toBe(4);
     });
@@ -229,9 +214,7 @@ describe('Chord', () => {
       const rootNote = new Note(rootPitch, 4);
       const chord = Chord.from(rootNote, ChordPattern.MinorSeventh);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'Cm7'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('Cm7');
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'D#4', 'G4', 'A#4']);
       expect(chord.constituentNotes.length).toBe(4);
     });
@@ -241,9 +224,7 @@ describe('Chord', () => {
       const rootNote = new Note(rootPitch, 4);
       const chord = Chord.from(rootNote, ChordPattern.DiminishedTriad);
 
-      expect(chord.getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))).toBe(
-        'Cdim'
-      );
+      expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('Cdim');
       expect(chord.getNotes().map(note => note.toString)).toEqual(['C4', 'D#4', 'F#4']);
       expect(chord.constituentNotes.length).toBe(3);
     });
@@ -384,18 +365,10 @@ describe('Chord', () => {
       ];
       const progression = keyDTOs.map(keyDTO => Chord.fromKeyDTO(keyDTO));
 
-      expect(
-        progression[0].getNameFor(new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major))
-      ).toBe('C');
-      expect(
-        progression[1].getNameFor(new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian))
-      ).toBe('Am');
-      expect(
-        progression[2].getNameFor(new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major))
-      ).toBe('F');
-      expect(
-        progression[3].getNameFor(new Key(PitchClass.fromCircleOfFifths(1), ScalePattern.Major))
-      ).toBe('G');
+      expect(progression[0].getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('C');
+      expect(progression[1].getNameFor(Key.minor(PitchClass.fromCircleOfFifths(3)))).toBe('Am');
+      expect(progression[2].getNameFor(Key.major(PitchClass.fromCircleOfFifths(11)))).toBe('F');
+      expect(progression[3].getNameFor(Key.major(PitchClass.fromCircleOfFifths(1)))).toBe('G');
     });
   });
 });
