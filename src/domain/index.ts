@@ -9,6 +9,7 @@ export * from './common';
 export * from './scale';
 export * from './chord';
 export * from './key';
+export * from './modal-context';
 
 // サービス
 export * from './services';

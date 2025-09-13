@@ -1,16 +1,30 @@
-import { Interval, PitchClass, ScalePattern } from '../common';
+import { Interval, PitchClass, ScalePattern, ScaleQuality } from '../common';
 import { Scale } from '../scale';
 import { Chord } from '../chord';
 import { ChordPattern } from '../common';
+import type { IAnalysisResult, IMusicalContext } from '../common/IMusicalContext';
 
 /** 調号 */
 type keySignature = 'sharp' | 'flat' | 'natural';
+
+/** 和声機能（調性音楽における） */
+type Function = 'Tonic' | 'Dominant' | 'Subdominant' | 'Other';
+
+/** keyの品質（major or minor） */
+type KeyQuality = Omit<ScaleQuality, 'diminished' | 'other'>;
 
 /** ディグリー情報の戻り値型 */
 type DegreeResult = {
   degree: number;
   degreeName: string;
 };
+
+/**
+ * 調性的分析結果
+ */
+interface TonalChordAnalysisResult extends IAnalysisResult {
+  function: Function | null;
+}
 
 /** ノンダイアトニック音のディグリーネームマップの型 */
 type NonDiatonicDegreeMap = Record<string, Record<number, string>>;
@@ -23,32 +37,28 @@ export interface KeyDTO {
   isMajor: boolean;
 }
 
-// そのKeyにおけるChord分析結果
-export interface ChordAnalysisResult {
-  /** ローマ数字表記のディグリーネーム（例: "III", "bV7", "#ivø"） */
-  romanDegreeName: string;
-  /** このコードがダイアトニックコードか */
-  isDiatonic: boolean;
-  /** ダイアトニックである場合にのみ、その機能を持つ */
-  function: 'Tonic' | 'Dominant' | 'Subdominant' | 'Other' | null;
-}
-
-// ダイアトニックコードの情報を保持する型
-export interface DiatonicChordInfo extends ChordAnalysisResult {
-  chord: Chord;
-}
-
 /**
- * 調性を表現する集約（Aggregate Root）
- * 和声機能（Harmonic Function）に関する知識と責務を持つ
+ * Key（調性）集約
+ *
+ * 音楽の調性（キー）を表現する集約ルート。IMusicalContextを実装し、
+ * 機能和声（Functional Harmony）のルールセットに基づき、音楽の調性的な文脈と機能的関係性を管理する。
+ * 特定のPitchClassをトニック（主音）とするメジャー・マイナー調性を管理し、
+ * ダイアトニック和音の生成、和声機能分析、関連調の導出などの責務を持つ。
+ *
+ * 音楽理論的背景:
+ * - メジャー、またはマイナー（和声的短音階を含む）スケールに限定される
+ * - 調的重力場（Tonal Gravity）の概念
+ * - ダイアトニック和音の機能（トニック、ドミナント、サブドミナント）
+ * - 関係調（平行調・同主調・属調・下属調）の体系
  */
-export class Key {
-  public readonly tonic: PitchClass;
+export class Key implements IMusicalContext<TonalChordAnalysisResult> {
+  public readonly centerPitch: PitchClass;
   public readonly scale: Scale;
+  public readonly keyQuality: KeyQuality;
   /** 調号，五度圏の右側がシャープ */
   public readonly keySignature: keySignature;
   // Keyのダイアトニックコード情報をキャッシュ 最初は空
-  private _diatonicChordsCache: readonly DiatonicChordInfo[] | null = null;
+  private _diatonicChordsCache: readonly Chord[] | null = null;
 
   // === 静的定数 ===
   // ローマ数字定数
@@ -104,18 +114,27 @@ export class Key {
   // === A. 基本構造 ===
 
   /**
-   * Keyを生成する
-   * @param tonic 主音となる音名
-   * @param scalePattern 主要なスケールパターン（例: Major, Aeolian）
+   * Keyを生成する（メジャー・マイナーのみサポート）
+   * 外部からの直接生成は禁止。ファクトリーメソッドを使用すること
+   * @param centerPitch 主音となる音名
+   * @param scalePattern Major または Aeolian のみ許可
+   * @throws {Error} Major/Aeolian以外が指定された場合
    */
-  constructor(tonic: PitchClass, scalePattern: ScalePattern) {
-    this.tonic = tonic;
-    this.scale = new Scale(tonic, scalePattern);
+  private constructor(centerPitch: PitchClass, scalePattern: ScalePattern) {
+    // メジャー・マイナーのみに制限
+    if (scalePattern !== ScalePattern.Major && scalePattern !== ScalePattern.Aeolian) {
+      throw new Error('Key supports only Major and Minor (Aeolian) scales');
+    }
+
+    this.centerPitch = centerPitch;
+    this.scale = new Scale(centerPitch, scalePattern);
+    this.keyQuality = this.scale.pattern.quality === 'major' ? 'major' : 'minor';
     // 五度圏でのシャープ系とフラット系の判定
     // C(0)からB(5)まではシャープ系、F#/G♭(6)からF(11)まではフラット系
-    const normalizedIndex = this.isMajor
-      ? this.tonic.fifthsIndex
-      : Key.normalizeIndex(this.tonic.fifthsIndex - 3);
+    const normalizedIndex =
+      this.keyQuality === 'major'
+        ? this.centerPitch.fifthsIndex
+        : Key.normalizeIndex(this.centerPitch.fifthsIndex - 3);
     this.keySignature = normalizedIndex < Key.SHARP_FLAT_BOUNDARY ? 'sharp' : 'flat';
   }
 
@@ -125,9 +144,9 @@ export class Key {
    */
   get keyName(): string {
     // 音楽理論慣習に従い、メジャーは♭表記、マイナーは#表記を使用
-    return this.scale.pattern.quality === 'major'
-      ? `${this.tonic.flatName} ${this.scale.pattern.name}`
-      : `${this.tonic.sharpName} ${this.scale.pattern.name}`;
+    return this.isMajor
+      ? `${this.centerPitch.flatName} ${this.scale.pattern.name}`
+      : `${this.centerPitch.sharpName} ${this.scale.pattern.name}`;
   }
 
   /**
@@ -135,24 +154,7 @@ export class Key {
    * @returns 短縮表記の調名
    */
   get shortName(): string {
-    const pattern = this.scale.pattern;
-    // 音楽理論慣習に従い、メジャーは♭表記、マイナーは#表記を使用
-    const tonicName = pattern.quality === 'major' ? this.tonic.flatName : this.tonic.sharpName;
-
-    // パターンの性質に基づいて分岐する
-    switch (pattern.quality) {
-      case 'major':
-        return tonicName;
-
-      case 'minor':
-        return `${tonicName}m`;
-
-      case 'diminished':
-        return `${tonicName}dim`;
-
-      default:
-        return `${tonicName} ${pattern.name}`;
-    }
+    return this.isMajor ? `${this.centerPitch.flatName}` : `${this.centerPitch.sharpName}m`;
   }
 
   /**
@@ -160,7 +162,7 @@ export class Key {
    * @returns メジャーキーかどうか
    */
   get isMajor(): boolean {
-    return this.scale.pattern.quality === 'major';
+    return this.keyQuality === 'major';
   }
 
   /**
@@ -178,16 +180,32 @@ export class Key {
   // === B. 静的ファクトリーメソッド・ユーティリティ ===
 
   /**
+   * メジャーキーを生成する便利なファクトリーメソッド
+   * @param centerPitch 主音となる音名
+   * @returns メジャーキーのインスタンス
+   */
+  static major(tonic: PitchClass): Key {
+    return new Key(tonic, ScalePattern.Major);
+  }
+
+  /**
+   * マイナーキーを生成する便利なファクトリーメソッド
+   * @param centerPitch 主音となる音名
+   * @returns マイナーキーのインスタンス
+   */
+  static minor(centerPitch: PitchClass): Key {
+    return new Key(centerPitch, ScalePattern.Aeolian);
+  }
+
+  /**
    * 五度圏インデックスからKeyを生成するファクトリーメソッド
    * @param circleIndex 五度圏インデックス (C=0, G=1, D=2, ..., F=5, Bb=6, Eb=7, ...)
    * @param isMajor メジャーキーかどうか（true: Major, false: 相対マイナー）
    * @returns 生成されたKeyインスタンス
    */
   static fromCircleOfFifths(circleIndex: number, isMajor: boolean): Key {
-    return new Key(
-      PitchClass.fromCircleOfFifths(circleIndex),
-      isMajor ? ScalePattern.Major : ScalePattern.Aeolian
-    );
+    const centerPitch = PitchClass.fromCircleOfFifths(circleIndex);
+    return isMajor ? Key.major(centerPitch) : Key.minor(centerPitch);
   }
 
   /**
@@ -215,41 +233,48 @@ export class Key {
 
   /**
    * このKeyのダイアトニックコード一覧を返す。計算は初回アクセス時に一度だけ実行。
-   * @returns ダイアトニックコード情報の配列（I, ii, iii, IV, V, vi, vii°など）
+   * @returns ダイアトニック和音の配列
    */
-  get diatonicChords(): readonly DiatonicChordInfo[] {
-    // 1. キャッシュが既に計算済みならそれを返す
+  get diatonicChords(): readonly Chord[] {
+    // キャッシュが既に計算済みならそれを返す
     if (this._diatonicChordsCache !== null) {
       return this._diatonicChordsCache;
     }
-    // 2. キャッシュが空ならここで初めて計算する
-    const calculatedChords: DiatonicChordInfo[] = this.scale
+    // キャッシュが空ならここで初めて計算する
+    const calculatedChords: Chord[] = this.scale
       .getNotes()
       .slice(0, 7)
-      .map((_, index) => {
-        const degree = index + 1;
-        const chord = this.getDiatonicChord(degree);
-        return {
-          chord,
-          romanDegreeName: chord.quality.getChordDegreeName(Key.getDegreeNameFromNumber(degree)),
-          isDiatonic: true,
-          function: this.deriveFunction(degree),
-        };
-      });
+      .map((_, index) => this.buildTriad(index + 1));
 
-    // 3. 計算結果をキャッシュに保存し、返す
+    // 計算結果をキャッシュに保存し、返す
     this._diatonicChordsCache = Object.freeze(calculatedChords);
     return this._diatonicChordsCache;
   }
 
   /**
-   * 指定された度数のダイアトニックコード（その調の音だけで作られる和音）を生成する
-   * スケール内の音で構成された三和音を返す
+   * このKeyのダイアトニックコードの情報一覧を返す
+   * @returns ダイアトニックコード情報の配列（I, ii, iii, IV, V, vi, vii°など）
+   */
+  getDiatonicChordsInfo(): (TonalChordAnalysisResult & { chord: Chord })[] {
+    return this.diatonicChords.map((chord, index) => {
+      const degree = index + 1;
+      return {
+        chord,
+        romanDegreeName: chord.quality.getChordDegreeName(Key.getDegreeNameFromNumber(degree)),
+        isDiatonic: true,
+        function: this.deriveFunction(degree),
+      };
+    });
+  }
+
+  /**
+   * 指定された度数のダイアトニック三和音を生成する
+   * スケール内の音で構成された三和音を返す（より音楽的な表現）
    * @param degree 度数（1から7）
    * @returns 対応するChord
    * @throws {Error} 度数が1-7の範囲外の場合
    */
-  getDiatonicChord(degree: number): Chord {
+  buildTriad(degree: number): Chord {
     if (degree < 1 || degree > 7) {
       throw new Error('度数は1から7の間で指定してください。');
     }
@@ -279,7 +304,7 @@ export class Key {
    * @returns メジャーキーのI、マイナーキーのiコード
    */
   getTonicChord(): Chord {
-    return this.getDiatonicChord(1);
+    return this.buildTriad(1);
   }
 
   /**
@@ -287,7 +312,7 @@ export class Key {
    * @returns メジャーキーのV、マイナーキーのVコード
    */
   getDominantChord(): Chord {
-    return this.getDiatonicChord(5);
+    return this.buildTriad(5);
   }
 
   /**
@@ -295,18 +320,18 @@ export class Key {
    * @returns メジャーキーのIV、マイナーキーのivコード
    */
   getSubdominantChord(): Chord {
-    return this.getDiatonicChord(4);
+    return this.buildTriad(4);
   }
 
   // === D. 分析・判定メソッド（外部向けAPI） ===
 
   /**
-   * あらゆるコードとこのKeyとの関係性を分析する
+   * あらゆるコードとこのKeyとの関係性を分析する（IMusicalContextインターフェース実装）
    * ダイアトニックコードかどうか、ローマ数字表記、和声機能を判定する
    * @param chordToAnalyze 分析したいChordオブジェクト
-   * @returns コード分析結果（ローマ数字、ダイアトニック判定、機能）
+   * @returns 調性的コード分析結果（ローマ数字、ダイアトニック判定、機能）
    */
-  public analyzeChord(chordToAnalyze: Chord): ChordAnalysisResult {
+  public analyzeChord(chordToAnalyze: Chord): TonalChordAnalysisResult {
     const degreeResult = this.analyzePitchClassInKey(chordToAnalyze.rootNote._pitchClass);
     const isDiatonic = this.isDiatonicChord(chordToAnalyze, degreeResult.degree);
 
@@ -361,8 +386,55 @@ export class Key {
   }
 
   /**
-   * 関連調を取得するメソッド
+   * 平行調（相対調）を取得する
+   * メジャーキーの場合は相対マイナー、マイナーキーの場合は相対メジャーを返す
+   * @returns 平行調のKeyインスタンス
+   */
+  public getRelativeKey(): Key {
+    const relativeCenterPitch = this.isMajor
+      ? PitchClass.fromCircleOfFifths(Key.normalizeIndex(this.centerPitch.fifthsIndex + 3))
+      : PitchClass.fromCircleOfFifths(Key.normalizeIndex(this.centerPitch.fifthsIndex - 3));
+
+    return this.isMajor ? Key.minor(relativeCenterPitch) : Key.major(relativeCenterPitch);
+  }
+
+  /**
+   * 同主調を取得する
+   * 同じトニックでメジャー・マイナーを切り替えた調
+   * @returns 同主調のKeyインスタンス
+   */
+  public getParallelKey(): Key {
+    return this.isMajor ? Key.minor(this.centerPitch) : Key.major(this.centerPitch);
+  }
+
+  /**
+   * 属調（ドミナント調）を取得する
+   * 五度圏で時計回りに1つ進んだ調
+   * @returns 属調のKeyインスタンス
+   */
+  public getDominantKey(): Key {
+    const dominantCenterPitch = PitchClass.fromCircleOfFifths(
+      Key.normalizeIndex(this.centerPitch.fifthsIndex + 1)
+    );
+    return this.isMajor ? Key.major(dominantCenterPitch) : Key.minor(dominantCenterPitch);
+  }
+
+  /**
+   * 下属調（サブドミナント調）を取得する
+   * 五度圏で反時計回りに1つ進んだ調
+   * @returns 下属調のKeyインスタンス
+   */
+  public getSubdominantKey(): Key {
+    const subdominantCenterPitch = PitchClass.fromCircleOfFifths(
+      Key.normalizeIndex(this.centerPitch.fifthsIndex - 1)
+    );
+    return this.isMajor ? Key.major(subdominantCenterPitch) : Key.minor(subdominantCenterPitch);
+  }
+
+  /**
+   * 関連調を一括取得するメソッド（後方互換性のため保持）
    * @returns 関連調の情報（平行調、同主調、属調、下属調）
+   * @deprecated 個別メソッド（getRelativeKey, getParallelKey等）の使用を推奨
    */
   public getRelatedKeys(): {
     relative: Key; // 平行調
@@ -370,24 +442,11 @@ export class Key {
     dominant: Key; // 属調
     subdominant: Key; // 下属調
   } {
-    const relativeTonic = this.isMajor
-      ? PitchClass.fromCircleOfFifths(Key.normalizeIndex(this.tonic.fifthsIndex + 3)) // メジャーの場合、+3で相対マイナー
-      : PitchClass.fromCircleOfFifths(Key.normalizeIndex(this.tonic.fifthsIndex - 3)); // マイナーの場合、-3で相対メジャー
-
-    const parallelPattern = this.isMajor ? ScalePattern.Aeolian : ScalePattern.Major;
-
-    const dominantTonic = PitchClass.fromCircleOfFifths(
-      Key.normalizeIndex(this.tonic.fifthsIndex + 1)
-    );
-    const subdominantTonic = PitchClass.fromCircleOfFifths(
-      Key.normalizeIndex(this.tonic.fifthsIndex - 1)
-    );
-
     return {
-      relative: new Key(relativeTonic, this.isMajor ? ScalePattern.Aeolian : ScalePattern.Major),
-      parallel: new Key(this.tonic, parallelPattern),
-      dominant: new Key(dominantTonic, this.scale.pattern),
-      subdominant: new Key(subdominantTonic, this.scale.pattern),
+      relative: this.getRelativeKey(),
+      parallel: this.getParallelKey(),
+      dominant: this.getDominantKey(),
+      subdominant: this.getSubdominantKey(),
     };
   }
 
@@ -404,7 +463,7 @@ export class Key {
     if (degree < 1 || degree > 7) return false;
 
     try {
-      const diatonicChord = this.getDiatonicChord(degree);
+      const diatonicChord = this.buildTriad(degree);
       return diatonicChord.equals(chord);
     } catch {
       return false;
@@ -417,37 +476,19 @@ export class Key {
    * @param degree 度数（1-7）
    * @returns 和声機能（Tonic, Dominant, Subdominant, Other）
    */
-  private deriveFunction(degree: number): 'Tonic' | 'Dominant' | 'Subdominant' | 'Other' {
-    // メジャーキーとマイナーキーでの機能分類マッピング
-    const functionMappings = {
-      major: {
-        1: 'Tonic', // I
-        2: 'Subdominant', // ii (IVの代理)
-        3: 'Tonic', // iii (Iの代理)
-        4: 'Subdominant', // IV
-        5: 'Dominant', // V
-        6: 'Tonic', // vi (トニックマイナー)
-        7: 'Dominant', // vii° (Vの代理)
-      },
-      minor: {
-        1: 'Tonic', // i
-        2: 'Subdominant', // ii° (ivの代理)
-        3: 'Tonic', // III (iの代理)
-        4: 'Subdominant', // iv
-        5: 'Dominant', // v (弱い)
-        6: 'Subdominant', // VI (iv系)
-        7: 'Dominant', // VII
-      },
-    } as const;
+  private deriveFunction(degree: number): Function {
+    if (degree < 1 || degree > 7) return 'Other';
 
-    const keyType = this.isMajor ? 'major' : 'minor';
-    const functionMap = functionMappings[keyType];
-
-    if (degree >= 1 && degree <= 7) {
-      type DegreeKey = keyof typeof functionMap;
-      return functionMap[degree as DegreeKey];
-    }
-    return 'Other';
+    const majorFunctions: Record<number, Function> = {
+      1: 'Tonic', // I
+      2: 'Subdominant', // ii (IVの代理)
+      3: 'Tonic', // iii (Iの代理)
+      4: 'Subdominant', // IV
+      5: 'Dominant', // V
+      6: this.isMajor ? 'Tonic' : 'Subdominant', // vi (トニックマイナー) / VI (iv系)
+      7: 'Dominant', // vii° (Vの代理)
+    };
+    return majorFunctions[degree];
   }
 
   // === F. シリアライゼーション ===
@@ -460,7 +501,7 @@ export class Key {
     return {
       shortName: this.shortName,
       keyName: this.keyName,
-      fifthsIndex: this.tonic.fifthsIndex,
+      fifthsIndex: this.centerPitch.fifthsIndex,
       isMajor: this.isMajor,
     };
   }
