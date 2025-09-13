@@ -479,7 +479,7 @@ export class Key implements IMusicalContext<TonalChordAnalysisResult> {
   private deriveFunction(degree: number): Function {
     if (degree < 1 || degree > 7) return 'Other';
 
-    const majorFunctions: Record<number, Function> = {
+    const functions: Record<number, Function> = {
       1: 'Tonic', // I
       2: 'Subdominant', // ii (IVの代理)
       3: 'Tonic', // iii (Iの代理)
@@ -488,7 +488,7 @@ export class Key implements IMusicalContext<TonalChordAnalysisResult> {
       6: this.isMajor ? 'Tonic' : 'Subdominant', // vi (トニックマイナー) / VI (iv系)
       7: 'Dominant', // vii° (Vの代理)
     };
-    return majorFunctions[degree];
+    return functions[degree];
   }
 
   // === F. シリアライゼーション ===
