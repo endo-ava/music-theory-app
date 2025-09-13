@@ -180,17 +180,17 @@ export function printAnalysis(
 ) {
   const gravity = analyzer.calculateGravity(chord, keyRoot);
   const inertia = analyzer.calculateInertia(chord, nextChord);
-  const cMajar = Key.major(PitchClass.C);
+  const cMajor = Key.major(PitchClass.C);
 
   console.log(
-    `--- Analysis for Chord [${chord.getNameFor(cMajar)}] in Key [${keyRoot.sharpName}] ---`
+    `--- Analysis for Chord [${chord.getNameFor(cMajor)}] in Key [${keyRoot.sharpName}] ---`
   );
   console.log(`Tonal Gravity:`);
   console.log(`  - Tonic:       ${(gravity.tonic * 100).toFixed(1)}%`);
   console.log(`  - Subdominant: ${(gravity.subdominant * 100).toFixed(1)}%`);
   console.log(`  - Dominant:    ${(gravity.dominant * 100).toFixed(1)}%`);
   console.log(
-    `Voice-Leading Inertia (to [${nextChord.getNameFor(cMajar)}]): ${inertia.toFixed(3)}`
+    `Voice-Leading Inertia (to [${nextChord.getNameFor(cMajor)}]): ${inertia.toFixed(3)}`
   );
   console.log(`------------------------------------`);
 }

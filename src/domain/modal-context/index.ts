@@ -38,7 +38,7 @@ export class ModalContext implements IMusicalContext<IAnalysisResult> {
    * IMusicalContextインターフェース実装 - getDiatonicChords
    * 基本的なダイアトニック和音一覧を返す
    */
-  getDiatonicChords(): readonly Chord[] {
+  get diatonicChords(): readonly Chord[] {
     // 基本実装：スケールの各度数に対して三和音を生成
     const scaleNotes = this.scale.getNotes().slice(0, 7);
     const chords: Chord[] = [];

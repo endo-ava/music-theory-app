@@ -22,7 +22,7 @@ type DegreeResult = {
 /**
  * 調性的分析結果
  */
-interface TonalChordAnalysisResult extends IAnalysisResult {
+export interface TonalChordAnalysisResult extends IAnalysisResult {
   function: Function | null;
 }
 
