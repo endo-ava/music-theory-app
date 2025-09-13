@@ -45,8 +45,8 @@ export const SelectedElementInfo: React.FC<ClassNameProps> = ({ className }) => 
       {hasSelection && selectedChordInfo ? (
         <>
           {/* 上段：選択コード */}
-          <div className="border-border mb-2 border-b pb-2">
-            <div className="text-secondary-foreground -mb-2 text-xs">Selected Chord</div>
+          <div className="border-border mb-2 flex items-center justify-between">
+            <div className="text-secondary-foreground text-xs">Selected Chord</div>
             <div className="text-center">
               <PlayButton
                 onClick={handlePlaySelectedChord}
@@ -56,6 +56,8 @@ export const SelectedElementInfo: React.FC<ClassNameProps> = ({ className }) => 
                 {selectedChordInfo.chord.getNameForCircleOfFifth()}
               </PlayButton>
             </div>
+            {/* スペーサー */}
+            <div className="text-xs text-transparent">Selected Chord</div>
           </div>
 
           {/* 下段：テーブル形式での情報表示 */}

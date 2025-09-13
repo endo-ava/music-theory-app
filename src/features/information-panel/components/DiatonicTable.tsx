@@ -61,7 +61,7 @@ export const DiatonicTable: React.FC<DiatonicTableProps> = React.memo(
             {diatonicChords.map((chordInfo, index) => (
               <TableCell key={index}>
                 <PlayButton
-                  onClick={() => onPlayChord(chordInfo)}
+                  onClick={() => onPlayChord(chordInfo.chord)}
                   ariaLabel={`Play chord ${chordInfo.chord.getNameFor(currentKey)}`}
                   className="w-full"
                 >

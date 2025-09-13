@@ -1,7 +1,7 @@
 import { Interval } from './Interval';
 
 // コードパターンの基本的な性質を定義する型
-type ChordQuality = 'major' | 'minor' | 'diminished' | 'augmented' | 'other';
+export type ChordQuality = 'major' | 'minor' | 'diminished' | 'augmented' | 'other';
 
 /**
  * 和音の設計図（インターバルパターン）を表現する値オブジェクト

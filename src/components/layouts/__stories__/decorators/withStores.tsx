@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import type { Decorator } from '@storybook/react';
-import { PitchClass, ScalePattern } from '@/domain/common';
 import { Key } from '@/domain/key';
 import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
@@ -9,7 +8,7 @@ import { useCurrentKeyStore } from '@/stores/currentKeyStore';
  * テスト用の標準初期化設定
  */
 const TEST_INITIAL_STATE = {
-  key: new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major),
+  key: Key.fromCircleOfFifths(0, true),
   resetStores: true, // 各ストーリー実行前にストアをリセット
 } as const;
 

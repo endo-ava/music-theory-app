@@ -4,7 +4,6 @@ import { CurrentKeyInfo } from '../components/CurrentKeyInfo';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain/key';
 import { PitchClass } from '@/domain/common/PitchClass';
-import { ScalePattern } from '@/domain/common/ScalePattern';
 
 const meta: Meta<typeof CurrentKeyInfo> = {
   title: 'Features/InformationPanel/CurrentKeyInfo',
@@ -85,7 +84,7 @@ export const DifferentKey: Story = {
   decorators: [
     Story => {
       // G Majorキーに設定
-      const gMajorKey = new Key(PitchClass.G, ScalePattern.Major);
+      const gMajorKey = Key.major(PitchClass.G);
       useCurrentKeyStore.getState().setCurrentKey(gMajorKey);
 
       return (
@@ -126,7 +125,7 @@ export const MinorKey: Story = {
   decorators: [
     Story => {
       // A minorキーに設定
-      const aMinorKey = new Key(PitchClass.A, ScalePattern.Aeolian);
+      const aMinorKey = Key.minor(PitchClass.A);
       useCurrentKeyStore.getState().setCurrentKey(aMinorKey);
 
       return (

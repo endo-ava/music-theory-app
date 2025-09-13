@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { PitchClass } from '../PitchClass';
 import { Interval } from '../Interval';
 import { Key } from '../../key';
-import { ScalePattern } from '../ScalePattern';
 
 describe('PitchClass', () => {
   describe('基本プロパティ', () => {
@@ -196,7 +195,7 @@ describe('PitchClass', () => {
   describe('getNameFor メソッド', () => {
     describe('ダイアトニック音の表記', () => {
       it('正常ケース: Cメジャーキーでのダイアトニック音', () => {
-        const cMajorKey = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+        const cMajorKey = Key.major(PitchClass.fromCircleOfFifths(0));
 
         // Cメジャースケール: C, D, E, F, G, A, B
         const testCases = [
@@ -216,7 +215,7 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: G♭メジャーキー（flat系）でのダイアトニック音', () => {
-        const gFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(6), ScalePattern.Major);
+        const gFlatMajorKey = Key.major(PitchClass.fromCircleOfFifths(6));
 
         // G♭メジャースケール: G♭, A♭, B♭, C♭, D♭, E♭, F
         const testCases = [
@@ -236,7 +235,7 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: B♭メジャーキー（flat系）でのダイアトニック音', () => {
-        const bFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(10), ScalePattern.Major);
+        const bFlatMajorKey = Key.major(PitchClass.fromCircleOfFifths(10));
 
         // B♭メジャースケール: B♭, C, D, E♭, F, G, A
         const testCases = [
@@ -258,7 +257,7 @@ describe('PitchClass', () => {
 
     describe('ノンダイアトニック音の表記', () => {
       it('正常ケース: Cメジャーキーでのノンダイアトニック音（sharp表記）', () => {
-        const cMajorKey = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+        const cMajorKey = Key.major(PitchClass.fromCircleOfFifths(0));
 
         // ノンダイアトニック音: C♯, D♯, F♯, G♯, A♯
         const testCases = [
@@ -276,7 +275,7 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: Fメジャーキー（flat系）でのノンダイアトニック音（flat表記）', () => {
-        const fMajorKey = new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major);
+        const fMajorKey = Key.major(PitchClass.fromCircleOfFifths(11));
 
         // ノンダイアトニック音（flat表記を期待）
         const testCases = [
@@ -299,10 +298,10 @@ describe('PitchClass', () => {
         // D♭/C♯ の音（fifthsIndex: 7）
         const dbCsharpPitch = PitchClass.fromCircleOfFifths(7);
 
-        const gMajorKey = new Key(PitchClass.fromCircleOfFifths(1), ScalePattern.Major); // sharp系
-        const aMajorKey = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Major); // sharp系
-        const fMajorKey = new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major); // flat系
-        const bFlatMajorKey = new Key(PitchClass.fromCircleOfFifths(10), ScalePattern.Major); // flat系
+        const gMajorKey = Key.major(PitchClass.fromCircleOfFifths(1)); // sharp系
+        const aMajorKey = Key.major(PitchClass.fromCircleOfFifths(3)); // sharp系
+        const fMajorKey = Key.major(PitchClass.fromCircleOfFifths(11)); // flat系
+        const bFlatMajorKey = Key.major(PitchClass.fromCircleOfFifths(10)); // flat系
 
         // sharp系キーでは C# 表記
         expect(dbCsharpPitch.getNameFor(gMajorKey.keySignature)).toBe('C#');
@@ -314,8 +313,8 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: 複数のエンハーモニック音での表記確認', () => {
-        const gMajorKey = new Key(PitchClass.fromCircleOfFifths(1), ScalePattern.Major); // sharp系
-        const fMajorKey = new Key(PitchClass.fromCircleOfFifths(11), ScalePattern.Major); // flat系
+        const gMajorKey = Key.major(PitchClass.fromCircleOfFifths(1)); // sharp系
+        const fMajorKey = Key.major(PitchClass.fromCircleOfFifths(11)); // flat系
 
         const enharmoinicPairs = [
           { fifthsIndex: 7, sharpName: 'C#', flatName: 'D♭' },
@@ -335,7 +334,7 @@ describe('PitchClass', () => {
 
     describe('境界値・エッジケース', () => {
       it('正常ケース: 全ての五度圏ポジションでの表記確認', () => {
-        const cMajorKey = new Key(PitchClass.fromCircleOfFifths(0), ScalePattern.Major);
+        const cMajorKey = Key.major(PitchClass.fromCircleOfFifths(0));
 
         // 全ての五度圏ポジション（0-11）をテスト
         for (let i = 0; i < 12; i++) {
@@ -350,7 +349,7 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: Aマイナーキー（sharp系）でのダイアトニック音', () => {
-        const aMinorKey = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+        const aMinorKey = Key.minor(PitchClass.fromCircleOfFifths(3));
 
         // Aマイナースケール: A, B, C, D, E, F, G
         const testCases = [
@@ -370,7 +369,7 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: G♭マイナーキー（flat系）でのダイアトニック音', () => {
-        const fSharpMinorKey = new Key(PitchClass.fromCircleOfFifths(6), ScalePattern.Aeolian);
+        const fSharpMinorKey = Key.minor(PitchClass.fromCircleOfFifths(6));
 
         // F#マイナースケール: G♭, A♭, A, B, D♭, D, E
         const testCases = [
@@ -390,7 +389,7 @@ describe('PitchClass', () => {
       });
 
       it('正常ケース: マイナーキーでのノンダイアトニック音（sharp表記）', () => {
-        const aMinorKey = new Key(PitchClass.fromCircleOfFifths(3), ScalePattern.Aeolian);
+        const aMinorKey = Key.minor(PitchClass.fromCircleOfFifths(3));
 
         // Aマイナーキーのノンダイアトニック音（#表記を期待）
         const testCases = [

@@ -36,8 +36,8 @@ export const CurrentKeyInfo: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div className={twMerge('bg-card space-y-4 p-4', className)} aria-label="Selected Key">
       {/* キー情報ヘッダー */}
-      <div className="border-border mb-2 border-b pb-2">
-        <div className="text-secondary-foreground -mb-2 text-xs">Current Key</div>
+      <div className="border-border mb-2 flex items-center justify-between">
+        <div className="text-secondary-foreground text-xs">Current Key</div>
         <div className="text-center">
           <PlayButton
             onClick={() => handlePlayScale(currentKey)}
@@ -47,6 +47,8 @@ export const CurrentKeyInfo: React.FC<ClassNameProps> = ({ className }) => {
             {currentKey.keyName}
           </PlayButton>
         </div>
+        {/* スペーサー */}
+        <div className="text-xs text-transparent">Current Key</div>
       </div>
 
       {/* ダイアトニックスケール & コード */}

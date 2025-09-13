@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { AudioEngine } from '@/domain/services/AudioEngine';
 import { Chord } from '@/domain/chord';
-import { Note, Key, type DiatonicChordInfo } from '@/domain';
+import { Note, Key } from '@/domain';
 import { logAudioError } from '../utils';
 import type { AudioPlayHandler } from '../types';
 
@@ -25,9 +25,8 @@ export const useAudioPlayback = () => {
    * ChordオブジェクトまたはDiatonicChordInfoオブジェクトを受け取り、
    * 適切なコードオブジェクトを抽出してAudioEngineで再生する。
    */
-  const handlePlayChord = useCallback(async (chordOrInfo: Chord | DiatonicChordInfo) => {
+  const handlePlayChord = useCallback(async (chord: Chord) => {
     try {
-      const chord = 'chord' in chordOrInfo ? chordOrInfo.chord : chordOrInfo;
       await AudioEngine.play(chord);
     } catch (error) {
       logAudioError('コード再生', error);
