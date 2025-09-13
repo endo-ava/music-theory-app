@@ -41,7 +41,15 @@ export const useCurrentKeyData = () => {
   /**
    * 関連調情報
    */
-  const relatedKeys = useMemo<RelatedKeysInfo>(() => currentKey.getRelatedKeys(), [currentKey]);
+  const relatedKeys = useMemo<RelatedKeysInfo>(
+    () => ({
+      relative: currentKey.getRelativeKey(),
+      parallel: currentKey.getParallelKey(),
+      dominant: currentKey.getDominantKey(),
+      subdominant: currentKey.getSubdominantKey(),
+    }),
+    [currentKey]
+  );
 
   /**
    * 日本語音度名配列
