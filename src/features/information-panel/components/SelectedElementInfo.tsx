@@ -57,7 +57,9 @@ export const SelectedElementInfo: React.FC<ClassNameProps> = ({ className }) => 
               </PlayButton>
             </div>
             {/* スペーサー */}
-            <div className="text-xs text-transparent">Selected Chord</div>
+            <div className="text-xs text-transparent" aria-hidden="true">
+              Selected Chord
+            </div>
           </div>
 
           {/* 下段：テーブル形式での情報表示 */}
