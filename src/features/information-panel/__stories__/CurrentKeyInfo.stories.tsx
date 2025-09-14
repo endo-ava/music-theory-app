@@ -4,7 +4,6 @@ import { CurrentKeyInfo } from '../components/CurrentKeyInfo';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain/key';
 import { PitchClass } from '@/domain/common/PitchClass';
-import { ScalePattern } from '@/domain/common/ScalePattern';
 
 const meta: Meta<typeof CurrentKeyInfo> = {
   title: 'Features/InformationPanel/CurrentKeyInfo',
@@ -49,8 +48,10 @@ export const Default: Story = {
     await expect(keyInfoContainer).toBeInTheDocument();
 
     // Current Keyヘッダーが表示されることを確認
-    const currentKeyLabel = canvas.getByText('Current Key');
-    await expect(currentKeyLabel).toBeInTheDocument();
+    // 複数の "Current Key" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const currentKeyLabels = canvas.getAllByText('Current Key');
+    const visibleCurrentKeyLabel = currentKeyLabels.find(el => !el.getAttribute('aria-hidden'));
+    await expect(visibleCurrentKeyLabel).toBeInTheDocument();
 
     // キー名ボタンが表示され、クリック可能であることを確認
     const keyButton = canvas.getByRole('button', { name: /Play C Major Key/i });
@@ -85,7 +86,7 @@ export const DifferentKey: Story = {
   decorators: [
     Story => {
       // G Majorキーに設定
-      const gMajorKey = new Key(PitchClass.G, ScalePattern.Major);
+      const gMajorKey = Key.major(PitchClass.G);
       useCurrentKeyStore.getState().setCurrentKey(gMajorKey);
 
       return (
@@ -126,7 +127,7 @@ export const MinorKey: Story = {
   decorators: [
     Story => {
       // A minorキーに設定
-      const aMinorKey = new Key(PitchClass.A, ScalePattern.Aeolian);
+      const aMinorKey = Key.minor(PitchClass.A);
       useCurrentKeyStore.getState().setCurrentKey(aMinorKey);
 
       return (
@@ -237,7 +238,9 @@ export const ResponsiveTest: Story = {
     await expect(keyButton).toBeInTheDocument();
 
     // テキストが読みやすいサイズで表示されることを確認
-    const currentKeyLabel = canvas.getByText('Current Key');
-    await expect(currentKeyLabel).toBeInTheDocument();
+    // 複数の "Current Key" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const currentKeyLabels = canvas.getAllByText('Current Key');
+    const visibleCurrentKeyLabel = currentKeyLabels.find(el => !el.getAttribute('aria-hidden'));
+    await expect(visibleCurrentKeyLabel).toBeInTheDocument();
   },
 };

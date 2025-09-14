@@ -7,7 +7,6 @@ import { Key, KeyDTO } from '@/domain/key';
 import { Chord } from '@/domain/chord';
 import { PitchClass } from '@/domain/common/PitchClass';
 import { Note } from '@/domain/common/Note';
-import { ScalePattern } from '@/domain/common/ScalePattern';
 import { ChordPattern } from '@/domain/common/ChordPattern';
 
 // ストーリー用ヘルパー関数：C Majorキー内でのコードの正しい位置を計算
@@ -131,8 +130,12 @@ export const Default: Story = {
     await expect(placeholderText).toBeInTheDocument();
 
     // Selected Chordヘッダーや詳細テーブルが表示されないことを確認
-    const selectedChordLabel = canvas.queryByText('Selected Chord');
-    expect(selectedChordLabel).not.toBeInTheDocument();
+    // 複数の "Selected Chord" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を確認
+    const selectedChordLabels = canvas.queryAllByText('Selected Chord');
+    const visibleSelectedChordLabel = selectedChordLabels.find(
+      el => !el.getAttribute('aria-hidden')
+    );
+    expect(visibleSelectedChordLabel).toBeUndefined();
 
     const chordDetailsTable = canvas.queryByRole('table');
     expect(chordDetailsTable).not.toBeInTheDocument();
@@ -150,7 +153,7 @@ export const WithSelectedChord: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Gコードを選択状態に設定
@@ -171,8 +174,12 @@ export const WithSelectedChord: Story = {
     const canvas = within(canvasElement);
 
     // Selected Chordヘッダーが表示されることを確認
-    const selectedChordLabel = canvas.getByText('Selected Chord');
-    await expect(selectedChordLabel).toBeInTheDocument();
+    // 複数の "Selected Chord" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const selectedChordLabels = canvas.getAllByText('Selected Chord');
+    const visibleSelectedChordLabel = selectedChordLabels.find(
+      el => !el.getAttribute('aria-hidden')
+    );
+    await expect(visibleSelectedChordLabel).toBeInTheDocument();
 
     // Gコードのボタンが表示され、クリック可能であることを確認
     const chordButton = canvas.getByRole('button', { name: /Play G chord/i });
@@ -217,7 +224,7 @@ export const WithMinorChord: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Aminorコードを選択状態に設定
@@ -267,7 +274,7 @@ export const WithDiminishedChord: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Bdimコードを選択状態に設定
@@ -321,7 +328,7 @@ export const DifferentKeyContext: Story = {
   decorators: [
     Story => {
       // A minorキーを設定
-      const aMinorKey = new Key(PitchClass.A, ScalePattern.Aeolian);
+      const aMinorKey = Key.minor(PitchClass.A);
       useCurrentKeyStore.getState().setCurrentKey(aMinorKey);
 
       // Gコードを選択状態に設定
@@ -366,7 +373,7 @@ export const AccessibilityTest: Story = {
   decorators: [
     Story => {
       // C Majorキーを設定
-      const cMajorKey = new Key(PitchClass.C, ScalePattern.Major);
+      const cMajorKey = Key.major(PitchClass.C);
       useCurrentKeyStore.getState().setCurrentKey(cMajorKey);
 
       // Cコードを選択状態に設定
