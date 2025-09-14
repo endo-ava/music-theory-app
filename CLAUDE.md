@@ -1,66 +1,8 @@
-# CLAUDE.md
+# プロジェクト概要
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+本アプリケーションは、複雑な音楽理論の概念と、その相互関係を探求するための**インタラクティブ・ビジュアライゼーションツール**である。視覚的なグラフィック表現と聴覚的なフィードバックを組み合わせることで、抽象的な理論を具体的で感覚的な体験へと転換。
 
-## 🚨 重要：リンク先ドキュメントの必読
-
-**Claude Codeは、このファイル内のすべてのリンク先ドキュメントを必ず読み込むこと。**
-下記リンクがある箇所では、作業開始前に必ずリンク先のファイルをReadツールで読み込み、内容を把握してから作業を行うこと。
-
-### 必読ドキュメント一覧
-
-- `./docs/01.requirements.md` - 要件定義書
-- `./docs/02.screenDesign.md` - 画面設計書(全体)
-- `./docs/screenDesigns/` - 画面設計書(個別)
-- `./docs/03.developmentAgreement.md` - **開発規約（最重要）**
-- `./docs/04.domainSystem.md` - 音楽理論ドメイン設計
-- `.github/PULL_REQUEST_TEMPLATE.md` - PRテンプレート
-- `.github/ISSUE_TEMPLATE/` - Issueテンプレート群
-
-## プロジェクト概要
-
-音楽理論のインタラクティブ・ビジュアライゼーションアプリケーション。五度圏を中心としたUIで音楽理論の学習を支援する。
-
-詳しくは、必読ドキュメント一覧における、[要件定義書](./docs/01.requirements.md)を参照
-
-## 基本的な開発コマンド
-
-```bash
-# 開発サーバー起動（Turbopack使用）
-npm run dev
-
-# 本番ビルド
-npm run build
-
-# 本番サーバー起動
-npm start
-
-# リンター実行
-npm run lint
-
-# コードフォーマット
-npm run format
-
-# フォーマットチェック
-npm run format:check
-
-# 単体テスト実行
-npm run test:run
-
-# 単体テストカバレッジ率算出
-npm run test:coverage
-
-# Storybookテスト実行
-npm run test:storybook
-
-# 単体テストとStorybookテスト実行
-npm run test:all
-
-# Storybookビルド
-npm run build-storybook
-```
-
-## 技術スタック
+# 技術スタック
 
 - **フロントエンド**: Next.js 15.x (App Router) + React 19.x + TypeScript 5.x + Shadcn/ui
 - **スタイリング**: Tailwind CSS 4.x + clsx + tailwind-merge
@@ -69,171 +11,153 @@ npm run build-storybook
 - **音声処理**: Tone.js 15.x
 - **コード品質**: ESLint + Prettier + Husky + lint-staged
 
-## プロジェクト構造とアーキテクチャ
+# 主要な開発コマンド
 
-本プロジェクトは、複雑で豊かなドメイン知識を正確かつ堅牢にコードへ反映させるため、ドメイン駆動設計（DDD） の思想を全面的に採用している。
-
-音楽理論に関する中核的な概念（例: PitchClass, Interval, Scale, Chord, Keyなど）の定義や、それらの振る舞いに関するルールは、すべてこのドメイン層（src/domain ディレクトリ）に集約されている。
-
-音楽理論に関する仕様の確認や、機能追加を行う際は、まずこのドメイン層のモデルを参照すること。各ドメインオブジェクトの責務や関係性についての詳細は、別途[音楽理論ドメイン設計書](./docs/04.domainSystem.md)にまとめられている。
-
-### ディレクトリ構成
-
-```
-src/
-├── app/                       # Next.js App Router
-│   ├── page.tsx              # ルートページ
-│   ├── layout.tsx            # ルートレイアウト
-│   ├── library/              # ライブラリページ
-│   └── tutorial/             # チュートリアルページ
-├── components/               # UIコンテナ
-│   ├── layouts/              # レイアウト専用コンポーネント
-│   │   ├── SidePanel/        # サイドパネルレイアウト
-│   │   ├── Canvas/           # メイン表示エリアレイアウト
-│   │   ├── MobileBottomSheet/# モバイルボトムシートレイアウト
-│   │   └── GlobalHeader/     # グローバルヘッダーレイアウト
-│   └── ui/                   # shadcn/ui 用コンポーネント
-├── domain/                   # ドメイン
-│   ├── common/               # 共通の値オブジェクト
-│   │   ├── PitchClass.md     # ピッチクラスVO
-│   │   ├── Note.md           # NoteVO
-│   │   ├── Interval.md       # インターバルVO
-│   │   └── ScalePattern.md   # スケールパターンVO
-│   ├── scale/                # スケール集約
-│   ├── chord/                # コード集約
-│   ├── key/                  # キー集約
-│   └── services/             # ドメインサービス
-├── features/                 # 機能Feature
-│   ├── view-controller/      # Hub切り替え機能
-│   ├── circle-of-fifths/     # 五度圏機能
-│   │   ├── README.md         # コンポーネント設計書
-│   │   ├── index.ts          # エクスポート統合
-│   │   ├── components/       # UIコンポーネント
-│   │   ├── __stories__/      # Storybookストーリー
-│   │   ├── animations.ts     # アニメーション定義
-│   │   ├── constants/        # 定数定義
-│   │   ├── hooks/            # カスタムフック
-│   │   ├── store/            # 状態管理（Zustand）
-│   │   ├── types.ts          # ローカル型定義
-│   │   └── utils/            # ユーティリティ関数
-│   └── chromatic-circle/     # クロマチック機能
-├── shared/                   # 共通要素
-│   ├── components/           # 共通コンポーネント
-│   │   └── icons/          　# SVGアイコン
-│   ├── hooks/                # 共通フックス
-│   ├── constants/            # 共通定数
-│   ├── types/                # 共通型定義
-│   └── utils/                # 共通ユーティリティ
-├── stores/                   # グローバル状態管理
-└── test/                     # テスト設定
-docs/                         # 設計書・要件定義
+```bash
+npm run dev            # 開発サーバー起動
+npm run build          # 本番ビルド
+npm run lint           # リンター実行
+npm run test:run       # 単体テスト実行
+npm run test:storybook # Storybookテスト実行
+npm run test:all       # 全テスト実行
+npm run test:coverage  # 単体テストカバレッジ算出
 ```
 
-## 開発規約
+# ドキュメント体系
 
-**🚨 作業前に必ず読むこと：** [開発規約](./docs/03.developmentAgreement.md)
+## ドキュメントの意義とAIへの指針
 
-### PR/Issue作成時の規約
+本プロジェクトにおいて、ドキュメントは単なる記録ではなく、\*\*プロジェクトの思想と決定を写す「生きた設計図」**である。コードが「どのように(How)」を表現するのに対し、ドキュメントは**「なぜ(Why)」**と**「何を(What)」\*\*を記録する。これにより、将来の意思決定の質を高め、開発の一貫性と保守性を担保する。
 
-- ghコマンドでPRやIssueを作成する際は、以下の手順を厳守すること。
+**AI開発パートナーへの指針:**
+あなた（AI）は、このドキュメント体系の最も重要な利用者であり、同時に保守者でもある。以下の指針を常に念頭に置いて開発支援を行うこと。
 
-  1.  まず、リポジトリ内の適切なテンプレートファイル（`.github/` 以下にある `.md` ファイル）を探し、その内容を文字列として読み込む。
-  2.  ユーザーからの指示（修正内容やバグの詳細など）に基づいて、手順1で読み込んだテンプレート文字列の各項目を埋めた**完全な本文文字列**を生成する。
-  3.  `gh` コマンドを実行する際は、必ず `--body` オプションを使用し、手順2で生成した完全な本文文字列をすべて渡す。
-      （例: `gh issue create --title "..." --body "（ここにテンプレートを埋めた長い本文）"`）
+1.  **参照の徹底 (Read Before Write):** コード生成、リファクタリング、設計提案など、いかなる提案を行う前にも、必ず関連するドキュメントを深く読み込み、その内容を完全に尊重すること。ドキュメントは、プロジェクトにおける\*\*信頼できる唯一の情報源（Single Source of Truth）\*\*である。
+2.  **同期の維持 (Sync Code and Docs):** あなたの提案によって既存の設計や規約が変更される場合は、コードの変更提案と**同時にドキュメントの更新案を提示する**こと。コードとドキュメントの乖離は、プロジェクトの技術的負債となる。
+3.  **知識の集約 (Accumulate Knowledge):** 開発過程で得られた新たな知見や解決策、議論の末に決定された事項は、単なるチャットログで終わらせず、`docs/70.knowledge/` や関連ドキュメントへの追記を積極的に提案すること。あなたの支援を通じて、このプロジェクトの知識ベースを共に成長させることを期待する。
 
-- コード内のコメント、PR、Issue、Reviewなどは日本語で記述すること
-- commit messageは英語で記述すること
+## ドキュメント番号体系
 
-### ドキュメント更新規約
+各ドキュメントには4桁のドキュメント番号を付与し、カテゴリと内容を即座に識別できるようにしている。
 
-- PR作成前に、必要に応じてドキュメント(./docs)との整合性を確認し、ドキュメントを更新すること
-  - 基本ドキュメントはこちら: `./docs`
-  - 主要なコンポーネントのドキュメントはsrcの各階層に保存:
-    - Features: `./src/features/circle-of-fifths/README.md`
-    - UI Containers: `./src/components/layouts/SidePanel/README.md`
+**番号範囲**:
 
-### PRレビュー対応について
+- **00xx**: プロジェクト基本情報 (0001-0099)
+- **10xx**: ドメイン設計 (1001-1999)
+- **20xx**: 開発ガイドライン (2001-2999)
+- **30xx**: 品質・プロセス (3001-3999)
+- **70xx**: ナレッジベース (サブディレクトリで管理)
+- **80xx**: 日報 (日付ベース命名)
+- **99xx**: テンプレート (サブディレクトリで管理)
 
-- github copilot等からレビューをもらうことがあるが、これは必ずしも鵜呑みにするのではなく、対応方針を自身で判断すること。柔軟に考え、対応不要と判断してもよい。ただしその場合はその理由を伝えること
+例: `2003` = 開発ガイドライン分野の3番目のドキュメント
 
-### Playwright MCP スクリーンショット設定
+## ドキュメントインデックス（一覧）
 
-#### 基本方針
+| カテゴリ             | ファイル             | 相対パス                                                                                                                                                               |
+| -------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| プロジェクト基本情報 | 要件定義             | [`docs/00.project/0001.requirements.md`](docs/00.project/0001.requirements.md)                                                                                         |
+| プロジェクト基本情報 | 画面設計             | [`docs/00.project/0002.screenDesign.md`](docs/00.project/0002.screenDesign.md)                                                                                         |
+| プロジェクト基本情報 | Hub画面設計          | [`docs/00.project/screenDesigns/0003.hub.md`](docs/00.project/screenDesigns/0003.hub.md)                                                                               |
+| プロジェクト基本情報 | Library画面設計      | [`docs/00.project/screenDesigns/0004.library.md`](docs/00.project/screenDesigns/0004.library.md)                                                                       |
+| プロジェクト基本情報 | Tutorial画面設計     | [`docs/00.project/screenDesigns/0005.tutorial.md`](docs/00.project/screenDesigns/0005.tutorial.md)                                                                     |
+| ドメイン設計         | ドメインシステム     | [`docs/10.domain/1001.domainSystem.md`](docs/10.domain/1001.domainSystem.md)                                                                                           |
+| ドメイン設計         | 音楽理論ガイドブック | [`docs/10.domain/1002.music-theory-guidebook.md`](docs/10.domain/1002.music-theory-guidebook.md)                                                                       |
+| 開発ガイドライン     | 基本コーディング     | [`docs/20.development/2001.basic-coding.md`](docs/20.development/2001.basic-coding.md)                                                                                 |
+| 開発ガイドライン     | 開発原則・思想       | [`docs/20.development/2002.development-principles.md`](docs/20.development/2002.development-principles.md)                                                             |
+| 開発ガイドライン     | フロントエンド設計   | [`docs/20.development/2003.frontend-design.md`](docs/20.development/2003.frontend-design.md)                                                                           |
+| 開発ガイドライン     | アーキテクチャ       | [`docs/20.development/2004.architecture.md`](docs/20.development/2004.architecture.md)                                                                                 |
+| 品質・プロセス       | テスト               | [`docs/30.quality/3001.testing.md`](docs/30.quality/3001.testing.md)                                                                                                   |
+| 品質・プロセス       | Git・PR              | [`docs/30.quality/3002.git-pr.md`](docs/30.quality/3002.git-pr.md)                                                                                                     |
+| 品質・プロセス       | MCPツール活用        | [`docs/30.quality/3003.mcp-tools-usage.md`](docs/30.quality/3003.mcp-tools-usage.md)                                                                                   |
+| ナレッジ             | ナレッジ             | [`docs/70.knowledge/`](docs/70.knowledge/)                                                                                                                             |
+| 日誌                 | 日誌                 | [`docs/80.dailyReport/`](docs/80.dailyReport/)                                                                                                                         |
+| テンプレート         | テンプレート         | [`docs/99.templates/`](docs/99.templates/), [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md), [`.github/ISSUE_TEMPLATE`](.github/ISSUE_TEMPLATE) |
 
-- 常に全画面（full_page: true）でスクリーンショットを取得する
-- ファイルサイズを最小化するため、品質とサイズを調整する
-- レスポンストークンサイズを制限内に収める
+# 開発ワークフローと参照ドキュメント
 
-#### スクリーンショット実行時の指示
+新規機能開発、リファクタリング、不具合修正など、すべての開発作業はこのフローに沿って進める。各フェーズで参照すべきドキュメントを必ず確認し、プロジェクト全体の一貫性を保つこと。
 
-1. まずビューポートサイズを設定。何も指示が無ければ、1920x1080と設定する：
+### **Phase 1: 企画・タスク着手**
 
-```
-playwright:browser_set_viewport_size(width: 1920, height: 1080)
-```
+**目的**: これから何を、なぜ作るのかを正確に理解し、開発の準備を整える。
 
-2. 以下の設定で全画面スクリーンショットを取得：
+作業を開始する前に、まずIssueやタスクの背景を完全に理解する。要件や仕様が不明瞭な場合は、実装に着手する前に必ず確認すること。
 
-```
-playwright:browser_take_screenshot(
-  filename: "[descriptive_name].jpg",
-  full_page: true,
-  quality: 70,
-  type: "jpeg",
-  raw: false
-)
-```
+- **参照ドキュメント**:
+  - **要件の理解**: `docs/00.project/0001.requirements.md`
+  - **UI/UXの確認**: `docs/00.project/0002.screenDesign.md` と配下の各画面設計書
+  - **ブランチ戦略**: `docs/30.quality/3002.git-pr.md`
+  - **Issue起票**: `.github/ISSUE_TEMPLATE`
 
-#### 下記に一般的な画面サイズを記載する。例えば「スマホサイズで」と指示されたら下記のスマートフォンのサイズを設定する。
+---
 
-- スマートフォン（一般的なサイズ）  
-  playwright:browser_set_viewport_size(width: 360, height: 800)
-- タブレット（10インチ）  
-  playwright:browser_set_viewport_size(width: 800, height: 1280)
-- FHD  
-  playwright:browser_set_viewport_size(width: 1920, height: 1080)
-- WQHD (2K)  
-  playwright:browser_set_viewport_size(width: 2560, height: 1440)
-- 4K  
-  playwright:browser_set_viewport_size(width: 3840, height: 2160)
-- ウルトラワイド  
-  playwright:browser_set_viewport_size(width: 3440, height: 1440)
+### **Phase 2: 設計**
 
-## Serena MCP 活用指針
+**目的**: 実装に着手する前に、どのように作るかを決定する。システムの保守性と拡張性を担保するための最も重要なフェーズ。
 
-### 基本方針
+アーキテクチャや設計原則に立ち返り、新しいコードが既存のシステムとどのように調和するかを考える。複雑な機能の場合は、設計内容をドキュメントにまとめること。
 
-- **コードベースの理解・探索にはSerena MCPを積極的に活用する**
-- ファイル全体を読む前に、まずシンボル概要やパターン検索で効率的に情報収集する
-- 大きなファイルを読む必要がある場合は、事前にSerenaの概要ツールで構造を把握する
+- **参照ドキュメント**:
+  - **全体構造の確認**: `docs/20.development/2004.architecture.md`
+  - **設計思想の遵守**: `docs/20.development/2002.development-principles.md`
+  - **コンポーネント設計**: `docs/20.development/2003.frontend-design.md`
+  - **ドメインロジックの確認**: `docs/10.domain/1001.domainSystem.md`
+  - **音楽理論概念の確認**: `docs/10.domain/1002.music-theory-guidebook.md`
 
-### 優先的にSerenaを使用すべき場面
+---
 
-1. **コードベース探索時**
+### **Phase 3: 実装**
 
-   - `mcp__serena__get_symbols_overview` でディレクトリやファイルの構造把握
-   - `mcp__serena__find_symbol` で特定のクラス・関数・型の検索
-   - `mcp__serena__search_for_pattern` でパターンマッチング検索
+**目的**: 設計に基づき、クリーンで保守性の高いコードを記述する。
 
-2. **コード編集時**
+コーディング規約を遵守し、一貫性のあるコードを作成する。実装中に設計上の問題に気づいた場合は、立ち止まってPhase 2に戻る勇気を持つこと。
 
-   - `mcp__serena__replace_symbol_body` でシンボル全体の置換
-   - `mcp__serena__insert_after_symbol` / `mcp__serena__insert_before_symbol` でコード挿入
-   - `mcp__serena__replace_regex` で部分的な置換
+- **参照ドキュメント**:
+  - **コーディング規約**: `docs/20.development/2001.basic-coding.md`
+  - **スタイリングとコンポーネント実装**: `docs/20.development/2003.frontend-design.md`
+  - **開発効率化ツールの活用**: `docs/30.quality/3003.mcp-tools-usage.md`
 
-3. **リファクタリング時**
-   - `mcp__serena__find_referencing_symbols` で参照箇所の特定
-   - 依存関係の理解と安全な変更の実施
+---
 
-### トークン効率化のために
+### **Phase 4: 品質保証**
 
-- ファイル全体読み込み（Readツール）は最後の手段とする
-- まずSerenaの概要・検索ツールで必要な部分のみを特定してから読み込む
-- 同じファイルを複数回読まないよう、Serenaの情報を活用する
+**目的**: 実装したコードが期待通りに動作し、既存の機能を破壊しないことを保証する。
 
-### メモリ活用
+「テストなきコードはレガシーコードである」という原則に基づき、必ずテストコードを記述する。
 
-- プロジェクト情報はSerenaメモリに保存済み
-- `mcp__serena__read_memory` で必要な情報を効率的に取得
-- 新しい知見は `mcp__serena__write_memory` で継続的に蓄積
+- **参照ドキュメント**:
+  - **テスト方針の確認**: `docs/30.quality/3001.testing.md`
+
+---
+
+### **Phase 5: レビューとマージ**
+
+**目的**: 第三者の視点からコードの品質を評価し、問題がなければメインブランチに統合する。
+
+Github copilotからのレビューは必ずしも鵜呑みにするのではなく、本当に対応すべきかを考察する。
+
+- **参照ドキュメント**:
+  - **PR・マージ手順**: `docs/30.quality/3002.git-pr.md`
+  - **PRテンプレート**: `.github/PULL_REQUEST_TEMPLATE.md`
+
+---
+
+### **Phase 6: ドキュメント更新と知識共有**
+
+**目的**: プロジェクトを最新かつ健全な状態に保ち、得られた知見をチームの資産とする。
+
+コードを書き終えたら、開発は終わりではない。変更に伴い古くなったドキュメントを更新する。
+
+- **参照ドキュメント**:
+  - **知見の蓄積**: `docs/70.knowledge/`
+  - **作業記録**: `docs/80.dailyReport/`
+  - **新規ドキュメント作成**: `docs/99.templates`
+
+---
+
+### **継続的プロセス: リファクタリング**
+
+**目的**: コードベースの健全性を長期的に維持する。
+
+リファクタリングは特定のフェーズではなく、開発プロセス全体を通じて継続的に行われるべき活動である。「動くコード」で満足せず、常によりクリーンなコードを目指すこと。リファクタリングを行う際は、上記のPhase 2〜5のサイクルを小規模に回す意識を持つ。
