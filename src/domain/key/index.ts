@@ -431,25 +431,6 @@ export class Key implements IMusicalContext<TonalChordAnalysisResult> {
     return this.isMajor ? Key.major(subdominantCenterPitch) : Key.minor(subdominantCenterPitch);
   }
 
-  /**
-   * 関連調を一括取得するメソッド（後方互換性のため保持）
-   * @returns 関連調の情報（平行調、同主調、属調、下属調）
-   * @deprecated 個別メソッド（getRelativeKey, getParallelKey等）の使用を推奨
-   */
-  public getRelatedKeys(): {
-    relative: Key; // 平行調
-    parallel: Key; // 同主調
-    dominant: Key; // 属調
-    subdominant: Key; // 下属調
-  } {
-    return {
-      relative: this.getRelativeKey(),
-      parallel: this.getParallelKey(),
-      dominant: this.getDominantKey(),
-      subdominant: this.getSubdominantKey(),
-    };
-  }
-
   // === E. 内部ヘルパーメソッド ===
 
   /**

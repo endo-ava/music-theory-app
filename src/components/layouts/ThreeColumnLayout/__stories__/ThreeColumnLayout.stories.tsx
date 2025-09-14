@@ -101,8 +101,12 @@ export const InteractiveTest: Story = {
     expect(informationPanel).toBeInTheDocument();
 
     // 選択されたコード情報の表示確認（Store初期化でC Majorが選択されている）
-    const selectedChord = canvas.getByText('Selected Chord');
-    expect(selectedChord).toBeInTheDocument();
+    // 複数の "Selected Chord" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const selectedChordLabels = canvas.getAllByText('Selected Chord');
+    const visibleSelectedChordLabel = selectedChordLabels.find(
+      el => !el.getAttribute('aria-hidden')
+    );
+    expect(visibleSelectedChordLabel).toBeInTheDocument();
 
     // CircleOfFifthsの表示確認（SVG要素として）
     const circleOfFifths = canvas.getByRole('img', { name: 'Circle of Fifths' });
@@ -313,7 +317,9 @@ export const ComponentBoundaryTest: Story = {
     const informationContent = canvas.getByText('Information');
     expect(informationContent).toBeInTheDocument();
 
-    const selectedChordContent = canvas.getByText('Selected Chord');
+    // 複数の "Selected Chord" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const selectedChordLabels = canvas.getAllByText('Selected Chord');
+    const selectedChordContent = selectedChordLabels.find(el => !el.getAttribute('aria-hidden'));
     expect(selectedChordContent).toBeInTheDocument();
 
     // Client Component（Provider）の確認

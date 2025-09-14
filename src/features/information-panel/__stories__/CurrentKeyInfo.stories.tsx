@@ -48,8 +48,10 @@ export const Default: Story = {
     await expect(keyInfoContainer).toBeInTheDocument();
 
     // Current Keyヘッダーが表示されることを確認
-    const currentKeyLabel = canvas.getByText('Current Key');
-    await expect(currentKeyLabel).toBeInTheDocument();
+    // 複数の "Current Key" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const currentKeyLabels = canvas.getAllByText('Current Key');
+    const visibleCurrentKeyLabel = currentKeyLabels.find(el => !el.getAttribute('aria-hidden'));
+    await expect(visibleCurrentKeyLabel).toBeInTheDocument();
 
     // キー名ボタンが表示され、クリック可能であることを確認
     const keyButton = canvas.getByRole('button', { name: /Play C Major Key/i });
@@ -236,7 +238,9 @@ export const ResponsiveTest: Story = {
     await expect(keyButton).toBeInTheDocument();
 
     // テキストが読みやすいサイズで表示されることを確認
-    const currentKeyLabel = canvas.getByText('Current Key');
-    await expect(currentKeyLabel).toBeInTheDocument();
+    // 複数の "Current Key" テキストがある場合は、表示されているもの（aria-hiddenでないもの）を取得
+    const currentKeyLabels = canvas.getAllByText('Current Key');
+    const visibleCurrentKeyLabel = currentKeyLabels.find(el => !el.getAttribute('aria-hidden'));
+    await expect(visibleCurrentKeyLabel).toBeInTheDocument();
   },
 };

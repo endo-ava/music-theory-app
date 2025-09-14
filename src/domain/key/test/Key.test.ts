@@ -243,79 +243,6 @@ describe('Key', () => {
     });
   });
 
-  describe('getRelatedKeys メソッド', () => {
-    it('正常ケース: C Majorの関連調を正しく取得', () => {
-      const cMajor = Key.major(PitchClass.fromCircleOfFifths(0));
-      const relatedKeys = cMajor.getRelatedKeys();
-
-      // 平行調: A minor (C Major の平行調)
-      expect(relatedKeys.relative.centerPitch.sharpName).toBe('A');
-      expect(relatedKeys.relative.isMajor).toBe(false);
-      expect(relatedKeys.relative.keyName).toBe('A Minor');
-
-      // 同主調: C minor (同じトニック、異なるモード)
-      expect(relatedKeys.parallel.centerPitch.sharpName).toBe('C');
-      expect(relatedKeys.parallel.isMajor).toBe(false);
-      expect(relatedKeys.parallel.keyName).toBe('C Minor');
-
-      // 属調: G major (V度のキー)
-      expect(relatedKeys.dominant.centerPitch.sharpName).toBe('G');
-      expect(relatedKeys.dominant.isMajor).toBe(true);
-      expect(relatedKeys.dominant.keyName).toBe('G Major');
-
-      // 下属調: F major (IV度のキー)
-      expect(relatedKeys.subdominant.centerPitch.sharpName).toBe('F');
-      expect(relatedKeys.subdominant.isMajor).toBe(true);
-      expect(relatedKeys.subdominant.keyName).toBe('F Major');
-    });
-
-    it('正常ケース: A minorの関連調を正しく取得', () => {
-      const aMinor = Key.minor(PitchClass.fromCircleOfFifths(3));
-      const relatedKeys = aMinor.getRelatedKeys();
-
-      // 平行調: C major (A minor の平行調)
-      expect(relatedKeys.relative.centerPitch.sharpName).toBe('C');
-      expect(relatedKeys.relative.isMajor).toBe(true);
-      expect(relatedKeys.relative.keyName).toBe('C Major');
-
-      // 同主調: A major (同じトニック、異なるモード)
-      expect(relatedKeys.parallel.centerPitch.sharpName).toBe('A');
-      expect(relatedKeys.parallel.isMajor).toBe(true);
-      expect(relatedKeys.parallel.keyName).toBe('A Major');
-
-      // 属調: E minor (V度のキー)
-      expect(relatedKeys.dominant.centerPitch.sharpName).toBe('E');
-      expect(relatedKeys.dominant.isMajor).toBe(false);
-      expect(relatedKeys.dominant.keyName).toBe('E Minor');
-
-      // 下属調: D minor (IV度のキー)
-      expect(relatedKeys.subdominant.centerPitch.sharpName).toBe('D');
-      expect(relatedKeys.subdominant.isMajor).toBe(false);
-      expect(relatedKeys.subdominant.keyName).toBe('D Minor');
-    });
-
-    it('境界値ケース: フラット系キー(F# Major)の関連調', () => {
-      const fsSharpMajor = Key.major(PitchClass.fromCircleOfFifths(6));
-      const relatedKeys = fsSharpMajor.getRelatedKeys();
-
-      // 平行調: D# minor
-      expect(relatedKeys.relative.centerPitch.sharpName).toBe('D#');
-      expect(relatedKeys.relative.isMajor).toBe(false);
-
-      // 同主調: F# minor
-      expect(relatedKeys.parallel.centerPitch.sharpName).toBe('F#');
-      expect(relatedKeys.parallel.isMajor).toBe(false);
-
-      // 属調: C# major
-      expect(relatedKeys.dominant.centerPitch.sharpName).toBe('C#');
-      expect(relatedKeys.dominant.isMajor).toBe(true);
-
-      // 下属調: B major
-      expect(relatedKeys.subdominant.centerPitch.sharpName).toBe('B');
-      expect(relatedKeys.subdominant.isMajor).toBe(true);
-    });
-  });
-
   describe('japaneseScaleDegreeNames getter', () => {
     it('正常ケース: メジャーキーの日本語度数名配列を正しく返す', () => {
       const cMajor = Key.major(PitchClass.fromCircleOfFifths(0));
@@ -372,6 +299,183 @@ describe('Key', () => {
 
       // 同じ参照を返すことを確認（メモ化されている）
       expect(degreeNames1).toBe(degreeNames2);
+    });
+  });
+
+  describe('関連調メソッド', () => {
+    describe('getRelativeKey', () => {
+      it('正常ケース: メジャーキーから相対マイナーキーを取得', () => {
+        const cMajor = Key.major(PitchClass.fromCircleOfFifths(0)); // C Major
+        const relativeMinor = cMajor.getRelativeKey();
+
+        expect(relativeMinor.centerPitch.sharpName).toBe('A');
+        expect(relativeMinor.keyName).toBe('A Minor');
+        expect(relativeMinor.isMajor).toBe(false);
+        expect(relativeMinor.centerPitch.fifthsIndex).toBe(3); // A
+      });
+
+      it('正常ケース: マイナーキーから相対メジャーキーを取得', () => {
+        const aMinor = Key.minor(PitchClass.fromCircleOfFifths(3)); // A Minor
+        const relativeMajor = aMinor.getRelativeKey();
+
+        expect(relativeMajor.centerPitch.sharpName).toBe('C');
+        expect(relativeMajor.keyName).toBe('C Major');
+        expect(relativeMajor.isMajor).toBe(true);
+        expect(relativeMajor.centerPitch.fifthsIndex).toBe(0); // C
+      });
+
+      it('正常ケース: G Majorから相対マイナーキー（E Minor）を取得', () => {
+        const gMajor = Key.major(PitchClass.fromCircleOfFifths(1)); // G Major
+        const relativeMinor = gMajor.getRelativeKey();
+
+        expect(relativeMinor.centerPitch.sharpName).toBe('E');
+        expect(relativeMinor.keyName).toBe('E Minor');
+        expect(relativeMinor.isMajor).toBe(false);
+        expect(relativeMinor.centerPitch.fifthsIndex).toBe(4); // E
+      });
+
+      it('正常ケース: E MinorからG Majorを取得', () => {
+        const eMinor = Key.minor(PitchClass.fromCircleOfFifths(4)); // E Minor
+        const relativeMajor = eMinor.getRelativeKey();
+
+        expect(relativeMajor.centerPitch.sharpName).toBe('G');
+        expect(relativeMajor.keyName).toBe('G Major');
+        expect(relativeMajor.isMajor).toBe(true);
+        expect(relativeMajor.centerPitch.fifthsIndex).toBe(1); // G
+      });
+
+      it('境界値ケース: 五度圏の境界での相対調', () => {
+        const fSharpMajor = Key.major(PitchClass.fromCircleOfFifths(6)); // F# Major
+        const relativeMinor = fSharpMajor.getRelativeKey();
+
+        expect(relativeMinor.centerPitch.sharpName).toBe('D#');
+        expect(relativeMinor.keyName).toBe('D# Minor');
+        expect(relativeMinor.centerPitch.fifthsIndex).toBe(9); // D#
+      });
+    });
+
+    describe('getParallelKey', () => {
+      it('正常ケース: メジャーキーから同主マイナーキーを取得', () => {
+        const cMajor = Key.major(PitchClass.fromCircleOfFifths(0)); // C Major
+        const parallelMinor = cMajor.getParallelKey();
+
+        expect(parallelMinor.centerPitch.sharpName).toBe('C');
+        expect(parallelMinor.keyName).toBe('C Minor');
+        expect(parallelMinor.isMajor).toBe(false);
+        expect(parallelMinor.centerPitch.fifthsIndex).toBe(0); // C
+      });
+
+      it('正常ケース: マイナーキーから同主メジャーキーを取得', () => {
+        const cMinor = Key.minor(PitchClass.fromCircleOfFifths(0)); // C Minor
+        const parallelMajor = cMinor.getParallelKey();
+
+        expect(parallelMajor.centerPitch.sharpName).toBe('C');
+        expect(parallelMajor.keyName).toBe('C Major');
+        expect(parallelMajor.isMajor).toBe(true);
+        expect(parallelMajor.centerPitch.fifthsIndex).toBe(0); // C
+      });
+
+      it('正常ケース: G Majorから同主マイナーキー（G Minor）を取得', () => {
+        const gMajor = Key.major(PitchClass.fromCircleOfFifths(1)); // G Major
+        const parallelMinor = gMajor.getParallelKey();
+
+        expect(parallelMinor.centerPitch.sharpName).toBe('G');
+        expect(parallelMinor.keyName).toBe('G Minor');
+        expect(parallelMinor.isMajor).toBe(false);
+        expect(parallelMinor.centerPitch.fifthsIndex).toBe(1); // G
+      });
+
+      it('正常ケース: G MinorからG Majorを取得', () => {
+        const gMinor = Key.minor(PitchClass.fromCircleOfFifths(1)); // G Minor
+        const parallelMajor = gMinor.getParallelKey();
+
+        expect(parallelMajor.centerPitch.sharpName).toBe('G');
+        expect(parallelMajor.keyName).toBe('G Major');
+        expect(parallelMajor.isMajor).toBe(true);
+        expect(parallelMajor.centerPitch.fifthsIndex).toBe(1); // G
+      });
+    });
+
+    describe('getDominantKey', () => {
+      it('正常ケース: C Majorからドミナント調（G Major）を取得', () => {
+        const cMajor = Key.major(PitchClass.fromCircleOfFifths(0)); // C Major
+        const dominantKey = cMajor.getDominantKey();
+
+        expect(dominantKey.centerPitch.sharpName).toBe('G');
+        expect(dominantKey.keyName).toBe('G Major');
+        expect(dominantKey.isMajor).toBe(true);
+        expect(dominantKey.centerPitch.fifthsIndex).toBe(1); // G
+      });
+
+      it('正常ケース: A Minorからドミナント調（E Minor）を取得', () => {
+        const aMinor = Key.minor(PitchClass.fromCircleOfFifths(3)); // A Minor
+        const dominantKey = aMinor.getDominantKey();
+
+        expect(dominantKey.centerPitch.sharpName).toBe('E');
+        expect(dominantKey.keyName).toBe('E Minor');
+        expect(dominantKey.isMajor).toBe(false);
+        expect(dominantKey.centerPitch.fifthsIndex).toBe(4); // E
+      });
+
+      it('正常ケース: F Majorからドミナント調（C Major）を取得', () => {
+        const fMajor = Key.major(PitchClass.fromCircleOfFifths(11)); // F Major
+        const dominantKey = fMajor.getDominantKey();
+
+        expect(dominantKey.centerPitch.sharpName).toBe('C');
+        expect(dominantKey.keyName).toBe('C Major');
+        expect(dominantKey.isMajor).toBe(true);
+        expect(dominantKey.centerPitch.fifthsIndex).toBe(0); // C
+      });
+
+      it('境界値ケース: 五度圏の境界でのドミナント調', () => {
+        const bMajor = Key.major(PitchClass.fromCircleOfFifths(5)); // B Major
+        const dominantKey = bMajor.getDominantKey();
+
+        expect(dominantKey.centerPitch.sharpName).toBe('F#');
+        expect(dominantKey.keyName).toBe('G♭ Major'); // メジャーキーは♭表記を使用
+        expect(dominantKey.centerPitch.fifthsIndex).toBe(6); // F#
+      });
+    });
+
+    describe('getSubdominantKey', () => {
+      it('正常ケース: C Majorからサブドミナント調（F Major）を取得', () => {
+        const cMajor = Key.major(PitchClass.fromCircleOfFifths(0)); // C Major
+        const subdominantKey = cMajor.getSubdominantKey();
+
+        expect(subdominantKey.centerPitch.sharpName).toBe('F');
+        expect(subdominantKey.keyName).toBe('F Major');
+        expect(subdominantKey.isMajor).toBe(true);
+        expect(subdominantKey.centerPitch.fifthsIndex).toBe(11); // F
+      });
+
+      it('正常ケース: A Minorからサブドミナント調（D Minor）を取得', () => {
+        const aMinor = Key.minor(PitchClass.fromCircleOfFifths(3)); // A Minor
+        const subdominantKey = aMinor.getSubdominantKey();
+
+        expect(subdominantKey.centerPitch.sharpName).toBe('D');
+        expect(subdominantKey.keyName).toBe('D Minor');
+        expect(subdominantKey.isMajor).toBe(false);
+        expect(subdominantKey.centerPitch.fifthsIndex).toBe(2); // D
+      });
+
+      it('正常ケース: G Majorからサブドミナント調（C Major）を取得', () => {
+        const gMajor = Key.major(PitchClass.fromCircleOfFifths(1)); // G Major
+        const subdominantKey = gMajor.getSubdominantKey();
+
+        expect(subdominantKey.centerPitch.sharpName).toBe('C');
+        expect(subdominantKey.keyName).toBe('C Major');
+        expect(subdominantKey.isMajor).toBe(true);
+        expect(subdominantKey.centerPitch.fifthsIndex).toBe(0); // C
+      });
+
+      it('境界値ケース: 五度圏の境界でのサブドミナント調', () => {
+        const cSharpMajor = Key.major(PitchClass.fromCircleOfFifths(7)); // C# Major
+        const subdominantKey = cSharpMajor.getSubdominantKey();
+
+        expect(subdominantKey.centerPitch.sharpName).toBe('F#');
+        expect(subdominantKey.keyName).toBe('G♭ Major'); // メジャーキーは♭表記を使用
+        expect(subdominantKey.centerPitch.fifthsIndex).toBe(6); // F#
+      });
     });
   });
 });

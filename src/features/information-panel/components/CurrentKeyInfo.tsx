@@ -48,7 +48,9 @@ export const CurrentKeyInfo: React.FC<ClassNameProps> = ({ className }) => {
           </PlayButton>
         </div>
         {/* スペーサー */}
-        <div className="text-xs text-transparent">Current Key</div>
+        <div className="text-xs text-transparent" aria-hidden="true">
+          Current Key
+        </div>
       </div>
 
       {/* ダイアトニックスケール & コード */}
