@@ -1,4 +1,5 @@
 export * from './ChordPattern';
+export * from './IMusicalContext';
 export * from './Interval';
 export * from './Note';
 export * from './PitchClass';
