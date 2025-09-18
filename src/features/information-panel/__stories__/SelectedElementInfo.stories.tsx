@@ -71,7 +71,7 @@ const createKeyDTOForChordInCMajor = (chord: Chord): KeyDTO => {
 };
 
 const meta: Meta<typeof SelectedElementInfo> = {
-  title: 'Features/InformationPanel/SelectedElementInfo',
+  title: 'Components/InformationPanel/SelectedElementInfo',
   component: SelectedElementInfo,
   parameters: {
     layout: 'centered',

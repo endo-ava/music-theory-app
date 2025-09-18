@@ -15,10 +15,8 @@
 - [アーキテクチャ](#アーキテクチャ)
 - [技術仕様](#技術仕様)
 - [使用方法](#使用方法)
+- [機能詳細](#機能詳細)
 - [設計思想](#設計思想)
-- [パフォーマンス](#パフォーマンス)
-- [アクセシビリティ](#アクセシビリティ)
-- [開発・保守](#開発保守)
 
 ## 概要
 
@@ -169,61 +167,35 @@ interface [ComponentName]Store {
 
 ## 使用方法
 
-### 基本的な使用
+[使用上の注意点や特記事項があれば記述]
 
 ```tsx
-import { [ComponentName] } from '@/components/[ComponentName]';
+import { [ComponentName] } from '@/features/[feature-name]';
 
-function App() {
-  return (
-    <div>
-      <[ComponentName]
-        requiredProp="value"
-        optionalProp={42}
-        onEvent={(value) => console.log(value)}
-      />
-    </div>
-  );
-}
-```
-
-### カスタマイズ例
-
-```tsx
-import { [ComponentName] } from '@/components/[ComponentName]';
-
-function CustomExample() {
+function Example() {
   return (
     <[ComponentName]
-      requiredProp="custom-value"
-      className="custom-styles"
-      onEvent={handleCustomEvent}
+      // 必要なpropsを記述
     />
   );
 }
 ```
 
+## 機能詳細
+
+[このコンポーネントの具体的な機能や動作について記述する。
+状態変更によるUI変化、ユーザー操作による効果、他コンポーネントへの影響などを含める。]
+
+### 機能の動作
+
+- **初期状態**: [初期状態での動作や表示]
+- **操作時**: [ユーザー操作時の動作や表示変化]
+- **影響範囲**: [他のコンポーネントや要素への影響]
+
 ## 設計思想
 
-### 1. 単一責任原則
-
-[このコンポーネントが持つ単一の責任について説明]
-
-### 2. 再利用性
-
-[再利用性を高めるための設計上の工夫について説明]
-
-### 3. 保守性
-
-[保守性を考慮した設計について説明]
-
-### 4. パフォーマンス
-
-[パフォーマンスを考慮した設計について説明]
-
-### 5. アクセシビリティ
-
-[アクセシビリティを考慮した設計について説明]
+[このコンポーネントの設計で重視したポイントや考慮事項について記述する。
+例：単一責任の原則、再利用性、保守性、パフォーマンス、アクセシビリティなど]
 
 ## 関連ドキュメント
 
