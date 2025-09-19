@@ -25,7 +25,7 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
       <ViewController />
 
       {/* C-2: Layer Controller（レイヤー・コントローラー） */}
-      <LayerController className="py-6" />
+      <LayerController className="md:py-6" />
 
       {/* 将来の拡張エリア: キー選択UI、設定・オプション等 */}
     </aside>
