@@ -2,6 +2,7 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { ViewController } from '@/features/view-controller';
+import { LayerController } from '@/features/layer-controller';
 import { ClassNameProps } from '@/shared/types';
 
 /**
@@ -20,8 +21,11 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
     >
       <h2 className="text-foreground hidden w-fit text-lg md:block">Controller</h2>
 
-      {/* C-3: View Controller（ビュー・コントローラー） */}
+      {/* C-1: View Controller（ビュー・コントローラー） */}
       <ViewController />
+
+      {/* C-2: Layer Controller（レイヤー・コントローラー） */}
+      <LayerController className="md:py-6" />
 
       {/* 将来の拡張エリア: キー選択UI、設定・オプション等 */}
     </aside>

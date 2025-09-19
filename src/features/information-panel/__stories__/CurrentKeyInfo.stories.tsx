@@ -6,7 +6,7 @@ import { Key } from '@/domain/key';
 import { PitchClass } from '@/domain/common/PitchClass';
 
 const meta: Meta<typeof CurrentKeyInfo> = {
-  title: 'Features/InformationPanel/CurrentKeyInfo',
+  title: 'Components/InformationPanel/CurrentKeyInfo',
   component: CurrentKeyInfo,
   parameters: {
     layout: 'centered',
