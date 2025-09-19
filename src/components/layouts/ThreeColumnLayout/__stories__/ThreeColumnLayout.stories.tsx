@@ -404,3 +404,98 @@ export const CustomStyle: Story = {
     expect(layoutContainer).toHaveClass('shadow-2xl');
   },
 };
+
+/**
+ * ControllerPanel統合確認テスト
+ */
+export const ControllerPanelIntegrationTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'ThreeColumnLayout内でControllerPanelが正しく統合されていることを確認します。LayerControllerとViewControllerの両方が含まれ、適切に動作することをテストします。',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // ControllerPanelの基本構造確認
+    const controllerPanel = canvas.getByLabelText('コントローラーパネル');
+    expect(controllerPanel).toBeInTheDocument();
+    expect(controllerPanel.tagName.toLowerCase()).toBe('aside');
+
+    // "Controller"タイトルの存在確認（複数のh2から特定）
+    const titles = canvas.getAllByRole('heading', { level: 2 });
+    const controllerTitle = titles.find(title => title.textContent === 'Controller');
+    expect(controllerTitle).toBeInTheDocument();
+    expect(controllerTitle).toHaveClass('hidden', 'md:block'); // レスポンシブクラス
+
+    // LayerControllerの存在確認
+    const layerAccordion = canvas.getByRole('button', { name: 'Chord Layers' });
+    expect(layerAccordion).toBeInTheDocument();
+    expect(layerAccordion).toHaveAttribute('aria-expanded'); // アコーディオン機能
+
+    // LayerControllerのスイッチ確認
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    expect(diatonicSwitch).toBeInTheDocument();
+    expect(diatonicSwitch).toHaveAttribute('aria-checked');
+
+    // 両コンポーネントが同じパネル内に統合されていることを確認
+    expect(controllerPanel).toContainElement(layerAccordion);
+    expect(controllerPanel).toContainElement(diatonicSwitch);
+  },
+};
+
+/**
+ * ControllerPanel レスポンシブレイアウトテスト
+ */
+export const ControllerPanelResponsiveTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'ControllerPanelのレスポンシブ対応を統合環境でテストします。md以上でカード形式のスタイル、タイトル表示が適用されることを確認します。',
+      },
+    },
+    viewport: {
+      viewports: {
+        mobile: {
+          name: 'Mobile',
+          styles: { width: '375px', height: '667px' },
+        },
+        tablet: {
+          name: 'Tablet',
+          styles: { width: '768px', height: '1024px' },
+        },
+        desktop: {
+          name: 'Desktop',
+          styles: { width: '1024px', height: '768px' },
+        },
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 基本構造確認
+    const controllerPanel = canvas.getByLabelText('コントローラーパネル');
+    expect(controllerPanel).toBeInTheDocument();
+
+    // md以上でカード形式のクラスが適用されることを確認
+    expect(controllerPanel).toHaveClass(
+      'md:bg-card',
+      'md:border-border',
+      'md:rounded-lg',
+      'md:border',
+      'md:backdrop-blur-sm'
+    );
+
+    // タイトルのレスポンシブクラス確認
+    const titles = canvas.getAllByRole('heading', { level: 2 });
+    const controllerTitle = titles.find(title => title.textContent === 'Controller');
+    expect(controllerTitle).toHaveClass('hidden', 'md:block');
+  },
+};
