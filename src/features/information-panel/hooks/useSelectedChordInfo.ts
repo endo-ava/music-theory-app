@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
+import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { createChordInfo } from '../utils';
 
 /**

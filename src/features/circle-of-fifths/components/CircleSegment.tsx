@@ -2,15 +2,9 @@
 
 import { memo } from 'react';
 import { motion } from 'motion/react';
-import { ANIMATION } from '../constants/index';
-import {
-  calculateSignatureAreaDelay,
-  calculateSignatureTextDelay,
-  calculateKeyAnimationDelay,
-  calculateTextAnimationDelay,
-} from '../utils/animations';
 import { KeyArea } from './KeyArea';
-import type { Point, SegmentPaths } from '@/features/circle-of-fifths/types';
+import type { Point } from '@/shared/types/graphics';
+import type { SegmentPaths } from '../types';
 import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 
 /**
@@ -42,10 +36,7 @@ export interface CircleSegmentProps {
  */
 export const CircleSegment = memo<CircleSegmentProps>(
   ({ segment, paths, textPositions, textRotation }) => {
-    const { position, minorKey, majorKey, keySignature } = segment;
-    // アニメーション遅延を計算
-    const signatureAreaDelay = calculateSignatureAreaDelay(position);
-    const signatureTextDelay = calculateSignatureTextDelay(position);
+    const { minorKey, majorKey, keySignature } = segment;
 
     return (
       <g>
@@ -56,8 +47,6 @@ export const CircleSegment = memo<CircleSegmentProps>(
           path={paths.minorPath}
           textPosition={textPositions.minorTextPos}
           textRotation={textRotation}
-          animationDelay={calculateKeyAnimationDelay(position, false)}
-          textAnimationDelay={calculateTextAnimationDelay(position, false)}
         />
 
         {/* メジャーキーエリア（クリック可能） */}
@@ -67,17 +56,13 @@ export const CircleSegment = memo<CircleSegmentProps>(
           path={paths.majorPath}
           textPosition={textPositions.majorTextPos}
           textRotation={textRotation}
-          animationDelay={calculateKeyAnimationDelay(position, true)}
-          textAnimationDelay={calculateTextAnimationDelay(position, true)}
         />
 
         {/* 調号エリア（表示のみ） */}
         <motion.path
           d={paths.signaturePath}
           className="fill-key-area-signature stroke-border border"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: ANIMATION.FADE_DURATION, delay: signatureAreaDelay }}
+          initial={{ opacity: 1 }}
         />
 
         {/* 調号テキスト */}
@@ -88,9 +73,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
           textAnchor="middle"
           dominantBaseline="middle"
           transform={`rotate(${textRotation} ${textPositions.signatureTextPos.x} ${textPositions.signatureTextPos.y})`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: ANIMATION.FADE_DURATION, delay: signatureTextDelay }}
+          initial={{ opacity: 1 }}
           style={{ pointerEvents: 'none' }} // テキストのクリックイベントを無効化
         >
           {/* keySignatureの文字列を'\n'で分割して、各行を<tspan>で描画する */}
