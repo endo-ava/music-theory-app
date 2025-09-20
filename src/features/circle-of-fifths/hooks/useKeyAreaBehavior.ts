@@ -9,7 +9,7 @@
 import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import type { KeyDTO } from '@/domain/key';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
-import { useAudio } from '../useAudio';
+import { useAudio } from './useAudio';
 import { useKeyState, type KeyAreaStates } from './useKeyState';
 import { useKeyInteraction, type KeyAreaHandlers } from './useKeyInteraction';
 import { useRippleEffect } from './useRippleEffect';

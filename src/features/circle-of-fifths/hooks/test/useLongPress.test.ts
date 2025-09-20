@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useLongPress } from '../../keyArea/useLongPress';
+import { useLongPress } from '../useLongPress';
 
 describe('useLongPress hook', () => {
   // モック関数の定義
@@ -381,7 +381,7 @@ describe('useLongPress hook', () => {
         clientY: 120,
       } as unknown as React.MouseEvent;
 
-      const mockUpEvent = { preventDefault: vi.fn() } as React.MouseEvent;
+      const mockUpEvent = { preventDefault: vi.fn() } as unknown as React.MouseEvent;
 
       // 1回目: 短時間クリック
       act(() => {

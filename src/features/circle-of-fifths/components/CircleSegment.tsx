@@ -1,7 +1,4 @@
-'use client';
-
 import { memo } from 'react';
-import { motion } from 'motion/react';
 import { KeyArea } from './KeyArea';
 import type { Point } from '@/shared/types/graphics';
 import type { SegmentPaths } from '../types';
@@ -59,22 +56,17 @@ export const CircleSegment = memo<CircleSegmentProps>(
         />
 
         {/* 調号エリア（表示のみ） */}
-        <motion.path
-          d={paths.signaturePath}
-          className="fill-key-area-signature stroke-border border"
-          initial={{ opacity: 1 }}
-        />
+        <path d={paths.signaturePath} className="fill-key-area-signature stroke-border border" />
 
         {/* 調号テキスト */}
-        <motion.text
+        <text
           className="fill-foreground text-key-signature font-key-signature stroke-border border"
           x={textPositions.signatureTextPos.x}
           y={textPositions.signatureTextPos.y}
           textAnchor="middle"
           dominantBaseline="middle"
           transform={`rotate(${textRotation} ${textPositions.signatureTextPos.x} ${textPositions.signatureTextPos.y})`}
-          initial={{ opacity: 1 }}
-          style={{ pointerEvents: 'none' }} // テキストのクリックイベントを無効化
+          style={{ pointerEvents: 'none' }}
         >
           {/* keySignatureの文字列を'\n'で分割して、各行を<tspan>で描画する */}
           {keySignature.split('\n').map((line, index) => (
@@ -86,7 +78,7 @@ export const CircleSegment = memo<CircleSegmentProps>(
               {line}
             </tspan>
           ))}
-        </motion.text>
+        </text>
       </g>
     );
   }

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useKeyState, type UseKeyStateProps } from '../../keyArea/useKeyState';
+import { useKeyState, type UseKeyStateProps } from '../useKeyState';
 import type { KeyDTO } from '@/domain/key';
 
 describe('useKeyState hook', () => {

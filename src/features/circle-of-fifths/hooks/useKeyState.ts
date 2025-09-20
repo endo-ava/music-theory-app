@@ -7,8 +7,8 @@
 
 import { useMemo } from 'react';
 import type { KeyDTO } from '@/domain';
-import type { FillClassName, TextClassName } from '../../types';
-import { calculateFillClassName, calculateTextClassName, isKeyMatch } from '../../utils/classNames';
+import type { FillClassName, TextClassName } from '../types';
+import { calculateFillClassName, calculateTextClassName, isKeyMatch } from '../utils/classNames';
 
 /**
  * useKeyStateフックの引数型

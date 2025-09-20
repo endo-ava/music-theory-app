@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { LAYOUT_OFFSETS } from '../../constants';
-import { useDiatonicChordHighlight } from '../useDiatonicChordHighlight';
+import { LAYOUT_OFFSETS } from '../constants';
+import { useDiatonicChordHighlight } from './useDiatonicChordHighlight';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 import type { Point } from '@/shared/types/graphics';
 import type { Key, KeyDTO } from '@/domain';

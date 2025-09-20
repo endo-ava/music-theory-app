@@ -39,33 +39,46 @@
 
 統合されたKeyAreaアーキテクチャにより、関心の分離とパフォーマンス最適化を実現しています。
 
+**SSR対応状況**:
+
+- **CircleSegment**: SSRコンポーネント（`'use client'`削除、静的SVG要素使用）
+- **KeyArea**: クライアントコンポーネント（インタラクション・アニメーション機能）
+
 ### コンポーネント構成図
 
 ```mermaid
 graph TD
-    A[CircleOfFifths] --> B[CircleSegment × 12]
-    B --> C[KeyArea × 2]
+    A["CircleOfFifths"] --> B["CircleSegment × 12<br/>(ここまでSSR)"]
+    B --> C["KeyArea × 2<br/>(ここからClient)"]
     C --> D[KeyAreaContent]
     D --> E[SVGRippleEffect]
 
-    F[useCircleOfFifths] --> A
+    F[circleOfFifthsData] --> A
     G[useKeyAreaBehavior] --> C
     H[useKeyAreaPresentation] --> C
     I[useDiatonicChordHighlight] --> A
+
+    classDef ssr fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef client fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+
+    class A,C,D,E client
+    class B ssr
 ```
 
 ### データフロー図
 
 ```mermaid
 flowchart LR
-    A[circleOfFifthsStore] -->|currentKey| B[useKeyAreaPresentation]
-    C[layerStore] -->|isDiatonicChordsVisible| D[useDiatonicChordHighlight]
-    A -->|currentKey| D
-    D -->|highlightInfo| B
-    B -->|presentation| E[KeyAreaContent]
-    F[useKeyAreaBehavior] -->|states & handlers| E
-    E -->|user events| G[KeyArea]
-    G -->|setCurrentKey| A
+    A[useCircleOfFifthsStore] -->|selectedKey, hoveredKey| B[useKeyAreaBehavior]
+    A -->|selectedKey| C[useKeyAreaPresentation]
+    D[useLayerStore] -->|isDiatonicChordsVisible| E[useDiatonicChordHighlight]
+    C -->|currentKey| E
+    E -->|getHighlightInfo| C
+    C -->|presentation| F[KeyAreaContent]
+    B -->|states & handlers| F
+    G[useAudio] -->|playChordAtPosition, playScaleAtPosition| B
+    F -->|user events| H[KeyArea]
+
 ```
 
 ### ファイル構造
@@ -84,32 +97,26 @@ src/features/circle-of-fifths/
 │       ├── KeyAreaContent.tsx     # 統合描画コンポーネント
 │       └── SVGRippleEffect.tsx    # リップルエフェクト
 ├── hooks/                         # カスタムフック
-│   ├── useCircleOfFifths.ts       # メインフック
 │   ├── useAudio.ts                # 音声機能
 │   ├── useDiatonicChordHighlight.ts # ダイアトニックハイライト（Layer Controller機能）
-│   └── keyArea/                   # KeyArea専用フック
-│       ├── useKeyAreaBehavior.ts  # 行動統合フック
-│       ├── useKeyAreaPresentation.ts # プレゼンテーション統合フック
-│       ├── useKeyInteraction.ts   # インタラクション管理
-│       ├── useKeyState.ts         # 状態管理
-│       ├── useLongPress.ts        # 長押し検知
-│       └── useRippleEffect.ts     # リップル効果
+│   ├── useKeyAreaBehavior.ts      # 行動統合フック
+│   ├── useKeyAreaPresentation.ts  # プレゼンテーション統合フック
+│   ├── useKeyInteraction.ts       # インタラクション管理
+│   ├── useKeyState.ts             # 状態管理
+│   ├── useLongPress.ts            # 長押し検知
+│   └── useRippleEffect.ts         # リップル効果
 ├── constants/                     # 定数定義
 │   └── index.ts                   # レイアウト・アニメーション定数
 ├── utils/                         # ユーティリティ関数
 │   ├── index.ts                   # 統合エクスポート
+│   ├── circleOfFifthsData.ts      # 五度圏データ管理（旧useCircleOfFifths）
 │   ├── geometry.ts                # 幾何学計算
 │   ├── pathGeneration.ts          # SVGパス生成
 │   ├── validation.ts              # バリデーション
 │   ├── classNames.ts              # CSS クラス名生成
 │   └── test/                      # ユーティリティテスト
-├── __stories__/                   # Storybookストーリー
-│   └── CircleOfFifths.stories.tsx
-└── hooks/test/                    # フックテスト
-    ├── useAudio.test.ts
-    ├── useDiatonicChordHighlight.test.ts
-    └── keyArea/
-        └── useKeyArea.test.ts
+└── __stories__/                   # Storybookストーリー
+    └── CircleOfFifths.stories.tsx
 ```
 
 ### 依存関係

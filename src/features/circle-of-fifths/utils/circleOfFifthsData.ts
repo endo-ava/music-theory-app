@@ -23,9 +23,9 @@ export interface SegmentData {
 }
 
 /**
- * 五度圏（Circle of Fifths）の描画に必要な計算ロジックを提供するカスタムフック。
- * SVGのビューボックス、各セグメントのパスデータ、テキスト座標などをメモ化して算出する。
- * このフックは計算に特化しており、UIのレンダリングは行わない（関心の分離）。
+ * 五度圏（Circle of Fifths）の描画に必要な、事前計算済みのデータセットを提供する関数。
+ * SVGのビューボックス、各セグメントのパスデータ、テキスト座標などを返す。
+ * この関数は計算に特化しており、UIのレンダリングは行わない（関心の分離）。
  * @returns {{
  * viewBox: string;
  * segments: SegmentData[];
@@ -65,8 +65,8 @@ const PRECOMPUTED_SEGMENTS: SegmentData[] = CircleOfFifthsService.getSegmentDTOs
 
 const PRECOMPUTED_TEXT_ROTATION = calculateTextRotation();
 
-export const useCircleOfFifths = () => {
-  // 事前計算済みの固定値をそのまま返す（メモ化不要）
+export const getCircleOfFifthsData = () => {
+  // 事前計算済みの固定値をそのまま返す
   return {
     viewBox: PRECOMPUTED_VIEW_BOX,
     segments: PRECOMPUTED_SEGMENTS,

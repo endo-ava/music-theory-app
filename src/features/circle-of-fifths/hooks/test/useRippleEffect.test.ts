@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useRippleEffect } from '../../keyArea/useRippleEffect';
+import { useRippleEffect } from '../useRippleEffect';
 
 describe('useRippleEffect hook', () => {
   beforeEach(() => {
