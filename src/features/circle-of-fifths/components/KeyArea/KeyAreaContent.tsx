@@ -2,8 +2,8 @@ import { motion } from 'motion/react';
 import { ANIMATION, COMMON_TEXT_STYLES, FONT_SIZES } from '../../constants';
 import { SVGRippleEffect } from './SVGRippleEffect';
 import type { Point } from '@/shared/types/graphics';
-import type { KeyAreaStates } from '../../hooks/keyArea/useKeyState';
-import type { KeyAreaPresentationInfo } from '../../hooks/keyArea/useKeyAreaPresentation';
+import type { KeyAreaStates } from '../../hooks/useKeyState';
+import type { KeyAreaPresentationInfo } from '../../hooks/useKeyAreaPresentation';
 
 /**
  * KeyAreaContentコンポーネントのProps

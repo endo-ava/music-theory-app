@@ -1,5 +1,5 @@
 import { CircleSegment } from './CircleSegment';
-import { useCircleOfFifths } from '../hooks/useCircleOfFifths';
+import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 import { ClassNameProps } from '@/shared/types';
 
 /**
@@ -13,8 +13,8 @@ import { ClassNameProps } from '@/shared/types';
  * @returns 五度圏のJSX要素
  */
 export const CircleOfFifths: React.FC<ClassNameProps> = ({ className }) => {
-  // カスタムフックからサークルセグメント描画情報を取得
-  const { viewBox, segments, textRotation } = useCircleOfFifths();
+  // サークルセグメント描画情報を取得
+  const { viewBox, segments, textRotation } = getCircleOfFifthsData();
 
   return (
     <div className={className}>

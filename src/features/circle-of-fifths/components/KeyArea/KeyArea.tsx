@@ -4,8 +4,8 @@ import { memo } from 'react';
 import { motion } from 'motion/react';
 import { ANIMATION, COMMON_TEXT_STYLES } from '../../constants';
 
-import { useKeyAreaBehavior } from '../../hooks/keyArea/useKeyAreaBehavior';
-import { useKeyAreaPresentation } from '../../hooks/keyArea/useKeyAreaPresentation';
+import { useKeyAreaBehavior } from '../../hooks/useKeyAreaBehavior';
+import { useKeyAreaPresentation } from '../../hooks/useKeyAreaPresentation';
 import { KeyAreaContent } from './KeyAreaContent';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 

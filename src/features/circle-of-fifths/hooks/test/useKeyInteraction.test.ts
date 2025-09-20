@@ -1,14 +1,14 @@
 import { describe, test, expect, vi, beforeEach, afterEach, type Mock } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useKeyInteraction, type UseKeyInteractionProps } from '../../keyArea/useKeyInteraction';
+import { useKeyInteraction, type UseKeyInteractionProps } from '../useKeyInteraction';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { useLongPress } from '../../keyArea/useLongPress';
+import { useLongPress } from '../useLongPress';
 import type { KeyDTO } from '@/domain/key';
 import { ScalePattern } from '@/domain';
 
 // 依存関係のモック
 vi.mock('@/stores/currentKeyStore');
-vi.mock('../../keyArea/useLongPress');
+vi.mock('../useLongPress');
 
 // モック関数の定義
 const mockSetCurrentKey = vi.fn();

@@ -1,20 +1,20 @@
 import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useKeyAreaBehavior, type UseKeyAreaBehaviorProps } from '../../keyArea/useKeyAreaBehavior';
+import { useKeyAreaBehavior, type UseKeyAreaBehaviorProps } from '../useKeyAreaBehavior';
 import type { KeyDTO } from '@/domain/key';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
-import { useAudio } from '../../useAudio';
-import { useKeyState } from '../../keyArea/useKeyState';
-import { useKeyInteraction } from '../../keyArea/useKeyInteraction';
-import { useRippleEffect } from '../../keyArea/useRippleEffect';
+import { useAudio } from '../useAudio';
+import { useKeyState } from '../useKeyState';
+import { useKeyInteraction } from '../useKeyInteraction';
+import { useRippleEffect } from '../useRippleEffect';
 
 // 依存関係のモック
 vi.mock('@/stores/circleOfFifthsStore');
-vi.mock('../../useAudio');
-vi.mock('../../keyArea/useKeyState');
-vi.mock('../../keyArea/useKeyInteraction');
-vi.mock('../../keyArea/useRippleEffect');
+vi.mock('../useAudio');
+vi.mock('../useKeyState');
+vi.mock('../useKeyInteraction');
+vi.mock('../useRippleEffect');
 
 // モック関数の定義
 const mockSetSelectedKey = vi.fn();

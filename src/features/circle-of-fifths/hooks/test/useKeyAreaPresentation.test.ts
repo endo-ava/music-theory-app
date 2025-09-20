@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react';
 import {
   useKeyAreaPresentation,
   type UseKeyAreaPresentationProps,
-} from '../keyArea/useKeyAreaPresentation';
+} from '../useKeyAreaPresentation';
 import { useDiatonicChordHighlight } from '../useDiatonicChordHighlight';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 import { Key, KeyDTO, PitchClass } from '@/domain';
