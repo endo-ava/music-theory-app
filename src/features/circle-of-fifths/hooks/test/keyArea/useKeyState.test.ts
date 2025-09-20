@@ -205,7 +205,9 @@ describe('useKeyState hook', () => {
           isMajor: false,
         };
 
-        const { result } = renderHook(() => useKeyState({ keyDTO: minorKeyDTO }));
+        const { result } = renderHook(() =>
+          useKeyState({ keyDTO: minorKeyDTO, selectedKey: null, hoveredKey: null })
+        );
 
         expect(result.current.fillClassName).toBe('fill-key-area-minor');
       });
@@ -262,7 +264,9 @@ describe('useKeyState hook', () => {
           isMajor: false,
         };
 
-        const { result } = renderHook(() => useKeyState({ keyDTO: minorKeyDTO }));
+        const { result } = renderHook(() =>
+          useKeyState({ keyDTO: minorKeyDTO, selectedKey: null, hoveredKey: null })
+        );
 
         expect(result.current.textClassName).toBe('text-key-minor font-key-minor');
       });
@@ -364,6 +368,8 @@ describe('useKeyState hook', () => {
           fifthsIndex: 1,
           isMajor: true,
         },
+        selectedKey: null,
+        hoveredKey: null,
       };
 
       rerender(newProps);

@@ -139,12 +139,12 @@ describe('useCircleOfFifths hook', () => {
         expect(segmentData.segment).toHaveProperty('keySignature');
 
         // paths プロパティの検証
-        expect(segmentData.paths).toHaveProperty('innerPath');
-        expect(segmentData.paths).toHaveProperty('middlePath');
-        expect(segmentData.paths).toHaveProperty('outerPath');
-        expect(typeof segmentData.paths.innerPath).toBe('string');
-        expect(typeof segmentData.paths.middlePath).toBe('string');
-        expect(typeof segmentData.paths.outerPath).toBe('string');
+        expect(segmentData.paths).toHaveProperty('minorPath');
+        expect(segmentData.paths).toHaveProperty('majorPath');
+        expect(segmentData.paths).toHaveProperty('signaturePath');
+        expect(typeof segmentData.paths.minorPath).toBe('string');
+        expect(typeof segmentData.paths.majorPath).toBe('string');
+        expect(typeof segmentData.paths.signaturePath).toBe('string');
 
         // textPositions プロパティの検証
         expect(segmentData.textPositions).toHaveProperty('minorTextPos');

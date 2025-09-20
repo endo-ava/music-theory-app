@@ -171,7 +171,7 @@ describe('useLongPress hook', () => {
       // マウスリーブで中断
       act(() => {
         vi.advanceTimersByTime(200);
-        result.current.onMouseLeave();
+        result.current.onMouseLeave(mockEvent);
       });
 
       // 遅延時間経過後でも長押しイベントは発生しない
@@ -235,12 +235,12 @@ describe('useLongPress hook', () => {
       const mockStartEvent = {
         preventDefault: vi.fn(),
         touches: [{ clientX: 100, clientY: 100 }],
-      } as unknown as React.TouchEvent;
+      } as React.TouchEvent;
 
       const mockMoveEvent = {
         preventDefault: vi.fn(),
         touches: [{ clientX: 120, clientY: 120 }], // 移動距離が閾値（10px）を超える
-      } as unknown as React.TouchEvent;
+      } as React.TouchEvent;
 
       act(() => {
         result.current.onTouchStart(mockStartEvent);
