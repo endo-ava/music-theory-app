@@ -1,4 +1,5 @@
-import { Point, CircleOfFifthsError } from '@/features/circle-of-fifths/types';
+import type { Point } from '@/shared/types/graphics';
+import { CircleOfFifthsError } from '@/features/circle-of-fifths/types';
 import { ANGLE_OFFSET, ANGLE_PER_SEGMENT } from '../constants/index';
 import { isValidPosition } from './validation';
 import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';

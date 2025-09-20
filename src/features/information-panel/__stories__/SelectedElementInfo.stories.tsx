@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, expect } from '@storybook/test';
 import { SelectedElementInfo } from '../components/SelectedElementInfo';
-import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
+import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key, KeyDTO } from '@/domain/key';
 import { Chord } from '@/domain/chord';
