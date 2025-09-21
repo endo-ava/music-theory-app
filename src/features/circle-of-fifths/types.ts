@@ -1,26 +1,16 @@
 /**
- * 五度圏関連のグローバル型定義
+ * 五度圏専用の型定義
  *
- * このファイルには、アプリケーション全体で使用される
- * 五度圏関連の型定義が含まれています。
+ * このファイルには、五度圏フィーチャー内でのみ使用される
+ * ローカルな型定義が含まれています。
  */
 
-import { Variants } from 'motion/react';
-
-// ============================================================================
-// ユーティリティ型定義（グローバルで使用）
-// ============================================================================
+// 共通型定義はsharedから再エクスポート
+export type { Point } from '@/shared/types/graphics';
 
 /**
- * 座標情報
- */
-export interface Point {
-  x: number;
-  y: number;
-}
-
-/**
- * SVGパス情報
+ * SVGパス情報（3分割セグメント用）
+ * 五度圏固有の構造
  */
 export interface SegmentPaths {
   /** マイナーキーエリアのパス */
@@ -29,21 +19,6 @@ export interface SegmentPaths {
   majorPath: string;
   /** 調号エリアのパス */
   signaturePath: string;
-}
-
-/**
- * アニメーション変数の型
- */
-export type AnimationVariants = Variants;
-
-/**
- * アニメーション遅延値の型
- */
-export interface KeyAreaAnimations {
-  /** アニメーション遅延時間（秒） */
-  readonly animationDelay: number;
-  /** テキストアニメーション遅延時間（秒） */
-  readonly textAnimationDelay: number;
 }
 
 /**

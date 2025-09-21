@@ -1,12 +1,12 @@
 /**
- * キーエリア統合フック
+ * キーエリア動作統合フック
  *
  * useKeyStateとuseKeyInteractionを組み合わせたcomposition hook。
- * 状態計算とイベントハンドリングの責務を分離しつつ、
- * 既存のAPIとの互換性を保持している。
+ * 動作・インタラクション・状態管理の責務に特化し、
+ * 表示関連の処理は useKeyAreaPresentation に分離している。
  */
 
-import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/store';
+import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import type { KeyDTO } from '@/domain/key';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useAudio } from './useAudio';
@@ -15,9 +15,9 @@ import { useKeyInteraction, type KeyAreaHandlers } from './useKeyInteraction';
 import { useRippleEffect } from './useRippleEffect';
 
 /**
- * useKeyAreaフックの引数型
+ * useKeyAreaBehaviorフックの引数型
  */
-export interface UseKeyAreaProps {
+export interface UseKeyAreaBehaviorProps {
   /** キーのDTO */
   keyDTO: KeyDTO;
   /** セグメントの情報 */
@@ -25,9 +25,9 @@ export interface UseKeyAreaProps {
 }
 
 /**
- * useKeyAreaフックの戻り値型
+ * useKeyAreaBehaviorフックの戻り値型
  */
-export interface UseKeyAreaResult {
+export interface UseKeyAreaBehaviorResult {
   /** キーエリアの状態情報 */
   states: KeyAreaStates;
   /** イベントハンドラ群 */
@@ -41,20 +41,25 @@ export interface UseKeyAreaResult {
 }
 
 /**
- * キーエリアの状態管理とインタラクション処理を統合するcomposition hook
+ * キーエリアの動作管理とインタラクション処理を統合するcomposition hook
  *
  * 状態計算（useKeyState）とイベントハンドリング（useKeyInteraction）を
- * 組み合わせて、キーエリアに必要なすべての機能を提供します。
+ * 組み合わせて、キーエリアの動作に必要な機能を提供します。
+ * 表示関連の処理は useKeyAreaPresentation で分離されています。
  *
  * 責務分離により：
+ * - 動作と表示の明確な分離
  * - テスタビリティの向上
  * - 個別フックの再利用性向上
  * - コードの可読性・保守性向上
  *
  * @param props - フックの引数
- * @returns キーエリアの状態とハンドラ
+ * @returns キーエリアの動作状態とハンドラ
  */
-export const useKeyArea = ({ keyDTO, segment }: UseKeyAreaProps): UseKeyAreaResult => {
+export const useKeyAreaBehavior = ({
+  keyDTO,
+  segment,
+}: UseKeyAreaBehaviorProps): UseKeyAreaBehaviorResult => {
   const { position } = segment;
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
   const { playChordAtPosition, playScaleAtPosition } = useAudio();

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { useCircleOfFifthsStore } from '.';
+import { useCircleOfFifthsStore } from '../circleOfFifthsStore';
 
 describe('Zustandストアの基本動作確認', () => {
   it('ストアが正常に初期化される', () => {
