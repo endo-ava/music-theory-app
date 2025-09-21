@@ -4,6 +4,7 @@ import { Chord } from '@/domain/chord';
 import { Note, Key } from '@/domain';
 import { logAudioError } from '../utils';
 import type { AudioPlayHandler } from '../types';
+import type { IMusicalContext } from '@/domain/common/IMusicalContext';
 
 /**
  * 音声再生機能を提供するカスタムフック
@@ -53,7 +54,7 @@ export const useAudioPlayback = () => {
    * Keyオブジェクトまたは直接スケールオブジェクトを受け取り、
    * 適切なスケールオブジェクトを抽出してAudioEngineで再生する。
    */
-  const handlePlayScale = useCallback(async (keyOrScale: Key | Key['scale']) => {
+  const handlePlayScale = useCallback(async (keyOrScale: Key | Key['scale'] | IMusicalContext) => {
     try {
       const scale = 'scale' in keyOrScale ? keyOrScale.scale : keyOrScale;
       await AudioEngine.play(scale);

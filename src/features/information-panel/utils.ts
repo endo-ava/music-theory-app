@@ -51,7 +51,7 @@ export const createChordInfo = (
     chord: chord,
     constituentNotes: chord.constituentNotes.map(note => note.getNameFor(currentKey.keySignature)),
     function: analysis.function || '-',
-    keyContext: `in ${currentKey.keyName}`,
+    keyContext: `in ${currentKey.contextName}`,
   };
 };
 

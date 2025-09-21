@@ -9,16 +9,17 @@ import { Interval } from '../Interval';
 
 describe('ScalePattern', () => {
   describe('constructor', () => {
-    it('正常ケース: 名前とインターバル配列でインスタンスを作成', () => {
+    it('正常ケース: 名前とインターバル配列とshortSymbolでインスタンスを作成', () => {
       const intervals = [Interval.Whole, Interval.Whole, Interval.Half];
-      const pattern = new ScalePattern('Test Pattern', intervals);
+      const pattern = new ScalePattern('Test Pattern', intervals, 'test');
 
       expect(pattern.name).toBe('Test Pattern');
       expect(pattern.intervals).toEqual(intervals);
+      expect(pattern.shortSymbol).toBe('test');
     });
 
     it('正常ケース: インスタンスがfreeze（不変）である', () => {
-      const pattern = new ScalePattern('Test', [Interval.Whole]);
+      const pattern = new ScalePattern('Test', [Interval.Whole], 't');
       expect(Object.isFrozen(pattern)).toBe(true);
     });
   });
@@ -104,9 +105,10 @@ describe('ScalePattern', () => {
   describe('derive メソッド', () => {
     it('正常ケース: Majorパターンからモードを導出', () => {
       const major = ScalePattern.Major;
-      const dorian = major.derive(2, 'Test Dorian');
+      const dorian = major.derive(2, 'Test Dorian', 'tdor');
 
       expect(dorian.name).toBe('Test Dorian');
+      expect(dorian.shortSymbol).toBe('tdor');
       expect(dorian.intervals.length).toBe(7);
       expect(dorian).toBeInstanceOf(ScalePattern);
     });
@@ -115,7 +117,7 @@ describe('ScalePattern', () => {
       const major = ScalePattern.Major;
 
       // 2度からの導出（Dorian相当）
-      const dorian = major.derive(2, 'Test Dorian');
+      const dorian = major.derive(2, 'Test Dorian', 'tdor');
       const expectedDorian = [
         Interval.Whole,
         Interval.Half,
@@ -133,7 +135,7 @@ describe('ScalePattern', () => {
 
     it('境界値ケース: 最初の度数（1度）', () => {
       const major = ScalePattern.Major;
-      const derived = major.derive(1, 'Same as Major');
+      const derived = major.derive(1, 'Same as Major', 'same');
 
       // 1度から始めるので元のパターンと同じ
       expect(derived.intervals).toEqual(major.intervals);
@@ -141,9 +143,10 @@ describe('ScalePattern', () => {
 
     it('境界値ケース: 最後の度数（7度）', () => {
       const major = ScalePattern.Major;
-      const derived = major.derive(7, 'Locrian-like');
+      const derived = major.derive(7, 'Locrian-like', 'loc-like');
 
       expect(derived.name).toBe('Locrian-like');
+      expect(derived.shortSymbol).toBe('loc-like');
       expect(derived.intervals.length).toBe(7);
     });
 
@@ -151,15 +154,15 @@ describe('ScalePattern', () => {
       const major = ScalePattern.Major;
 
       expect(() => {
-        major.derive(0, 'Invalid');
+        major.derive(0, 'Invalid', 'inv');
       }).toThrow('開始度数がパターンの音数を超えています。');
 
       expect(() => {
-        major.derive(8, 'Invalid');
+        major.derive(8, 'Invalid', 'inv');
       }).toThrow('開始度数がパターンの音数を超えています。');
 
       expect(() => {
-        major.derive(-1, 'Invalid');
+        major.derive(-1, 'Invalid', 'inv');
       }).toThrow('開始度数がパターンの音数を超えています。');
     });
   });
@@ -169,27 +172,27 @@ describe('ScalePattern', () => {
       const major = ScalePattern.Major;
 
       // Dorianは2度から開始
-      const dorian = major.derive(2, 'Dorian');
+      const dorian = major.derive(2, 'Dorian', 'test-dor');
       expect(dorian.intervals).toEqual(ScalePattern.Dorian.intervals);
 
       // Phrygianは3度から開始
-      const phrygian = major.derive(3, 'Phrygian');
+      const phrygian = major.derive(3, 'Phrygian', 'test-phr');
       expect(phrygian.intervals).toEqual(ScalePattern.Phrygian.intervals);
 
       // Lydianは4度から開始
-      const lydian = major.derive(4, 'Lydian');
+      const lydian = major.derive(4, 'Lydian', 'test-lyd');
       expect(lydian.intervals).toEqual(ScalePattern.Lydian.intervals);
 
       // Mixolydianは5度から開始
-      const mixolydian = major.derive(5, 'Mixolydian');
+      const mixolydian = major.derive(5, 'Mixolydian', 'test-mix');
       expect(mixolydian.intervals).toEqual(ScalePattern.Mixolydian.intervals);
 
       // Aeolianは6度から開始
-      const aeolian = major.derive(6, 'Aeolian (Natural Minor)');
+      const aeolian = major.derive(6, 'Aeolian (Natural Minor)', 'test-m');
       expect(aeolian.intervals).toEqual(ScalePattern.Aeolian.intervals);
 
       // Locrianは7度から開始
-      const locrian = major.derive(7, 'Locrian');
+      const locrian = major.derive(7, 'Locrian', 'test-loc');
       expect(locrian.intervals).toEqual(ScalePattern.Locrian.intervals);
     });
 
@@ -229,7 +232,7 @@ describe('ScalePattern', () => {
 
     it('正常ケース: derive後のインスタンスも変更不可', () => {
       const major = ScalePattern.Major;
-      const dorian = major.derive(2, 'Dorian');
+      const dorian = major.derive(2, 'Dorian', 'test-dor');
 
       expect(Object.isFrozen(dorian)).toBe(true);
       // intervals配列は readonly なので変更防止の仕組みに任せる
