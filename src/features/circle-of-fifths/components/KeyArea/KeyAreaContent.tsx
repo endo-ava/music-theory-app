@@ -1,0 +1,131 @@
+import { motion } from 'motion/react';
+import { ANIMATION, COMMON_TEXT_STYLES, FONT_SIZES } from '../../constants';
+import { SVGRippleEffect } from './SVGRippleEffect';
+import type { Point } from '@/shared/types/graphics';
+import type { KeyAreaStates } from '../../hooks/useKeyState';
+import type { KeyAreaPresentationInfo } from '../../hooks/useKeyAreaPresentation';
+
+/**
+ * KeyAreaContentコンポーネントのProps
+ */
+interface KeyAreaContentProps {
+  /** キー名（表示用） */
+  keyName: string;
+  /** SVGパス */
+  path: string;
+  /** テキスト位置 */
+  textPosition: Point;
+  /** テキスト回転角度 */
+  textRotation: number;
+  /** キーエリアの状態（選択・ホバー・クラス名） */
+  states: KeyAreaStates;
+  /** プレゼンテーション情報（ハイライト・色・レイアウト） */
+  presentation: KeyAreaPresentationInfo;
+  /** リップルエフェクトの状態 */
+  ripple: {
+    isRippleActive: boolean;
+    resetRipple: () => void;
+  };
+}
+
+/**
+ * KeyArea統合描画コンポーネント
+ *
+ * SVGパス、テキスト、リップルエフェクトを一括描画する。
+ *
+ * 統合により以下を実現:
+ * - Props数の大幅削減
+ * - 関連する描画ロジックの一箇所集約
+ * - コンポーネント階層の簡素化
+ *
+ * @param props - コンポーネントのプロパティ
+ * @returns キーエリア内容のJSX要素
+ */
+export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
+  keyName,
+  path,
+  textPosition,
+  textRotation,
+  states,
+  presentation,
+  ripple,
+}) => {
+  const { fillClassName, textClassName } = states;
+  const { shouldHighlight, romanNumeral, keyAreaColor, currentKeyColor, layout } = presentation;
+
+  return (
+    <>
+      {/* SVGパス描画 */}
+      <motion.path
+        className={fillClassName}
+        d={path}
+        initial={{
+          opacity: 1,
+          stroke: 'var(--color-border)',
+        }}
+        animate={{
+          opacity: 1,
+          stroke: shouldHighlight ? currentKeyColor : 'var(--color-border)',
+          strokeWidth: '1px',
+          filter: shouldHighlight ? `drop-shadow(0 0 4px ${keyAreaColor})` : '',
+          strokeLinejoin: 'miter',
+          strokeLinecap: 'square',
+        }}
+        style={{
+          shapeRendering: 'geometricPrecision',
+        }}
+      />
+
+      {/* プライマリテキスト（キー名）描画 */}
+      <motion.text
+        className={`fill-foreground ${textClassName}`}
+        x={textPosition.x}
+        y={layout.primaryTextY}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
+        initial={{ opacity: 1 }}
+        style={{
+          ...COMMON_TEXT_STYLES,
+          fontSize: FONT_SIZES.PRIMARY,
+        }}
+      >
+        {keyName}
+      </motion.text>
+
+      {/* ダイアトニックコードのローマ数字表記 */}
+      {shouldHighlight && romanNumeral && (
+        <motion.text
+          className="fill-foreground font-semibold"
+          x={textPosition.x}
+          y={layout.romanTextY}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
+          style={{
+            ...COMMON_TEXT_STYLES,
+            fontSize: FONT_SIZES.ROMAN,
+            fill: keyAreaColor,
+          }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{
+            duration: ANIMATION.FADE_DURATION * 0.8,
+          }}
+        >
+          {romanNumeral}
+        </motion.text>
+      )}
+
+      {/* リップルエフェクト */}
+      <SVGRippleEffect
+        isTriggered={ripple.isRippleActive}
+        centerX={textPosition.x}
+        centerY={textPosition.y}
+        color={keyAreaColor}
+        onAnimationComplete={ripple.resetRipple}
+      />
+    </>
+  );
+};

@@ -1,7 +1,6 @@
 import { useMemo, useCallback } from 'react';
-import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { useLayerStore } from '@/stores/layerStore';
-import { KeyDTO } from '@/domain';
+import { Key, KeyDTO } from '@/domain';
 
 /**
  * ダイアトニックコード識別用の複合キー型
@@ -24,8 +23,7 @@ const createCompositeKey = (fifthsIndex: number, isMajor: boolean): CompositeKey
  * 現在のキーとレイヤー設定に基づいて、
  * 指定されたキーがダイアトニックコードとしてハイライト表示されるべきかを判定する。
  */
-export const useDiatonicChordHighlight = () => {
-  const { currentKey } = useCurrentKeyStore();
+export const useDiatonicChordHighlight = (currentKey: Key) => {
   const { isDiatonicChordsVisible } = useLayerStore();
 
   // ダイアトニックコード情報を一括計算してMapで管理

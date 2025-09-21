@@ -58,20 +58,47 @@ export const TEXT_RADIUS = {
 } as const;
 
 // ============================================================================
-// アニメーション定数（Framer Motion用）
+// KeyArea アニメーション・スタイル定数
 // ============================================================================
 
 /**
  * アニメーション定数
- * Framer Motionのアニメーション設定に使用
+ * Framer Motionのアニメーション設定に使用される定数
  */
 export const ANIMATION = {
-  /** 基本の遅延時間（秒） */
-  BASE_DELAY: 0.02,
   /** フェードイン時間（秒） */
   FADE_DURATION: 0.3,
   /** ホバー時のスケール */
   HOVER_SCALE: 1.03,
   /** タップ時のスケール */
   TAP_SCALE: 0.9,
+} as const;
+
+/**
+ * テキストスタイル定数
+ * userSelectなどの重複を解消
+ */
+export const COMMON_TEXT_STYLES = {
+  userSelect: 'none',
+  WebkitUserSelect: 'none',
+  MozUserSelect: 'none',
+  msUserSelect: 'none',
+} as const;
+
+/**
+ * フォントサイズ定数
+ * マジックナンバーの排除
+ */
+export const FONT_SIZES = {
+  PRIMARY: '12px',
+  ROMAN: '10px',
+} as const;
+
+/**
+ * レイアウトオフセット定数
+ * テキスト位置調整用の値
+ */
+export const LAYOUT_OFFSETS = {
+  ROMAN_Y_OFFSET: 6,
+  PRIMARY_Y_OFFSET: -6,
 } as const;
