@@ -1,9 +1,9 @@
-import { PitchClass, ScalePattern, Note, KeySignature } from '../common';
+import { PitchClass, ScalePattern, Note, Accidental } from '../common';
 
-/** Degreeと調号のペア */
-export type DegreeWithkeySignature = {
+/** Degreeと変化記号のペア */
+export type DegreeWithAccidental = {
   degree: number;
-  keySignature: KeySignature;
+  accidental: Accidental;
 };
 
 /** Steps数からDegree分析の結果 */
@@ -11,9 +11,9 @@ export type DegreeAnalysisResult = {
   /** スケール音かどうか */
   isScaleDegree: boolean;
   /** シャープ表記でのdegree（例: C# = 1度のシャープ） */
-  sharpNotation: DegreeWithkeySignature;
+  sharpNotation: DegreeWithAccidental;
   /** フラット表記でのdegree（例: Db = 2度のフラット） */
-  flatNotation: DegreeWithkeySignature;
+  flatNotation: DegreeWithAccidental;
 };
 
 /**
@@ -71,8 +71,8 @@ export class Scale {
       const degree = scaleIndex + 1;
       return {
         isScaleDegree: true,
-        sharpNotation: { degree, keySignature: 'natural' },
-        flatNotation: { degree, keySignature: 'natural' },
+        sharpNotation: { degree, accidental: Accidental.NATURAL },
+        flatNotation: { degree, accidental: Accidental.NATURAL },
       };
     }
 
@@ -85,8 +85,8 @@ export class Scale {
 
     return {
       isScaleDegree: false,
-      sharpNotation: { degree: upperIndex, keySignature: 'sharp' },
-      flatNotation: { degree: flatDegree, keySignature: 'flat' },
+      sharpNotation: { degree: upperIndex, accidental: Accidental.SHARP },
+      flatNotation: { degree: flatDegree, accidental: Accidental.FLAT },
     };
   }
 

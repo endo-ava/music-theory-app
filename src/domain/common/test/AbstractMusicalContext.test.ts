@@ -7,6 +7,7 @@ import { Scale } from '../../scale';
 import { Chord } from '../../chord';
 import { Note } from '../Note';
 import { ChordPattern } from '../ChordPattern';
+import { Accidental } from '../Accidental';
 import { AbstractMusicalContext } from '../AbstractMusicalContext';
 
 /**
@@ -57,70 +58,106 @@ describe('AbstractMusicalContext', () => {
   describe('getDegreeNameFromNumber - 静的メソッド', () => {
     it('正常ケース: 1-7度の各度数で正しいローマ数字を返す', () => {
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 1, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 1,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅰ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 2, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 2,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅱ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 3, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 3,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅲ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 4, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 4,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅳ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 5, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 5,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅴ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 6, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 6,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅵ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 7, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 7,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅶ');
     });
 
     it('正常ケース: sharp記号付き度数名を正しく返す', () => {
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 1, keySignature: 'sharp' })
+        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 1, accidental: Accidental.SHARP })
       ).toBe('♯Ⅰ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 4, keySignature: 'sharp' })
+        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 4, accidental: Accidental.SHARP })
       ).toBe('♯Ⅳ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 7, keySignature: 'sharp' })
+        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 7, accidental: Accidental.SHARP })
       ).toBe('♯Ⅶ');
     });
 
     it('正常ケース: flat記号付き度数名を正しく返す', () => {
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 2, keySignature: 'flat' })
+        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 2, accidental: Accidental.FLAT })
       ).toBe('♭Ⅱ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 6, keySignature: 'flat' })
+        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 6, accidental: Accidental.FLAT })
       ).toBe('♭Ⅵ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 7, keySignature: 'flat' })
+        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 7, accidental: Accidental.FLAT })
       ).toBe('♭Ⅶ');
     });
 
     it('異常ケース: 範囲外の度数でエラーをスロー', () => {
       expect(() =>
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 0, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 0,
+          accidental: Accidental.NATURAL,
+        })
       ).toThrow('度数は1から7の間で指定してください。');
       expect(() =>
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 8, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 8,
+          accidental: Accidental.NATURAL,
+        })
       ).toThrow('度数は1から7の間で指定してください。');
       expect(() =>
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: -1, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: -1,
+          accidental: Accidental.NATURAL,
+        })
       ).toThrow('度数は1から7の間で指定してください。');
     });
 
     it('境界値ケース: 最小値と最大値で正しく動作', () => {
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 1, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 1,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅰ');
       expect(
-        AbstractMusicalContext.getDegreeNameFromNumber({ degree: 7, keySignature: 'natural' })
+        AbstractMusicalContext.getDegreeNameFromNumber({
+          degree: 7,
+          accidental: Accidental.NATURAL,
+        })
       ).toBe('Ⅶ');
     });
   });

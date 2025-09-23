@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Scale } from '..';
 import { PitchClass } from '../../common/PitchClass';
 import { ScalePattern } from '../../common/ScalePattern';
+import { Accidental } from '../../common/Accidental';
 
 describe('Scale', () => {
   describe('スケール作成', () => {
@@ -287,22 +288,22 @@ describe('Scale', () => {
 
         // Cメジャースケールのインターバル: [0, 2, 4, 5, 7, 9, 11]
         const testCases = [
-          { step: 0, degree: 1, keySignature: 'natural' }, // C (1度)
-          { step: 2, degree: 2, keySignature: 'natural' }, // D (2度)
-          { step: 4, degree: 3, keySignature: 'natural' }, // E (3度)
-          { step: 5, degree: 4, keySignature: 'natural' }, // F (4度)
-          { step: 7, degree: 5, keySignature: 'natural' }, // G (5度)
-          { step: 9, degree: 6, keySignature: 'natural' }, // A (6度)
-          { step: 11, degree: 7, keySignature: 'natural' }, // B (7度)
+          { step: 0, degree: 1 }, // C (1度)
+          { step: 2, degree: 2 }, // D (2度)
+          { step: 4, degree: 3 }, // E (3度)
+          { step: 5, degree: 4 }, // F (4度)
+          { step: 7, degree: 5 }, // G (5度)
+          { step: 9, degree: 6 }, // A (6度)
+          { step: 11, degree: 7 }, // B (7度)
         ];
 
-        testCases.forEach(({ step, degree, keySignature }) => {
+        testCases.forEach(({ step, degree }) => {
           const result = scale.getDegreeFromSteps(step);
           expect(result.isScaleDegree).toBe(true);
           expect(result.sharpNotation.degree).toBe(degree);
-          expect(result.sharpNotation.keySignature).toBe(keySignature);
+          expect(result.sharpNotation.accidental).toBe(Accidental.NATURAL);
           expect(result.flatNotation.degree).toBe(degree);
-          expect(result.flatNotation.keySignature).toBe(keySignature);
+          expect(result.flatNotation.accidental).toBe(Accidental.NATURAL);
         });
       });
 
@@ -350,9 +351,9 @@ describe('Scale', () => {
           const result = scale.getDegreeFromSteps(step);
           expect(result.isScaleDegree).toBe(false);
           expect(result.sharpNotation.degree).toBe(sharpDegree);
-          expect(result.sharpNotation.keySignature).toBe('sharp');
+          expect(result.sharpNotation.accidental).toBe(Accidental.SHARP);
           expect(result.flatNotation.degree).toBe(flatDegree);
-          expect(result.flatNotation.keySignature).toBe('flat');
+          expect(result.flatNotation.accidental).toBe(Accidental.FLAT);
         });
       });
 
@@ -374,9 +375,9 @@ describe('Scale', () => {
           const result = scale.getDegreeFromSteps(step);
           expect(result.isScaleDegree).toBe(false);
           expect(result.sharpNotation.degree).toBe(sharpDegree);
-          expect(result.sharpNotation.keySignature).toBe('sharp');
+          expect(result.sharpNotation.accidental).toBe(Accidental.SHARP);
           expect(result.flatNotation.degree).toBe(flatDegree);
-          expect(result.flatNotation.keySignature).toBe('flat');
+          expect(result.flatNotation.accidental).toBe(Accidental.FLAT);
         });
       });
     });
@@ -390,7 +391,7 @@ describe('Scale', () => {
         const result = scale.getDegreeFromSteps(0);
         expect(result.isScaleDegree).toBe(true);
         expect(result.sharpNotation.degree).toBe(1);
-        expect(result.sharpNotation.keySignature).toBe('natural');
+        expect(result.sharpNotation.accidental).toBe(Accidental.NATURAL);
       });
 
       it('境界値ケース: step = 11（オクターブ下の音）', () => {
@@ -401,7 +402,7 @@ describe('Scale', () => {
         const result = scale.getDegreeFromSteps(11);
         expect(result.isScaleDegree).toBe(true);
         expect(result.sharpNotation.degree).toBe(7); // B
-        expect(result.sharpNotation.keySignature).toBe('natural');
+        expect(result.sharpNotation.accidental).toBe(Accidental.NATURAL);
       });
 
       it('境界値ケース: 負の値（正規化される）', () => {
