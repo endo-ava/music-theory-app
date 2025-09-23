@@ -1,6 +1,6 @@
 import { Chord } from '@/domain/chord';
-import { Key, TonalChordAnalysisResult } from '@/domain/key';
-import { Note } from '@/domain';
+import { Key } from '@/domain/key';
+import { IAnalysisResult, Note } from '@/domain';
 
 /**
  * 選択されたコード情報の型定義
@@ -10,7 +10,6 @@ import { Note } from '@/domain';
  *
  */
 export type SelectedChordInfo = {
-  name: string;
   degreeName: string;
   chord: Chord;
   constituentNotes: string[];
@@ -74,7 +73,7 @@ export interface TableComponentProps {
  */
 export interface DiatonicTableProps extends TableComponentProps {
   currentKey: Key;
-  diatonicChords: (TonalChordAnalysisResult & { chord: Chord })[];
+  diatonicChords: IAnalysisResult[];
   scaleNotes: readonly Note[];
   onPlayChord: (chord: Chord) => Promise<void>;
   onPlayNote: AudioPlayHandler<Note>;

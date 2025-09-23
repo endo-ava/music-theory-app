@@ -45,7 +45,7 @@ export const useDiatonicChordHighlight = (currentKey: Key) => {
       const compositeKey = createCompositeKey(chordRootFifthsIndex, chordIsMajor);
 
       chordMap.set(compositeKey, {
-        romanNumeral: info.romanDegreeName,
+        romanNumeral: info.flatDegreeName,
         shouldHighlight: true,
       });
     });

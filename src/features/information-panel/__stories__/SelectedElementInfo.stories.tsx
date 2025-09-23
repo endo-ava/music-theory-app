@@ -3,7 +3,8 @@ import { within, expect } from '@storybook/test';
 import { SelectedElementInfo } from '../components/SelectedElementInfo';
 import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { Key, KeyDTO } from '@/domain/key';
+import { Key } from '@/domain/key';
+import type { KeyDTO } from '@/domain/common/IMusicalContext';
 import { Chord } from '@/domain/chord';
 import { PitchClass } from '@/domain/common/PitchClass';
 import { Note } from '@/domain/common/Note';
@@ -37,7 +38,8 @@ const createKeyDTOForChordInCMajor = (chord: Chord): KeyDTO => {
     const isMajor = chordQuality.nameSuffix === '';
     return {
       shortName: isMajor ? rootPitchClass.sharpName : `${rootPitchClass.sharpName}m`,
-      keyName: `${rootPitchClass.sharpName} ${isMajor ? 'Major' : 'Minor'}`,
+      contextName: `${rootPitchClass.sharpName} ${isMajor ? 'Major' : 'Minor'}`,
+      type: 'key' as const,
       fifthsIndex: pitchIndex,
       isMajor,
     };
@@ -49,24 +51,25 @@ const createKeyDTOForChordInCMajor = (chord: Chord): KeyDTO => {
   const rootName = rootPitchClass.sharpName;
 
   let shortName: string;
-  let keyName: string;
+  let contextName: string;
 
   if (isDiminished) {
     shortName = `${rootName}dim`;
-    keyName = `${rootName} Diminished`;
+    contextName = `${rootName} Diminished`;
   } else if (isActuallyMajor) {
     shortName = rootName;
-    keyName = `${rootName} Major`;
+    contextName = `${rootName} Major`;
   } else {
     shortName = `${rootName}m`;
-    keyName = `${rootName} Minor`;
+    contextName = `${rootName} Minor`;
   }
 
   return {
     shortName,
-    keyName,
+    contextName,
     fifthsIndex: expectedChord.fifthsIndex,
     isMajor: isActuallyMajor,
+    type: 'key' as const,
   };
 };
 

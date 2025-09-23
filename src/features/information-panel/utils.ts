@@ -46,8 +46,7 @@ export const createChordInfo = (
   if (!analysis) return null;
 
   return {
-    name: `${chord.getNameFor(currentKey)} (${analysis.romanDegreeName})`,
-    degreeName: analysis.romanDegreeName,
+    degreeName: analysis.perfectDegreeName,
     chord: chord,
     constituentNotes: chord.constituentNotes.map(note => note.getNameFor(currentKey.keySignature)),
     function: analysis.function || '-',

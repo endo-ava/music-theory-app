@@ -7,9 +7,10 @@ describe('keyColorUtils', () => {
     test('正常ケース: C Majorで正確なCSS変数名を生成する', () => {
       const cMajorKey: KeyDTO = {
         shortName: 'C',
-        keyName: 'C Major',
+        contextName: 'C Major',
         fifthsIndex: 0,
         isMajor: true,
+        type: 'key',
       };
 
       const result = getMusicColorKey(cMajorKey);
@@ -19,9 +20,10 @@ describe('keyColorUtils', () => {
     test('正常ケース: A Minorで正確なCSS変数名を生成する', () => {
       const aMinorKey: KeyDTO = {
         shortName: 'Am',
-        keyName: 'A Minor',
+        contextName: 'A Minor',
         fifthsIndex: 3,
         isMajor: false,
+        type: 'key',
       };
 
       const result = getMusicColorKey(aMinorKey);
@@ -31,9 +33,10 @@ describe('keyColorUtils', () => {
     test('正常ケース: F# Majorで正確なCSS変数名を生成する', () => {
       const fsharpMajorKey: KeyDTO = {
         shortName: 'F#',
-        keyName: 'F# Major',
+        contextName: 'F# Major',
         fifthsIndex: 6,
         isMajor: true,
+        type: 'key',
       };
 
       const result = getMusicColorKey(fsharpMajorKey);
