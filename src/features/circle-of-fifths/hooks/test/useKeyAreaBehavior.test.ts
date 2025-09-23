@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useKeyAreaBehavior, type UseKeyAreaBehaviorProps } from '../useKeyAreaBehavior';
-import type { KeyDTO } from '@/domain/key';
+import type { KeyDTO } from '@/domain/common/IMusicalContext';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { useAudio } from '../useAudio';
@@ -52,24 +52,27 @@ describe('useKeyAreaBehavior integration hook', () => {
     position: 0,
     majorKey: {
       shortName: 'C',
-      keyName: 'C Major',
+      contextName: 'C Major',
       fifthsIndex: 0,
       isMajor: true,
+      type: 'key' as const,
     },
     minorKey: {
       shortName: 'Am',
-      keyName: 'A Minor',
+      contextName: 'A Minor',
       fifthsIndex: 0,
       isMajor: false,
+      type: 'key' as const,
     },
     keySignature: '',
   };
 
   const defaultKeyDTO: KeyDTO = {
     shortName: 'C',
-    keyName: 'C Major',
+    contextName: 'C Major',
     fifthsIndex: 0,
     isMajor: true,
+    type: 'key' as const,
   };
 
   const defaultProps: UseKeyAreaBehaviorProps = {
@@ -190,9 +193,10 @@ describe('useKeyAreaBehavior integration hook', () => {
     test('正常ケース: 異なるキーでの動作', () => {
       const differentKeyDTO: KeyDTO = {
         shortName: 'G',
-        keyName: 'G Major',
+        contextName: 'G Major',
         fifthsIndex: 1,
         isMajor: true,
+        type: 'key' as const,
       };
 
       const props: UseKeyAreaBehaviorProps = {
@@ -257,9 +261,10 @@ describe('useKeyAreaBehavior integration hook', () => {
       // Props変更
       const newKeyDTO: KeyDTO = {
         shortName: 'D',
-        keyName: 'D Major',
+        contextName: 'D Major',
         fifthsIndex: 2,
         isMajor: true,
+        type: 'key' as const,
       };
 
       const newProps: UseKeyAreaBehaviorProps = {

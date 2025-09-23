@@ -11,9 +11,10 @@ const createKeyDTO = (
 ): KeyDTO & { pitchClassName: string } => ({
   fifthsIndex,
   isMajor,
-  keyName: `Test-${fifthsIndex}-${isMajor}`,
+  contextName: `Test-${fifthsIndex}-${isMajor}`,
   pitchClassName: `TestPitch-${fifthsIndex}`,
   shortName: '',
+  type: 'key',
 });
 
 describe('useDiatonicChordHighlight hook', () => {
