@@ -1,5 +1,6 @@
 import { ChordPattern, Interval, Note, PitchClass } from '../common';
-import type { Key, KeyDTO } from '../key';
+import type { Key } from '../key';
+import type { KeyDTO } from '../common/IMusicalContext';
 
 /**
  * 和音を表現する集約（Aggregate Root）
