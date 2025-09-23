@@ -7,7 +7,7 @@
  */
 
 import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
-import type { KeyDTO } from '@/domain/key';
+import type { KeyDTO } from '@/domain/common/IMusicalContext';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useAudio } from './useAudio';
 import { useKeyState, type KeyAreaStates } from './useKeyState';

@@ -20,10 +20,10 @@ import type { RelatedKeysInfo } from '../types';
  * const { currentKey, scaleNotes, diatonicChords, relatedKeys } = useCurrentKeyData();
  *
  * // Cメジャーキーの場合
- * console.log(currentKey.keyName); // "C Major"
+ * console.log(currentKey.contextName); // "C Major"
  * console.log(scaleNotes[0].name); // "C"
  * console.log(diatonicChords[0].romanDegreeName); // "I"
- * console.log(relatedKeys.relative.keyName); // "A minor"
+ * console.log(relatedKeys.relative.contextName); // "A minor"
  */
 export const useCurrentKeyData = () => {
   const { currentKey } = useCurrentKeyStore();
