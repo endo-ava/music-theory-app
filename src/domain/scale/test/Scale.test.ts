@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Scale } from '..';
 import { PitchClass } from '../../common/PitchClass';
 import { ScalePattern } from '../../common/ScalePattern';
+import { Accidental } from '../../common/Accidental';
 
 describe('Scale', () => {
   describe('スケール作成', () => {
@@ -275,6 +276,203 @@ describe('Scale', () => {
 
       expect(notes[0]._octave).toBe(8);
       expect(notes.length).toBe(8);
+    });
+  });
+
+  describe('getDegreeFromSteps - 度数分析機能', () => {
+    describe('ダイアトニック音（スケール構成音）の分析', () => {
+      it('正常ケース: Cメジャースケールのダイアトニック音を正しく分析', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        // Cメジャースケールのインターバル: [0, 2, 4, 5, 7, 9, 11]
+        const testCases = [
+          { step: 0, degree: 1 }, // C (1度)
+          { step: 2, degree: 2 }, // D (2度)
+          { step: 4, degree: 3 }, // E (3度)
+          { step: 5, degree: 4 }, // F (4度)
+          { step: 7, degree: 5 }, // G (5度)
+          { step: 9, degree: 6 }, // A (6度)
+          { step: 11, degree: 7 }, // B (7度)
+        ];
+
+        testCases.forEach(({ step, degree }) => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(true);
+          expect(result.sharpNotation.degree).toBe(degree);
+          expect(result.sharpNotation.accidental).toBe(Accidental.NATURAL);
+          expect(result.flatNotation.degree).toBe(degree);
+          expect(result.flatNotation.accidental).toBe(Accidental.NATURAL);
+        });
+      });
+
+      it('正常ケース: Aナチュラルマイナースケールのダイアトニック音を正しく分析', () => {
+        const root = PitchClass.fromCircleOfFifths(3); // A
+        const pattern = ScalePattern.Aeolian; // Natural Minor
+        const scale = new Scale(root, pattern);
+
+        // Aナチュラルマイナーのインターバル: [0, 2, 3, 5, 7, 8, 10]
+        const testCases = [
+          { step: 0, degree: 1 }, // A (1度)
+          { step: 2, degree: 2 }, // B (2度)
+          { step: 3, degree: 3 }, // C (3度)
+          { step: 5, degree: 4 }, // D (4度)
+          { step: 7, degree: 5 }, // E (5度)
+          { step: 8, degree: 6 }, // F (6度)
+          { step: 10, degree: 7 }, // G (7度)
+        ];
+
+        testCases.forEach(({ step, degree }) => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(true);
+          expect(result.sharpNotation.degree).toBe(degree);
+          expect(result.flatNotation.degree).toBe(degree);
+        });
+      });
+    });
+
+    describe('ノンダイアトニック音（変化音）の分析', () => {
+      it('正常ケース: Cメジャースケールのノンダイアトニック音を正しく分析', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        // ノンダイアトニック音のテストケース
+        const testCases = [
+          { step: 1, sharpDegree: 1, flatDegree: 2, description: 'C#/Db' }, // C# または D♭
+          { step: 3, sharpDegree: 2, flatDegree: 3, description: 'D#/Eb' }, // D# または E♭
+          { step: 6, sharpDegree: 4, flatDegree: 5, description: 'F#/Gb' }, // F# または G♭
+          { step: 8, sharpDegree: 5, flatDegree: 6, description: 'G#/Ab' }, // G# または A♭
+          { step: 10, sharpDegree: 6, flatDegree: 7, description: 'A#/Bb' }, // A# または B♭
+        ];
+
+        testCases.forEach(({ step, sharpDegree, flatDegree, description: _description }) => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(false);
+          expect(result.sharpNotation.degree).toBe(sharpDegree);
+          expect(result.sharpNotation.accidental).toBe(Accidental.SHARP);
+          expect(result.flatNotation.degree).toBe(flatDegree);
+          expect(result.flatNotation.accidental).toBe(Accidental.FLAT);
+        });
+      });
+
+      it('正常ケース: マイナースケールでのノンダイアトニック音分析', () => {
+        const root = PitchClass.fromCircleOfFifths(3); // A
+        const pattern = ScalePattern.Aeolian; // Natural Minor
+        const scale = new Scale(root, pattern);
+
+        // Aナチュラルマイナーでのノンダイアトニック音
+        const testCases = [
+          { step: 1, sharpDegree: 1, flatDegree: 2 }, // A# / B♭
+          { step: 4, sharpDegree: 3, flatDegree: 4 }, // C# / D♭
+          { step: 6, sharpDegree: 4, flatDegree: 5 }, // D# / E♭
+          { step: 9, sharpDegree: 6, flatDegree: 7 }, // F# / G♭
+          { step: 11, sharpDegree: 7, flatDegree: 1 }, // G# / A♭
+        ];
+
+        testCases.forEach(({ step, sharpDegree, flatDegree }) => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(false);
+          expect(result.sharpNotation.degree).toBe(sharpDegree);
+          expect(result.sharpNotation.accidental).toBe(Accidental.SHARP);
+          expect(result.flatNotation.degree).toBe(flatDegree);
+          expect(result.flatNotation.accidental).toBe(Accidental.FLAT);
+        });
+      });
+    });
+
+    describe('境界値とエッジケース', () => {
+      it('境界値ケース: step = 0（ルート音）', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        const result = scale.getDegreeFromSteps(0);
+        expect(result.isScaleDegree).toBe(true);
+        expect(result.sharpNotation.degree).toBe(1);
+        expect(result.sharpNotation.accidental).toBe(Accidental.NATURAL);
+      });
+
+      it('境界値ケース: step = 11（オクターブ下の音）', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        const result = scale.getDegreeFromSteps(11);
+        expect(result.isScaleDegree).toBe(true);
+        expect(result.sharpNotation.degree).toBe(7); // B
+        expect(result.sharpNotation.accidental).toBe(Accidental.NATURAL);
+      });
+
+      it('境界値ケース: 負の値（正規化される）', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        const result = scale.getDegreeFromSteps(-1); // -1 -> 11に正規化
+        expect(result.isScaleDegree).toBe(true);
+        expect(result.sharpNotation.degree).toBe(7); // B
+      });
+
+      it('境界値ケース: 12以上の値（正規化される）', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        const result = scale.getDegreeFromSteps(12); // 12 -> 0に正規化
+        expect(result.isScaleDegree).toBe(true);
+        expect(result.sharpNotation.degree).toBe(1); // C
+      });
+
+      it('境界値ケース: 大きな値での正規化', () => {
+        const root = PitchClass.fromCircleOfFifths(0); // C
+        const pattern = ScalePattern.Major;
+        const scale = new Scale(root, pattern);
+
+        const result = scale.getDegreeFromSteps(26); // 26 -> 2に正規化
+        expect(result.isScaleDegree).toBe(true);
+        expect(result.sharpNotation.degree).toBe(2); // D
+      });
+    });
+
+    describe('異なるスケールパターンでの動作確認', () => {
+      it('正常ケース: ドリアンモードでの度数分析', () => {
+        const root = PitchClass.fromCircleOfFifths(2); // D
+        const pattern = ScalePattern.Dorian;
+        const scale = new Scale(root, pattern);
+
+        // ドリアンのインターバル: [0, 2, 3, 5, 7, 9, 10]
+        const diatonicSteps = [0, 2, 3, 5, 7, 9, 10];
+
+        diatonicSteps.forEach((step, index) => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(true);
+          expect(result.sharpNotation.degree).toBe(index + 1);
+        });
+
+        // ノンダイアトニック音をテスト
+        const nonDiatonicSteps = [1, 4, 6, 8, 11];
+        nonDiatonicSteps.forEach(step => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(false);
+        });
+      });
+
+      it('正常ケース: ミクソリディアンモードでの度数分析', () => {
+        const root = PitchClass.fromCircleOfFifths(1); // G
+        const pattern = ScalePattern.Mixolydian;
+        const scale = new Scale(root, pattern);
+
+        // ミクソリディアンのインターバル: [0, 2, 4, 5, 7, 9, 10]
+        const diatonicSteps = [0, 2, 4, 5, 7, 9, 10];
+
+        diatonicSteps.forEach((step, index) => {
+          const result = scale.getDegreeFromSteps(step);
+          expect(result.isScaleDegree).toBe(true);
+          expect(result.sharpNotation.degree).toBe(index + 1);
+        });
+      });
     });
   });
 });

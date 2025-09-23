@@ -1,3 +1,4 @@
+export * from './Accidental';
 export * from './ChordPattern';
 export * from './IMusicalContext';
 export * from './Interval';

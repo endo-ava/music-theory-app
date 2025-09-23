@@ -1,5 +1,8 @@
 import { Interval } from './Interval';
 
+/** 調号 */
+export type KeySignature = 'sharp' | 'flat' | 'natural';
+
 /**
  * オクターブに依存しない音名（C, C#, D...）を表現する不変の値オブジェクト
  * エンハーモニック関係（C#=D♭など）に対応し、文脈に応じた適切な表記を提供する
@@ -29,7 +32,7 @@ export class PitchClass {
    * - B♭   2♭     B♭ C  D  E♭ F  G  A
    * - F    1♭     F  G  A  B♭ C  D  E
    */
-  public getNameFor(keySignature: 'sharp' | 'flat' | 'natural'): string {
+  public getNameFor(keySignature: KeySignature): string {
     // 調号に基づいて適切な表記を選択
     if (keySignature === 'sharp') return this.sharpName;
     if (keySignature === 'flat') return this.flatName;
@@ -85,14 +88,22 @@ export class PitchClass {
   }
 
   /**
+   * 任意の数値をピッチクラスの値（0-11）に正規化する
+   * 数学的解釈：任意の数値を法12で正規化し、0-11の範囲に収める。負数にも正しく対応する数学的な剰余演算。
+   * @param value 正規化したい数値
+   * @returns 0-11の範囲に正規化された数値
+   */
+  public static modulo12 = (value: number): number => {
+    return ((value % 12) + 12) % 12;
+  };
+
+  /**
    * 指定されたインターバル分だけ移調した新しいPitchClassを返す
    * @param interval 移調するインターバル
    */
   transposeBy(interval: Interval): PitchClass {
-    const newIndex = (this.index + interval.semitones) % 12;
-    // 負数の剰余対策
-    const positiveIndex = (newIndex + 12) % 12;
-    const found = PitchClass.ALL_PITCH_CLASSES.find(p => p.index === positiveIndex);
+    const newIndex = PitchClass.modulo12(this.index + interval.semitones);
+    const found = PitchClass.ALL_PITCH_CLASSES.find(p => p.index === newIndex);
     if (!found) throw new Error('移調計算に失敗しました。');
     return found;
   }

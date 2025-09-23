@@ -79,7 +79,13 @@ describe('Chord', () => {
 
   describe('KeyDTOファクトリメソッド', () => {
     it('正常ケース: KeyDTOからメジャーコード生成', () => {
-      const keyDTO = { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true };
+      const keyDTO = {
+        shortName: 'C',
+        contextName: 'C Major',
+        fifthsIndex: 0,
+        isMajor: true,
+        type: 'key' as const,
+      };
       const chord = Chord.fromKeyDTO(keyDTO); // C major
 
       expect(chord.getNameFor(Key.major(PitchClass.fromCircleOfFifths(0)))).toBe('C');
@@ -87,7 +93,13 @@ describe('Chord', () => {
     });
 
     it('正常ケース: KeyDTOからマイナーコード生成', () => {
-      const keyDTO = { shortName: 'Am', keyName: 'A Minor', fifthsIndex: 3, isMajor: false }; // A minor
+      const keyDTO = {
+        shortName: 'Am',
+        contextName: 'A Minor',
+        fifthsIndex: 3,
+        isMajor: false,
+        type: 'key' as const,
+      }; // A minor
       const chord = Chord.fromKeyDTO(keyDTO);
 
       expect(chord.getNameFor(Key.minor(PitchClass.fromCircleOfFifths(3)))).toBe('Am');
@@ -358,10 +370,34 @@ describe('Chord', () => {
     it('正常ケース: KeyDTOを使った和音進行', () => {
       // I-vi-IV-V進行（Cメジャーキー）をKeyDTOで表現
       const keyDTOs = [
-        { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true }, // I (C major)
-        { shortName: 'Am', keyName: 'A Minor', fifthsIndex: 3, isMajor: false }, // vi (A minor)
-        { shortName: 'F', keyName: 'F Major', fifthsIndex: 11, isMajor: true }, // IV (F major)
-        { shortName: 'G', keyName: 'G Major', fifthsIndex: 1, isMajor: true }, // V (G major)
+        {
+          shortName: 'C',
+          contextName: 'C Major',
+          fifthsIndex: 0,
+          isMajor: true,
+          type: 'key' as const,
+        }, // I (C major)
+        {
+          shortName: 'Am',
+          contextName: 'A Minor',
+          fifthsIndex: 3,
+          isMajor: false,
+          type: 'key' as const,
+        }, // vi (A minor)
+        {
+          shortName: 'F',
+          contextName: 'F Major',
+          fifthsIndex: 11,
+          isMajor: true,
+          type: 'key' as const,
+        }, // IV (F major)
+        {
+          shortName: 'G',
+          contextName: 'G Major',
+          fifthsIndex: 1,
+          isMajor: true,
+          type: 'key' as const,
+        }, // V (G major)
       ];
       const progression = keyDTOs.map(keyDTO => Chord.fromKeyDTO(keyDTO));
 

@@ -17,7 +17,7 @@ describe('Key', () => {
 
       expect(key.centerPitch.sharpName).toBe('C');
       expect(key.scale.pattern.name).toBe('Major');
-      expect(key.keyName).toBe('C Major');
+      expect(key.contextName).toBe('C Major');
     });
 
     it('正常ケース: マイナーキーを作成できる', () => {
@@ -26,7 +26,7 @@ describe('Key', () => {
 
       expect(key.centerPitch.sharpName).toBe('A');
       expect(key.scale.pattern.name).toBe('Minor');
-      expect(key.keyName).toBe('A Minor');
+      expect(key.contextName).toBe('A Minor');
     });
   });
 
@@ -39,40 +39,21 @@ describe('Key', () => {
         PitchClass.fromCircleOfFifths(2) // D
       );
 
-      expect(cMajor.keyName).toBe('C Major');
-      expect(dMinor.keyName).toBe('D Minor');
+      expect(cMajor.contextName).toBe('C Major');
+      expect(dMinor.contextName).toBe('D Minor');
     });
   });
 
-  describe('buildTriad', () => {
-    it('正常ケース: C Majorの各度数のダイアトニックコードを正しく生成', () => {
-      const key = Key.major(
-        PitchClass.fromCircleOfFifths(0) // C
-      );
+  // buildTriad の基本機能は AbstractMusicalContext.test.ts でテスト済み
+  // ここではKey固有の挙動のみテスト
+  describe('buildTriad - Key固有テスト', () => {
+    it('正常ケース: C Majorの代表的な和音名が正しく表示される', () => {
+      const key = Key.major(PitchClass.fromCircleOfFifths(0)); // C Major
 
-      // I度 - C Major
-      const iChord = key.buildTriad(1);
-      expect(iChord.getNameFor(key)).toBe('C');
-      expect(iChord.quality).toBe(ChordPattern.MajorTriad);
-
-      // V度 - G Major
-      const vChord = key.buildTriad(5);
-      expect(vChord.getNameFor(key)).toBe('G');
-      expect(vChord.quality).toBe(ChordPattern.MajorTriad);
-
-      // vi度 - A Minor
-      const viChord = key.buildTriad(6);
-      expect(viChord.getNameFor(key)).toBe('Am');
-      expect(viChord.quality).toBe(ChordPattern.MinorTriad);
-    });
-
-    it('異常ケース: 無効な度数でエラーをスロー', () => {
-      const key = Key.major(
-        PitchClass.fromCircleOfFifths(0) // C
-      );
-
-      expect(() => key.buildTriad(0)).toThrow('度数は1から7の間で指定してください。');
-      expect(() => key.buildTriad(8)).toThrow('度数は1から7の間で指定してください。');
+      // Key特有の機能：和音名表示の確認
+      expect(key.buildTriad(1).getNameFor(key)).toBe('C'); // I度
+      expect(key.buildTriad(5).getNameFor(key)).toBe('G'); // V度
+      expect(key.buildTriad(6).getNameFor(key)).toBe('Am'); // vi度
     });
   });
 
@@ -114,7 +95,7 @@ describe('Key', () => {
 
       expect(key.centerPitch.sharpName).toBe('G');
       expect(key.scale.pattern).toBe(ScalePattern.Major);
-      expect(key.keyName).toBe('G Major');
+      expect(key.contextName).toBe('G Major');
     });
 
     it('正常ケース: 五度圏インデックスからマイナーキーを生成', () => {
@@ -122,7 +103,7 @@ describe('Key', () => {
 
       expect(key.centerPitch.sharpName).toBe('C');
       expect(key.scale.pattern).toBe(ScalePattern.Aeolian);
-      expect(key.keyName).toBe('C Minor');
+      expect(key.contextName).toBe('C Minor');
     });
 
     it('正常ケース: 全ての五度圏インデックスでキーを生成可能', () => {
@@ -171,7 +152,7 @@ describe('Key', () => {
       majorKeys.forEach(({ position, expectedShortName, expectedKeyName }) => {
         const key = Key.fromCircleOfFifths(position, true);
         expect(key.shortName).toBe(expectedShortName);
-        expect(key.keyName).toBe(expectedKeyName);
+        expect(key.contextName).toBe(expectedKeyName);
       });
 
       // マイナーキーの表記テスト（#表記を使用）
@@ -186,7 +167,7 @@ describe('Key', () => {
       minorKeys.forEach(({ position, expectedShortName, expectedKeyName }) => {
         const key = Key.fromCircleOfFifths(position, false);
         expect(key.shortName).toBe(expectedShortName);
-        expect(key.keyName).toBe(expectedKeyName);
+        expect(key.contextName).toBe(expectedKeyName);
       });
     });
   });
@@ -309,7 +290,7 @@ describe('Key', () => {
         const relativeMinor = cMajor.getRelativeKey();
 
         expect(relativeMinor.centerPitch.sharpName).toBe('A');
-        expect(relativeMinor.keyName).toBe('A Minor');
+        expect(relativeMinor.contextName).toBe('A Minor');
         expect(relativeMinor.isMajor).toBe(false);
         expect(relativeMinor.centerPitch.fifthsIndex).toBe(3); // A
       });
@@ -319,7 +300,7 @@ describe('Key', () => {
         const relativeMajor = aMinor.getRelativeKey();
 
         expect(relativeMajor.centerPitch.sharpName).toBe('C');
-        expect(relativeMajor.keyName).toBe('C Major');
+        expect(relativeMajor.contextName).toBe('C Major');
         expect(relativeMajor.isMajor).toBe(true);
         expect(relativeMajor.centerPitch.fifthsIndex).toBe(0); // C
       });
@@ -329,7 +310,7 @@ describe('Key', () => {
         const relativeMinor = gMajor.getRelativeKey();
 
         expect(relativeMinor.centerPitch.sharpName).toBe('E');
-        expect(relativeMinor.keyName).toBe('E Minor');
+        expect(relativeMinor.contextName).toBe('E Minor');
         expect(relativeMinor.isMajor).toBe(false);
         expect(relativeMinor.centerPitch.fifthsIndex).toBe(4); // E
       });
@@ -339,7 +320,7 @@ describe('Key', () => {
         const relativeMajor = eMinor.getRelativeKey();
 
         expect(relativeMajor.centerPitch.sharpName).toBe('G');
-        expect(relativeMajor.keyName).toBe('G Major');
+        expect(relativeMajor.contextName).toBe('G Major');
         expect(relativeMajor.isMajor).toBe(true);
         expect(relativeMajor.centerPitch.fifthsIndex).toBe(1); // G
       });
@@ -349,7 +330,7 @@ describe('Key', () => {
         const relativeMinor = fSharpMajor.getRelativeKey();
 
         expect(relativeMinor.centerPitch.sharpName).toBe('D#');
-        expect(relativeMinor.keyName).toBe('D# Minor');
+        expect(relativeMinor.contextName).toBe('D# Minor');
         expect(relativeMinor.centerPitch.fifthsIndex).toBe(9); // D#
       });
     });
@@ -360,7 +341,7 @@ describe('Key', () => {
         const parallelMinor = cMajor.getParallelKey();
 
         expect(parallelMinor.centerPitch.sharpName).toBe('C');
-        expect(parallelMinor.keyName).toBe('C Minor');
+        expect(parallelMinor.contextName).toBe('C Minor');
         expect(parallelMinor.isMajor).toBe(false);
         expect(parallelMinor.centerPitch.fifthsIndex).toBe(0); // C
       });
@@ -370,7 +351,7 @@ describe('Key', () => {
         const parallelMajor = cMinor.getParallelKey();
 
         expect(parallelMajor.centerPitch.sharpName).toBe('C');
-        expect(parallelMajor.keyName).toBe('C Major');
+        expect(parallelMajor.contextName).toBe('C Major');
         expect(parallelMajor.isMajor).toBe(true);
         expect(parallelMajor.centerPitch.fifthsIndex).toBe(0); // C
       });
@@ -380,7 +361,7 @@ describe('Key', () => {
         const parallelMinor = gMajor.getParallelKey();
 
         expect(parallelMinor.centerPitch.sharpName).toBe('G');
-        expect(parallelMinor.keyName).toBe('G Minor');
+        expect(parallelMinor.contextName).toBe('G Minor');
         expect(parallelMinor.isMajor).toBe(false);
         expect(parallelMinor.centerPitch.fifthsIndex).toBe(1); // G
       });
@@ -390,7 +371,7 @@ describe('Key', () => {
         const parallelMajor = gMinor.getParallelKey();
 
         expect(parallelMajor.centerPitch.sharpName).toBe('G');
-        expect(parallelMajor.keyName).toBe('G Major');
+        expect(parallelMajor.contextName).toBe('G Major');
         expect(parallelMajor.isMajor).toBe(true);
         expect(parallelMajor.centerPitch.fifthsIndex).toBe(1); // G
       });
@@ -402,7 +383,7 @@ describe('Key', () => {
         const dominantKey = cMajor.getDominantKey();
 
         expect(dominantKey.centerPitch.sharpName).toBe('G');
-        expect(dominantKey.keyName).toBe('G Major');
+        expect(dominantKey.contextName).toBe('G Major');
         expect(dominantKey.isMajor).toBe(true);
         expect(dominantKey.centerPitch.fifthsIndex).toBe(1); // G
       });
@@ -412,7 +393,7 @@ describe('Key', () => {
         const dominantKey = aMinor.getDominantKey();
 
         expect(dominantKey.centerPitch.sharpName).toBe('E');
-        expect(dominantKey.keyName).toBe('E Minor');
+        expect(dominantKey.contextName).toBe('E Minor');
         expect(dominantKey.isMajor).toBe(false);
         expect(dominantKey.centerPitch.fifthsIndex).toBe(4); // E
       });
@@ -422,7 +403,7 @@ describe('Key', () => {
         const dominantKey = fMajor.getDominantKey();
 
         expect(dominantKey.centerPitch.sharpName).toBe('C');
-        expect(dominantKey.keyName).toBe('C Major');
+        expect(dominantKey.contextName).toBe('C Major');
         expect(dominantKey.isMajor).toBe(true);
         expect(dominantKey.centerPitch.fifthsIndex).toBe(0); // C
       });
@@ -432,7 +413,7 @@ describe('Key', () => {
         const dominantKey = bMajor.getDominantKey();
 
         expect(dominantKey.centerPitch.sharpName).toBe('F#');
-        expect(dominantKey.keyName).toBe('G♭ Major'); // メジャーキーは♭表記を使用
+        expect(dominantKey.contextName).toBe('G♭ Major'); // メジャーキーは♭表記を使用
         expect(dominantKey.centerPitch.fifthsIndex).toBe(6); // F#
       });
     });
@@ -443,7 +424,7 @@ describe('Key', () => {
         const subdominantKey = cMajor.getSubdominantKey();
 
         expect(subdominantKey.centerPitch.sharpName).toBe('F');
-        expect(subdominantKey.keyName).toBe('F Major');
+        expect(subdominantKey.contextName).toBe('F Major');
         expect(subdominantKey.isMajor).toBe(true);
         expect(subdominantKey.centerPitch.fifthsIndex).toBe(11); // F
       });
@@ -453,7 +434,7 @@ describe('Key', () => {
         const subdominantKey = aMinor.getSubdominantKey();
 
         expect(subdominantKey.centerPitch.sharpName).toBe('D');
-        expect(subdominantKey.keyName).toBe('D Minor');
+        expect(subdominantKey.contextName).toBe('D Minor');
         expect(subdominantKey.isMajor).toBe(false);
         expect(subdominantKey.centerPitch.fifthsIndex).toBe(2); // D
       });
@@ -463,7 +444,7 @@ describe('Key', () => {
         const subdominantKey = gMajor.getSubdominantKey();
 
         expect(subdominantKey.centerPitch.sharpName).toBe('C');
-        expect(subdominantKey.keyName).toBe('C Major');
+        expect(subdominantKey.contextName).toBe('C Major');
         expect(subdominantKey.isMajor).toBe(true);
         expect(subdominantKey.centerPitch.fifthsIndex).toBe(0); // C
       });
@@ -473,7 +454,7 @@ describe('Key', () => {
         const subdominantKey = cSharpMajor.getSubdominantKey();
 
         expect(subdominantKey.centerPitch.sharpName).toBe('F#');
-        expect(subdominantKey.keyName).toBe('G♭ Major'); // メジャーキーは♭表記を使用
+        expect(subdominantKey.contextName).toBe('G♭ Major'); // メジャーキーは♭表記を使用
         expect(subdominantKey.centerPitch.fifthsIndex).toBe(6); // F#
       });
     });

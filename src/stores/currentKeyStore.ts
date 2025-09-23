@@ -8,7 +8,7 @@ export interface CurrentKeyState {
   /** 現在の音楽キー（音楽的世界観） */
   currentKey: Key;
   /** 音楽キーを設定する */
-  setCurrentKey: (Key: Key) => void;
+  setCurrentKey: (key: Key) => void;
   /** デフォルト音楽キーにリセットする */
   resetToDefault: () => void;
 }
@@ -24,7 +24,7 @@ export const useCurrentKeyStore = create<CurrentKeyState>(set => ({
   currentKey: Key.fromCircleOfFifths(0, true),
 
   // 音楽キーを設定
-  setCurrentKey: (Key: Key) => set({ currentKey: Key }),
+  setCurrentKey: (key: Key) => set({ currentKey: key }),
 
   // デフォルト音楽キー（C Major）にリセット
   resetToDefault: () => set({ currentKey: Key.fromCircleOfFifths(0, true) }),

@@ -407,4 +407,117 @@ describe('PitchClass', () => {
       });
     });
   });
+
+  describe('modulo12 - 数値正規化関数', () => {
+    describe('正の値の正規化', () => {
+      it('正常ケース: 0-11の範囲内の値はそのまま返す', () => {
+        for (let i = 0; i <= 11; i++) {
+          expect(PitchClass.modulo12(i)).toBe(i);
+        }
+      });
+
+      it('正常ケース: 12の倍数を正規化', () => {
+        expect(PitchClass.modulo12(12)).toBe(0);
+        expect(PitchClass.modulo12(24)).toBe(0);
+        expect(PitchClass.modulo12(36)).toBe(0);
+        expect(PitchClass.modulo12(120)).toBe(0);
+      });
+
+      it('正常ケース: 12より大きい値を正規化', () => {
+        expect(PitchClass.modulo12(13)).toBe(1);
+        expect(PitchClass.modulo12(14)).toBe(2);
+        expect(PitchClass.modulo12(23)).toBe(11);
+        expect(PitchClass.modulo12(25)).toBe(1);
+        expect(PitchClass.modulo12(37)).toBe(1);
+      });
+    });
+
+    describe('負の値の正規化', () => {
+      it('正常ケース: -1から-11の値を正規化', () => {
+        expect(PitchClass.modulo12(-1)).toBe(11);
+        expect(PitchClass.modulo12(-2)).toBe(10);
+        expect(PitchClass.modulo12(-3)).toBe(9);
+        expect(PitchClass.modulo12(-11)).toBe(1);
+      });
+
+      it('正常ケース: -12の倍数を正規化', () => {
+        expect(PitchClass.modulo12(-12)).toBe(0);
+        expect(PitchClass.modulo12(-24)).toBe(0);
+        expect(PitchClass.modulo12(-36)).toBe(0);
+      });
+
+      it('正常ケース: -12より小さい値を正規化', () => {
+        expect(PitchClass.modulo12(-13)).toBe(11);
+        expect(PitchClass.modulo12(-14)).toBe(10);
+        expect(PitchClass.modulo12(-25)).toBe(11);
+        expect(PitchClass.modulo12(-37)).toBe(11);
+      });
+    });
+
+    describe('境界値とエッジケース', () => {
+      it('境界値ケース: 0を正規化', () => {
+        expect(PitchClass.modulo12(0)).toBe(0);
+      });
+
+      it('境界値ケース: 非常に大きな正の値', () => {
+        expect(PitchClass.modulo12(1000)).toBe(4); // 1000 % 12 = 4
+        expect(PitchClass.modulo12(9999)).toBe(3); // 9999 % 12 = 3
+      });
+
+      it('境界値ケース: 非常に小さな負の値', () => {
+        expect(PitchClass.modulo12(-1000)).toBe(8); // (-1000 + 84*12) % 12 = 8
+        expect(PitchClass.modulo12(-9999)).toBe(9); // (-9999 + 834*12) % 12 = 9
+      });
+
+      it('数学的検証: 結果が常に0-11の範囲内', () => {
+        const testValues = [-1000, -37, -25, -12, -1, 0, 1, 12, 25, 37, 1000];
+
+        testValues.forEach(value => {
+          const result = PitchClass.modulo12(value);
+          expect(result).toBeGreaterThanOrEqual(0);
+          expect(result).toBeLessThanOrEqual(11);
+          expect(Number.isInteger(result)).toBe(true);
+        });
+      });
+    });
+
+    describe('音楽理論的応用での検証', () => {
+      it('正常ケース: ピッチクラス計算での使用', () => {
+        // C (index: 0) から7半音上に移調 -> G (index: 7)
+        const result = PitchClass.modulo12(0 + 7);
+        expect(result).toBe(7);
+      });
+
+      it('正常ケース: オクターブを跨ぐ移調計算', () => {
+        // B (index: 11) から3半音上に移調 -> D (index: 2)
+        const result = PitchClass.modulo12(11 + 3);
+        expect(result).toBe(2);
+      });
+
+      it('正常ケース: 下行移調計算', () => {
+        // C (index: 0) から5半音下に移調 -> G (index: 7)
+        const result = PitchClass.modulo12(0 - 5);
+        expect(result).toBe(7);
+      });
+
+      it('正常ケース: 大幅な移調計算', () => {
+        // C (index: 0) から25半音上に移調 -> C# (index: 1)
+        const result = PitchClass.modulo12(0 + 25);
+        expect(result).toBe(1);
+      });
+    });
+
+    describe('TypeScript型安全性の確認', () => {
+      it('正常ケース: 整数以外の数値でも動作', () => {
+        expect(PitchClass.modulo12(12.5)).toBe(0.5);
+        expect(PitchClass.modulo12(-0.5)).toBe(11.5);
+      });
+
+      it('正常ケース: 数値型チェック', () => {
+        const result = PitchClass.modulo12(5);
+        expect(typeof result).toBe('number');
+        expect(Number.isNaN(result)).toBe(false);
+      });
+    });
+  });
 });

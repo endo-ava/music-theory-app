@@ -1,15 +1,16 @@
 import { describe, test, expect } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useKeyState, type UseKeyStateProps } from '../useKeyState';
-import type { KeyDTO } from '@/domain/key';
+import type { KeyDTO } from '@/domain/common/IMusicalContext';
 
 describe('useKeyState hook', () => {
   // テスト用のデフォルトKeyDTO
   const defaultKeyDTO: KeyDTO = {
     shortName: 'C',
-    keyName: 'C Major',
+    contextName: 'C Major',
     fifthsIndex: 0,
     isMajor: true,
+    type: 'key' as const,
   };
 
   const defaultProps: UseKeyStateProps = {
@@ -58,9 +59,10 @@ describe('useKeyState hook', () => {
     test('正常ケース: 異なるキーが選択されている場合', () => {
       const differentKey: KeyDTO = {
         shortName: 'G',
-        keyName: 'G Major',
+        contextName: 'G Major',
         fifthsIndex: 1,
         isMajor: true,
+        type: 'key' as const,
       };
 
       const propsWithDifferentSelection: UseKeyStateProps = {
@@ -78,16 +80,18 @@ describe('useKeyState hook', () => {
     test('正常ケース: メジャー・マイナーキーの判定', () => {
       const majorKey: KeyDTO = {
         shortName: 'C',
-        keyName: 'C Major',
+        contextName: 'C Major',
         fifthsIndex: 0,
         isMajor: true,
+        type: 'key' as const,
       };
 
       const minorKey: KeyDTO = {
         shortName: 'Am',
-        keyName: 'A Minor',
+        contextName: 'A Minor',
         fifthsIndex: 0,
         isMajor: false,
+        type: 'key' as const,
       };
 
       // メジャーキーが選択されている状態でメジャーキーをテスト
@@ -112,18 +116,54 @@ describe('useKeyState hook', () => {
     test('境界値ケース: fifthsIndexとisMajorの厳密な比較', () => {
       const testCases = [
         {
-          selectedKey: { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true },
-          testKey: { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true },
+          selectedKey: {
+            shortName: 'C',
+            contextName: 'C Major',
+            fifthsIndex: 0,
+            isMajor: true,
+            type: 'key' as const,
+          },
+          testKey: {
+            shortName: 'C',
+            contextName: 'C Major',
+            fifthsIndex: 0,
+            isMajor: true,
+            type: 'key' as const,
+          },
           expected: true,
         },
         {
-          selectedKey: { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true },
-          testKey: { shortName: 'Am', keyName: 'A Minor', fifthsIndex: 0, isMajor: false },
+          selectedKey: {
+            shortName: 'C',
+            contextName: 'C Major',
+            fifthsIndex: 0,
+            isMajor: true,
+            type: 'key' as const,
+          },
+          testKey: {
+            shortName: 'Am',
+            contextName: 'A Minor',
+            fifthsIndex: 0,
+            isMajor: false,
+            type: 'key' as const,
+          },
           expected: false,
         },
         {
-          selectedKey: { shortName: 'G', keyName: 'G Major', fifthsIndex: 1, isMajor: true },
-          testKey: { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true },
+          selectedKey: {
+            shortName: 'G',
+            contextName: 'G Major',
+            fifthsIndex: 1,
+            isMajor: true,
+            type: 'key' as const,
+          },
+          testKey: {
+            shortName: 'C',
+            contextName: 'C Major',
+            fifthsIndex: 0,
+            isMajor: true,
+            type: 'key' as const,
+          },
           expected: false,
         },
       ];
@@ -158,9 +198,10 @@ describe('useKeyState hook', () => {
     test('正常ケース: 異なるキーがホバーされている場合', () => {
       const differentKey: KeyDTO = {
         shortName: 'G',
-        keyName: 'G Major',
+        contextName: 'G Major',
         fifthsIndex: 1,
         isMajor: true,
+        type: 'key' as const,
       };
 
       const propsWithDifferentHover: UseKeyStateProps = {
@@ -200,9 +241,10 @@ describe('useKeyState hook', () => {
       test('正常ケース: マイナーキーの通常状態', () => {
         const minorKeyDTO: KeyDTO = {
           shortName: 'Am',
-          keyName: 'A Minor',
+          contextName: 'A Minor',
           fifthsIndex: 0,
           isMajor: false,
+          type: 'key' as const,
         };
 
         const { result } = renderHook(() =>
@@ -259,9 +301,10 @@ describe('useKeyState hook', () => {
       test('正常ケース: マイナーキーのテキストクラス', () => {
         const minorKeyDTO: KeyDTO = {
           shortName: 'Am',
-          keyName: 'A Minor',
+          contextName: 'A Minor',
           fifthsIndex: 0,
           isMajor: false,
+          type: 'key' as const,
         };
 
         const { result } = renderHook(() =>
@@ -364,9 +407,10 @@ describe('useKeyState hook', () => {
       const newProps: UseKeyStateProps = {
         keyDTO: {
           shortName: 'G',
-          keyName: 'G Major',
+          contextName: 'G Major',
           fifthsIndex: 1,
           isMajor: true,
+          type: 'key' as const,
         },
         selectedKey: null,
         hoveredKey: null,
@@ -398,10 +442,34 @@ describe('useKeyState hook', () => {
 
     test('境界値ケース: 極端なfifthsIndex値', () => {
       const edgeCaseKeys = [
-        { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true },
-        { shortName: 'F#', keyName: 'F# Major', fifthsIndex: 6, isMajor: true },
-        { shortName: 'Gb', keyName: 'Gb Major', fifthsIndex: -6, isMajor: true },
-        { shortName: 'Test', keyName: 'Test Major', fifthsIndex: 999, isMajor: true },
+        {
+          shortName: 'C',
+          contextName: 'C Major',
+          fifthsIndex: 0,
+          isMajor: true,
+          type: 'key' as const,
+        },
+        {
+          shortName: 'F#',
+          contextName: 'F# Major',
+          fifthsIndex: 6,
+          isMajor: true,
+          type: 'key' as const,
+        },
+        {
+          shortName: 'Gb',
+          contextName: 'Gb Major',
+          fifthsIndex: -6,
+          isMajor: true,
+          type: 'key' as const,
+        },
+        {
+          shortName: 'Test',
+          contextName: 'Test Major',
+          fifthsIndex: 999,
+          isMajor: true,
+          type: 'key' as const,
+        },
       ];
 
       edgeCaseKeys.forEach(keyDTO => {

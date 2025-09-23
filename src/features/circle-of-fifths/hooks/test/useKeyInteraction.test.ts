@@ -3,7 +3,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useKeyInteraction, type UseKeyInteractionProps } from '../useKeyInteraction';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { useLongPress } from '../useLongPress';
-import type { KeyDTO } from '@/domain/key';
+import type { KeyDTO } from '@/domain/common/IMusicalContext';
 import { ScalePattern } from '@/domain';
 
 // 依存関係のモック
@@ -33,9 +33,10 @@ describe('useKeyInteraction hook', () => {
   // テスト用のデフォルトKeyDTO
   const defaultKeyDTO: KeyDTO = {
     shortName: 'C',
-    keyName: 'C Major',
+    contextName: 'C Major',
     fifthsIndex: 0,
     isMajor: true,
+    type: 'key' as const,
   };
 
   const defaultPosition = 0;
@@ -168,9 +169,10 @@ describe('useKeyInteraction hook', () => {
     test('正常ケース: マイナーキーでのhandleLongPress動作', () => {
       const minorKeyDTO: KeyDTO = {
         shortName: 'Am',
-        keyName: 'A Minor',
+        contextName: 'A Minor',
         fifthsIndex: 0,
         isMajor: false,
+        type: 'key' as const,
       };
 
       const minorProps: UseKeyInteractionProps = {
@@ -222,10 +224,34 @@ describe('useKeyInteraction hook', () => {
 
     test('正常ケース: 異なるキーでのマウス進入', () => {
       const testKeys = [
-        { shortName: 'C', keyName: 'C Major', fifthsIndex: 0, isMajor: true },
-        { shortName: 'G', keyName: 'G Major', fifthsIndex: 1, isMajor: true },
-        { shortName: 'Am', keyName: 'A Minor', fifthsIndex: 0, isMajor: false },
-        { shortName: 'Em', keyName: 'E Minor', fifthsIndex: 1, isMajor: false },
+        {
+          shortName: 'C',
+          contextName: 'C Major',
+          fifthsIndex: 0,
+          isMajor: true,
+          type: 'key' as const,
+        },
+        {
+          shortName: 'G',
+          contextName: 'G Major',
+          fifthsIndex: 1,
+          isMajor: true,
+          type: 'key' as const,
+        },
+        {
+          shortName: 'Am',
+          contextName: 'A Minor',
+          fifthsIndex: 0,
+          isMajor: false,
+          type: 'key' as const,
+        },
+        {
+          shortName: 'Em',
+          contextName: 'E Minor',
+          fifthsIndex: 1,
+          isMajor: false,
+          type: 'key' as const,
+        },
       ];
 
       testKeys.forEach(keyDTO => {
@@ -302,9 +328,10 @@ describe('useKeyInteraction hook', () => {
         ...defaultProps,
         keyDTO: {
           shortName: 'G',
-          keyName: 'G Major',
+          contextName: 'G Major',
           fifthsIndex: 1,
           isMajor: true,
+          type: 'key' as const,
         },
         position: 1,
       };

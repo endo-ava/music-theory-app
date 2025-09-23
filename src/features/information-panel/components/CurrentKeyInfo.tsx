@@ -41,10 +41,10 @@ export const CurrentKeyInfo: React.FC<ClassNameProps> = ({ className }) => {
         <div className="text-center">
           <PlayButton
             onClick={() => handlePlayScale(currentKey)}
-            ariaLabel={`Play ${currentKey.keyName} Key`}
+            ariaLabel={`Play ${currentKey.contextName} Key`}
             className={BUTTON_STYLES.header}
           >
-            {currentKey.keyName}
+            {currentKey.contextName}
           </PlayButton>
         </div>
         {/* スペーサー */}
