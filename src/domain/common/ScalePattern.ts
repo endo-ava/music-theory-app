@@ -85,7 +85,14 @@ export class ScalePattern {
   }
 
   /**
-   * ルートからの各音のインターバル（半音数）をセットとして取得
+   * ルートからの各音のインターバル（半音数）を配列として取得（0を含む）
+   */
+  public getIntervalsFromRootAsArray(): number[] {
+    return [0, ...Array.from(this.getIntervalsFromRoot())];
+  }
+
+  /**
+   * ルートからの各音のインターバル（半音数）をセットとして取得（0は含まない）
    * hasMajorThirdとdetermineQualityで共通利用
    */
   private getIntervalsFromRoot(): Set<number> {

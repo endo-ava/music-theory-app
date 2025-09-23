@@ -26,7 +26,7 @@ export class Interval {
       'MinorSeventh',
       'MajorSeventh',
     ];
-    const normalizedSemitones = ((this.semitones % 12) + 12) % 12;
+    const normalizedSemitones = PitchClass.modulo12(this.semitones);
     return names[normalizedSemitones] || `Unknown(${this.semitones})`;
   }
 
@@ -65,7 +65,7 @@ export class Interval {
    */
   static between(from: PitchClass, to: PitchClass): Interval {
     // 上行方向の半音数を計算（オクターブ内で正規化）
-    let semitones = (to.index - from.index) % 12;
+    let semitones = PitchClass.modulo12(to.index - from.index);
     if (semitones < 0) {
       semitones += 12;
     }
