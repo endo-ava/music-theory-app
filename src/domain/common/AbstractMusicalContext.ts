@@ -1,5 +1,5 @@
 import { PitchClass } from './PitchClass';
-import { DegreeAnalysisResult, DegreeWithkeySignature, Scale } from '../scale';
+import { DegreeAnalysisResult, DegreeWithAccidental, Scale } from '../scale';
 import { Chord } from '../chord';
 import { ChordPattern } from './ChordPattern';
 import { Interval } from './Interval';
@@ -42,18 +42,13 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
    * @returns 度数名（ローマ数字）（例: "Ⅰ", "Ⅱ", "Ⅲ"）
    * @throws {Error} degree が 1-7 の範囲外の場合
    */
-  public static getDegreeNameFromNumber(degreeWithkeySignature: DegreeWithkeySignature): string {
-    const { degree, keySignature } = degreeWithkeySignature;
+  public static getDegreeNameFromNumber(degreeWithAccidental: DegreeWithAccidental): string {
+    const { degree, accidental } = degreeWithAccidental;
     if (degree < 1 || degree > 7) {
       throw new Error('度数は1から7の間で指定してください。');
     }
 
-    const KEY_SIGNATURE_MAP = {
-      sharp: '♯',
-      flat: '♭',
-      natural: '',
-    };
-    return KEY_SIGNATURE_MAP[keySignature] + AbstractMusicalContext.ROMAN_NUMERALS[degree - 1];
+    return accidental.getSymbol() + AbstractMusicalContext.ROMAN_NUMERALS[degree - 1];
   }
 
   // === 共通インスタンスメソッド ===
