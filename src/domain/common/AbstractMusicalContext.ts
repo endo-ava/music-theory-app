@@ -1,9 +1,9 @@
 import { PitchClass } from './PitchClass';
-import { Scale } from '../scale';
+import { DegreeAnalysisResult, DegreeWithkeySignature, Scale } from '../scale';
 import { Chord } from '../chord';
 import { ChordPattern } from './ChordPattern';
 import { Interval } from './Interval';
-import type { IMusicalContext, IAnalysisResult, DegreeResult } from './IMusicalContext';
+import type { IMusicalContext, IAnalysisResult, KeyDTO } from './IMusicalContext';
 
 /**
  * 音楽的文脈の抽象基底クラス
@@ -11,9 +11,7 @@ import type { IMusicalContext, IAnalysisResult, DegreeResult } from './IMusicalC
  * Key（調性音楽）とModalContext（旋法音楽）の共通機能を提供。
  * 音楽理論の基本概念（度数、ローマ数字表記、基本的な和音構築）を実装。
  */
-export abstract class AbstractMusicalContext<T extends IAnalysisResult = IAnalysisResult>
-  implements IMusicalContext<T>
-{
+export abstract class AbstractMusicalContext implements IMusicalContext {
   /** 中心音（調性音楽のトニック、旋法音楽の中心音） */
   public readonly centerPitch: PitchClass;
 
@@ -44,20 +42,18 @@ export abstract class AbstractMusicalContext<T extends IAnalysisResult = IAnalys
    * @returns 度数名（ローマ数字）（例: "Ⅰ", "Ⅱ", "Ⅲ"）
    * @throws {Error} degree が 1-7 の範囲外の場合
    */
-  public static getDegreeNameFromNumber(degree: number): string {
+  public static getDegreeNameFromNumber(degreeWithkeySignature: DegreeWithkeySignature): string {
+    const { degree, keySignature } = degreeWithkeySignature;
     if (degree < 1 || degree > 7) {
       throw new Error('度数は1から7の間で指定してください。');
     }
-    return AbstractMusicalContext.ROMAN_NUMERALS[degree - 1];
-  }
 
-  /**
-   * 五度圏インデックスを0-11の範囲に正規化する共通ユーティリティ関数
-   * @param index 正規化したいインデックス
-   * @returns 0-11の範囲に正規化されたインデックス
-   */
-  public static normalizeIndex(index: number): number {
-    return ((index % 12) + 12) % 12;
+    const KEY_SIGNATURE_MAP = {
+      sharp: '♯',
+      flat: '♭',
+      natural: '',
+    };
+    return KEY_SIGNATURE_MAP[keySignature] + AbstractMusicalContext.ROMAN_NUMERALS[degree - 1];
   }
 
   // === 共通インスタンスメソッド ===
@@ -95,41 +91,6 @@ export abstract class AbstractMusicalContext<T extends IAnalysisResult = IAnalys
   }
 
   /**
-   * この文脈でPitchClassを分析し、度数と度数名を取得する共通メソッド
-   * ダイアトニック音の場合は基本的な度数、ノンダイアトニック音の場合は変化記号付きの度数を返す
-   * @param pitchClassToAnalyze 分析対象のPitchClass
-   * @returns 度数（1-7）と度数名（ローマ数字表記）
-   */
-  public analyzePitchClassInContext(pitchClassToAnalyze: PitchClass): DegreeResult {
-    const scaleNotes = this.scale.getNotes();
-    const diatonicIndex = scaleNotes.findIndex(note =>
-      note._pitchClass.equals(pitchClassToAnalyze)
-    );
-
-    // ダイアトニック音の場合
-    if (diatonicIndex !== -1) {
-      return {
-        degree: diatonicIndex + 1,
-        degreeName: AbstractMusicalContext.getDegreeNameFromNumber(diatonicIndex + 1),
-      };
-    }
-
-    // ノンダイアトニック音の場合 - ベースレターから度数を特定
-    // このデフォルト実装では基本的なローマ数字のみを返す
-    // サブクラスでより詳細な分析ロジックをオーバーライド可能
-    const baseLetter = pitchClassToAnalyze.sharpName.charAt(0);
-    const baseLetterIndex = scaleNotes.findIndex(
-      note => note._pitchClass.sharpName.charAt(0) === baseLetter
-    );
-    const baseDegree = baseLetterIndex !== -1 ? baseLetterIndex + 1 : 1;
-
-    return {
-      degree: baseDegree,
-      degreeName: AbstractMusicalContext.getDegreeNameFromNumber(baseDegree),
-    };
-  }
-
-  /**
    * 音楽的文脈の完全名を取得する
    * hasMajorThirdの結果に基づいて調号を選択
    * @returns 音楽的文脈の完全名（例: "C Major", "D Dorian", "A Minor"）
@@ -154,37 +115,14 @@ export abstract class AbstractMusicalContext<T extends IAnalysisResult = IAnalys
   }
 
   /**
-   * 指定されたコードがダイアトニックコードかどうかを判定する共通メソッド
-   * サブクラスからアクセス可能なprotectedメソッド
-   * @param chord 判定したいコード
-   * @param degree 度数（1-7）
-   * @returns ダイアトニックコードかどうか
-   */
-  protected isDiatonicChord(chord: Chord, degree: number): boolean {
-    if (degree < 1 || degree > 7) return false;
-
-    try {
-      const diatonicChord = this.buildTriad(degree);
-      return diatonicChord.equals(chord);
-    } catch {
-      return false;
-    }
-  }
-
-  /**
    * このコンテキストのダイアトニックコードの情報一覧を返す
    * ベース実装では和声機能分析を含まない基本的な情報のみ提供
    * @returns ダイアトニックコード情報の配列（分析結果とコードオブジェクトを含む）
    */
-  public getDiatonicChordsInfo(): (IAnalysisResult & { chord: Chord })[] {
-    return this.diatonicChords.map((chord, index) => {
-      const degree = index + 1;
+  public getDiatonicChordsInfo(): IAnalysisResult[] {
+    return this.diatonicChords.map(chord => {
       return {
-        chord,
-        romanDegreeName: chord.quality.getChordDegreeName(
-          AbstractMusicalContext.getDegreeNameFromNumber(degree)
-        ),
-        isDiatonic: true,
+        ...this.analyzeChord(chord),
       };
     });
   }
@@ -225,13 +163,48 @@ export abstract class AbstractMusicalContext<T extends IAnalysisResult = IAnalys
    * @param chord 分析対象の和音
    * @returns 基本分析結果（ローマ数字、ダイアトニック判定）
    */
-  public analyzeChord(chord: Chord): T {
-    const degreeResult = this.analyzePitchClassInContext(chord.rootNote._pitchClass);
-    const isDiatonic = this.isDiatonicChord(chord, degreeResult.degree);
-
+  public analyzeChord(chord: Chord): IAnalysisResult {
+    const steps = PitchClass.modulo12(chord.rootNote._pitchClass.index - this.centerPitch.index);
+    const degreeAnalysisResult: DegreeAnalysisResult = this.scale.getDegreeFromSteps(steps);
+    const [flatDegreeName, sharpDegreeName] = [
+      chord.quality.getChordDegreeName(
+        AbstractMusicalContext.getDegreeNameFromNumber(degreeAnalysisResult.flatNotation)
+      ),
+      chord.quality.getChordDegreeName(
+        AbstractMusicalContext.getDegreeNameFromNumber(degreeAnalysisResult.sharpNotation)
+      ),
+    ];
     return {
-      romanDegreeName: chord.quality.getChordDegreeName(degreeResult.degreeName),
-      isDiatonic,
-    } as T;
+      ...degreeAnalysisResult,
+      chord,
+      isDiatonic: this.isDiatonicChord(chord),
+      sharpDegreeName,
+      flatDegreeName,
+      perfectDegreeName: degreeAnalysisResult.isScaleDegree
+        ? flatDegreeName
+        : sharpDegreeName + ' / ' + flatDegreeName,
+    };
+  }
+
+  /**
+   * 指定されたコードがこの文脈においてダイアトニックかどうかを判定する
+   * @param chord 判定対象のコード
+   * @returns ダイアトニックの場合true
+   */
+  public isDiatonicChord(chord: Chord): boolean {
+    return this.diatonicChords.some(diatonicChord => chord.equals(diatonicChord));
+  }
+
+  /**
+   * JSON形式で出力（共通実装）
+   */
+  public toJSON(): KeyDTO {
+    return {
+      shortName: this.shortName,
+      contextName: this.contextName,
+      fifthsIndex: this.centerPitch.fifthsIndex,
+      type: 'modal', // デフォルト値
+      isMajor: false, // デフォルト値（Keyクラスでオーバーライド）
+    };
   }
 }
