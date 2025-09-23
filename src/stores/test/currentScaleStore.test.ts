@@ -17,7 +17,7 @@ describe('currentKeyStore', () => {
 
     expect(result.current.currentKey.centerPitch.sharpName).toBe('C');
     expect(result.current.currentKey.isMajor).toBe(true);
-    expect(result.current.currentKey.keyName).toBe('C Major');
+    expect(result.current.currentKey.contextName).toBe('C Major');
   });
 
   it('音楽キーを設定できる', () => {
@@ -30,7 +30,7 @@ describe('currentKeyStore', () => {
 
     expect(result.current.currentKey.centerPitch.sharpName).toBe('G');
     expect(result.current.currentKey.isMajor).toBe(true);
-    expect(result.current.currentKey.keyName).toBe('G Major');
+    expect(result.current.currentKey.contextName).toBe('G Major');
   });
 
   // setCurrentKeyFromKeyNameメソッドは現在コメントアウトされているためテストをスキップ

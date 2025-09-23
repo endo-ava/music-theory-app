@@ -1,15 +1,19 @@
-import { PitchClass, ScalePattern, Note } from '../common';
+import { PitchClass, ScalePattern, Note, Accidental } from '../common';
 
-/** スケールにおける度数と調号変化の状態
- * 例：
- * F#m in D Majar -> degree:3, alteration:natural
- * F in D Majar -> degree:3, alteration:flat
- */
-export type DegreeInfo = {
-  /** スケール上の度数 (1-7) */
+/** Degreeと変化記号のペア */
+export type DegreeWithAccidental = {
   degree: number;
-  /** 変化の状態 ('natural'はダイアトニック音そのもの) */
-  alteration: 'sharp' | 'flat' | 'natural';
+  accidental: Accidental;
+};
+
+/** Steps数からDegree分析の結果 */
+export type DegreeAnalysisResult = {
+  /** スケール音かどうか */
+  isScaleDegree: boolean;
+  /** シャープ表記でのdegree（例: C# = 1度のシャープ） */
+  sharpNotation: DegreeWithAccidental;
+  /** フラット表記でのdegree（例: Db = 2度のフラット） */
+  flatNotation: DegreeWithAccidental;
 };
 
 /**
@@ -49,6 +53,41 @@ export class Scale {
       return undefined;
     }
     return this.notes[degree - 1];
+  }
+
+  /**
+   * 指定されたStep数（半音階での距離）からDegree分析を行う
+   * @param step ルートからの半音階での距離（0-11）
+   * @returns DegreeAnalysisResult 分析結果（シャープ/フラット両方の表記を含む）
+   */
+  getDegreeFromSteps(step: number): DegreeAnalysisResult {
+    const normalizedStep = PitchClass.modulo12(step);
+    // 例: [0, 2, 3, 5, 7, 8, 10, 12]
+    const scaleIntervals = this.pattern.getIntervalsFromRootAsArray();
+
+    // 1. ダイアトニック音かどうかをチェック
+    const scaleIndex = scaleIntervals.indexOf(normalizedStep);
+    if (scaleIndex !== -1) {
+      const degree = scaleIndex + 1;
+      return {
+        isScaleDegree: true,
+        sharpNotation: { degree, accidental: Accidental.NATURAL },
+        flatNotation: { degree, accidental: Accidental.NATURAL },
+      };
+    }
+
+    // 2. ノンダイアトニック音を上から挟むダイアトニック音を探す
+    const upperIndex = scaleIntervals.findIndex(interval => interval > normalizedStep);
+
+    const scaleSize = scaleIntervals.length - 1;
+    // ディグリーがスケールの構成音数を超えた場合は、1に戻す（例: 8度 -> 1度）
+    const flatDegree = upperIndex + 1 > scaleSize ? 1 : upperIndex + 1;
+
+    return {
+      isScaleDegree: false,
+      sharpNotation: { degree: upperIndex, accidental: Accidental.SHARP },
+      flatNotation: { degree: flatDegree, accidental: Accidental.FLAT },
+    };
   }
 
   /**

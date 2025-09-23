@@ -22,9 +22,10 @@ describe('useKeyAreaPresentation hook', () => {
   const defaultTestPosition: Point = { x: 100, y: 50 };
   const defaultKeyDTO: KeyDTO = {
     shortName: 'C',
-    keyName: 'C Major',
+    contextName: 'C Major',
     fifthsIndex: 0,
     isMajor: true,
+    type: 'key' as const,
   };
   const defaultCurrentKey = Key.major(PitchClass.C);
 
@@ -160,9 +161,10 @@ describe('useKeyAreaPresentation hook', () => {
     test('正常ケース: 異なるキーでの色計算', () => {
       const gMajorKeyDTO: KeyDTO = {
         shortName: 'G',
-        keyName: 'G Major',
+        contextName: 'G Major',
         fifthsIndex: 1,
         isMajor: true,
+        type: 'key' as const,
       };
       const gMajorKey = Key.major(PitchClass.G);
 
@@ -185,9 +187,10 @@ describe('useKeyAreaPresentation hook', () => {
     test('正常ケース: マイナーキーでの色計算', () => {
       const aMinorKeyDTO: KeyDTO = {
         shortName: 'Am',
-        keyName: 'A Minor',
+        contextName: 'A Minor',
         fifthsIndex: 0,
         isMajor: false,
+        type: 'key' as const,
       };
       const aMinorKey = Key.minor(PitchClass.A);
 
@@ -276,9 +279,10 @@ describe('useKeyAreaPresentation hook', () => {
       // 異なるキーでのProps
       const newKeyDTO: KeyDTO = {
         shortName: 'D',
-        keyName: 'D Major',
+        contextName: 'D Major',
         fifthsIndex: 2,
         isMajor: true,
+        type: 'key' as const,
       };
       const newCurrentKey = Key.major(PitchClass.D);
       const newProps: UseKeyAreaPresentationProps = {

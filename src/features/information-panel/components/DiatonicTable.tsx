@@ -50,7 +50,7 @@ export const DiatonicTable: React.FC<DiatonicTableProps> = React.memo(
           <TableRow>
             {diatonicChords.map((chordInfo, index) => (
               <TableHead key={index} className="flex items-center justify-center">
-                {chordInfo.romanDegreeName}
+                {chordInfo.perfectDegreeName}
               </TableHead>
             ))}
           </TableRow>

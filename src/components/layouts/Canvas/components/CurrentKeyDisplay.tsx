@@ -23,7 +23,7 @@ export const CurrentKeyDisplay: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div className={twMerge('relative inline-block', className)}>
       {/* テキスト本体 */}
-      <h2 className="cursor-default pr-4 pb-2 text-2xl lg:text-4xl">{currentKey.keyName}</h2>
+      <h2 className="cursor-default pr-4 pb-2 text-2xl lg:text-4xl">{currentKey.contextName}</h2>
 
       {/* レスポンシブヘルプアイコン */}
       <ResponsiveHelpIcon

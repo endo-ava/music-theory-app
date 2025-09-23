@@ -1,5 +1,5 @@
 import { Interval } from './Interval';
-import { PitchClass } from './PitchClass';
+import { PitchClass, KeySignature } from './PitchClass';
 
 /**
  * オクターブを含む具体的な音高を表現する不変の値オブジェクト
@@ -17,7 +17,7 @@ export class Note {
    * @param keySignature 調号設定（sharp/flat/natural）
    * @returns 適切な表記での音名
    */
-  getNameFor(keySignature: 'sharp' | 'flat' | 'natural'): string {
+  getNameFor(keySignature: KeySignature): string {
     return this._pitchClass.getNameFor(keySignature);
   }
 

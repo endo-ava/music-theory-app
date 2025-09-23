@@ -9,17 +9,19 @@ vi.mock('@/domain/services/CircleOfFifths', () => {
     position: index,
     majorKey: {
       shortName: ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'F', 'Bb', 'Eb', 'Ab'][index],
-      keyName: `${['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'F', 'Bb', 'Eb', 'Ab'][index]} Major`,
+      contextName: `${['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'F', 'Bb', 'Eb', 'Ab'][index]} Major`,
       fifthsIndex: index,
       isMajor: true,
+      type: 'key' as const,
     },
     minorKey: {
       shortName: ['Am', 'Em', 'Bm', 'F#m', 'C#m', 'G#m', 'D#m', 'A#m', 'Dm', 'Gm', 'Cm', 'Fm'][
         index
       ],
-      keyName: `${['Am', 'Em', 'Bm', 'F#m', 'C#m', 'G#m', 'D#m', 'A#m', 'Dm', 'Gm', 'Cm', 'Fm'][index]}`,
+      contextName: `${['Am', 'Em', 'Bm', 'F#m', 'C#m', 'G#m', 'D#m', 'A#m', 'Dm', 'Gm', 'Cm', 'Fm'][index]}`,
       fifthsIndex: index,
       isMajor: false,
+      type: 'key' as const,
     },
     keySignature: [
       '',
@@ -170,13 +172,13 @@ describe('getCircleOfFifthsData', () => {
 
         // メジャーキーの検証
         expect(typeof majorKey.shortName).toBe('string');
-        expect(typeof majorKey.keyName).toBe('string');
+        expect(typeof majorKey.contextName).toBe('string');
         expect(typeof majorKey.fifthsIndex).toBe('number');
         expect(majorKey.isMajor).toBe(true);
 
         // マイナーキーの検証
         expect(typeof minorKey.shortName).toBe('string');
-        expect(typeof minorKey.keyName).toBe('string');
+        expect(typeof minorKey.contextName).toBe('string');
         expect(typeof minorKey.fifthsIndex).toBe('number');
         expect(minorKey.isMajor).toBe(false);
       });

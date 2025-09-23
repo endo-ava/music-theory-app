@@ -1,5 +1,6 @@
 import { Interval } from '../common';
-import { Key, KeyDTO } from '../key';
+import { Key } from '../key';
+import type { KeyDTO } from '../common/IMusicalContext';
 
 /**
  * 五度圏のセグメント情報を表現するデータ構造
