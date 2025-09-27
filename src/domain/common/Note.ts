@@ -1,5 +1,6 @@
 import { Interval } from './Interval';
-import { PitchClass, KeySignature } from './PitchClass';
+import { KeySignature } from './KeySignature';
+import { PitchClass } from './PitchClass';
 
 /**
  * オクターブを含む具体的な音高を表現する不変の値オブジェクト

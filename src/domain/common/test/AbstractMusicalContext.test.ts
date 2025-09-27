@@ -17,6 +17,13 @@ class TestContext extends AbstractMusicalContext {
   constructor(centerPitch: PitchClass, scale: Scale) {
     super(centerPitch, scale);
   }
+
+  /**
+   * テスト専用の実装：与えられたスケールの主音をそのまま返す
+   */
+  getRelativeMajorTonic(): PitchClass {
+    return this.centerPitch;
+  }
 }
 
 /**
