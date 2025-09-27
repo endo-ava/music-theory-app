@@ -13,7 +13,7 @@ import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 export const ANGLE_OFFSET = -105;
 
 /** 1セグメントあたりの角度（度） */
-export const ANGLE_PER_SEGMENT = 360 / CircleOfFifthsService.getSegmentCount();
+export const ANGLE_PER_SEGMENT = 360 / CircleOfFifthsService.SEGMENT_COUNT;
 
 // ============================================================================
 // レイアウト定数（計算に必要な値のみ）
