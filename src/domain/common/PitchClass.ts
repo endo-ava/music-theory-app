@@ -1,7 +1,6 @@
 import { Interval } from './Interval';
-
-/** 調号 */
-export type KeySignature = 'sharp' | 'flat' | 'natural';
+import { KeySignature } from './KeySignature';
+import { Accidental } from './Accidental';
 
 /**
  * オクターブに依存しない音名（C, C#, D...）を表現する不変の値オブジェクト
@@ -14,7 +13,9 @@ export class PitchClass {
     public readonly flatName: string, // フラット表記（例: 'D♭'）
     public readonly index: number, // C=0, C#=1 ... B=11
     public readonly fifthsIndex: number // C=0, G=1 ... F=11
-  ) {}
+  ) {
+    Object.freeze(this);
+  }
 
   /**
    * Key (Major)  KeySig   1  2  3  4  5  6  7
@@ -34,8 +35,8 @@ export class PitchClass {
    */
   public getNameFor(keySignature: KeySignature): string {
     // 調号に基づいて適切な表記を選択
-    if (keySignature === 'sharp') return this.sharpName;
-    if (keySignature === 'flat') return this.flatName;
+    if (keySignature.primaryAccidental === Accidental.SHARP) return this.sharpName;
+    if (keySignature.primaryAccidental === Accidental.FLAT) return this.flatName;
     // naturalの場合はデフォルトでsharp表記を使用
     return this.sharpName;
   }
@@ -96,6 +97,25 @@ export class PitchClass {
   public static modulo12 = (value: number): number => {
     return ((value % 12) + 12) % 12;
   };
+
+  /**
+   * 調号でシャープが付く順序（F, C, G, D, A, E, B）
+   * 五度圏順序の末尾のF（fifthsIndex=11）から開始して7つの音名
+   */
+  public static readonly SHARP_KEY_ORDER: readonly PitchClass[] = (() => {
+    const fifthsOrder = PitchClass.ALL_PITCH_CLASSES;
+    // F（末尾） + C-B（先頭から6つ）
+    return [fifthsOrder[11], ...fifthsOrder.slice(0, 6)];
+  })();
+
+  /**
+   * 調号でフラットが付く順序（B, E, A, D, G, C, F）
+   * シャープ順序の逆順（Bから逆方向）
+   */
+  public static readonly FLAT_KEY_ORDER: readonly PitchClass[] = (() => {
+    // シャープ順序を逆にしてフラット順序を生成
+    return [...PitchClass.SHARP_KEY_ORDER].reverse();
+  })();
 
   /**
    * 指定されたインターバル分だけ移調した新しいPitchClassを返す

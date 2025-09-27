@@ -6,6 +6,7 @@
 import { describe, it, expect } from 'vitest';
 import { Note } from '../Note';
 import { PitchClass } from '../PitchClass';
+import { KeySignature } from '../KeySignature';
 import { Interval } from '../Interval';
 
 describe('Note', () => {
@@ -63,7 +64,7 @@ describe('Note', () => {
       testCases.forEach(({ circleIndex, expected }) => {
         const pitchClass = PitchClass.fromCircleOfFifths(circleIndex);
         const note = new Note(pitchClass, 4);
-        expect(note.getNameFor('sharp')).toBe(expected);
+        expect(note.getNameFor(KeySignature.fromFifthsIndex(1))).toBe(expected); // G Major (1 sharp)
       });
     });
 
@@ -86,7 +87,7 @@ describe('Note', () => {
       testCases.forEach(({ circleIndex, expected }) => {
         const pitchClass = PitchClass.fromCircleOfFifths(circleIndex);
         const note = new Note(pitchClass, 4);
-        expect(note.getNameFor('flat')).toBe(expected);
+        expect(note.getNameFor(KeySignature.fromFifthsIndex(11))).toBe(expected); // F Major (1 flat)
       });
     });
 
@@ -97,16 +98,16 @@ describe('Note', () => {
       const cNote = new Note(cPitchClass, 4);
       const cSharpNote = new Note(cSharpPitchClass, 4);
 
-      expect(cNote.getNameFor('natural')).toBe('C');
-      expect(cSharpNote.getNameFor('natural')).toBe('C#'); // naturalでもsharpが表示される
+      expect(cNote.getNameFor(KeySignature.fromFifthsIndex(0))).toBe('C'); // C Major (no accidentals)
+      expect(cSharpNote.getNameFor(KeySignature.fromFifthsIndex(0))).toBe('C#'); // naturalでもsharpが表示される
     });
 
     it('正常ケース: エンハーモニック等価性の確認', () => {
       const cSharpPitchClass = PitchClass.fromCircleOfFifths(7); // C#/D♭
       const note = new Note(cSharpPitchClass, 4);
 
-      expect(note.getNameFor('sharp')).toBe('C#');
-      expect(note.getNameFor('flat')).toBe('D♭');
+      expect(note.getNameFor(KeySignature.fromFifthsIndex(1))).toBe('C#'); // G Major (1 sharp)
+      expect(note.getNameFor(KeySignature.fromFifthsIndex(11))).toBe('D♭'); // F Major (1 flat)
       // 同じ音だが調号によって表記が変わる
     });
   });
