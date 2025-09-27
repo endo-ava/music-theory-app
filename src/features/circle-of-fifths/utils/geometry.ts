@@ -61,7 +61,7 @@ export const calculateTextPosition = (position: number, radius: number): Point =
     throw new CircleOfFifthsError(`Invalid radius: ${radius}`, 'INVALID_RADIUS');
   }
 
-  const angle = calculateAngle(position) + Math.PI / CircleOfFifthsService.getSegmentCount(); // セグメントの中心
+  const angle = calculateAngle(position) + Math.PI / CircleOfFifthsService.SEGMENT_COUNT; // セグメントの中心
   return polarToCartesian(radius, angle);
 };
 

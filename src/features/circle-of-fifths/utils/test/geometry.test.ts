@@ -18,7 +18,7 @@ describe('geometry utils', () => {
     });
 
     test('正常ケース: 各位置（0-11）で正しい角度を計算', () => {
-      for (let position = 0; position < CircleOfFifthsService.getSegmentCount(); position++) {
+      for (let position = 0; position < CircleOfFifthsService.SEGMENT_COUNT; position++) {
         const expectedAngleInDegrees = position * ANGLE_PER_SEGMENT + ANGLE_OFFSET;
         const expectedAngle = (expectedAngleInDegrees * Math.PI) / 180;
         expect(calculateAngle(position)).toBeCloseTo(expectedAngle, 10);
@@ -39,7 +39,7 @@ describe('geometry utils', () => {
 
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => calculateAngle(-1)).toThrow(CircleOfFifthsError);
-      expect(() => calculateAngle(CircleOfFifthsService.getSegmentCount())).toThrow(
+      expect(() => calculateAngle(CircleOfFifthsService.SEGMENT_COUNT)).toThrow(
         CircleOfFifthsError
       );
       expect(() => calculateAngle(1.5)).toThrow(CircleOfFifthsError);
@@ -117,12 +117,12 @@ describe('geometry utils', () => {
     test('正常ケース: 各位置で正しいテキスト座標を計算', () => {
       const radius = 150;
 
-      for (let position = 0; position < CircleOfFifthsService.getSegmentCount(); position++) {
+      for (let position = 0; position < CircleOfFifthsService.SEGMENT_COUNT; position++) {
         const result = calculateTextPosition(position, radius);
 
         // セグメントの中心角度を計算
         const centerAngle =
-          calculateAngle(position) + Math.PI / CircleOfFifthsService.getSegmentCount();
+          calculateAngle(position) + Math.PI / CircleOfFifthsService.SEGMENT_COUNT;
         const expected = polarToCartesian(radius, centerAngle);
 
         expect(result.x).toBeCloseTo(expected.x, 10);
@@ -132,7 +132,7 @@ describe('geometry utils', () => {
 
     test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
       expect(() => calculateTextPosition(-1, 100)).toThrow(CircleOfFifthsError);
-      expect(() => calculateTextPosition(CircleOfFifthsService.getSegmentCount(), 100)).toThrow(
+      expect(() => calculateTextPosition(CircleOfFifthsService.SEGMENT_COUNT, 100)).toThrow(
         CircleOfFifthsError
       );
 

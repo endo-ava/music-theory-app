@@ -1,4 +1,4 @@
-import { Interval } from '../common';
+import { Accidental, Interval, KeySignature } from '../common';
 import { Key } from '../key';
 import type { KeyDTO } from '../common/IMusicalContext';
 
@@ -9,7 +9,7 @@ export interface CircleSegmentData {
   position: number;
   majorKey: Key;
   minorKey: Key;
-  keySignature: string; // 調号
+  keySignature: string;
 }
 
 /**
@@ -29,11 +29,9 @@ export class CircleOfFifthsService {
   private static segments: readonly CircleSegmentData[];
 
   /**
-   * 五度圏のセグメント数を返す (SEGMENT_COUNTの代替)
+   * 五度圏のセグメント数
    */
-  static getSegmentCount(): number {
-    return 12;
-  }
+  public static SEGMENT_COUNT = 12;
 
   /**
    * 12個すべての五度圏セグメント情報を生成して返す (CIRCLE_SEGMENTSの代替)
@@ -44,7 +42,7 @@ export class CircleOfFifthsService {
     }
 
     const generatedSegments: CircleSegmentData[] = [];
-    for (let i = 0; i < this.getSegmentCount(); i++) {
+    for (let i = 0; i < CircleOfFifthsService.SEGMENT_COUNT; i++) {
       generatedSegments.push({
         position: i,
         majorKey: Key.fromCircleOfFifths(i, true),
@@ -70,14 +68,15 @@ export class CircleOfFifthsService {
    * 五度圏の位置から調号の文字列表現を生成するヘルパーメソッド
    */
   private static generateKeySignature(position: number): string {
-    if (position === 0) return '';
-    if (position < 6) return `♯${position}`;
-    if (position === 6) return `♯♭${position}`;
+    if (position === KeySignature.NO_KEYSIGNATURE) return '';
+    if (position === KeySignature.SAME_KEYSIGNATURE)
+      return `${Accidental.SHARP.getSymbol()}${Accidental.FLAT.getSymbol()}${position}`;
 
+    if (KeySignature.isSharpSystem(position)) return `${Accidental.SHARP.getSymbol()}${position}`;
     // F(11), B♭(10), E♭(9), A♭(8), D♭(7)
     // 12 - positionで♭の数が計算できる
-    const flatCount = 12 - position;
-    return `♭${flatCount}`;
+    const flatCount = CircleOfFifthsService.SEGMENT_COUNT - position;
+    return `${Accidental.FLAT.getSymbol()}${flatCount}`;
   }
 
   /**

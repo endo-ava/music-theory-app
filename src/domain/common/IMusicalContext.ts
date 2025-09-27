@@ -1,6 +1,7 @@
 import type { PitchClass } from './PitchClass';
 import type { DegreeAnalysisResult, Scale } from '../scale';
 import type { Chord } from '../chord';
+import { KeySignature } from './KeySignature';
 
 /**
  * 音楽的文脈のDTO型
@@ -61,6 +62,9 @@ export interface IMusicalContext {
   /** この文脈で使用されるスケール */
   readonly scale: Scale;
 
+  /** この文脈に対応する調号 */
+  readonly keySignature: KeySignature;
+
   /**
    * 音楽的文脈の完全名（例: "C Major", "D Dorian"）
    */
@@ -103,6 +107,13 @@ export interface IMusicalContext {
    * @returns ダイアトニックの場合true
    */
   isDiatonicChord(chord: Chord): boolean;
+
+  /**
+   * この文脈の相対的メジャートニックを返す
+   * メジャーキーの場合はそのまま、マイナーキーの場合は相対メジャーのトニックを返す
+   * @returns 相対的メジャートニックのPitchClass
+   */
+  getRelativeMajorTonic(): PitchClass;
 
   /**
    * JSON形式で出力する

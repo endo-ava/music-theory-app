@@ -1,4 +1,4 @@
-import { KeySignature, PitchClass, ScalePattern, ScaleQuality } from '../common';
+import { Interval, PitchClass, ScalePattern, ScaleQuality, KeySignature } from '../common';
 import { Scale } from '../scale';
 import { Chord } from '../chord';
 import { AbstractMusicalContext } from '../common/AbstractMusicalContext';
@@ -35,8 +35,6 @@ export interface IAnalysisResultWithFunction extends IAnalysisResult {
  */
 export class Key extends AbstractMusicalContext {
   public readonly keyQuality: KeyQuality;
-  /** 調号，五度圏の右側がシャープ */
-  public readonly keySignature: KeySignature;
 
   // === 静的定数 ===
 
@@ -80,15 +78,13 @@ export class Key extends AbstractMusicalContext {
       throw new Error('Key supports only Major and Minor (Aeolian) scales');
     }
 
-    super(centerPitch, new Scale(centerPitch, scalePattern));
-    this.keyQuality = this.scale.pattern.quality === 'major' ? 'major' : 'minor';
-    // 五度圏でのシャープ系とフラット系の判定
-    // C(0)からB(5)まではシャープ系、F#/G♭(6)からF(11)まではフラット系
-    const normalizedIndex =
-      this.keyQuality === 'major'
-        ? this.centerPitch.fifthsIndex
-        : PitchClass.modulo12(this.centerPitch.fifthsIndex - 3);
-    this.keySignature = normalizedIndex < Key.SHARP_FLAT_BOUNDARY ? 'sharp' : 'flat';
+    // keyQuality, KeySignatureを事前に計算
+    const keyQuality = scalePattern.quality === 'major' ? 'major' : 'minor';
+    const keySignature = Key.calculateKeySignatureForKey(centerPitch, keyQuality);
+
+    super(centerPitch, new Scale(centerPitch, scalePattern), keySignature);
+
+    this.keyQuality = keyQuality;
   }
 
   /**
@@ -112,6 +108,21 @@ export class Key extends AbstractMusicalContext {
   }
 
   // === B. 静的ファクトリーメソッド・ユーティリティ ===
+
+  /**
+   * 指定されたトニックとキータイプから適切なKeySignatureを計算する
+   * @param centerPitch 主音となる音名
+   * @param keyQuality キーの品質（major または minor）
+   * @returns 適切なKeySignature
+   */
+  private static calculateKeySignatureForKey(
+    centerPitch: PitchClass,
+    keyQuality: KeyQuality
+  ): KeySignature {
+    const relativeMajorTonic =
+      keyQuality === 'major' ? centerPitch : centerPitch.transposeBy(Interval.MinorThird);
+    return KeySignature.fromFifthsIndex(relativeMajorTonic.fifthsIndex);
+  }
 
   /**
    * メジャーキーを生成する便利なファクトリーメソッド
@@ -228,6 +239,21 @@ export class Key extends AbstractMusicalContext {
       PitchClass.modulo12(this.centerPitch.fifthsIndex - 1)
     );
     return this.isMajor ? Key.major(subdominantCenterPitch) : Key.minor(subdominantCenterPitch);
+  }
+
+  /**
+   * この文脈の相対的メジャートニックを返す
+   * メジャーキーの場合はそのまま、マイナーキーの場合は相対メジャーのトニックを返す
+   * @returns 相対的メジャートニックのPitchClass
+   */
+  public getRelativeMajorTonic(): PitchClass {
+    if (this.isMajor) {
+      // メジャーキーの場合はそのままトニックを返す
+      return this.centerPitch;
+    } else {
+      // マイナーキーの場合は相対メジャー（短3度上）のトニックを直接計算
+      return this.centerPitch.transposeBy(Interval.MinorThird);
+    }
   }
 
   // === E. 内部ヘルパーメソッド ===

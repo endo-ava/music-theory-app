@@ -10,6 +10,94 @@ import { ScalePattern } from '../../common/ScalePattern';
 import { ChordPattern } from '../../common';
 
 describe('Key', () => {
+  // 新規追加: calculateKeySignatureForKey関数の間接テスト
+  describe('KeySignature calculation (calculateKeySignatureForKey)', () => {
+    describe('メジャーキーのKeySignature計算', () => {
+      it('正常ケース: C major → 調号なし (fifthsIndex: 0)', () => {
+        const cMajor = Key.major(PitchClass.fromCircleOfFifths(0)); // C
+        expect(cMajor.keySignature.fifthsIndex).toBe(0);
+        expect(cMajor.keySignature.primaryAccidental).toBe(null);
+      });
+
+      it('正常ケース: G major → 1つのシャープ (fifthsIndex: 1)', () => {
+        const gMajor = Key.major(PitchClass.fromCircleOfFifths(1)); // G
+        expect(gMajor.keySignature.fifthsIndex).toBe(1);
+        expect(gMajor.keySignature.primaryAccidental?.value).toBe('sharp');
+      });
+
+      it('正常ケース: F major → 1つのフラット (fifthsIndex: 11)', () => {
+        const fMajor = Key.major(PitchClass.fromCircleOfFifths(11)); // F
+        expect(fMajor.keySignature.fifthsIndex).toBe(11);
+        expect(fMajor.keySignature.primaryAccidental?.value).toBe('flat');
+      });
+
+      it('正常ケース: B♭ major → 2つのフラット (fifthsIndex: 10)', () => {
+        const bbMajor = Key.major(PitchClass.fromCircleOfFifths(10)); // B♭
+        expect(bbMajor.keySignature.fifthsIndex).toBe(10);
+        expect(bbMajor.keySignature.primaryAccidental?.value).toBe('flat');
+      });
+    });
+
+    describe('マイナーキーのKeySignature計算（相対長調から導出）', () => {
+      it('正常ケース: A minor → C major相対 (fifthsIndex: 0)', () => {
+        const aMinor = Key.minor(PitchClass.fromCircleOfFifths(3)); // A
+        expect(aMinor.keySignature.fifthsIndex).toBe(0); // C major
+        expect(aMinor.keySignature.primaryAccidental).toBe(null);
+      });
+
+      it('正常ケース: E minor → G major相対 (fifthsIndex: 1)', () => {
+        const eMinor = Key.minor(PitchClass.fromCircleOfFifths(4)); // E
+        expect(eMinor.keySignature.fifthsIndex).toBe(1); // G major
+        expect(eMinor.keySignature.primaryAccidental?.value).toBe('sharp');
+      });
+
+      it('正常ケース: F# minor → A major相対 (fifthsIndex: 3)', () => {
+        const fsMinor = Key.minor(PitchClass.fromCircleOfFifths(6)); // F#
+        expect(fsMinor.keySignature.fifthsIndex).toBe(3); // A major
+        expect(fsMinor.keySignature.primaryAccidental?.value).toBe('sharp');
+      });
+
+      it('正常ケース: D minor → F major相対 (fifthsIndex: 11)', () => {
+        const dMinor = Key.minor(PitchClass.fromCircleOfFifths(2)); // D
+        expect(dMinor.keySignature.fifthsIndex).toBe(11); // F major
+        expect(dMinor.keySignature.primaryAccidental?.value).toBe('flat');
+      });
+    });
+
+    describe('音楽理論的妥当性の確認', () => {
+      it('正常ケース: 全ての五度圏位置でKeySignatureが正しく計算される', () => {
+        // メジャーキーの検証
+        for (let i = 0; i < 12; i++) {
+          const majorKey = Key.major(PitchClass.fromCircleOfFifths(i));
+          expect(majorKey.keySignature.fifthsIndex).toBe(i);
+        }
+
+        // マイナーキーの検証（相対長調のfifthsIndexと一致する）
+        for (let i = 0; i < 12; i++) {
+          const minorKey = Key.minor(PitchClass.fromCircleOfFifths(i));
+          // 実際の実装では MinorThird.transposeBy を使用しており、
+          // これは fifthsIndex ベースでの計算ではなく semitone ベースでの計算
+          // そのため、実際の相対長調の fifthsIndex を直接計算するのではなく、
+          // 実装されている getRelativeMajorTonic() の結果と比較する
+          const expectedRelativeMajorTonic = minorKey.getRelativeMajorTonic();
+          expect(minorKey.keySignature.fifthsIndex).toBe(expectedRelativeMajorTonic.fifthsIndex);
+        }
+      });
+
+      it('正常ケース: 相対調関係のKeySignatureが一致する', () => {
+        // A minor と C major
+        const aMinor = Key.minor(PitchClass.fromCircleOfFifths(3));
+        const cMajor = Key.major(PitchClass.fromCircleOfFifths(0));
+        expect(aMinor.keySignature.fifthsIndex).toBe(cMajor.keySignature.fifthsIndex);
+
+        // F# minor と A major
+        const fsMinor = Key.minor(PitchClass.fromCircleOfFifths(6));
+        const aMajor = Key.major(PitchClass.fromCircleOfFifths(3));
+        expect(fsMinor.keySignature.fifthsIndex).toBe(aMajor.keySignature.fifthsIndex);
+      });
+    });
+  });
+
   describe('constructor', () => {
     it('正常ケース: PitchClassとScalePatternから調を作成できる', () => {
       const centerPitch = PitchClass.fromCircleOfFifths(0); // C

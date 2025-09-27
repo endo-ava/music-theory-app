@@ -4,7 +4,7 @@ import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 describe('validation utils', () => {
   describe('isValidPosition', () => {
-    const segmentCount = CircleOfFifthsService.getSegmentCount();
+    const segmentCount = CircleOfFifthsService.SEGMENT_COUNT;
 
     test('正常ケース: 有効な位置（0-11）でtrueを返す', () => {
       // 0から11までの全ての位置をテスト
