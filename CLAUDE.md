@@ -21,6 +21,7 @@ npm run test:run       # 単体テスト実行
 npm run test:storybook # Storybookテスト実行
 npm run test:all       # 全テスト実行
 npm run test:coverage  # 単体テストカバレッジ算出
+npx vitest run path/to/file.test.ts # ファイルを指定してテスト実行
 ```
 
 # ドキュメント体系
