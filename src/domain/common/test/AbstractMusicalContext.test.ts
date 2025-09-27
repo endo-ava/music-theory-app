@@ -9,13 +9,15 @@ import { Note } from '../Note';
 import { ChordPattern } from '../ChordPattern';
 import { Accidental } from '../Accidental';
 import { AbstractMusicalContext } from '../AbstractMusicalContext';
+import { KeySignature } from '../KeySignature';
 
 /**
  * テスト専用のAbstractMusicalContextの実装
  */
 class TestContext extends AbstractMusicalContext {
   constructor(centerPitch: PitchClass, scale: Scale) {
-    super(centerPitch, scale);
+    // TODO: FIX
+    super(centerPitch, scale, KeySignature.fromFifthsIndex(1));
   }
 
   /**
