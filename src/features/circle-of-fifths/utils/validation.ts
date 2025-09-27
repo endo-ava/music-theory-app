@@ -7,8 +7,6 @@ import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
  */
 export const isValidPosition = (position: number): boolean => {
   return (
-    Number.isInteger(position) &&
-    position >= 0 &&
-    position < CircleOfFifthsService.getSegmentCount()
+    Number.isInteger(position) && position >= 0 && position < CircleOfFifthsService.SEGMENT_COUNT
   );
 };
