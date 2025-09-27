@@ -10,20 +10,20 @@
 
 ```bash
 git status
-git log --oneline -10
+git log --oneline -5
 ```
 
 ### Step 2
 
-ブランチの差分を全て網羅したPRを作成するため、変更内容を詳細に把握する。
+ブランチの差分を把握する。変更統計情報のみで十分なため、効率的に情報収集する。
 
 コマンド例：
 
 ```bash
-git diff main...HEAD --name-only
 git diff main...HEAD --stat
-mcp__github__list_commits #（GitHub MCP）
 ```
+
+注意: GitHub MCPの`mcp__github__list_commits`は通常不要（ローカルgit情報で十分）。大規模変更時のみ必要に応じて使用。
 
 ### Step 3
 
