@@ -2,6 +2,7 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { ViewController } from '@/features/view-controller';
+import { KeyController } from '@/features/key-controller';
 import { LayerController } from '@/features/layer-controller';
 import { ClassNameProps } from '@/shared/types';
 
@@ -24,10 +25,13 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
       {/* C-1: View Controller（ビュー・コントローラー） */}
       <ViewController />
 
-      {/* C-2: Layer Controller（レイヤー・コントローラー） */}
+      {/* C-2: Key Controller（キー・コントローラー） */}
+      <KeyController />
+
+      {/* C-3: Layer Controller（レイヤー・コントローラー） */}
       <LayerController className="md:py-6" />
 
-      {/* 将来の拡張エリア: キー選択UI、設定・オプション等 */}
+      {/* 将来の拡張エリア: 設定・オプション等 */}
     </aside>
   );
 };
