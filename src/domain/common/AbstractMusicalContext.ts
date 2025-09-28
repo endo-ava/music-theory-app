@@ -4,6 +4,7 @@ import { Chord } from '../chord';
 import { ChordPattern } from './ChordPattern';
 import { Interval } from './Interval';
 import type { IMusicalContext, IAnalysisResult, KeyDTO } from './IMusicalContext';
+import { KeySignature } from './KeySignature';
 
 /**
  * 音楽的文脈の抽象基底クラス
@@ -18,6 +19,9 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
   /** この文脈で使用されるスケール */
   public readonly scale: Scale;
 
+  /** この文脈に対応する調号 */
+  public readonly keySignature: KeySignature;
+
   /** ダイアトニックコードのキャッシュ（初回計算時に保存） */
   protected _diatonicChordsCache: readonly Chord[] | null = null;
 
@@ -28,10 +32,12 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
    * 抽象基底クラスのコンストラクタ
    * @param centerPitch 中心音となる音名
    * @param scale この文脈で使用されるスケール
+   * @param keySignature この文脈に対応する調号（依存性注入）
    */
-  protected constructor(centerPitch: PitchClass, scale: Scale) {
+  protected constructor(centerPitch: PitchClass, scale: Scale, keySignature: KeySignature) {
     this.centerPitch = centerPitch;
     this.scale = scale;
+    this.keySignature = keySignature;
   }
 
   // === 静的ユーティリティメソッド ===
@@ -189,6 +195,13 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
   public isDiatonicChord(chord: Chord): boolean {
     return this.diatonicChords.some(diatonicChord => chord.equals(diatonicChord));
   }
+
+  /**
+   * この文脈の相対的メジャートニックを返す
+   * 抽象メソッド - サブクラスで具体的な実装を提供する
+   * @returns 相対的メジャートニックのPitchClass
+   */
+  public abstract getRelativeMajorTonic(): PitchClass;
 
   /**
    * JSON形式で出力（共通実装）

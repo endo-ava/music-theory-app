@@ -30,7 +30,7 @@ export const generatePizzaSlicePath = (
   }
 
   const startAngle = calculateAngle(position);
-  const endAngle = calculateAngle((position + 1) % CircleOfFifthsService.getSegmentCount());
+  const endAngle = calculateAngle((position + 1) % CircleOfFifthsService.SEGMENT_COUNT);
 
   // 内側の円弧の開始点と終了点
   const innerStart = polarToCartesian(innerRadius, startAngle);
