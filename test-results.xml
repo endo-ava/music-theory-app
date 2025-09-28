@@ -1,0 +1,1869 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="898" failures="0" errors="0" time="1.508338145">
+    <testsuite name="src/stores/test/circleOfFifthsStore.test.ts" timestamp="2025-09-28T09:30:38.999Z" hostname="runnervm3ublj" tests="1" failures="0" errors="0" skipped="0" time="0.003345364">
+        <testcase classname="src/stores/test/circleOfFifthsStore.test.ts" name="Zustandストアの基本動作確認 &gt; ストアが正常に初期化される" time="0.001884444">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/test/currentScaleStore.test.ts" timestamp="2025-09-28T09:30:39.001Z" hostname="runnervm3ublj" tests="4" failures="0" errors="0" skipped="0" time="0.029420311">
+        <testcase classname="src/stores/test/currentScaleStore.test.ts" name="currentKeyStore &gt; 初期状態はC Majorキーである" time="0.015622602">
+        </testcase>
+        <testcase classname="src/stores/test/currentScaleStore.test.ts" name="currentKeyStore &gt; 音楽キーを設定できる" time="0.005112151">
+        </testcase>
+        <testcase classname="src/stores/test/currentScaleStore.test.ts" name="currentKeyStore &gt; デフォルトにリセットできる" time="0.004074687">
+        </testcase>
+        <testcase classname="src/stores/test/currentScaleStore.test.ts" name="currentKeyStore &gt; メジャーキーとマイナーキーを正しく区別する" time="0.00300911">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/test/hubStore.test.ts" timestamp="2025-09-28T09:30:39.002Z" hostname="runnervm3ublj" tests="13" failures="0" errors="0" skipped="0" time="0.009498135">
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; 初期状態 &gt; 正常ケース: デフォルトでcircle-of-fifthsが設定される" time="0.00206483">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; 初期状態 &gt; 正常ケース: setHubType関数が定義されている" time="0.00027515">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; 初期状態 &gt; 正常ケース: ストアの型構造が正しい" time="0.001545126">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; setHubType関数 &gt; 正常ケース: circle-of-fifthsに設定できる" time="0.00031281">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; setHubType関数 &gt; 正常ケース: chromatic-circleに設定できる" time="0.000233133">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; setHubType関数 &gt; 正常ケース: 状態変更後もsetHubType関数が同じ参照を保持" time="0.000330904">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; setHubType関数 &gt; 境界値ケース: 全てのHubTypeを正しく設定できる" time="0.000428625">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; 状態変更の動作 &gt; 正常ケース: 複数回の状態変更が正しく処理される" time="0.00043139">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; 状態変更の動作 &gt; 正常ケース: 同じ値を設定しても状態は変更される" time="0.000416292">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; ストア購読の動作 &gt; 正常ケース: 状態変更時にリスナーが呼ばれる" time="0.000497433">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; ストアの独立性 &gt; 正常ケース: 複数のgetState()呼び出しが同じオブジェクトを参照" time="0.000284658">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; ストアの独立性 &gt; 正常ケース: ストアの状態が適切に分離されている" time="0.00023204">
+        </testcase>
+        <testcase classname="src/stores/test/hubStore.test.ts" name="hubStore &gt; 型安全性 &gt; 正常ケース: HubType以外の値は型エラーとなる（TypeScript）" time="0.000196555">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/test/layerStore.test.ts" timestamp="2025-09-28T09:30:39.005Z" hostname="runnervm3ublj" tests="11" failures="0" errors="0" skipped="0" time="0.010257843">
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; initial state &gt; 正常ケース: 初期状態でダイアトニックコード非表示" time="0.002409108">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; toggleDiatonicChords action &gt; 正常ケース: falseからtrueに切り替わる" time="0.000465704">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; toggleDiatonicChords action &gt; 正常ケース: trueからfalseに切り替わる" time="0.000460744">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; toggleDiatonicChords action &gt; 正常ケース: 複数回のトグル動作" time="0.000609861">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; toggleDiatonicChords action &gt; 正常ケース: 関数の参照が安定している" time="0.000244333">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; state immutability &gt; 正常ケース: setState後に元のstateが変更されない" time="0.000549319">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; state immutability &gt; 正常ケース: toggleDiatonicChords後の不変性" time="0.001425172">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; store subscription &gt; 正常ケース: 状態変更時にsubscriberが呼ばれる" time="0.000545893">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; direct state manipulation &gt; 正常ケース: setStateによる直接的な状態変更" time="0.000515055">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; direct state manipulation &gt; 正常ケース: 部分的な状態更新" time="0.000302501">
+        </testcase>
+        <testcase classname="src/stores/test/layerStore.test.ts" name="layerStore &gt; type safety &gt; 正常ケース: 型安全な状態アクセス" time="0.000333769">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/chord/test/Chord.test.ts" timestamp="2025-09-28T09:30:39.008Z" hostname="runnervm3ublj" tests="30" failures="0" errors="0" skipped="0" time="0.019676733">
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; コンストラクタ（ファクトリメソッド経由） &gt; 正常ケース: メジャーコードを生成" time="0.002857699">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; コンストラクタ（ファクトリメソッド経由） &gt; 正常ケース: マイナーコードを生成" time="0.000587739">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; コンストラクタ（ファクトリメソッド経由） &gt; 正常ケース: ドミナント7thコードを生成" time="0.000507141">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; 構成音生成テスト &gt; 正常ケース: 各メジャートライアドの構成音" time="0.001056148">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; 構成音生成テスト &gt; 正常ケース: 各マイナートライアドの構成音" time="0.000858312">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; KeyDTOファクトリメソッド &gt; 正常ケース: KeyDTOからメジャーコード生成" time="0.000950212">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; KeyDTOファクトリメソッド &gt; 正常ケース: KeyDTOからマイナーコード生成" time="0.000561061">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; オクターブ処理 &gt; 正常ケース: オクターブを跨ぐ音程の処理" time="0.000280009">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; オクターブ処理 &gt; 正常ケース: 低いオクターブでの和音" time="0.000362122">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; オクターブ処理 &gt; 正常ケース: 高いオクターブでの和音" time="0.000311898">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; fromNotes ファクトリメソッド &gt; 正常ケース: メジャートライアドの構成音から生成" time="0.000726306">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; fromNotes ファクトリメソッド &gt; 正常ケース: マイナートライアドの構成音から生成" time="0.000433734">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; fromNotes ファクトリメソッド &gt; 正常ケース: ドミナント7thコードの構成音から生成" time="0.0004527">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; fromNotes ファクトリメソッド &gt; 正常ケース: ディミニッシュトライアドの構成音から生成" time="0.000605252">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; fromNotes ファクトリメソッド &gt; エラーケース: 空の構成音配列" time="0.001093177">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; fromNotes ファクトリメソッド &gt; エラーケース: 認識できないコード品質" time="0.000480631">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; ChordPattern.from ファクトリメソッド &gt; 正常ケース: MajorSeventhコード" time="0.000416342">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; ChordPattern.from ファクトリメソッド &gt; 正常ケース: MinorSeventhコード" time="0.0003668">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; ChordPattern.from ファクトリメソッド &gt; 正常ケース: DiminishedTriadコード" time="0.00041526">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: 同じルート音と同じ品質のChordは等しい" time="0.000300337">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: 同じChord同士は等しい" time="0.000181596">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: 異なる品質のChordは等しくない" time="0.000234145">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: 異なるルート音のChordは等しくない" time="0.00025386">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: 異なるオクターブでも同じピッチクラスと品質なら等しい" time="0.000249052">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; エッジケース: null、undefined、非Chordオブジェクトとの比較" time="0.000298403">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: 異なる生成方法で作られた同じChordは等しい" time="0.000225047">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; equals メソッド &gt; 正常ケース: fromNotesで生成したChordとの比較" time="0.000208247">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; 音楽理論的検証 &gt; 正常ケース: 基本トライアドの音程関係" time="0.000361169">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; 音楽理論的検証 &gt; 正常ケース: セブンスコードの音程関係" time="0.000467527">
+        </testcase>
+        <testcase classname="src/domain/chord/test/Chord.test.ts" name="Chord &gt; 音楽理論的検証 &gt; 正常ケース: KeyDTOを使った和音進行" time="0.000575998">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/AbstractMusicalContext.test.ts" timestamp="2025-09-28T09:30:39.014Z" hostname="runnervm3ublj" tests="287" failures="0" errors="0" skipped="0" time="0.25113674">
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDegreeNameFromNumber - 静的メソッド &gt; 正常ケース: 1-7度の各度数で正しいローマ数字を返す" time="0.002581968">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDegreeNameFromNumber - 静的メソッド &gt; 正常ケース: sharp記号付き度数名を正しく返す" time="0.000419698">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDegreeNameFromNumber - 静的メソッド &gt; 正常ケース: flat記号付き度数名を正しく返す" time="0.000386356">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDegreeNameFromNumber - 静的メソッド &gt; 異常ケース: 範囲外の度数でエラーをスロー" time="0.001438878">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDegreeNameFromNumber - 静的メソッド &gt; 境界値ケース: 最小値と最大値で正しく動作" time="0.000281763">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (C Major) &gt; centerPitchが正しく設定されている" time="0.000400222">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (C Major) &gt; scaleが正しく設定されている" time="0.000224526">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (C Major) &gt; contextNameが生成される" time="0.000356531">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (C Major) &gt; shortNameが生成される" time="0.000376177">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (G Major - Sharp) &gt; centerPitchが正しく設定されている" time="0.000290799">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (G Major - Sharp) &gt; scaleが正しく設定されている" time="0.00016708">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (G Major - Sharp) &gt; contextNameが生成される" time="0.000153875">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (G Major - Sharp) &gt; shortNameが生成される" time="0.000184151">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (F Major - Flat) &gt; centerPitchが正しく設定されている" time="0.000351372">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (F Major - Flat) &gt; scaleが正しく設定されている" time="0.000188119">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (F Major - Flat) &gt; contextNameが生成される" time="0.00027486">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (F Major - Flat) &gt; shortNameが生成される" time="0.000184973">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (A Minor) &gt; centerPitchが正しく設定されている" time="0.000173301">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (A Minor) &gt; scaleが正しく設定されている" time="0.00015133">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (A Minor) &gt; contextNameが生成される" time="0.00025357">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (A Minor) &gt; shortNameが生成される" time="0.000209368">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (E Minor - Sharp) &gt; centerPitchが正しく設定されている" time="0.000149006">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (E Minor - Sharp) &gt; scaleが正しく設定されている" time="0.000126565">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (E Minor - Sharp) &gt; contextNameが生成される" time="0.000197005">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (E Minor - Sharp) &gt; shortNameが生成される" time="0.000135852">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (D Minor - Flat) &gt; centerPitchが正しく設定されている" time="0.000139659">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (D Minor - Flat) &gt; scaleが正しく設定されている" time="0.000118761">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (D Minor - Flat) &gt; contextNameが生成される" time="0.000139499">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; Key (D Minor - Flat) &gt; shortNameが生成される" time="0.000140881">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (D Dorian) &gt; centerPitchが正しく設定されている" time="0.000117177">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (D Dorian) &gt; scaleが正しく設定されている" time="0.000103452">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (D Dorian) &gt; contextNameが生成される" time="0.00012402">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (D Dorian) &gt; shortNameが生成される" time="0.000152542">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (E Phrygian) &gt; centerPitchが正しく設定されている" time="0.000126835">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (E Phrygian) &gt; scaleが正しく設定されている" time="0.000128829">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (E Phrygian) &gt; contextNameが生成される" time="0.000129881">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (E Phrygian) &gt; shortNameが生成される" time="0.000123709">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (F Lydian) &gt; centerPitchが正しく設定されている" time="0.001014471">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (F Lydian) &gt; scaleが正しく設定されている" time="0.000142885">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (F Lydian) &gt; contextNameが生成される" time="0.000260633">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (F Lydian) &gt; shortNameが生成される" time="0.000153374">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (G Mixolydian) &gt; centerPitchが正しく設定されている" time="0.000141572">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (G Mixolydian) &gt; scaleが正しく設定されている" time="0.000119281">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (G Mixolydian) &gt; contextNameが生成される" time="0.000128498">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; 基本プロパティ &gt; ModalContext (G Mixolydian) &gt; shortNameが生成される" time="0.000168483">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (C Major) &gt; 1-7度の三和音を構築できる" time="0.005159096">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (C Major) &gt; 範囲外の度数でエラーが投げられる" time="0.00172167">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (G Major - Sharp) &gt; 1-7度の三和音を構築できる" time="0.001181981">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (G Major - Sharp) &gt; 範囲外の度数でエラーが投げられる" time="0.000371429">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (F Major - Flat) &gt; 1-7度の三和音を構築できる" time="0.001160432">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (F Major - Flat) &gt; 範囲外の度数でエラーが投げられる" time="0.000402335">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (A Minor) &gt; 1-7度の三和音を構築できる" time="0.000925015">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (A Minor) &gt; 範囲外の度数でエラーが投げられる" time="0.000329641">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (E Minor - Sharp) &gt; 1-7度の三和音を構築できる" time="0.001060617">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (E Minor - Sharp) &gt; 範囲外の度数でエラーが投げられる" time="0.000446919">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (D Minor - Flat) &gt; 1-7度の三和音を構築できる" time="0.00109991">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; Key (D Minor - Flat) &gt; 範囲外の度数でエラーが投げられる" time="0.000314773">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (D Dorian) &gt; 1-7度の三和音を構築できる" time="0.001413824">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (D Dorian) &gt; 範囲外の度数でエラーが投げられる" time="0.000365698">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (E Phrygian) &gt; 1-7度の三和音を構築できる" time="0.000907422">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (E Phrygian) &gt; 範囲外の度数でエラーが投げられる" time="0.000427343">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (F Lydian) &gt; 1-7度の三和音を構築できる" time="0.001328673">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (F Lydian) &gt; 範囲外の度数でエラーが投げられる" time="0.000338217">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (G Mixolydian) &gt; 1-7度の三和音を構築できる" time="0.002214175">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; buildTriad - 三和音構築機能 &gt; ModalContext (G Mixolydian) &gt; 範囲外の度数でエラーが投げられる" time="0.000401945">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; 特定キーの完全一致検証 &gt; 正常ケース: C Majorの7つのダイアトニック和音を完全検証" time="0.000600454">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; 特定キーの完全一致検証 &gt; 正常ケース: A Minorの7つのダイアトニック和音を完全検証" time="0.000496501">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; 特定キーの完全一致検証 &gt; 正常ケース: G Majorの7つのダイアトニック和音を完全検証" time="0.000457778">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (C Major) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000756462">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (C Major) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000115144">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (C Major) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000115063">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (C Major) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.000755772">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (G Major - Sharp) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000771731">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (G Major - Sharp) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000078255">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (G Major - Sharp) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000072265">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (G Major - Sharp) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.000533669">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (F Major - Flat) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.00256854">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (F Major - Flat) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000127536">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (F Major - Flat) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000131985">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (F Major - Flat) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.000665744">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (A Minor) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.00076032">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (A Minor) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000095347">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (A Minor) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.00008635">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (A Minor) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.003601197">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000816153">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (E Minor - Sharp) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000114873">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000105967">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.000976882">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (D Minor - Flat) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000792931">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (D Minor - Flat) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000092852">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (D Minor - Flat) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000088394">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; Key (D Minor - Flat) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.00052332">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (D Dorian) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000748608">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (D Dorian) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.00009699">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (D Dorian) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000077955">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (D Dorian) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.004495576">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.01437299">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (E Phrygian) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000125613">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000126084">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.000538638">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (F Lydian) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000772081">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (F Lydian) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000090447">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (F Lydian) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000097281">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (F Lydian) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.003608651">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 7つのダイアトニック和音を返す" time="0.000737047">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: キャッシュ機能が動作する（同一インスタンスを返す）" time="0.000115484">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 結果がフリーズされている（immutable）" time="0.000094385">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; diatonicChords - ダイアトニック和音配列 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 各和音が有効なコード名を持つ" time="0.000530614">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; 特定キーの分析結果完全検証 &gt; 正常ケース: C Majorの各ダイアトニック和音分析を完全検証" time="0.002811032">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; 特定キーの分析結果完全検証 &gt; 正常ケース: A Minorの各ダイアトニック和音分析を完全検証" time="0.000745252">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (C Major) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000365267">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (C Major) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.001133261">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (C Major) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.005004308">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (G Major - Sharp) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000233654">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (G Major - Sharp) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.003855309">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (G Major - Sharp) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.002174952">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (F Major - Flat) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000266785">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (F Major - Flat) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000708433">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (F Major - Flat) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.005724965">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (A Minor) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000224586">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (A Minor) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.007153293">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (A Minor) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.007942837">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (E Minor - Sharp) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000434646">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000748047">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.005726648">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (D Minor - Flat) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.00021617">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (D Minor - Flat) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000699246">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; Key (D Minor - Flat) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.001625877">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (D Dorian) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000207014">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (D Dorian) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000688547">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (D Dorian) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.002038199">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (E Phrygian) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000198308">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000769166">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.001693811">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (F Lydian) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000187528">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (F Lydian) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000705478">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (F Lydian) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.001532281">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: ダイアトニック和音の分析結果構造を検証" time="0.000237811">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 全ダイアトニック和音が正しく分析される" time="0.000628485">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 和音分析結果の詳細プロパティを検証" time="0.001641824">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; 正常ケース: C Majorにおけるセカンダリードミナント（V/V = D major）の分析" time="0.000518682">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; 正常ケース: A Minorにおけるナポリタン6度（♭Ⅱ = B♭ major）の分析" time="0.000500889">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; 正常ケース: C Majorにおける借用和音（ⅵ♭ = A♭ major）の分析" time="0.000369315">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; 正常ケース: G Majorにおけるクロマチック和音（F diminished）の分析" time="0.000379093">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; 正常ケース: F Majorにおける増六和音（ドイツ増六 = D♭ major）の分析" time="0.000348025">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (C Major) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000358505">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (C Major) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000274519">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (C Major) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000338748">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (G Major - Sharp) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000255434">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (G Major - Sharp) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.00020486">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (G Major - Sharp) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000309905">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (F Major - Flat) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.00029682">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (F Major - Flat) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000219186">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (F Major - Flat) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000323009">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (A Minor) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000260614">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (A Minor) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000203106">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (A Minor) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000387318">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (E Minor - Sharp) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000300327">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (E Minor - Sharp) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000202927">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (E Minor - Sharp) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000347475">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (D Minor - Flat) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000252849">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (D Minor - Flat) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000182078">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; Key (D Minor - Flat) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000337396">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (D Dorian) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000267406">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (D Dorian) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000189011">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (D Dorian) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000286932">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (E Phrygian) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000282043">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (E Phrygian) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000181556">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (E Phrygian) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000308191">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (F Lydian) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000257678">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (F Lydian) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000287563">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (F Lydian) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000322929">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (G Mixolydian) - ノンダイアトニック和音 &gt; 正常ケース: 完全に異なる調の和音をfalseと分析" time="0.000287894">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (G Mixolydian) - ノンダイアトニック和音 &gt; 正常ケース: 異なるクオリティの同じルート音和音をfalseと分析" time="0.000243261">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; analyzeChord - 和音分析機能 &gt; ノンダイアトニック和音の分析 &gt; ModalContext (G Mixolydian) - ノンダイアトニック和音 &gt; 正常ケース: ノンダイアトニック和音の分析結果構造検証" time="0.000354567">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; 特定キーの和音情報完全検証 &gt; 正常ケース: C Majorの和音情報を完全検証" time="0.000947267">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; 特定キーの和音情報完全検証 &gt; 正常ケース: A Minorの和音情報を完全検証" time="0.000765149">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (C Major) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000324261">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (C Major) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001663745">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (C Major) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001542871">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (G Major - Sharp) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000324732">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (G Major - Sharp) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001653215">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (G Major - Sharp) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001428598">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (F Major - Flat) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000305356">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (F Major - Flat) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.003589546">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (F Major - Flat) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001331319">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (A Minor) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000299825">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (A Minor) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001442815">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (A Minor) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001365943">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000342074">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001483922">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001418329">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (D Minor - Flat) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000299205">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (D Minor - Flat) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001516512">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; Key (D Minor - Flat) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.00449291">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (D Dorian) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000263899">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (D Dorian) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001295141">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (D Dorian) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001331859">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000246597">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001230441">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.004208854">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (F Lydian) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.000312039">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (F Lydian) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001362456">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (F Lydian) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001235311">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 7つのダイアトニック和音情報を返す" time="0.003318372">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 各情報に必要なプロパティが完全に含まれている" time="0.001342028">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; getDiatonicChordsInfo - ダイアトニック和音情報 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 和音情報とdiatonicChordsとanalyzeChordの一貫性を検証" time="0.001268342">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; 特定キーでの判定完全検証 &gt; 正常ケース: C Majorダイアトニック和音を正しく判定" time="0.007176746">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; 特定キーでの判定完全検証 &gt; 正常ケース: A Minorダイアトニック和音を正しく判定" time="0.000593831">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (C Major) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000353706">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (C Major) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000222172">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (G Major - Sharp) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000225538">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (G Major - Sharp) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000152733">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (F Major - Flat) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.001880927">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (F Major - Flat) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000201133">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (A Minor) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000286662">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (A Minor) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000179563">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.00023203">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (E Minor - Sharp) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000192707">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (D Minor - Flat) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000281392">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; Key (D Minor - Flat) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000182078">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (D Dorian) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000265683">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (D Dorian) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000209158">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.002787318">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (E Phrygian) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000194461">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (F Lydian) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000289557">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (F Lydian) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000258539">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 自身のダイアトニック和音を正しく判定" time="0.000261525">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: 遠い調の和音をfalseと判定" time="0.000200582">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; 音楽理論的エッジケース &gt; 正常ケース: 関係調の共通和音を正しく判定" time="0.000304996">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; isDiatonicChord - ダイアトニックコード判定 &gt; 音楽理論的エッジケース &gt; 正常ケース: 異なるモードの和音をfalseと判定" time="0.000294916">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (C Major) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000720476">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (C Major) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000184963">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (C Major) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000143035">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (C Major) &gt; 正常ケース: JSON文字列化が可能" time="0.000411623">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (C Major) &gt; 正常ケース: JSONから復元可能な形式" time="0.001056218">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (G Major - Sharp) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000376207">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (G Major - Sharp) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000146482">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (G Major - Sharp) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000110415">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (G Major - Sharp) &gt; 正常ケース: JSON文字列化が可能" time="0.000253771">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (G Major - Sharp) &gt; 正常ケース: JSONから復元可能な形式" time="0.000355589">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (F Major - Flat) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000519042">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (F Major - Flat) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000152473">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (F Major - Flat) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000094765">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (F Major - Flat) &gt; 正常ケース: JSON文字列化が可能" time="0.000230217">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (F Major - Flat) &gt; 正常ケース: JSONから復元可能な形式" time="0.000324943">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (A Minor) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000360268">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (A Minor) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.00014044">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (A Minor) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000107339">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (A Minor) &gt; 正常ケース: JSON文字列化が可能" time="0.000215099">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (A Minor) &gt; 正常ケース: JSONから復元可能な形式" time="0.000301139">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (E Minor - Sharp) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000274289">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (E Minor - Sharp) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000107049">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (E Minor - Sharp) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000078185">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (E Minor - Sharp) &gt; 正常ケース: JSON文字列化が可能" time="0.000201763">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (E Minor - Sharp) &gt; 正常ケース: JSONから復元可能な形式" time="0.001196148">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (D Minor - Flat) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000299906">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (D Minor - Flat) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.00011895">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (D Minor - Flat) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000079287">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (D Minor - Flat) &gt; 正常ケース: JSON文字列化が可能" time="0.000192968">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; Key (D Minor - Flat) &gt; 正常ケース: JSONから復元可能な形式" time="0.000402667">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (D Dorian) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000342705">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (D Dorian) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000119632">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (D Dorian) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000101909">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (D Dorian) &gt; 正常ケース: JSON文字列化が可能" time="0.000297993">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (D Dorian) &gt; 正常ケース: JSONから復元可能な形式" time="0.000264381">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (E Phrygian) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000325083">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (E Phrygian) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000142785">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (E Phrygian) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000127827">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (E Phrygian) &gt; 正常ケース: JSON文字列化が可能" time="0.000207835">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (E Phrygian) &gt; 正常ケース: JSONから復元可能な形式" time="0.000236949">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (F Lydian) &gt; 正常ケース: JSON形式で正しく出力される" time="0.000273166">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (F Lydian) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000110194">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (F Lydian) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000073256">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (F Lydian) &gt; 正常ケース: JSON文字列化が可能" time="0.002217381">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (F Lydian) &gt; 正常ケース: JSONから復元可能な形式" time="0.000261695">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: JSON形式で正しく出力される" time="0.00030202">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: shortNameとcontextNameが適切に設定されている" time="0.000118931">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: fifthsIndexが中心音のfifthsIndexと一致" time="0.000120404">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: JSON文字列化が可能" time="0.000213706">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; ModalContext (G Mixolydian) &gt; 正常ケース: JSONから復元可能な形式" time="0.000298995">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; 型固有のプロパティ検証 &gt; 正常ケース: Keyタイプの場合type=&quot;key&quot;とisMajorが適切に設定" time="0.001225383">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; 型固有のプロパティ検証 &gt; 正常ケース: ModalContextタイプの場合type=&quot;modal&quot;" time="0.000249062">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; 境界値とエッジケース &gt; 正常ケース: 全ての五度圏ポジションでの出力" time="0.00164521">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; 境界値とエッジケース &gt; 正常ケース: 特殊文字を含む名前での出力" time="0.000330773">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; 境界値とエッジケース &gt; 正常ケース: AbstractMusicalContextの基本実装" time="0.000273026">
+        </testcase>
+        <testcase classname="src/domain/common/test/AbstractMusicalContext.test.ts" name="AbstractMusicalContext &gt; toJSON - JSON出力 &gt; 不変性の確認 &gt; 正常ケース: toJSONで返されるオブジェクトの変更が元オブジェクトに影響しない" time="0.000670693">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/Accidental.test.ts" timestamp="2025-09-28T09:30:39.082Z" hostname="runnervm3ublj" tests="24" failures="0" errors="0" skipped="0" time="0.013544259">
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 基本プロパティ &gt; 正常ケース: sharp変化記号の基本プロパティ" time="0.001740508">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 基本プロパティ &gt; 正常ケース: flat変化記号の基本プロパティ" time="0.000484649">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 基本プロパティ &gt; 正常ケース: natural変化記号の基本プロパティ" time="0.000411253">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 静的インスタンス &gt; 正常ケース: SHARP静的インスタンス" time="0.000272726">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 静的インスタンス &gt; 正常ケース: FLAT静的インスタンス" time="0.000270873">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 静的インスタンス &gt; 正常ケース: NATURAL静的インスタンス" time="0.000261756">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 静的インスタンスの一意性 &gt; 正常ケース: 静的インスタンスが常に同じ参照を返す" time="0.000415781">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 静的インスタンスの一意性 &gt; 正常ケース: 新しいインスタンスとは異なる参照" time="0.001186752">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; getSymbol メソッド &gt; 正常ケース: sharp記号の正しい文字" time="0.000306207">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; getSymbol メソッド &gt; 正常ケース: flat記号の正しい文字" time="0.000251356">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; getSymbol メソッド &gt; 正常ケース: natural記号は空文字" time="0.000187578">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; getSymbol メソッド &gt; 正常ケース: 記号文字列の型確認" time="0.000443402">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 音楽理論的検証 &gt; 正常ケース: 全ての変化記号タイプが適切に処理される" time="0.000440978">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 音楽理論的検証 &gt; 正常ケース: 変化記号の表記が音楽記号として正しい" time="0.000509916">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 音楽理論的検証 &gt; 正常ケース: 変化記号の組み合わせテスト" time="0.000265562">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 不変性の確認 &gt; 正常ケース: valueプロパティの不変性" time="0.000214217">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 不変性の確認 &gt; 正常ケース: 静的インスタンスの不変性" time="0.000229426">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; TypeScript型安全性の確認 &gt; 正常ケース: AccidentalType型の制約" time="0.001287848">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; TypeScript型安全性の確認 &gt; 正常ケース: getSymbolメソッドの戻り値型" time="0.0002425">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 境界値・エッジケース &gt; 正常ケース: 全ての有効なAccidentalTypeをテスト" time="0.000451727">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; 境界値・エッジケース &gt; 正常ケース: 静的インスタンスと動的インスタンスの値の一致" time="0.00037724">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; ユーティリティ用途での検証 &gt; 正常ケース: 文字列連結での使用" time="0.000224777">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; ユーティリティ用途での検証 &gt; 正常ケース: 条件分岐での使用" time="0.000395263">
+        </testcase>
+        <testcase classname="src/domain/common/test/Accidental.test.ts" name="Accidental &gt; ユーティリティ用途での検証 &gt; 正常ケース: 配列やコレクションでの使用" time="0.000175917">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/Interval.test.ts" timestamp="2025-09-28T09:30:39.087Z" hostname="runnervm3ublj" tests="25" failures="0" errors="0" skipped="0" time="0.014886729">
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; constructor &gt; 正常ケース: セミトーン数でインスタンスを作成" time="0.002718722">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; constructor &gt; 正常ケース: 負の値も受け入れる（下行音程）" time="0.000493996">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的プロパティ &gt; 正常ケース: 基本的な音程の定義が正しい" time="0.001549974">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的プロパティ &gt; 正常ケース: 便宜上の別名も正しく定義されている" time="0.000265882">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; invert メソッド &gt; 正常ケース: 音程の方向を反転する" time="0.000198238">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; invert メソッド &gt; 正常ケース: 様々な音程の反転" time="0.000373633">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; invert メソッド &gt; 正常ケース: 二重反転で元に戻る" time="0.000201664">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 音楽理論的特性 &gt; 正常ケース: トライアド構築に必要な音程" time="0.000210721">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 音楽理論的特性 &gt; 正常ケース: マイナートライアド構築に必要な音程" time="0.000358775">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 音楽理論的特性 &gt; 正常ケース: セブンスコード構築に必要な音程" time="0.000958447">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 音楽理論的特性 &gt; 境界値ケース: 12音階内での音程の特殊性" time="0.000273628">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 実用例 &gt; 正常ケース: 様々な音程の組み合わせ" time="0.000269068">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 実用例 &gt; 正常ケース: 音程の算術演算" time="0.000241669">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; equals メソッド &gt; 正常ケース: 同じ半音数のIntervalは等しい" time="0.000462998">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; equals メソッド &gt; 正常ケース: 異なる半音数のIntervalは等しくない" time="0.000349288">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; equals メソッド &gt; 正常ケース: 負の値を含む比較" time="0.000275571">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; equals メソッド &gt; 正常ケース: 静的プロパティとの比較" time="0.000206031">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; compare &gt; 正常ケース: 半音数による比較" time="0.000506008">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; compare &gt; 正常ケース: 負の値を含む比較" time="0.000260343">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; sort &gt; 正常ケース: 半音数昇順でソート" time="0.000630529">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; sort &gt; 正常ケース: 元の配列は変更されない" time="0.000364676">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; sort &gt; 正常ケース: 負の値を含むソート" time="0.000288195">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; sort &gt; エッジケース: 空の配列" time="0.000275731">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; sort &gt; エッジケース: 単一要素" time="0.000202535">
+        </testcase>
+        <testcase classname="src/domain/common/test/Interval.test.ts" name="Interval &gt; 静的メソッド &gt; sort &gt; 正常ケース: 同じ半音数の場合は元の順序を保持" time="0.000219868">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/KeySignature.test.ts" timestamp="2025-09-28T09:30:39.092Z" hostname="runnervm3ublj" tests="23" failures="0" errors="0" skipped="0" time="0.017863321">
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; fromFifthsIndex &gt; 正常ケース: 有効なfifthsIndex（0-11）でKeySignatureを作成" time="0.00195741">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; fromFifthsIndex &gt; 異常ケース: 負の数でErrorをスロー" time="0.001100264">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; fromFifthsIndex &gt; 異常ケース: 11より大きい数でErrorをスロー" time="0.000308902">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; fromFifthsIndex &gt; 異常ケース: 非整数でErrorをスロー" time="0.000261044">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; キャッシング機能 &gt; 正常ケース: 同じfifthsIndexで同一インスタンスを返す" time="0.000245675">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; キャッシング機能 &gt; 正常ケース: 異なるfifthsIndexで異なるインスタンスを返す" time="0.001128393">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; 不変性 &gt; 正常ケース: インスタンスがfrozenされている" time="0.00029121">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; 不変性 &gt; 正常ケース: accidentalsがReadonlyMapとして機能" time="0.000434966">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; 変化記号なし（C Major / A minor） &gt; 正常ケース: fifthsIndex 0で変化記号なし" time="0.001000566">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; シャープ系調号 &gt; 正常ケース: G Major（fifthsIndex 1）でF#を含む" time="0.000371178">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; シャープ系調号 &gt; 正常ケース: D Major（fifthsIndex 2）でF#, C#を含む" time="0.000395423">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; シャープ系調号 &gt; 正常ケース: A Major（fifthsIndex 3）でF#, C#, G#を含む" time="0.000334861">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; シャープ系調号 &gt; 正常ケース: E Major（fifthsIndex 4）でF#, C#, G#, D#を含む" time="0.000360588">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; シャープ系調号 &gt; 正常ケース: B Major（fifthsIndex 5）でF#, C#, G#, D#, A#を含む" time="0.000571249">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; フラット系調号 &gt; 正常ケース: G♭ Major（fifthsIndex 6）でB♭, E♭, A♭, D♭, G♭, C♭を含む" time="0.000587459">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; フラット系調号 &gt; 正常ケース: F Major（fifthsIndex 11）でB♭を含む" time="0.00032348">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; フラット系調号 &gt; 正常ケース: B♭ Major（fifthsIndex 10）でB♭, E♭を含む" time="0.000266645">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; フラット系調号 &gt; 正常ケース: E♭ Major（fifthsIndex 9）でB♭, E♭, A♭を含む" time="0.000314563">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; フラット系調号 &gt; 正常ケース: A♭ Major（fifthsIndex 8）でB♭, E♭, A♭, D♭を含む" time="0.000340191">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; フラット系調号 &gt; 正常ケース: D♭ Major（fifthsIndex 7）でB♭, E♭, A♭, D♭, G♭を含む" time="0.000413236">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; エッジケースと音楽理論検証 &gt; 正常ケース: 同じ調号内でシャープとフラットが同時に存在しない" time="0.000778935">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; エッジケースと音楽理論検証 &gt; 正常ケース: シャープ系調号で五度圈の順序を守る" time="0.002276692">
+        </testcase>
+        <testcase classname="src/domain/common/test/KeySignature.test.ts" name="KeySignature &gt; エッジケースと音楽理論検証 &gt; 正常ケース: フラット系調号で五度圈の順序を守る" time="0.001370132">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/Note.test.ts" timestamp="2025-09-28T09:30:39.097Z" hostname="runnervm3ublj" tests="36" failures="0" errors="0" skipped="0" time="0.023905975">
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; constructor &gt; 正常ケース: PitchClassとオクターブでインスタンスを作成" time="0.002113509">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; constructor &gt; 正常ケース: 全音名でインスタンス作成可能" time="0.001585269">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; getNameFor メソッド &gt; 正常ケース: sharp調号での音名取得" time="0.001134363">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; getNameFor メソッド &gt; 正常ケース: flat調号での音名取得" time="0.000806646">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; getNameFor メソッド &gt; 正常ケース: natural調号での音名取得" time="0.000249532">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; getNameFor メソッド &gt; 正常ケース: エンハーモニック等価性の確認" time="0.000703524">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; toString getter &gt; 正常ケース: Tone.js用の正しい文字列表現を返す" time="0.000450114">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; transposeBy メソッド &gt; 正常ケース: 上行移調" time="0.000385094">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; transposeBy メソッド &gt; 正常ケース: オクターブを跨ぐ移調" time="0.000387598">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; transposeBy メソッド &gt; 正常ケース: 下行移調" time="0.000796045">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; transposeBy メソッド &gt; 正常ケース: オクターブ移調" time="0.000237">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 境界値テスト &gt; 境界値ケース: 最低オクターブ（0）" time="0.000218926">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 境界値テスト &gt; 境界値ケース: 最高オクターブ（8）" time="0.000235266">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 境界値テスト &gt; 境界値ケース: 基準オクターブ（4）での全音名" time="0.002705577">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 音楽理論的特性 &gt; 正常ケース: 中央C（C4）の特性" time="0.00039359">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 音楽理論的特性 &gt; 正常ケース: オクターブ関係の音符" time="0.000281572">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 音楽理論的特性 &gt; 正常ケース: シャープ付き音名の処理" time="0.002756992">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 音楽理論的特性 &gt; 正常ケース: ナチュラル音名の処理" time="0.000957385">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 移調テスト &gt; 正常ケース: 基本的なインターバル移調" time="0.000279769">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 移調テスト &gt; 正常ケース: 複雑な移調計算" time="0.000297211">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 実用例 &gt; 正常ケース: 基本的なCメジャートライアドの構成音" time="0.000984886">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 実用例 &gt; 正常ケース: 異なるオクターブでの和音展開" time="0.000249582">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; 実用例 &gt; 正常ケース: シャープを含む和音" time="0.000261294">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 同じピッチクラスと同じオクターブのNoteは等しい" time="0.000207044">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 同じNote同士は等しい" time="0.000151701">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 異なるオクターブのNoteは等しくない" time="0.000200341">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 異なるピッチクラスのNoteは等しくない" time="0.000176287">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 異なるピッチクラスと異なるオクターブのNoteは等しくない" time="0.000175516">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; エッジケース: null、undefined、非Noteオブジェクトとの比較" time="0.000271975">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 異なる生成方法で作られた同じNoteは等しい" time="0.000154566">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; equals メソッド &gt; 正常ケース: 異なるエンハーモニック表記の比較" time="0.000146652">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; sortByPitch 静的メソッド &gt; 正常ケース: 音高順にソート" time="0.0003181">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; sortByPitch 静的メソッド &gt; 正常ケース: 元の配列は変更されない" time="0.000385745">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; sortByPitch 静的メソッド &gt; 正常ケース: 同じ音高の場合は元の順序を保持" time="0.000187308">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; sortByPitch 静的メソッド &gt; エッジケース: 空の配列" time="0.000165056">
+        </testcase>
+        <testcase classname="src/domain/common/test/Note.test.ts" name="Note &gt; sortByPitch 静的メソッド &gt; エッジケース: 単一要素" time="0.000186245">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/PitchClass.test.ts" timestamp="2025-09-28T09:30:39.104Z" hostname="runnervm3ublj" tests="52" failures="0" errors="0" skipped="0" time="0.045824093">
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 基本プロパティ &gt; 正常ケース: 各音高クラスが正しいプロパティを持つ" time="0.003581841">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 基本プロパティ &gt; 正常ケース: 全ての音高クラスのプロパティが正しい" time="0.00214082">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 五度圏ファクトリメソッド &gt; 正常ケース: 五度圏インデックスからPitchClassを作成" time="0.000348576">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 五度圏ファクトリメソッド &gt; 境界値ケース: 範囲内の最大値でPitchClassを作成" time="0.000351461">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 五度圏ファクトリメソッド &gt; 異常ケース: 負の五度圏インデックスで処理" time="0.001199894">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 五度圏ファクトリメソッド &gt; 異常ケース: 範囲外の五度圏インデックスで処理" time="0.000206633">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 移調 &gt; 正常ケース: 長3度上に移調" time="0.000396465">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 移調 &gt; 正常ケース: 完全5度上に移調" time="0.00021076">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 移調 &gt; 正常ケース: 短3度下に移調（負の値）" time="0.000375987">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 移調 &gt; 正常ケース: オクターブを跨ぐ移調" time="0.000259581">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 移調 &gt; 正常ケース: 大きな値での移調（正規化確認）" time="0.000214077">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 音楽理論的検証 &gt; 正常ケース: 五度圏の順序が正しい" time="0.000368954">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 音楽理論的検証 &gt; 正常ケース: 半音階の順序が正しい" time="0.000352002">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 音楽理論的検証 &gt; 正常ケース: 移調による音程関係の確認" time="0.000780687">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; エッジケース &gt; 境界値ケース: 最後の五度圏インデックス（F）" time="0.000293194">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; エッジケース &gt; 境界値ケース: 0半音移調（変化なし）" time="0.000298954">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; エッジケース &gt; 境界値ケース: 完全オクターブ移調（12半音、変化なし）" time="0.0002642">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; ダイアトニック音の表記 &gt; 正常ケース: Cメジャーキーでのダイアトニック音" time="0.001130877">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; ダイアトニック音の表記 &gt; 正常ケース: G♭メジャーキー（flat系）でのダイアトニック音" time="0.002309943">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; ダイアトニック音の表記 &gt; 正常ケース: B♭メジャーキー（flat系）でのダイアトニック音" time="0.000489888">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; ノンダイアトニック音の表記 &gt; 正常ケース: Cメジャーキーでのノンダイアトニック音（sharp表記）" time="0.000395594">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; ノンダイアトニック音の表記 &gt; 正常ケース: Fメジャーキー（flat系）でのノンダイアトニック音（flat表記）" time="0.000331835">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; エンハーモニック表記の確認 &gt; 正常ケース: 同じ音高でも異なるキーで異なる表記" time="0.000351472">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; エンハーモニック表記の確認 &gt; 正常ケース: 複数のエンハーモニック音での表記確認" time="0.000549439">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; 境界値・エッジケース &gt; 正常ケース: 全ての五度圏ポジションでの表記確認" time="0.001385188">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; 境界値・エッジケース &gt; 正常ケース: Aマイナーキー（sharp系）でのダイアトニック音" time="0.000876455">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; 境界値・エッジケース &gt; 正常ケース: F#マイナーキー（sharp系）でのダイアトニック音" time="0.000434115">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; getNameFor メソッド &gt; 境界値・エッジケース &gt; 正常ケース: マイナーキーでのノンダイアトニック音（sharp表記）" time="0.00035028">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 正の値の正規化 &gt; 正常ケース: 0-11の範囲内の値はそのまま返す" time="0.000422614">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 正の値の正規化 &gt; 正常ケース: 12の倍数を正規化" time="0.000240516">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 正の値の正規化 &gt; 正常ケース: 12より大きい値を正規化" time="0.000222111">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 負の値の正規化 &gt; 正常ケース: -1から-11の値を正規化" time="0.00019977">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 負の値の正規化 &gt; 正常ケース: -12の倍数を正規化" time="0.000168052">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 負の値の正規化 &gt; 正常ケース: -12より小さい値を正規化" time="0.000303402">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 境界値とエッジケース &gt; 境界値ケース: 0を正規化" time="0.00011374">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 境界値とエッジケース &gt; 境界値ケース: 非常に大きな正の値" time="0.000147053">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 境界値とエッジケース &gt; 境界値ケース: 非常に小さな負の値" time="0.000146692">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 境界値とエッジケース &gt; 数学的検証: 結果が常に0-11の範囲内" time="0.009572789">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 音楽理論的応用での検証 &gt; 正常ケース: ピッチクラス計算での使用" time="0.000259341">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 音楽理論的応用での検証 &gt; 正常ケース: オクターブを跨ぐ移調計算" time="0.000125333">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 音楽理論的応用での検証 &gt; 正常ケース: 下行移調計算" time="0.000129379">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; 音楽理論的応用での検証 &gt; 正常ケース: 大幅な移調計算" time="0.000119642">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; TypeScript型安全性の確認 &gt; 正常ケース: 整数以外の数値でも動作" time="0.000147524">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; modulo12 - 数値正規化関数 &gt; TypeScript型安全性の確認 &gt; 正常ケース: 数値型チェック" time="0.000154617">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; SHARP_KEY_ORDER - シャープ調号の順序 &gt; 正常ケース: 音楽理論に正しいシャープ順序（F, C, G, D, A, E, B）" time="0.004224974">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; SHARP_KEY_ORDER - シャープ調号の順序 &gt; 正常ケース: 五度圏上の順序で並んでいる" time="0.000377901">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; FLAT_KEY_ORDER - フラット調号の順序 &gt; 正常ケース: 音楽理論に正しいフラット順序（B, E, A, D, G, C, F）" time="0.000532027">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; FLAT_KEY_ORDER - フラット調号の順序 &gt; 正常ケース: SHARP_KEY_ORDERの逆順である" time="0.000512631">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; FLAT_KEY_ORDER - フラット調号の順序 &gt; 正常ケース: 五度圏上でシャープ順序の逆順" time="0.00037739">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; 音楽理論的妥当性の確認 &gt; 正常ケース: 調号システムとしての整合性" time="0.000219347">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; 音楽理論的妥当性の確認 &gt; 正常ケース: 実際の調号計算での使用例" time="0.003217395">
+        </testcase>
+        <testcase classname="src/domain/common/test/PitchClass.test.ts" name="PitchClass &gt; 調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER) &gt; 音楽理論的妥当性の確認 &gt; 正常ケース: 五度圏上での連続性" time="0.00036656">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/common/test/ScalePattern.test.ts" timestamp="2025-09-28T09:30:39.113Z" hostname="runnervm3ublj" tests="39" failures="0" errors="0" skipped="0" time="0.025865129">
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; constructor &gt; 正常ケース: 名前とインターバル配列とshortSymbolでインスタンスを作成" time="0.002914897">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; constructor &gt; 正常ケース: インスタンスがfreeze（不変）である" time="0.000327908">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Majorパターンが正しく定義されている" time="0.001072168">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: HarmonicMinorパターンが正しく定義されている" time="0.000656277">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Dorianモードが正しく定義されている" time="0.000288475">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Phrygianモードが正しく定義されている" time="0.000413527">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Lydianモードが正しく定義されている" time="0.000303723">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Mixolydianモードが正しく定義されている" time="0.000290418">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Aeolianモードが正しく定義されている" time="0.000425339">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 静的プロパティ &gt; 正常ケース: Locrianモードが正しく定義されている" time="0.000421212">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; derive メソッド &gt; 正常ケース: Majorパターンからモードを導出" time="0.000402086">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; derive メソッド &gt; 正常ケース: 各度数からの導出で期待される回転パターン" time="0.000492143">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; derive メソッド &gt; 境界値ケース: 最初の度数（1度）" time="0.000483797">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; derive メソッド &gt; 境界値ケース: 最後の度数（7度）" time="0.000515836">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; derive メソッド &gt; 異常ケース: 無効な開始度数でエラーが発生する" time="0.001534205">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 実用例 &gt; 正常ケース: 静的モードパターンがMajorから正しく導出されている" time="0.000996177">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 実用例 &gt; 正常ケース: 音楽理論的に正しい音程関係" time="0.000306658">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 実用例 &gt; 正常ケース: HarmonicMinorの特徴的な増2度音程" time="0.000158344">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 不変性検証 &gt; 正常ケース: 静的プロパティのインスタンスは変更不可" time="0.000220038">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; 不変性検証 &gt; 正常ケース: derive後のインスタンスも変更不可" time="0.000176447">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 基本的なスケールパターンのインターバル配列 &gt; 正常ケース: Majorスケールのインターバル配列を取得" time="0.000248592">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 基本的なスケールパターンのインターバル配列 &gt; 正常ケース: Aeolian（Natural Minor）スケールのインターバル配列を取得" time="0.000210981">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 基本的なスケールパターンのインターバル配列 &gt; 正常ケース: HarmonicMinorスケールのインターバル配列を取得" time="0.000239985">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; モーダルスケールパターンのインターバル配列 &gt; 正常ケース: Dorianモードのインターバル配列を取得" time="0.0002106">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; モーダルスケールパターンのインターバル配列 &gt; 正常ケース: Phrygianモードのインターバル配列を取得" time="0.000186506">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; モーダルスケールパターンのインターバル配列 &gt; 正常ケース: Lydianモードのインターバル配列を取得" time="0.000185344">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; モーダルスケールパターンのインターバル配列 &gt; 正常ケース: Mixolydianモードのインターバル配列を取得" time="0.000209738">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; モーダルスケールパターンのインターバル配列 &gt; 正常ケース: Locrianモードのインターバル配列を取得" time="0.00018339">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 配列の基本的性質の検証 &gt; 正常ケース: 配列の最初の要素は常に0" time="0.000476383">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 配列の基本的性質の検証 &gt; 正常ケース: 配列の長さはintervals配列の長さ + 1" time="0.000286882">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 配列の基本的性質の検証 &gt; 正常ケース: 配列の要素は昇順に並んでいる" time="0.002874771">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 配列の基本的性質の検証 &gt; 正常ケース: 配列の要素は全て0-12の範囲内" time="0.002984173">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; カスタムパターンでの動作検証 &gt; 正常ケース: 単一音程のパターン" time="0.000211964">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; カスタムパターンでの動作検証 &gt; 正常ケース: 3音のパターン" time="0.000170586">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; カスタムパターンでの動作検証 &gt; 正常ケース: derive後のパターンでも正しく動作" time="0.000314684">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 数学的検証 &gt; 正常ケース: 累積インターバルの計算が正しい" time="0.000207464">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 数学的検証 &gt; 正常ケース: HarmonicMinorの特徴的な増2度を含む配列" time="0.000215649">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 型安全性の確認 &gt; 正常ケース: 返り値は数値配列" time="0.000584904">
+        </testcase>
+        <testcase classname="src/domain/common/test/ScalePattern.test.ts" name="ScalePattern &gt; getIntervalsFromRootAsArray - インターバル配列取得 &gt; 型安全性の確認 &gt; 正常ケース: 返り値は変更可能な配列（元のデータは変更されない）" time="0.000597177">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/key/test/Key.test.ts" timestamp="2025-09-28T09:30:39.119Z" hostname="runnervm3ublj" tests="48" failures="0" errors="0" skipped="0" time="0.044492465">
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; メジャーキーのKeySignature計算 &gt; 正常ケース: C major → 調号なし (fifthsIndex: 0)" time="0.002405501">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; メジャーキーのKeySignature計算 &gt; 正常ケース: G major → 1つのシャープ (fifthsIndex: 1)" time="0.000574745">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; メジャーキーのKeySignature計算 &gt; 正常ケース: F major → 1つのフラット (fifthsIndex: 11)" time="0.000370927">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; メジャーキーのKeySignature計算 &gt; 正常ケース: B♭ major → 2つのフラット (fifthsIndex: 10)" time="0.000268127">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; マイナーキーのKeySignature計算（相対長調から導出） &gt; 正常ケース: A minor → C major相対 (fifthsIndex: 0)" time="0.000514795">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; マイナーキーのKeySignature計算（相対長調から導出） &gt; 正常ケース: E minor → G major相対 (fifthsIndex: 1)" time="0.000282273">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; マイナーキーのKeySignature計算（相対長調から導出） &gt; 正常ケース: F# minor → A major相対 (fifthsIndex: 3)" time="0.000275431">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; マイナーキーのKeySignature計算（相対長調から導出） &gt; 正常ケース: D minor → F major相対 (fifthsIndex: 11)" time="0.000295378">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; 音楽理論的妥当性の確認 &gt; 正常ケース: 全ての五度圏位置でKeySignatureが正しく計算される" time="0.00387248">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; KeySignature calculation (calculateKeySignatureForKey) &gt; 音楽理論的妥当性の確認 &gt; 正常ケース: 相対調関係のKeySignatureが一致する" time="0.000359206">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; constructor &gt; 正常ケース: PitchClassとScalePatternから調を作成できる" time="0.000355168">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; constructor &gt; 正常ケース: マイナーキーを作成できる" time="0.000290599">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; keyName getter &gt; 正常ケース: キー名を正しく取得できる" time="0.000254301">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; buildTriad - Key固有テスト &gt; 正常ケース: C Majorの代表的な和音名が正しく表示される" time="0.000953317">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 特定和音取得メソッド &gt; 正常ケース: トニックコードを正しく取得" time="0.000359988">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 特定和音取得メソッド &gt; 正常ケース: ドミナントコードを正しく取得" time="0.000272435">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 特定和音取得メソッド &gt; 正常ケース: サブドミナントコードを正しく取得" time="0.000282895">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; fromCircleOfFifths ファクトリメソッド &gt; 正常ケース: 五度圏インデックスからメジャーキーを生成" time="0.000314864">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; fromCircleOfFifths ファクトリメソッド &gt; 正常ケース: 五度圏インデックスからマイナーキーを生成" time="0.000264741">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; fromCircleOfFifths ファクトリメソッド &gt; 正常ケース: 全ての五度圏インデックスでキーを生成可能" time="0.009090866">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; primaryScale プロパティ &gt; 正常ケース: 主要スケールが正しく設定される" time="0.000215169">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 境界値テスト &gt; 境界値ケース: 全ての五度圏ポジションでのキー作成" time="0.006188224">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 境界値テスト &gt; エンハーモニック表記: メジャーキーは♭表記、マイナーキーは#表記" time="0.001168356">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 音楽理論的特性 &gt; 正常ケース: C Majorキーのダイアトニックコード進行" time="0.000409429">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 音楽理論的特性 &gt; 正常ケース: 相対調関係の確認" time="0.003274541">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 実用例 &gt; 正常ケース: 一般的なキーでの基本和音" time="0.000474019">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; japaneseScaleDegreeNames getter &gt; 正常ケース: メジャーキーの日本語度数名配列を正しく返す" time="0.000939062">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; japaneseScaleDegreeNames getter &gt; 正常ケース: マイナーキーの日本語度数名配列を正しく返す" time="0.000379393">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; japaneseScaleDegreeNames getter &gt; 正常ケース: 異なるメジャーキーでも同じ度数名を返す" time="0.00019423">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; japaneseScaleDegreeNames getter &gt; 正常ケース: 常に同じ参照を返す（メジャーキー）" time="0.000153876">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; japaneseScaleDegreeNames getter &gt; 正常ケース: 常に同じ参照を返す（マイナーキー）" time="0.000138587">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getRelativeKey &gt; 正常ケース: メジャーキーから相対マイナーキーを取得" time="0.000310335">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getRelativeKey &gt; 正常ケース: マイナーキーから相対メジャーキーを取得" time="0.001932433">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getRelativeKey &gt; 正常ケース: G Majorから相対マイナーキー（E Minor）を取得" time="0.000286661">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getRelativeKey &gt; 正常ケース: E MinorからG Majorを取得" time="0.000249543">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getRelativeKey &gt; 境界値ケース: 五度圏の境界での相対調" time="0.000223715">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getParallelKey &gt; 正常ケース: メジャーキーから同主マイナーキーを取得" time="0.000271824">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getParallelKey &gt; 正常ケース: マイナーキーから同主メジャーキーを取得" time="0.000276873">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getParallelKey &gt; 正常ケース: G Majorから同主マイナーキー（G Minor）を取得" time="0.000255003">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getParallelKey &gt; 正常ケース: G MinorからG Majorを取得" time="0.000242499">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getDominantKey &gt; 正常ケース: C Majorからドミナント調（G Major）を取得" time="0.000313381">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getDominantKey &gt; 正常ケース: A Minorからドミナント調（E Minor）を取得" time="0.000254773">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getDominantKey &gt; 正常ケース: F Majorからドミナント調（C Major）を取得" time="0.000255664">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getDominantKey &gt; 境界値ケース: 五度圏の境界でのドミナント調" time="0.000229746">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getSubdominantKey &gt; 正常ケース: C Majorからサブドミナント調（F Major）を取得" time="0.000318551">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getSubdominantKey &gt; 正常ケース: A Minorからサブドミナント調（D Minor）を取得" time="0.000238983">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getSubdominantKey &gt; 正常ケース: G Majorからサブドミナント調（C Major）を取得" time="0.000219537">
+        </testcase>
+        <testcase classname="src/domain/key/test/Key.test.ts" name="Key &gt; 関連調メソッド &gt; getSubdominantKey &gt; 境界値ケース: 五度圏の境界でのサブドミナント調" time="0.000204029">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/scale/test/Scale.test.ts" timestamp="2025-09-28T09:30:39.127Z" hostname="runnervm3ublj" tests="32" failures="0" errors="0" skipped="0" time="0.027261477">
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; スケール作成 &gt; 正常ケース: PitchClassとScalePatternからスケールを作成" time="0.002787799">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; スケール作成 &gt; 正常ケース: デフォルトオクターブでスケールを作成" time="0.000397807">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; スケール作成 &gt; 正常ケース: 指定オクターブでスケールを作成" time="0.002832933">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 構成音取得 &gt; 正常ケース: Cメジャースケールの構成音" time="0.000634346">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 構成音取得 &gt; 正常ケース: Aナチュラルマイナースケールの構成音" time="0.000595644">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 構成音取得 &gt; 正常ケース: Gメジャースケールの構成音" time="0.000552585">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 度数指定音取得 &gt; 正常ケース: 各度数の音を正しく取得" time="0.000623216">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 度数指定音取得 &gt; 境界値ケース: 最初の度数（1度）" time="0.000226801">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 度数指定音取得 &gt; 境界値ケース: 最後の度数（7度）" time="0.000343747">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 度数指定音取得 &gt; 異常ケース: 無効な度数（0）でundefinedを返す" time="0.000375616">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 度数指定音取得 &gt; 異常ケース: 無効な度数（9）でundefinedを返す" time="0.000209789">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 度数指定音取得 &gt; 異常ケース: 負の度数でundefinedを返す" time="0.000194961">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; オクターブ処理 &gt; 正常ケース: 低いオクターブでのスケール" time="0.000252278">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; オクターブ処理 &gt; 正常ケース: 高いオクターブでのスケール" time="0.000484409">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; オクターブ処理 &gt; 正常ケース: オクターブを跨ぐスケール" time="0.001786773">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 異なるスケールパターン &gt; 正常ケース: ミクソリディアンモードの構成音" time="0.000621202">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 異なるスケールパターン &gt; 正常ケース: ドリアンモードの構成音" time="0.000521978">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 音楽理論的検証 &gt; 正常ケース: メジャースケールの音程関係" time="0.000447219">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; 音楽理論的検証 &gt; 正常ケース: ナチュラルマイナーの音程関係" time="0.000303873">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; エッジケース &gt; 境界値ケース: 最低オクターブでのスケール" time="0.000229646">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; エッジケース &gt; 境界値ケース: 高オクターブでのスケール" time="0.000249843">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; ダイアトニック音（スケール構成音）の分析 &gt; 正常ケース: Cメジャースケールのダイアトニック音を正しく分析" time="0.003372463">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; ダイアトニック音（スケール構成音）の分析 &gt; 正常ケース: Aナチュラルマイナースケールのダイアトニック音を正しく分析" time="0.001403462">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; ノンダイアトニック音（変化音）の分析 &gt; 正常ケース: Cメジャースケールのノンダイアトニック音を正しく分析" time="0.00119196">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; ノンダイアトニック音（変化音）の分析 &gt; 正常ケース: マイナースケールでのノンダイアトニック音分析" time="0.000984275">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 境界値とエッジケース &gt; 境界値ケース: step = 0（ルート音）" time="0.000288445">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 境界値とエッジケース &gt; 境界値ケース: step = 11（オクターブ下の音）" time="0.000276201">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 境界値とエッジケース &gt; 境界値ケース: 負の値（正規化される）" time="0.000221691">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 境界値とエッジケース &gt; 境界値ケース: 12以上の値（正規化される）" time="0.000211902">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 境界値とエッジケース &gt; 境界値ケース: 大きな値での正規化" time="0.000213176">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 異なるスケールパターンでの動作確認 &gt; 正常ケース: ドリアンモードでの度数分析" time="0.000825941">
+        </testcase>
+        <testcase classname="src/domain/scale/test/Scale.test.ts" name="Scale &gt; getDegreeFromSteps - 度数分析機能 &gt; 異なるスケールパターンでの動作確認 &gt; 正常ケース: ミクソリディアンモードでの度数分析" time="0.000635799">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/services/test/AudioEngine.test.ts" timestamp="2025-09-28T09:30:39.132Z" hostname="runnervm3ublj" tests="16" failures="0" errors="0" skipped="0" time="0.033169086">
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; setVolume &gt; 正常ケース: 音量設定がconfigに反映される" time="0.001963181">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; setVolume &gt; 境界値ケース: 極端な音量値" time="0.000591387">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; setArpeggioSpeed &gt; 正常ケース: 有効範囲内の速度設定" time="0.000701932">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; setArpeggioSpeed &gt; 境界値ケース: 最小値以下の場合は50msに制限" time="0.000351141">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; setArpeggioSpeed &gt; 境界値ケース: 最大値以上の場合は500msに制限" time="0.000484659">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; play &gt; 正常ケース: 和音再生インターフェースのテスト" time="0.002324551">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; config初期値 &gt; 正常ケース: デフォルト設定値の確認" time="0.00029639">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 設定の統合テスト &gt; 正常ケース: 設定変更後の和音再生" time="0.002513584">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 設定の統合テスト &gt; 正常ケース: 設定のリセット動作" time="0.000426902">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 型安全性の検証 &gt; 正常ケース: Chordエンティティとの統合" time="0.003240209">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 型安全性の検証 &gt; 正常ケース: 音量設定の型安全性" time="0.002664993">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 型安全性の検証 &gt; 正常ケース: アルペジオ速度設定の型安全性" time="0.002648472">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 実用的な使用例 &gt; 正常ケース: 基本的な和音進行の再生" time="0.00321374">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 実用的な使用例 &gt; 正常ケース: Toneコンテキストが停止状態の場合にTone.start()が呼ばれる" time="0.001385449">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 実用的な使用例 &gt; 正常ケース: 動的な設定変更とセッション" time="0.005329283">
+        </testcase>
+        <testcase classname="src/domain/services/test/AudioEngine.test.ts" name="AudioEngine &gt; 実用的な使用例 &gt; 正常ケース: 異なるオクターブでの再生" time="0.002849314">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/constants/test/hubs.test.ts" timestamp="2025-09-28T09:30:39.135Z" hostname="runnervm3ublj" tests="9" failures="0" errors="0" skipped="0" time="0.007666487">
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubDisplayNameEn関数 &gt; 正常ケース: circle-of-fifthsの英語名を取得" time="0.001403303">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubDisplayNameEn関数 &gt; 正常ケース: chromatic-circleの英語名を取得" time="0.000166238">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubDisplayNameEn関数 &gt; 境界値ケース: 全てのHubTypeの英語名を正しく取得" time="0.001002639">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubOptions関数 &gt; 正常ケース: 正しいオプション配列を生成" time="0.000485079">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubOptions関数 &gt; 正常ケース: 配列の各要素が正しい型構造を持つ" time="0.001298679">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubOptions関数 &gt; 正常ケース: shortNameがlabelに使用される" time="0.000186816">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubOptions関数 &gt; 正常ケース: descriptionがHUBSデータと一致する" time="0.000265813">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubOptions関数 &gt; 境界値ケース: 全てのHubTypeがオプションに含まれる" time="0.000717841">
+        </testcase>
+        <testcase classname="src/shared/constants/test/hubs.test.ts" name="hubs constants &gt; getHubOptions関数 &gt; 正常ケース: 関数の呼び出しが冪等である" time="0.000351813">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/hooks/test/useBodyScrollLock.test.ts" timestamp="2025-09-28T09:30:39.137Z" hostname="runnervm3ublj" tests="9" failures="0" errors="0" skipped="0" time="0.01225624">
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; locked = true の場合 &gt; 正常ケース: bodyのスタイルが正しく設定される" time="0.003798354">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; locked = true の場合 &gt; 正常ケース: クリーンアップ時に元の状態に復元される" time="0.002239293">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; locked = true の場合 &gt; 境界値ケース: scrollY = 0 の場合" time="0.000543398">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; locked = false の場合 &gt; 正常ケース: bodyのスタイルが変更されない" time="0.00052259">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; locked = false の場合 &gt; 正常ケース: scrollToが呼ばれない" time="0.000467818">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; 状態変更 &gt; 正常ケース: locked が true → false に変更された場合" time="0.000526467">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; 状態変更 &gt; 正常ケース: locked が false → true に変更された場合" time="0.000528951">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; 実際のフック使用例 &gt; 正常ケース: フックのAPIが正しく動作する" time="0.001334745">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useBodyScrollLock.test.ts" name="useBodyScrollLock &gt; 実際のフック使用例 &gt; 正常ケース: フックが引数を受け取る" time="0.000516198">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/hooks/test/useFixedViewportHeight.test.ts" timestamp="2025-09-28T09:30:39.139Z" hostname="runnervm3ublj" tests="12" failures="0" errors="0" skipped="0" time="0.062756543">
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 初期化 &gt; 正常ケース: 初期状態でwindow.innerHeightを正しく取得する" time="0.019545829">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 初期化 &gt; 境界値ケース: window.innerHeightが0の場合" time="0.002401904">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 初期化 &gt; 境界値ケース: window.innerHeightが極大値の場合" time="0.002817656">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 固定値の維持 &gt; 正常ケース: 初回取得後は値が固定される" time="0.004180323">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 固定値の維持 &gt; 正常ケース: 複数回の再レンダリングでも値が固定される" time="0.004809169">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; SSR対応 &gt; 正常ケース: windowが正常にアクセスできることを確認" time="0.003146776">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; SSR対応 &gt; 正常ケース: useEffectがクライアントサイドでのみ実行される" time="0.002198928">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 複数インスタンス &gt; 正常ケース: 複数のインスタンスが独立して動作する" time="0.003849479">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 複数インスタンス &gt; 正常ケース: 異なるタイミングでマウントされたインスタンス" time="0.006969385">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 戻り値の型 &gt; 正常ケース: 戻り値がnumber型である" time="0.001913578">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 戻り値の型 &gt; 正常ケース: 戻り値が有限数である" time="0.004906299">
+        </testcase>
+        <testcase classname="src/shared/hooks/test/useFixedViewportHeight.test.ts" name="useFixedViewportHeight &gt; 戻り値の型 &gt; 正常ケース: 戻り値が非負数である" time="0.003553658">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/utils/test/keyColorUtils.test.ts" timestamp="2025-09-28T09:30:39.141Z" hostname="runnervm3ublj" tests="3" failures="0" errors="0" skipped="0" time="0.002633274">
+        <testcase classname="src/shared/utils/test/keyColorUtils.test.ts" name="keyColorUtils &gt; getMusicColorKey &gt; 正常ケース: C Majorで正確なCSS変数名を生成する" time="0.001181491">
+        </testcase>
+        <testcase classname="src/shared/utils/test/keyColorUtils.test.ts" name="keyColorUtils &gt; getMusicColorKey &gt; 正常ケース: A Minorで正確なCSS変数名を生成する" time="0.000170666">
+        </testcase>
+        <testcase classname="src/shared/utils/test/keyColorUtils.test.ts" name="keyColorUtils &gt; getMusicColorKey &gt; 正常ケース: F# Majorで正確なCSS変数名を生成する" time="0.000213817">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/utils/test/musicColorSystem.test.ts" timestamp="2025-09-28T09:30:39.142Z" hostname="runnervm3ublj" tests="5" failures="0" errors="0" skipped="0" time="0.007566642">
+        <testcase classname="src/shared/utils/test/musicColorSystem.test.ts" name="musicColorSystem generateMusicColorTheme &gt; 正常ケース: 全84色のCSS変数を正確なHSL値で生成する" time="0.002055582">
+        </testcase>
+        <testcase classname="src/shared/utils/test/musicColorSystem.test.ts" name="musicColorSystem generateMusicColorTheme &gt; 正常ケース: 84個のCSS変数が生成される" time="0.001491736">
+        </testcase>
+        <testcase classname="src/shared/utils/test/musicColorSystem.test.ts" name="musicColorSystem generateMusicColorTheme &gt; 正常ケース: 正確なHSL形式でカラー値が出力される" time="0.000497573">
+        </testcase>
+        <testcase classname="src/shared/utils/test/musicColorSystem.test.ts" name="musicColorSystem generateMusicColorTheme &gt; 正常ケース: 五度圏順の色相進行（30°刻み）が正確に生成される" time="0.001189035">
+        </testcase>
+        <testcase classname="src/shared/utils/test/musicColorSystem.test.ts" name="musicColorSystem generateMusicColorTheme &gt; 正常ケース: モード階層の明度進行（70%→28%）が正確に生成される" time="0.000752506">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/utils/test/scroll.test.ts" timestamp="2025-09-28T09:30:39.143Z" hostname="runnervm3ublj" tests="19" failures="0" errors="0" skipped="0" time="0.01731409">
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 正常系 &gt; 正常ケース: data-scrollable属性がある要素を優先的に検索する" time="0.006460809">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 正常系 &gt; 正常ケース: overflow-y: auto の要素を検索する" time="0.001400377">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 正常系 &gt; 正常ケース: overflow-y: scroll の要素を検索する" time="0.001191098">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 正常系 &gt; 正常ケース: 複数の親要素を遡って検索する" time="0.001383793">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 境界値・異常系 &gt; 境界値ケース: スクロール可能な親要素が存在しない場合はnullを返す" time="0.000787139">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 境界値・異常系 &gt; 境界値ケース: document.bodyに到達した場合はnullを返す" time="0.000599772">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 境界値・異常系 &gt; 境界値ケース: parentElementがnullの場合はnullを返す" time="0.000365698">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; findScrollableParent &gt; 境界値・異常系 &gt; 境界値ケース: targetがdocument.bodyの場合はnullを返す" time="0.000411472">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 正常系 &gt; 上方向ドラッグ + 最上部の場合はドラッグを許可する" time="0.000326936">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 正常系 &gt; 正常ケース: 上方向ドラッグ + 最上部以外の場合はドラッグを不許可にする" time="0.000216442">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 正常系 &gt; 正常ケース: 下方向ドラッグ + 最下部の場合はドラッグを許可する" time="0.000297882">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 正常系 &gt; 正常ケース: 下方向ドラッグ + 最下部以外の場合はドラッグを不許可にする" time="0.000181826">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 境界値 &gt; 境界値ケース: scrollTop = 0 の場合（最上部）" time="0.000203628">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 境界値 &gt; 境界値ケース: scrollTop + clientHeight = scrollHeight - 1 の場合（1px余裕の境界）" time="0.00037229">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 境界値 &gt; 境界値ケース: scrollTop + clientHeight = scrollHeight の場合（完全な最下部）" time="0.000254803">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 境界値 &gt; 境界値ケース: scrollTop + clientHeight &gt; scrollHeight の場合（理論的には起こらないが）" time="0.000243321">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; 境界値 &gt; 境界値ケース: スクロールがない場合（scrollHeight = clientHeight）" time="0.000187969">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; DragDirection型の網羅 &gt; 正常ケース: up方向のドラッグをテストする" time="0.00016166">
+        </testcase>
+        <testcase classname="src/shared/utils/test/scroll.test.ts" name="scroll utils &gt; shouldAllowDrag &gt; DragDirection型の網羅 &gt; 正常ケース: down方向のドラッグをテストする" time="0.000144588">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" timestamp="2025-09-28T09:30:39.147Z" hostname="runnervm3ublj" tests="12" failures="0" errors="0" skipped="0" time="0.07154342">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; 基本機能 &gt; 正常ケース: フックが正しい関数群を返す" time="0.021720332">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; 基本機能 &gt; 正常ケース: 複数回レンダリングでも安定したインスタンスを返す" time="0.003159329">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; playChordAtPosition &gt; 正常ケース: 五度圏ポジションからメジャーコードを再生" time="0.003520459">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; playChordAtPosition &gt; 正常ケース: 五度圏ポジションからマイナーコードを再生" time="0.002710738">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; playChordAtPosition &gt; 正常ケース: 異なる五度圏ポジションでの再生" time="0.002483446">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; playChordAtPosition &gt; 異常ケース: コード生成でエラーが発生した場合のハンドリング" time="0.005163305">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; playChordAtPosition &gt; 異常ケース: 音響再生でエラーが発生した場合のハンドリング" time="0.002684969">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; setVolume &gt; 正常ケース: 音量設定がAudioEngineに伝達される" time="0.001997064">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; setVolume &gt; 正常ケース: 複数回の音量設定" time="0.002598469">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; setArpeggioSpeed &gt; 正常ケース: アルペジオ速度設定がAudioEngineに伝達される" time="0.003460738">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; setArpeggioSpeed &gt; 正常ケース: 複数回のアルペジオ速度設定" time="0.004654072">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useAudio.test.ts" name="useAudio &gt; 統合テスト &gt; 正常ケース: 設定変更と和音再生の組み合わせ" time="0.014812972">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" timestamp="2025-09-28T09:30:39.149Z" hostname="runnervm3ublj" tests="8" failures="0" errors="0" skipped="0" time="0.053827193">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; 正常ケース: ダイアトニックコード非表示時、常にfalseを返す" time="0.020626232">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; 正常ケース: ダイアトニックコード表示時、該当コードでtrueを返す" time="0.003972427">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; 正常ケース: ダイアトニックコード表示時、非該当コードでfalseを返す" time="0.004404316">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; 境界値ケース: 異なるキーでのダイアトニックコード判定" time="0.002814851">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; ストア変更テスト: layerStore状態変更時の再計算" time="0.005536548">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; キー変更テスト: 異なるキー引数での動作確認" time="0.004484256">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; getHighlightInfo function &gt; メモ化テスト: 同じ引数で複数回呼び出した際の一貫性" time="0.003017426">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useDiatonicChordHighlight.test.ts" name="useDiatonicChordHighlight hook &gt; createCompositeKey utility function &gt; 正常ケース: 異なる引数で異なるキーを生成" time="0.006732165">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" timestamp="2025-09-28T09:30:39.150Z" hostname="runnervm3ublj" tests="11" failures="0" errors="0" skipped="0" time="0.048410565">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; 統合機能 &gt; 正常ケース: フックが正しい構造を返す" time="0.013296827">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; 統合機能 &gt; 正常ケース: 個別フックが正しい引数で呼ばれる" time="0.003545415">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; 統合機能 &gt; 正常ケース: ストア状態変更時の個別フック再実行" time="0.005529765">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; 異なるセグメントでの動作 &gt; 正常ケース: 異なるポジションのセグメント" time="0.003396998">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; 異なるセグメントでの動作 &gt; 正常ケース: 異なるキーでの動作" time="0.002968966">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; リップルエフェクト統合 &gt; 正常ケース: リップルトリガーが正しく統合される" time="0.002341673">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; リップルエフェクト統合 &gt; 正常ケース: リップル状態が正しく返される" time="0.002278595">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; Props変更の影響 &gt; 正常ケース: Props変更時の個別フック再実行" time="0.002533509">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; Props変更の影響 &gt; 正常ケース: 同じPropsでの安定性" time="0.002862559">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; エラーハンドリング &gt; 異常ケース: useAudioがundefinedを返す場合" time="0.002203797">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaBehavior.test.ts" name="useKeyAreaBehavior integration hook &gt; エラーハンドリング &gt; 異常ケース: ストア関数がnullの場合" time="0.005253784">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" timestamp="2025-09-28T09:30:39.153Z" hostname="runnervm3ublj" tests="17" failures="0" errors="0" skipped="0" time="0.085152099">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 基本機能 &gt; 正常ケース: フックが正しい構造を返す" time="0.017820379">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 基本機能 &gt; 正常ケース: layoutオブジェクトが正しい構造を持つ" time="0.002224835">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; ダイアトニックハイライト機能 &gt; 正常ケース: ハイライト非表示時の動作" time="0.004193547">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; ダイアトニックハイライト機能 &gt; 正常ケース: ハイライト表示時の動作" time="0.002337385">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; ダイアトニックハイライト機能 &gt; 正常ケース: 異なるローマ数字での動作確認" time="0.00801265">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 色計算機能 &gt; 正常ケース: keyAreaColorの計算" time="0.003651091">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 色計算機能 &gt; 正常ケース: currentKeyColorの計算" time="0.010734447">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 色計算機能 &gt; 正常ケース: 異なるキーでの色計算" time="0.002900279">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 色計算機能 &gt; 正常ケース: マイナーキーでの色計算" time="0.002600293">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; レイアウト計算機能 &gt; 正常ケース: レイアウトオフセットの適用" time="0.002417624">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; レイアウト計算機能 &gt; 正常ケース: 異なるテキスト位置での計算" time="0.009079829">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 依存関係の管理 &gt; 正常ケース: useDiatonicChordHighlightが正しい引数で呼ばれる" time="0.001305752">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; 依存関係の管理 &gt; 正常ケース: Props変更時の再計算" time="0.004328377">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 同じProps値での複数回レンダリング" time="0.001755425">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 依存配列の動作確認" time="0.001380169">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; エラーハンドリング &gt; 異常ケース: getMusicColorVariableがエラーをスローした場合" time="0.006604528">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyAreaPresentation.test.ts" name="useKeyAreaPresentation hook &gt; エラーハンドリング &gt; 異常ケース: useDiatonicChordHighlightがnullを返した場合" time="0.001644871">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" timestamp="2025-09-28T09:30:39.156Z" hostname="runnervm3ublj" tests="17" failures="0" errors="0" skipped="0" time="0.091895538">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; 基本機能 &gt; 正常ケース: フックが正しい構造を返す" time="0.034353929">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; 基本機能 &gt; 正常ケース: 複数回レンダリングで安定した関数参照を返す" time="0.00314412">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; useLongPress統合 &gt; 正常ケース: useLongPressが正しい引数で呼ばれる" time="0.006514619">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; useLongPress統合 &gt; 正常ケース: ハンドラがuseLongPressから返される" time="0.002771078">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; コールバック関数の動作 &gt; 正常ケース: handleClickコールバックの動作" time="0.002941293">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; コールバック関数の動作 &gt; 正常ケース: handleLongPressコールバックの動作" time="0.003118973">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; コールバック関数の動作 &gt; 正常ケース: マイナーキーでのhandleLongPress動作" time="0.002494706">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; コールバック関数の動作 &gt; 正常ケース: handleLongPressStartコールバックの動作" time="0.002023302">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; onMouseEnter機能 &gt; 正常ケース: マウス進入時の処理" time="0.0021734">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; onMouseEnter機能 &gt; 正常ケース: 異なるキーでのマウス進入" time="0.017783763">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; onMouseLeave機能 &gt; 正常ケース: マウス退出時の処理" time="0.001399645">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; onMouseLeave機能 &gt; 正常ケース: 複数回のマウス退出" time="0.001381812">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; onMouseLeave機能 &gt; 正常ケース: マウス進入→退出のサイクル" time="0.002221439">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; 依存関係とメモ化 &gt; 正常ケース: Props変更時の関数再生成" time="0.001991864">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; 依存関係とメモ化 &gt; 正常ケース: 同じPropsでの関数安定性" time="0.001430973">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; 統合テスト &gt; 正常ケース: フル操作シーケンス" time="0.001689653">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyInteraction.test.ts" name="useKeyInteraction hook &gt; 統合テスト &gt; 正常ケース: useLongPressの統合テスト" time="0.001711143">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" timestamp="2025-09-28T09:30:39.159Z" hostname="runnervm3ublj" tests="23" failures="0" errors="0" skipped="0" time="0.081957608">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 基本機能 &gt; 正常ケース: フックが正しい構造を返す" time="0.018596979">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 基本機能 &gt; 正常ケース: 初期状態（選択・ホバーなし）" time="0.002019254">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 選択状態の判定 &gt; 正常ケース: 選択されている場合" time="0.00239485">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 選択状態の判定 &gt; 正常ケース: 異なるキーが選択されている場合" time="0.002034763">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 選択状態の判定 &gt; 正常ケース: メジャー・マイナーキーの判定" time="0.003939264">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 選択状態の判定 &gt; 境界値ケース: fifthsIndexとisMajorの厳密な比較" time="0.006295953">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; ホバー状態の判定 &gt; 正常ケース: ホバーされている場合" time="0.002086519">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; ホバー状態の判定 &gt; 正常ケース: 異なるキーがホバーされている場合" time="0.00506999">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; ホバー状態の判定 &gt; 正常ケース: 選択かつホバーの場合" time="0.00784219">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; fillClassName &gt; 正常ケース: メジャーキーの通常状態" time="0.001795469">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; fillClassName &gt; 正常ケース: マイナーキーの通常状態" time="0.005062827">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; fillClassName &gt; 正常ケース: 選択状態の優先" time="0.001147597">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; fillClassName &gt; 正常ケース: ホバー状態" time="0.003032863">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; fillClassName &gt; 正常ケース: 選択状態がホバー状態より優先される" time="0.00163381">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; textClassName &gt; 正常ケース: メジャーキーのテキストクラス" time="0.001244818">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; textClassName &gt; 正常ケース: マイナーキーのテキストクラス" time="0.002316595">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; クラス名の生成 &gt; textClassName &gt; 正常ケース: 状態によらずキータイプでテキストクラスが決まる" time="0.00103">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 状態変更の反応性 &gt; 正常ケース: ストア状態変更時の再計算" time="0.001740317">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; 状態変更の反応性 &gt; 正常ケース: ホバー状態の変化" time="0.001602972">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 同じProps・ストア状態での結果安定性" time="0.001129403">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; メモ化とパフォーマンス &gt; 正常ケース: Props変更時の再計算" time="0.001949625">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; エッジケース &gt; 正常ケース: nullストア値の処理" time="0.001015483">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useKeyState.test.ts" name="useKeyState hook &gt; エッジケース &gt; 境界値ケース: 極端なfifthsIndex値" time="0.004296466">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" timestamp="2025-09-28T09:30:39.163Z" hostname="runnervm3ublj" tests="16" failures="0" errors="0" skipped="0" time="0.105464452">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; 基本機能 &gt; 正常ケース: フックが正しい構造を返す" time="0.028523587">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; 基本機能 &gt; 正常ケース: 複数回レンダリングで安定した関数参照を返す" time="0.004158761">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; マウスイベント処理 &gt; 正常ケース: 短時間クリック（onClick）" time="0.004483523">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; マウスイベント処理 &gt; 正常ケース: 長押し（onLongPress）" time="0.002835698">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; マウスイベント処理 &gt; 正常ケース: カスタム遅延時間" time="0.003127719">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; マウスイベント処理 &gt; 正常ケース: マウスムーブでの中断" time="0.003300419">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; マウスイベント処理 &gt; 正常ケース: マウスリーブでの中断" time="0.002770046">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; タッチイベント処理 &gt; 正常ケース: 短時間タッチ（onClick）" time="0.002722418">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; タッチイベント処理 &gt; 正常ケース: 長押しタッチ（onLongPress）" time="0.004623703">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; タッチイベント処理 &gt; 正常ケース: タッチムーブでの中断" time="0.006247914">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; エッジケース &gt; 正常ケース: 遅延時間0での即座実行" time="0.016186078">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; エッジケース &gt; 正常ケース: 負の遅延時間の処理" time="0.005238433">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; エッジケース &gt; 異常ケース: コールバック関数でエラーが発生" time="0.007449122">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 同じPropsでの関数安定性" time="0.002333627">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 異なるコールバックでの再生成" time="0.003210573">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useLongPress.test.ts" name="useLongPress hook &gt; 複雑なシーケンス &gt; 正常ケース: 複数回の操作サイクル" time="0.005439836">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" timestamp="2025-09-28T09:30:39.166Z" hostname="runnervm3ublj" tests="18" failures="0" errors="0" skipped="0" time="0.094292041">
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; 基本機能 &gt; 正常ケース: フックが正しい構造を返す" time="0.024089425">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; 基本機能 &gt; 正常ケース: 初期状態でリップルが非活性" time="0.00274542">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; 基本機能 &gt; 正常ケース: 複数回レンダリングで安定した関数参照を返す" time="0.003777253">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルトリガー機能 &gt; 正常ケース: triggerRippleでリップルが活性化" time="0.00337619">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルトリガー機能 &gt; 正常ケース: 複数回triggerRippleを呼び出し" time="0.003314015">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルトリガー機能 &gt; 正常ケース: triggerRipple後の自動リセット" time="0.003271565">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルトリガー機能 &gt; 正常ケース: 適切なタイムアウト時間での自動リセット" time="0.003163155">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルリセット機能 &gt; 正常ケース: resetRippleで手動リセット" time="0.00240553">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルリセット機能 &gt; 正常ケース: 非活性状態でのresetRipple" time="0.002297059">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; リップルリセット機能 &gt; 正常ケース: 複数回resetRippleを呼び出し" time="0.002849103">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; タイマー管理 &gt; 正常ケース: 手動リセット後の自動リセットタイマー無効化" time="0.007641608">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; タイマー管理 &gt; 正常ケース: 複数回のトリガーでタイマーリセット" time="0.002440675">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; タイマー管理 &gt; 正常ケース: コンポーネントアンマウント時のタイマークリア" time="0.008259086">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; エッジケース &gt; 正常ケース: 高速連続トリガー" time="0.003047261">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; エッジケース &gt; 正常ケース: トリガー→リセット→トリガーのサイクル" time="0.00768478">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 関数の安定性" time="0.004592628">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; メモ化とパフォーマンス &gt; 正常ケース: 状態変更時の適切な再レンダリング" time="0.001507866">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/hooks/test/useRippleEffect.test.ts" name="useRippleEffect hook &gt; 統合テスト &gt; 正常ケース: 完全なリップルライフサイクル" time="0.004876445">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" timestamp="2025-09-28T09:30:39.169Z" hostname="runnervm3ublj" tests="12" failures="0" errors="0" skipped="0" time="0.033102478">
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; 基本機能 &gt; 正常ケース: 関数が正しい構造を返す" time="0.002373973">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; 基本機能 &gt; 正常ケース: 複数回呼び出しで同じ値を返す（事前計算済み）" time="0.000376829">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; viewBox計算 &gt; 正常ケース: 正しいSVGビューボックス形式" time="0.000330563">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; viewBox計算 &gt; 境界値ケース: CIRCLE_LAYOUT.RADIUSの値に基づく計算" time="0.001375751">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; segments配列 &gt; 正常ケース: 12セグメントが生成される" time="0.000277485">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; segments配列 &gt; 正常ケース: 各セグメントが必要なプロパティを持つ" time="0.00947883">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; segments配列 &gt; 正常ケース: セグメントのposition値が0-11の範囲" time="0.00106216">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; segments配列 &gt; 正常ケース: 各セグメントのキー情報が正しく設定される" time="0.010439899">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; textRotation &gt; 正常ケース: textRotationが数値である" time="0.000333498">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; テキスト位置計算 &gt; 正常ケース: 3つの異なる半径でテキスト位置が計算される" time="0.003927995">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; 事前計算の最適化 &gt; パフォーマンステスト: 関数呼び出しが高速である" time="0.000341773">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/circleOfFifthsData.test.ts" name="getCircleOfFifthsData &gt; 事前計算の最適化 &gt; メモ化テスト: 同じオブジェクト参照が返される" time="0.00061424">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/utils/test/geometry.test.ts" timestamp="2025-09-28T09:30:39.172Z" hostname="runnervm3ublj" tests="18" failures="0" errors="0" skipped="0" time="0.011971802">
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateAngle &gt; 正常ケース: 位置0で正しい角度を返す" time="0.001894814">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateAngle &gt; 正常ケース: 各位置（0-11）で正しい角度を計算" time="0.001226244">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateAngle &gt; 正常ケース: 位置3（A）で正しい角度を返す" time="0.000302401">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateAngle &gt; 正常ケース: 位置6（F#/G♭）で正しい角度を返す" time="0.00025374">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateAngle &gt; 異常ケース: 無効な位置でCircleOfFifthsErrorをスロー" time="0.000982652">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; normalizeAngle &gt; 正常ケース: 正の角度をそのまま返す" time="0.000310256">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; normalizeAngle &gt; 正常ケース: 負の角度を正規化" time="0.000278266">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; normalizeAngle &gt; 正常ケース: 2π以上の角度を正規化" time="0.000245906">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; normalizeAngle &gt; 境界値ケース: 0度と2π度の処理" time="0.000412455">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; polarToCartesian &gt; 正常ケース: 0度で正しい座標を返す" time="0.000309094">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; polarToCartesian &gt; 正常ケース: 90度で正しい座標を返す" time="0.000227141">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; polarToCartesian &gt; 正常ケース: 180度で正しい座標を返す" time="0.00021061">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; polarToCartesian &gt; 正常ケース: 270度で正しい座標を返す" time="0.00019944">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; polarToCartesian &gt; 正常ケース: 半径0で原点を返す" time="0.000419668">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateTextPosition &gt; 正常ケース: 各位置で正しいテキスト座標を計算" time="0.001291365">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateTextPosition &gt; 異常ケース: 無効な位置でCircleOfFifthsErrorをスロー" time="0.000583442">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateTextPosition &gt; 異常ケース: 負の半径でCircleOfFifthsErrorをスロー" time="0.000381968">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/geometry.test.ts" name="geometry utils &gt; calculateTextRotation &gt; 正常ケース: 常に0を返す" time="0.000161299">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/utils/test/index.test.ts" timestamp="2025-09-28T09:30:39.175Z" hostname="runnervm3ublj" tests="3" failures="0" errors="0" skipped="0" time="0.006236947">
+        <testcase classname="src/features/circle-of-fifths/utils/test/index.test.ts" name="utils index exports &gt; エクスポートの確認: すべてのモジュールが正しくエクスポートされている" time="0.002547344">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/index.test.ts" name="utils index exports &gt; エクスポートの確認: ネームスペース形式でアクセス可能" time="0.000751003">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/index.test.ts" name="utils index exports &gt; エクスポートの確認: 各モジュールが独立している" time="0.001391861">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" timestamp="2025-09-28T09:30:39.176Z" hostname="runnervm3ublj" tests="11" failures="0" errors="0" skipped="0" time="0.016090798">
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generatePizzaSlicePath &gt; 正常ケース: 有効なパラメータで正しいSVGパスを生成" time="0.002977481">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generatePizzaSlicePath &gt; 正常ケース: 複数の位置で一貫したパス構造を生成" time="0.002979166">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generatePizzaSlicePath &gt; 境界値ケース: large-arc-flagの計算が正しい" time="0.000985678">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generatePizzaSlicePath &gt; 異常ケース: 無効な位置でCircleOfFifthsErrorをスロー" time="0.000841461">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generatePizzaSlicePath &gt; 異常ケース: 負の半径でCircleOfFifthsErrorをスロー" time="0.000422684">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generatePizzaSlicePath &gt; 異常ケース: 内側半径≥外側半径でCircleOfFifthsErrorをスロー" time="0.000502392">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generateThreeSegmentPaths &gt; 正常ケース: 有効なパラメータで3つのパスを正しく生成" time="0.000905369">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generateThreeSegmentPaths &gt; 正常ケース: 実際のCIRCLE_LAYOUT値で正しく動作" time="0.001370923">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generateThreeSegmentPaths &gt; 異常ケース: 無効な位置でCircleOfFifthsErrorをスロー" time="0.000635579">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generateThreeSegmentPaths &gt; 異常ケース: 負の半径でCircleOfFifthsErrorをスロー" time="0.000602438">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/pathGeneration.test.ts" name="pathGeneration utils &gt; generateThreeSegmentPaths &gt; 異常ケース: 半径の順序が正しくない場合でErrorをスロー" time="0.001889822">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/circle-of-fifths/utils/test/validation.test.ts" timestamp="2025-09-28T09:30:39.178Z" hostname="runnervm3ublj" tests="6" failures="0" errors="0" skipped="0" time="0.004806113">
+        <testcase classname="src/features/circle-of-fifths/utils/test/validation.test.ts" name="validation utils &gt; isValidPosition &gt; 正常ケース: 有効な位置（0-11）でtrueを返す" time="0.002172659">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/validation.test.ts" name="validation utils &gt; isValidPosition &gt; 境界値ケース: 負の数でfalseを返す" time="0.000241829">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/validation.test.ts" name="validation utils &gt; isValidPosition &gt; 境界値ケース: getSegmentCount()以上の数でfalseを返す" time="0.000310947">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/validation.test.ts" name="validation utils &gt; isValidPosition &gt; 異常ケース: 小数でfalseを返す" time="0.000270622">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/validation.test.ts" name="validation utils &gt; isValidPosition &gt; 異常ケース: NaNでfalseを返す" time="0.000145991">
+        </testcase>
+        <testcase classname="src/features/circle-of-fifths/utils/test/validation.test.ts" name="validation utils &gt; isValidPosition &gt; 異常ケース: Infinityでfalseを返す" time="0.000175936">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/view-controller/hooks/test/useViewController.test.ts" timestamp="2025-09-28T09:30:39.179Z" hostname="runnervm3ublj" tests="28" failures="0" errors="0" skipped="0" time="0.123246155">
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; 初期化 &gt; 正常ケース: フックが正常に初期化される" time="0.026132794">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; 初期化 &gt; 正常ケース: 初期状態でcircle-of-fifthsが選択されている" time="0.003976853">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; 初期化 &gt; 正常ケース: hubOptionsが正しく取得される" time="0.005183922">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; 初期化 &gt; 正常ケース: selectedOptionが正しく設定される" time="0.00263761">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; 初期化 &gt; 正常ケース: radioGroupRefが初期化される" time="0.003185366">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; hubType変更 &gt; 正常ケース: hubStoreの状態変更が反映される" time="0.004247826">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; hubType変更 &gt; 正常ケース: hubType変更時にselectedOptionが更新される" time="0.002899617">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleHubTypeChange &gt; 正常ケース: circle-of-fifthsに変更できる" time="0.003233535">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleHubTypeChange &gt; 正常ケース: chromatic-circleに変更できる" time="0.00440673">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleHubTypeChange &gt; 正常ケース: 連続して変更できる" time="0.008886467">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; ArrowLeft/ArrowUpキー &gt; 正常ケース: ArrowLeftで前のオプションに移動" time="0.006796862">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; ArrowLeft/ArrowUpキー &gt; 正常ケース: ArrowUpで前のオプションに移動" time="0.008526217">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; ArrowLeft/ArrowUpキー &gt; 境界値ケース: 最初のオプションで前に移動すると最後のオプションに移動" time="0.002697241">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; ArrowRight/ArrowDownキー &gt; 正常ケース: ArrowRightで次のオプションに移動" time="0.002176596">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; ArrowRight/ArrowDownキー &gt; 正常ケース: ArrowDownで次のオプションに移動" time="0.001806309">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; ArrowRight/ArrowDownキー &gt; 境界値ケース: 最後のオプションで次に移動すると最初のオプションに移動" time="0.002890559">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; Home/Endキー &gt; 正常ケース: Homeキーで最初のオプションに移動" time="0.001792122">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; Home/Endキー &gt; 正常ケース: Endキーで最後のオプションに移動" time="0.001715771">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; Home/Endキー &gt; 境界値ケース: 既に最初のオプションでHomeキーを押しても変化なし" time="0.001653085">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; Home/Endキー &gt; 境界値ケース: 既に最後のオプションでEndキーを押しても変化なし" time="0.001679855">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; その他のキー &gt; 正常ケース: サポートされていないキーは何も実行しない" time="0.00138071">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; handleKeyDown &gt; その他のキー &gt; 正常ケース: 複数の無効なキーを連続して処理" time="0.008948103">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; フォーカス管理 &gt; 正常ケース: DOM要素が存在しない場合はエラーなし" time="0.004124425">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; フォーカス管理 &gt; 正常ケース: DOM要素が存在する場合のフォーカス処理" time="0.003354732">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; メモ化の動作 &gt; 正常ケース: hubOptionsがメモ化される" time="0.001513235">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; メモ化の動作 &gt; 正常ケース: hubTypeが変更されない場合はselectedOptionがメモ化される" time="0.00135933">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; メモ化の動作 &gt; 正常ケース: hubTypeが変更されるとselectedOptionが更新される" time="0.001691827">
+        </testcase>
+        <testcase classname="src/features/view-controller/hooks/test/useViewController.test.ts" name="useViewController &gt; メモ化の動作 &gt; 正常ケース: handleHubTypeChangeとhandleKeyDownがメモ化される" time="0.001444868">
+        </testcase>
+    </testsuite>
+</testsuites>
