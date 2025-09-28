@@ -368,16 +368,16 @@ describe('PitchClass', () => {
         });
       });
 
-      it('正常ケース: G♭マイナーキー（flat系）でのダイアトニック音', () => {
+      it('正常ケース: F#マイナーキー（sharp系）でのダイアトニック音', () => {
         const fSharpMinorKey = Key.minor(PitchClass.fromCircleOfFifths(6));
 
-        // F#マイナースケール: G♭, A♭, A, B, D♭, D, E
+        // F#マイナースケール（Aメジャーが相対長調、3つのシャープ）: F#, G#, A, B, C#, D, E
         const testCases = [
-          { fifthsIndex: 6, expectedName: 'F#' }, // G♭
-          { fifthsIndex: 8, expectedName: 'G#' }, // A♭
+          { fifthsIndex: 6, expectedName: 'F#' }, // F#
+          { fifthsIndex: 8, expectedName: 'G#' }, // G#
           { fifthsIndex: 3, expectedName: 'A' }, // A
           { fifthsIndex: 5, expectedName: 'B' }, // B
-          { fifthsIndex: 7, expectedName: 'C#' }, // D♭
+          { fifthsIndex: 7, expectedName: 'C#' }, // C#
           { fifthsIndex: 2, expectedName: 'D' }, // D
           { fifthsIndex: 4, expectedName: 'E' }, // E
         ];
@@ -517,6 +517,99 @@ describe('PitchClass', () => {
         const result = PitchClass.modulo12(5);
         expect(typeof result).toBe('number');
         expect(Number.isNaN(result)).toBe(false);
+      });
+    });
+  });
+
+  // 新規追加: 調号順序定数のテスト
+  describe('調号順序定数 (SHARP_KEY_ORDER / FLAT_KEY_ORDER)', () => {
+    describe('SHARP_KEY_ORDER - シャープ調号の順序', () => {
+      it('正常ケース: 音楽理論に正しいシャープ順序（F, C, G, D, A, E, B）', () => {
+        const expectedOrder = ['F', 'C', 'G', 'D', 'A', 'E', 'B'];
+
+        expect(PitchClass.SHARP_KEY_ORDER).toHaveLength(7);
+
+        PitchClass.SHARP_KEY_ORDER.forEach((pitchClass, index) => {
+          expect(pitchClass.sharpName).toBe(expectedOrder[index]);
+        });
+      });
+
+      it('正常ケース: 五度圏上の順序で並んでいる', () => {
+        // シャープ順序は五度圏で7音分を反時計回りに進む順序
+        const expectedFifthsIndices = [11, 0, 1, 2, 3, 4, 5]; // F, C, G, D, A, E, B
+
+        PitchClass.SHARP_KEY_ORDER.forEach((pitchClass, index) => {
+          expect(pitchClass.fifthsIndex).toBe(expectedFifthsIndices[index]);
+        });
+      });
+    });
+
+    describe('FLAT_KEY_ORDER - フラット調号の順序', () => {
+      it('正常ケース: 音楽理論に正しいフラット順序（B, E, A, D, G, C, F）', () => {
+        const expectedOrder = ['B', 'E', 'A', 'D', 'G', 'C', 'F'];
+
+        expect(PitchClass.FLAT_KEY_ORDER).toHaveLength(7);
+
+        PitchClass.FLAT_KEY_ORDER.forEach((pitchClass, index) => {
+          expect(pitchClass.flatName).toBe(expectedOrder[index]);
+        });
+      });
+
+      it('正常ケース: SHARP_KEY_ORDERの逆順である', () => {
+        const reversedSharpOrder = [...PitchClass.SHARP_KEY_ORDER].reverse();
+
+        expect(PitchClass.FLAT_KEY_ORDER).toHaveLength(reversedSharpOrder.length);
+
+        // 同じ音高クラスかどうかをfifthsIndexで比較
+        PitchClass.FLAT_KEY_ORDER.forEach((pitchClass, index) => {
+          expect(pitchClass.fifthsIndex).toBe(reversedSharpOrder[index].fifthsIndex);
+        });
+      });
+
+      it('正常ケース: 五度圏上でシャープ順序の逆順', () => {
+        const expectedFifthsIndices = [5, 4, 3, 2, 1, 0, 11]; // B, E, A, D, G, C, F
+
+        PitchClass.FLAT_KEY_ORDER.forEach((pitchClass, index) => {
+          expect(pitchClass.fifthsIndex).toBe(expectedFifthsIndices[index]);
+        });
+      });
+    });
+
+    describe('音楽理論的妥当性の確認', () => {
+      it('正常ケース: 調号システムとしての整合性', () => {
+        // シャープとフラットの順序に重複がないことを確認
+        const sharpNames = PitchClass.SHARP_KEY_ORDER.map(pc => pc.sharpName);
+        const flatNames = PitchClass.FLAT_KEY_ORDER.map(pc => pc.flatName);
+
+        const uniqueSharpNames = new Set(sharpNames);
+        const uniqueFlatNames = new Set(flatNames);
+
+        expect(uniqueSharpNames.size).toBe(sharpNames.length);
+        expect(uniqueFlatNames.size).toBe(flatNames.length);
+      });
+
+      it('正常ケース: 実際の調号計算での使用例', () => {
+        // KeySignature での使用をシミュレート
+
+        // 最初の2つのシャープをテスト
+        const twoSharps = PitchClass.SHARP_KEY_ORDER.slice(0, 2);
+        expect(twoSharps.map(pc => pc.sharpName)).toEqual(['F', 'C']);
+
+        // 3つのフラット（B♭, E♭, A♭）をテスト
+        const threeFlats = PitchClass.FLAT_KEY_ORDER.slice(0, 3);
+        expect(threeFlats.map(pc => pc.flatName)).toEqual(['B', 'E', 'A']);
+      });
+
+      it('正常ケース: 五度圏上での連続性', () => {
+        // 隣接する音名が五度圏上で連続していることを確認
+        for (let i = 0; i < PitchClass.SHARP_KEY_ORDER.length - 1; i++) {
+          const current = PitchClass.SHARP_KEY_ORDER[i];
+          const next = PitchClass.SHARP_KEY_ORDER[i + 1];
+
+          // 次の音は五度圏上で1つ進んだ位置にある（F=11からC=0への境界処理を考慮）
+          const expectedNextIndex = current.fifthsIndex === 11 ? 0 : current.fifthsIndex + 1;
+          expect(next.fifthsIndex).toBe(expectedNextIndex);
+        }
       });
     });
   });

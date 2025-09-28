@@ -3,6 +3,7 @@ import { ScalePattern } from '../common/ScalePattern';
 import { Scale } from '../scale';
 import { AbstractMusicalContext } from '../common/AbstractMusicalContext';
 import type { KeyDTO } from '../common/IMusicalContext';
+import { KeySignature } from '../common';
 
 /**
  * ModalContext（旋法的文脈）
@@ -21,8 +22,18 @@ export class ModalContext extends AbstractMusicalContext {
    */
   constructor(tonalCenter: PitchClass, scalePattern: ScalePattern) {
     const scale = new Scale(tonalCenter, scalePattern);
-    super(tonalCenter, scale);
+    super(tonalCenter, scale, KeySignature.fromFifthsIndex(1)); // TODO
     this.tonalCenter = tonalCenter;
+  }
+
+  /**
+   * この文脈の相対的メジャートニックを返す
+   * モード文脈では、対応するメジャー調のトニックを計算する
+   * @returns 相対的メジャートニックのPitchClass
+   */
+  public getRelativeMajorTonic(): PitchClass {
+    // TODO: FIX
+    return this.centerPitch;
   }
 
   /**
