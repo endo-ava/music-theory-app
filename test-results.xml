@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="12" failures="0" errors="0" time="0.122791223">
-    <testsuite name="src/features/key-controller/test/KeyController.test.tsx" timestamp="2025-09-28T09:43:25.998Z" hostname="runnervm3ublj" tests="12" failures="0" errors="0" skipped="0" time="0.122791223">
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 基本レンダリング &gt; 正常ケース: コンポーネントが正しくレンダリングされる" time="0.051537695">
+<testsuites name="vitest tests" tests="12" failures="0" errors="0" time="0.132431058">
+    <testsuite name="src/features/key-controller/test/KeyController.test.tsx" timestamp="2025-09-28T09:48:46.411Z" hostname="runnervm3ublj" tests="12" failures="0" errors="0" skipped="0" time="0.132431058">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 基本レンダリング &gt; 正常ケース: コンポーネントが正しくレンダリングされる" time="0.054925722">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 基本レンダリング &gt; 正常ケース: カスタムタイトルが設定される" time="0.005548064">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 基本レンダリング &gt; 正常ケース: カスタムタイトルが設定される" time="0.005632967">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 基本レンダリング &gt; 正常ケース: className が適用される" time="0.004402408">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 基本レンダリング &gt; 正常ケース: className が適用される" time="0.004921137">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 選択状態の表示 &gt; 正常ケース: 現在のキーに対応するボタンが選択状態になる" time="0.005041885">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 選択状態の表示 &gt; 正常ケース: 現在のキーに対応するボタンが選択状態になる" time="0.00521395">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 選択状態の表示 &gt; 正常ケース: 現在のキー名が表示される" time="0.004347165">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; 選択状態の表示 &gt; 正常ケース: 現在のキー名が表示される" time="0.004175965">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; ボタンクリック動作 &gt; 正常ケース: トニックボタンクリックでキーが変更される" time="0.008820947">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; ボタンクリック動作 &gt; 正常ケース: トニックボタンクリックでキーが変更される" time="0.009229075">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; ボタンクリック動作 &gt; 正常ケース: 全てのトニックボタンが機能する" time="0.011686323">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; ボタンクリック動作 &gt; 正常ケース: 全てのトニックボタンが機能する" time="0.016224088">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; ボタンクリック動作 &gt; 正常ケース: 同じボタンを再度クリックしても動作する" time="0.004377162">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; ボタンクリック動作 &gt; 正常ケース: 同じボタンを再度クリックしても動作する" time="0.004639314">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; アクセシビリティ &gt; 正常ケース: 全てのボタンに適切なaria-labelが設定される" time="0.007373772">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; アクセシビリティ &gt; 正常ケース: 全てのボタンに適切なaria-labelが設定される" time="0.007401387">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; アクセシビリティ &gt; 正常ケース: ボタンにキーボードフォーカスが可能" time="0.007040684">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; アクセシビリティ &gt; 正常ケース: ボタンにキーボードフォーカスが可能" time="0.007959421">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; レスポンシブデザイン &gt; 正常ケース: グリッドレイアウトのクラスが適用される" time="0.00453256">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; レスポンシブデザイン &gt; 正常ケース: グリッドレイアウトのクラスが適用される" time="0.005876117">
         </testcase>
-        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; レスポンシブデザイン &gt; 正常ケース: タイトルがレスポンシブ表示クラスを持つ" time="0.00340094">
+        <testcase classname="src/features/key-controller/test/KeyController.test.tsx" name="KeyController &gt; レスポンシブデザイン &gt; 正常ケース: タイトルがレスポンシブ表示クラスを持つ" time="0.003898971">
         </testcase>
     </testsuite>
 </testsuites>
