@@ -1,337 +1,270 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import { expect, within, userEvent, waitFor } from '@storybook/test';
 import { KeyController } from '../components/KeyController';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain/key';
 import { PitchClass } from '@/domain/common';
 
-const meta: Meta<typeof KeyController> = {
-  title: 'Components/KeyController',
+const meta = {
+  title: 'Features/KeyController',
   component: KeyController,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          'Hub画面のKey Controller（C-2）コンポーネント。音楽的文脈（キー/モード）を設定するための制御インターフェース。Tonic（主音）とMode（旋法）を直感的に選択でき、currentKeyStoreと連携して状態管理を行います。',
-      },
-    },
-  },
-  tags: ['autodocs'],
-  argTypes: {
-    className: {
-      control: 'text',
-      description: 'カスタムクラス名（外部レイアウト制御用）',
-    },
-    title: {
-      control: 'text',
-      description: 'コンポーネントの見出し（デフォルト: "Key"）',
-    },
   },
   decorators: [
-    Story => (
-      <div className="flex min-h-[500px] items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8">
-        <div className="w-80">
-          <Story />
-        </div>
-      </div>
-    ),
+    Story => {
+      // 各Storyの前にストアをC Majorにリセット
+      const cMajor = Key.major(PitchClass.fromCircleOfFifths(0));
+      useCurrentKeyStore.getState().setCurrentKey(cMajor);
+      return <Story />;
+    },
   ],
-};
+} satisfies Meta<typeof KeyController>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * デフォルトのKeyController表示
+ * デフォルト表示
+ * C Majorキーが設定された初期状態
  */
 export const Default: Story = {
   args: {},
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'デフォルトの設定でKeyControllerを表示します。12音のTonicセレクターと、Major/Minorモード選択UI、現在のキー表示が含まれます。',
-      },
-    },
-  },
 };
 
 /**
- * カスタムタイトルのKeyController
+ * カスタムタイトル付き
  */
-export const CustomTitle: Story = {
+export const WithCustomTitle: Story = {
   args: {
-    title: 'キーの選択',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'カスタムタイトルを設定したKeyControllerです。デフォルトの"Key"から変更されています。',
-      },
-    },
+    title: 'Musical Context',
   },
 };
 
 /**
- * 基本インタラクションテスト
+ * Root選択のインタラクションテスト
+ * RootSelectorを操作してD Majorに変更
  */
-export const InteractiveTest: Story = {
+export const RootSelectionTest: Story = {
   args: {},
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'KeyControllerコンポーネントの基本的なインタラクション動作をテストします。Tonicボタンの選択状態、モード切り替え、状態管理を検証します。',
-      },
-    },
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // テスト開始前にストアを初期状態に確実にセット（C Major）
-    useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.C) });
+    // 初期状態: C Majorであることを確認
+    const currentDisplay = canvas.getByText(/Current:/);
+    expect(currentDisplay.textContent).toContain('C Major');
 
-    // KeyControllerの表示確認
-    const title = canvas.getByRole('heading', { level: 2 });
-    expect(title).toHaveTextContent('Key');
+    // RootSelectorをクリック
+    const rootSelector = canvas.getByRole('combobox');
+    await userEvent.click(rootSelector);
 
-    // TonicセレクションUIの確認
-    const tonicHeading = canvas.getByRole('heading', { level: 3, name: 'Tonic' });
-    expect(tonicHeading).toBeInTheDocument();
+    // Dのオプションを選択
+    // SelectコンテンツはPortalでレンダリングされるため、canvasスコープ外を探索
+    const dOption = await within(document.body).findByText('D');
+    await userEvent.click(dOption);
 
-    // ModeセレクションUIの確認
-    const modeHeading = canvas.getByRole('heading', { level: 3, name: 'Mode' });
-    expect(modeHeading).toBeInTheDocument();
-
-    // 初期状態でCボタンが選択されていることを確認
-    const cButton = canvas.getByLabelText('Select C major key');
-    expect(cButton).toBeInTheDocument();
-    expect(cButton).toHaveAttribute('aria-pressed', 'true');
-
-    // 初期状態でMajorモードが選択されていることを確認
-    const majorButton = canvas.getByLabelText('Select major mode');
-    const minorButton = canvas.getByLabelText('Select minor mode');
-    expect(majorButton).toHaveAttribute('aria-pressed', 'true');
-    expect(minorButton).toHaveAttribute('aria-pressed', 'false');
-
-    // 現在のキー表示確認
-    expect(canvas.getByText('Current:')).toBeInTheDocument();
-    expect(canvas.getByText('C Major')).toBeInTheDocument();
+    // 結果確認: D Majorになっていることを確認
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('D Major');
+    });
   },
 };
 
 /**
- * Tonic選択テスト
+ * Mode変更のインタラクションテスト
+ * ModeSliderを操作してC Dorianに変更
  */
-export const TonicSelectionTest: Story = {
+export const ModeChangeTest: Story = {
   args: {},
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Tonic（主音）選択機能の自動テストです。異なるTonicボタンをクリックして状態が正しく更新されることを確認します。',
-      },
-    },
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // テスト開始前にストアを初期状態に設定
-    useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.C) });
+    // 初期状態: C Majorであることを確認
+    const currentDisplay = canvas.getByText(/Current:/);
+    expect(currentDisplay.textContent).toContain('C Major');
 
-    // 初期状態の確認
-    const cButton = canvas.getByLabelText('Select C major key');
-    expect(cButton).toHaveAttribute('aria-pressed', 'true');
-    expect(canvas.getByText('C Major')).toBeInTheDocument();
+    // Dorianラベル（"Dor"）をクリック
+    const dorianLabel = canvas.getByRole('button', { name: /Dor/i });
+    await userEvent.click(dorianLabel);
 
-    // Gボタンをクリック
-    const gButton = canvas.getByLabelText('Select G major key');
-    await userEvent.click(gButton);
-
-    // 状態が切り替わったことを確認
-    expect(cButton).toHaveAttribute('aria-pressed', 'false');
-    expect(gButton).toHaveAttribute('aria-pressed', 'true');
-    expect(canvas.getByText('G Major')).toBeInTheDocument();
-
-    // Fボタンをクリック
-    const fButton = canvas.getByLabelText('Select F major key');
-    await userEvent.click(fButton);
-
-    // 状態が切り替わったことを確認
-    expect(gButton).toHaveAttribute('aria-pressed', 'false');
-    expect(fButton).toHaveAttribute('aria-pressed', 'true');
-    expect(canvas.getByText('F Major')).toBeInTheDocument();
+    // 結果確認: C Dorianになっていることを確認
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('C Dorian');
+    });
   },
 };
 
 /**
- * Mode切り替えテスト
+ * LydianからLocrianへの連続変更テスト
+ * 最も明るいモードから最も暗いモードへのスライダー操作
  */
-export const ModeSwitchTest: Story = {
+export const BrightnessRangeTest: Story = {
   args: {},
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Mode（調性）切り替え機能の自動テストです。Major/Minor間の切り替えが正しく動作し、tonicが保持されることを確認します。',
-      },
-    },
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const currentDisplay = canvas.getByText(/Current:/);
 
-    // テスト開始前にストアを初期状態に設定
-    useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.C) });
+    // Lydian（最も明るい）に変更
+    const lydianLabel = canvas.getByRole('button', { name: /Lyd/i });
+    await userEvent.click(lydianLabel);
 
-    // 初期状態の確認
-    const majorButton = canvas.getByLabelText('Select major mode');
-    const minorButton = canvas.getByLabelText('Select minor mode');
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('C Lydian');
+    });
 
-    expect(majorButton).toHaveAttribute('aria-pressed', 'true');
-    expect(minorButton).toHaveAttribute('aria-pressed', 'false');
-    expect(canvas.getByText('C Major')).toBeInTheDocument();
+    // Locrian（最も暗い）に変更
+    const locrianLabel = canvas.getByRole('button', { name: /Loc/i });
+    await userEvent.click(locrianLabel);
 
-    // Minorボタンをクリック
-    await userEvent.click(minorButton);
-
-    // 状態が切り替わったことを確認
-    expect(majorButton).toHaveAttribute('aria-pressed', 'false');
-    expect(minorButton).toHaveAttribute('aria-pressed', 'true');
-    expect(canvas.getByText('C Minor')).toBeInTheDocument();
-
-    // Majorボタンをクリックして戻す
-    await userEvent.click(majorButton);
-
-    // 元の状態に戻ったことを確認
-    expect(majorButton).toHaveAttribute('aria-pressed', 'true');
-    expect(minorButton).toHaveAttribute('aria-pressed', 'false');
-    expect(canvas.getByText('C Major')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('C Locrian');
+    });
   },
 };
 
 /**
- * 複合操作テスト（TonicとMode）
+ * RootとModeの統合テスト
+ * RootとModeを両方操作してD Dorianを設定
  */
-export const ComplexInteractionTest: Story = {
+export const IntegrationTest: Story = {
   args: {},
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'TonicとModeの複合操作をテストします。異なるTonicでMode切り替え、Minorモードでのtonic変更など、実際のユースケースを想定した操作を検証します。',
-      },
-    },
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const currentDisplay = canvas.getByText(/Current:/);
 
-    // テスト開始前にストアを初期状態に設定
-    useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.C) });
+    // 初期状態確認
+    expect(currentDisplay.textContent).toContain('C Major');
 
-    // 1. C Major → A Major
-    const aButton = canvas.getByLabelText('Select A major key');
-    await userEvent.click(aButton);
-    expect(canvas.getByText('A Major')).toBeInTheDocument();
+    // Step 1: Root を D に変更
+    const rootSelector = canvas.getByRole('combobox');
+    await userEvent.click(rootSelector);
 
-    // 2. A Major → A Minor（tonicを維持してmodeを変更）
-    const minorButton = canvas.getByLabelText('Select minor mode');
-    await userEvent.click(minorButton);
-    expect(canvas.getByText('A Minor')).toBeInTheDocument();
-    expect(aButton).toHaveAttribute('aria-pressed', 'true');
+    // SelectコンテンツはPortalでレンダリングされるため、canvasスコープ外を探索
+    const dOption = await within(document.body).findByText('D');
+    await userEvent.click(dOption);
 
-    // 3. A Minor → D Minor（modeを維持してtonicを変更）
-    const dButton = canvas.getByLabelText('Select D minor key');
-    await userEvent.click(dButton);
-    expect(canvas.getByText('D Minor')).toBeInTheDocument();
-    expect(minorButton).toHaveAttribute('aria-pressed', 'true');
-    expect(dButton).toHaveAttribute('aria-pressed', 'true');
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('D Major');
+    });
 
-    // 4. D Minor → D Major
-    const majorButton = canvas.getByLabelText('Select major mode');
-    await userEvent.click(majorButton);
-    expect(canvas.getByText('D Major')).toBeInTheDocument();
-    expect(dButton).toHaveAttribute('aria-pressed', 'true');
-    expect(majorButton).toHaveAttribute('aria-pressed', 'true');
+    // Step 2: Mode を Dorian に変更
+    const dorianLabel = canvas.getByRole('button', { name: /Dor/i });
+    await userEvent.click(dorianLabel);
+
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('D Dorian');
+    });
   },
 };
 
 /**
- * アクセシビリティテスト
+ * Major⇔Minor切り替えテスト
+ * よく使用される機能のクイック操作をテスト
  */
-export const AccessibilityTest: Story = {
+export const MajorMinorToggleTest: Story = {
   args: {},
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'KeyControllerコンポーネントのアクセシビリティ要件をテストします。適切なARIA属性、キーボードフォーカス、ラベルの関連付けを確認します。',
-      },
-    },
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const currentDisplay = canvas.getByText(/Current:/);
 
-    // 見出しの確認
-    const keyHeading = canvas.getByRole('heading', { level: 2, name: 'Key' });
-    const tonicHeading = canvas.getByRole('heading', { level: 3, name: 'Tonic' });
-    const modeHeading = canvas.getByRole('heading', { level: 3, name: 'Mode' });
+    // 初期状態: C Major
+    expect(currentDisplay.textContent).toContain('C Major');
 
-    expect(keyHeading).toBeInTheDocument();
-    expect(tonicHeading).toBeInTheDocument();
-    expect(modeHeading).toBeInTheDocument();
+    // Minor（Aeolian）に変更
+    const minorLabel = canvas.getByRole('button', { name: /Aeo\/Min/i });
+    await userEvent.click(minorLabel);
 
-    // 全てのTonicボタンの確認
-    const expectedTonics = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
-    for (const tonic of expectedTonics) {
-      const button = canvas.getByLabelText(
-        new RegExp(`Select ${tonic.replace('#', '#')} (major|minor) key`)
-      );
-      expect(button).toBeInTheDocument();
-      expect(button).toHaveAttribute('aria-pressed');
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('C Minor');
+    });
+
+    // 再びMajorに戻す
+    const majorLabel = canvas.getByRole('button', { name: /Ion\/Maj/i });
+    await userEvent.click(majorLabel);
+
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('C Major');
+    });
+  },
+};
+
+/**
+ * 全モードのビジュアル確認用
+ * 7つのモードすべてを順番に表示
+ */
+export const AllModesVisualCheck: Story = {
+  args: {},
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const currentDisplay = canvas.getByText(/Current:/);
+
+    // テスト用のモード名とラベル
+    const modes = [
+      { label: /Lyd/i, expected: 'C Lydian' },
+      { label: /Ion\/Maj/i, expected: 'C Major' },
+      { label: /Mix/i, expected: 'C Mixolydian' },
+      { label: /Dor/i, expected: 'C Dorian' },
+      { label: /Aeo\/Min/i, expected: 'C Minor' },
+      { label: /Phr/i, expected: 'C Phrygian' },
+      { label: /Loc/i, expected: 'C Locrian' },
+    ];
+
+    for (const mode of modes) {
+      const modeLabel = canvas.getByRole('button', { name: mode.label });
+      await userEvent.click(modeLabel);
+
+      await waitFor(() => {
+        expect(currentDisplay.textContent).toContain(mode.expected);
+      });
     }
-
-    // Modeボタンの確認
-    const majorButton = canvas.getByLabelText('Select major mode');
-    const minorButton = canvas.getByLabelText('Select minor mode');
-
-    expect(majorButton).toHaveAttribute('aria-pressed');
-    expect(minorButton).toHaveAttribute('aria-pressed');
-
-    // フォーカス可能であることを確認
-    const cButton = canvas.getByLabelText('Select C major key');
-    cButton.focus();
-    expect(cButton).toHaveFocus();
-
-    majorButton.focus();
-    expect(majorButton).toHaveFocus();
   },
 };
 
 /**
- * カスタムスタイルのKeyController
+ * シャープ系のキー設定テスト
+ * G Majorのような#系のキーを設定
  */
-export const CustomStyle: Story = {
-  args: {
-    className: 'border-2 border-purple-500 p-4 bg-purple-50/10 rounded-lg',
+export const SharpKeyTest: Story = {
+  args: {},
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const currentDisplay = canvas.getByText(/Current:/);
+
+    // G Majorを設定
+    const rootSelector = canvas.getByRole('combobox');
+    await userEvent.click(rootSelector);
+
+    // SelectコンテンツはPortalでレンダリングされるため、canvasスコープ外を探索
+    const gOption = await within(document.body).findByText('G');
+    await userEvent.click(gOption);
+
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('G Major');
+    });
   },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'カスタムスタイルを適用したKeyControllerです。className propsを使用して外部レイアウトやスタイルをカスタマイズできます。',
-      },
-    },
-    a11y: {
-      config: {
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: false, // カスタムスタイルでのコントラスト検証を無効化
-          },
-        ],
-      },
-    },
+};
+
+/**
+ * フラット系のキー設定テスト
+ * F Majorのような♭系のキーを設定
+ */
+export const FlatKeyTest: Story = {
+  args: {},
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const currentDisplay = canvas.getByText(/Current:/);
+
+    // F Majorを設定
+    const rootSelector = canvas.getByRole('combobox');
+    await userEvent.click(rootSelector);
+
+    // SelectコンテンツはPortalでレンダリングされるため、canvasスコープ外を探索
+    const fOption = await within(document.body).findByText('F');
+    await userEvent.click(fOption);
+
+    await waitFor(() => {
+      expect(currentDisplay.textContent).toContain('F Major');
+    });
   },
 };

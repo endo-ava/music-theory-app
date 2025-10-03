@@ -3,9 +3,9 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import type { ClassNameProps } from '@/shared/types';
-import { PitchClass } from '@/domain/common';
-import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { Key } from '@/domain/key';
+import { useKeyController } from '../hooks/useKeyController';
+import { RootSelector } from './RootSelector';
+import { ModeSlider } from './ModeSlider';
 
 /**
  * KeyControllerコンポーネントのProps
@@ -16,111 +16,56 @@ export interface KeyControllerProps extends ClassNameProps {
 }
 
 /**
- * Key Controller (C-2) コンポーネント
+ * Key Controller (C-2) コンポーネント - 新規設計版
  *
  * アプリケーションの音楽的文脈（キー/モード）を設定する。
  * Tonic（主音）とMode（旋法）を、素早くかつ直感的に選択するためのインターフェースを提供。
  *
- * Phase 1: 基本Tonicセレクター ✅
- * - 12音の水平ボタンリスト表示
- * - 基本クリック操作でキー変更（固定でMajorキー）
- * - currentKeyStoreとの連携
+ * 【新規設計準拠の実装】
+ * - **Root Selector**: 12の主音（C, C♯/D♭...）を検索・選択するためのドロップダウンメニュー（最小幅）
+ * - **Mode Slider**: 7つのモード（Lydian, Ionian...）を「#多（シャープ系）」から「♭多（フラット系）」への連続的な変化として表現するスライダー
+ * - **Current Display**: RootとModeの現在の組み合わせをシンプルなテキストで表示
  *
- * Phase 2: Mode選択機能 🚧
- * - Major/Minor（Aeolian）の切り替え機能
- * - ドメインモデル（Key.major/minor）との連携
+ * 設計思想:
+ * - **検索性と連続性の両立**: Root音は検索性重視のドロップダウン、Modeは調号特性の連続的変化を体感できるスライダー
+ * - **インタラクティブなフィードバック**: スライダーを動かすとCanvas上の構成音がリアルタイムで変化
+ * - **客観的事実の優先**: 解釈的表現（明暗）ではなく、音楽理論的事実（#/♭の特性）を表記
+ * - **情報密度の最適化**: 必要最小限のスペースで最大限の情報を提供
+ *
+ * 設計原則（SOLID）:
+ * - SRP: UI表示とビジネスロジックを分離（useKeyControllerに委譲）
+ * - OCP: コンポーネント構成により拡張に開放
+ * - DIP: 抽象化されたフックに依存
  *
  * @param props - コンポーネントのプロパティ
  * @returns KeyControllerのJSX要素
+ *
+ * @see {@link /home/ryuto/music-theory-app/docs/00.project/screenDesigns/hub/0003-4.controller-panel.md}
  */
 export const KeyController: React.FC<KeyControllerProps> = ({ className, title = 'Key' }) => {
-  const { currentKey, setCurrentKey } = useCurrentKeyStore();
-
-  /**
-   * 主音クリック時のハンドラー
-   * Phase 2: 現在のモードを維持してトニックのみ変更
-   */
-  const handleTonicClick = (tonic: PitchClass) => {
-    const newKey = currentKey.isMajor ? Key.major(tonic) : Key.minor(tonic);
-    setCurrentKey(newKey);
-  };
-
-  /**
-   * モード変更時のハンドラー
-   * Phase 2: 現在のトニックを維持してモードのみ変更
-   */
-  const handleModeChange = (isMajor: boolean) => {
-    const newKey = isMajor ? Key.major(currentKey.centerPitch) : Key.minor(currentKey.centerPitch);
-    setCurrentKey(newKey);
-  };
+  const { currentKey, currentTonic, currentModeIndex, handleRootChange, handleModeChange } =
+    useKeyController();
 
   return (
-    <div className={twMerge('space-y-3', className)}>
+    <div className={twMerge('space-y-4', className)}>
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
       <h2 className="text-foreground hidden text-lg md:block">{title}</h2>
 
-      {/* Tonic Selector - 12音の水平ボタンリスト */}
+      {/* Root Selector */}
       <div className="space-y-2">
-        <h3 className="text-secondary-foreground text-sm font-medium">Tonic</h3>
-        <div className="grid grid-cols-6 gap-1 sm:grid-cols-12">
-          {PitchClass.ALL_PITCH_CLASSES.map(pitchClass => {
-            const isSelected = currentKey.centerPitch.equals(pitchClass);
-            return (
-              <button
-                key={pitchClass.sharpName}
-                onClick={() => handleTonicClick(pitchClass)}
-                className={twMerge(
-                  'hover:bg-accent hover:text-accent-foreground focus:ring-ring flex h-8 min-w-0 items-center justify-center rounded border px-2 text-xs font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none',
-                  isSelected
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-border bg-card text-card-foreground'
-                )}
-                aria-pressed={isSelected}
-                aria-label={`Select ${pitchClass.sharpName} ${currentKey.isMajor ? 'major' : 'minor'} key`}
-              >
-                {pitchClass.sharpName}
-              </button>
-            );
-          })}
-        </div>
+        <h3 className="text-secondary-foreground text-sm font-medium">Root</h3>
+        <RootSelector value={currentTonic} onValueChange={handleRootChange} className="w-24" />
       </div>
 
-      {/* Mode Selector - Phase 2: Major/Minor切り替え */}
+      {/* Mode Slider */}
       <div className="space-y-2">
         <h3 className="text-secondary-foreground text-sm font-medium">Mode</h3>
-        <div className="flex gap-1">
-          <button
-            onClick={() => handleModeChange(true)}
-            className={twMerge(
-              'hover:bg-accent hover:text-accent-foreground focus:ring-ring flex h-8 flex-1 items-center justify-center rounded border px-3 text-xs font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none',
-              currentKey.isMajor
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-border bg-card text-card-foreground'
-            )}
-            aria-pressed={currentKey.isMajor}
-            aria-label="Select major mode"
-          >
-            Major
-          </button>
-          <button
-            onClick={() => handleModeChange(false)}
-            className={twMerge(
-              'hover:bg-accent hover:text-accent-foreground focus:ring-ring flex h-8 flex-1 items-center justify-center rounded border px-3 text-xs font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none',
-              !currentKey.isMajor
-                ? 'border-primary bg-primary text-primary-foreground'
-                : 'border-border bg-card text-card-foreground'
-            )}
-            aria-pressed={!currentKey.isMajor}
-            aria-label="Select minor mode"
-          >
-            Minor
-          </button>
-        </div>
+        <ModeSlider value={currentModeIndex} onValueChange={handleModeChange} className="w-full" />
       </div>
 
       {/* Current Key Display */}
-      <div className="text-secondary-foreground text-xs">
-        Current: <span className="font-medium">{currentKey.contextName}</span>
+      <div className="text-secondary-foreground text-right text-sm">
+        Current: <span className="text-foreground font-medium">{currentKey.contextName}</span>
       </div>
     </div>
   );
