@@ -3,7 +3,7 @@ import { LAYOUT_OFFSETS } from '../constants';
 import { useDiatonicChordHighlight } from './useDiatonicChordHighlight';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 import type { Point } from '@/shared/types/graphics';
-import type { Key, KeyDTO } from '@/domain';
+import type { IMusicalContext, KeyDTO } from '@/domain';
 
 /**
  * キーエリアプレゼンテーション統合フック
@@ -26,7 +26,7 @@ export interface UseKeyAreaPresentationProps {
   /** テキストの基準位置 */
   textPosition: Point;
   /** 現在のキー */
-  currentKey: Key;
+  currentKey: IMusicalContext;
 }
 
 /**
@@ -37,6 +37,8 @@ export interface KeyAreaPresentationInfo {
   readonly shouldHighlight: boolean;
   /** ローマ数字表記（ダイアトニック度数） */
   readonly romanNumeral: string | null;
+  /** 現在のキーのTonicか */
+  readonly isTonic: boolean;
   /** 各keyAreaの色（CSS変数形式） */
   readonly keyAreaColor: string;
   /** CunrrentKeyの色（CSS変数形式） */
@@ -76,7 +78,7 @@ export const useKeyAreaPresentation = ({
 
   return useMemo(() => {
     // ダイアトニックハイライト判定
-    const { shouldHighlight, romanNumeral } = getHighlightInfo(keyDTO);
+    const { shouldHighlight, romanNumeral, isTonic } = getHighlightInfo(keyDTO);
 
     // 色計算（音楽色相システム）
     const keyAreaColor = getMusicColorVariable(keyDTO);
@@ -94,6 +96,7 @@ export const useKeyAreaPresentation = ({
     return {
       shouldHighlight,
       romanNumeral,
+      isTonic,
       keyAreaColor,
       currentKeyColor,
       layout,
@@ -106,6 +109,5 @@ export const useKeyAreaPresentation = ({
     textPosition.y,
     getHighlightInfo,
     currentKey?.shortName,
-    currentKey?.isMajor,
   ]);
 };

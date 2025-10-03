@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { useLayerStore } from '@/stores/layerStore';
-import { Key, KeyDTO } from '@/domain';
+import { IMusicalContext, KeyDTO } from '@/domain';
+import { AbstractMusicalContext } from '../../../domain/common/AbstractMusicalContext';
 
 /**
  * ダイアトニックコード識別用の複合キー型
@@ -23,12 +24,15 @@ const createCompositeKey = (fifthsIndex: number, isMajor: boolean): CompositeKey
  * 現在のキーとレイヤー設定に基づいて、
  * 指定されたキーがダイアトニックコードとしてハイライト表示されるべきかを判定する。
  */
-export const useDiatonicChordHighlight = (currentKey: Key) => {
+export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
   const { isDiatonicChordsVisible } = useLayerStore();
 
   // ダイアトニックコード情報を一括計算してMapで管理
   const diatonicChordMap = useMemo(() => {
-    const chordMap = new Map<CompositeKey, { romanNumeral: string; shouldHighlight: boolean }>();
+    const chordMap = new Map<
+      CompositeKey,
+      { romanNumeral: string; shouldHighlight: boolean; isTonic: boolean }
+    >();
 
     if (!isDiatonicChordsVisible) {
       return chordMap;
@@ -47,6 +51,9 @@ export const useDiatonicChordHighlight = (currentKey: Key) => {
       chordMap.set(compositeKey, {
         romanNumeral: info.flatDegreeName,
         shouldHighlight: true,
+        isTonic:
+          info.isDiatonic &&
+          info.perfectDegreeName.includes(AbstractMusicalContext.ROMAN_NUMERALS[0]),
       });
     });
 
@@ -67,12 +74,14 @@ export const useDiatonicChordHighlight = (currentKey: Key) => {
         return {
           shouldHighlight: chordData.shouldHighlight,
           romanNumeral: chordData.romanNumeral,
+          isTonic: chordData.isTonic,
         };
       }
 
       return {
         shouldHighlight: false,
         romanNumeral: null,
+        isTonic: false,
       };
     },
     [diatonicChordMap]

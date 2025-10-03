@@ -1,5 +1,6 @@
 import { Chord } from '@/domain/chord';
-import { Key, KeyDTO } from '@/domain';
+import { IMusicalContext, KeyDTO } from '@/domain';
+import { IAnalysisResultWithFunction } from '@/domain/key';
 import { SelectedChordInfo } from './types';
 
 /**
@@ -36,7 +37,7 @@ export const BUTTON_STYLES = {
  */
 export const createChordInfo = (
   selectedKey: KeyDTO | null,
-  currentKey: Key
+  currentKey: IMusicalContext
 ): SelectedChordInfo | null => {
   if (!selectedKey || !currentKey) return null;
 
@@ -49,7 +50,7 @@ export const createChordInfo = (
     degreeName: analysis.perfectDegreeName,
     chord: chord,
     constituentNotes: chord.constituentNotes.map(note => note.getNameFor(currentKey.keySignature)),
-    function: analysis.function || '-',
+    function: (analysis as IAnalysisResultWithFunction)?.function || '-', // Key以外はfunctionが無いのですべて'-'とする
     keyContext: `in ${currentKey.contextName}`,
   };
 };
