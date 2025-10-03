@@ -67,6 +67,62 @@ describe('PitchClass', () => {
     });
   });
 
+  describe('半音インデックスファクトリメソッド (fromChromaticIndex)', () => {
+    it('正常ケース: 有効なインデックス（0-11）で正しいPitchClassを返す', () => {
+      const testCases = [
+        { index: 0, expectedSharpName: 'C' },
+        { index: 1, expectedSharpName: 'C#' },
+        { index: 2, expectedSharpName: 'D' },
+        { index: 3, expectedSharpName: 'D#' },
+        { index: 4, expectedSharpName: 'E' },
+        { index: 5, expectedSharpName: 'F' },
+        { index: 6, expectedSharpName: 'F#' },
+        { index: 7, expectedSharpName: 'G' },
+        { index: 8, expectedSharpName: 'G#' },
+        { index: 9, expectedSharpName: 'A' },
+        { index: 10, expectedSharpName: 'A#' },
+        { index: 11, expectedSharpName: 'B' },
+      ];
+
+      testCases.forEach(({ index, expectedSharpName }) => {
+        const pitchClass = PitchClass.fromChromaticIndex(index);
+        expect(pitchClass.sharpName).toBe(expectedSharpName);
+        expect(pitchClass.index).toBe(index);
+      });
+    });
+
+    it('境界値ケース: インデックス12以上は正規化される', () => {
+      const c = PitchClass.fromChromaticIndex(12);
+      expect(c.sharpName).toBe('C');
+      expect(c.index).toBe(0);
+
+      const d = PitchClass.fromChromaticIndex(14);
+      expect(d.sharpName).toBe('D');
+      expect(d.index).toBe(2);
+    });
+
+    it('境界値ケース: 負のインデックスは正規化される', () => {
+      const b = PitchClass.fromChromaticIndex(-1);
+      expect(b.sharpName).toBe('B');
+      expect(b.index).toBe(11);
+
+      const a = PitchClass.fromChromaticIndex(-3);
+      expect(a.sharpName).toBe('A');
+      expect(a.index).toBe(9);
+    });
+
+    it('正常ケース: fromCircleOfFifthsとの整合性', () => {
+      // 五度圏から作ったものと半音インデックスから作ったものが同じPitchClassを指す
+      for (let chromaticIndex = 0; chromaticIndex < 12; chromaticIndex++) {
+        const fromChromatic = PitchClass.fromChromaticIndex(chromaticIndex);
+        const fromFifths = PitchClass.fromCircleOfFifths(fromChromatic.fifthsIndex);
+
+        expect(fromChromatic.index).toBe(fromFifths.index);
+        expect(fromChromatic.sharpName).toBe(fromFifths.sharpName);
+      }
+    });
+  });
+
   describe('移調', () => {
     it('正常ケース: 長3度上に移調', () => {
       const c = PitchClass.fromCircleOfFifths(0); // C
@@ -610,6 +666,128 @@ describe('PitchClass', () => {
           const expectedNextIndex = current.fifthsIndex === 11 ? 0 : current.fifthsIndex + 1;
           expect(next.fifthsIndex).toBe(expectedNextIndex);
         }
+      });
+    });
+  });
+
+  // 新規追加: 半音⇔五度圏変換関数のテスト
+  describe('半音インデックス⇔五度圏インデックス変換', () => {
+    describe('semitonesToFifthsIndex - 半音→五度圏変換', () => {
+      it('正常ケース: メジャースケールの変換', () => {
+        // [0,2,4,5,7,9,11] → [0,2,4,11,1,3,5]
+        const semitones = [0, 2, 4, 5, 7, 9, 11];
+        const expectedFifths = [0, 2, 4, 11, 1, 3, 5];
+
+        semitones.forEach((s, i) => {
+          expect(PitchClass.semitonesToFifthsIndex(s)).toBe(expectedFifths[i]);
+        });
+      });
+
+      it('正常ケース: 全12音の変換テーブル', () => {
+        const conversionTable = [
+          { semitones: 0, fifths: 0 }, // C
+          { semitones: 1, fifths: 7 }, // C#
+          { semitones: 2, fifths: 2 }, // D
+          { semitones: 3, fifths: 9 }, // D#
+          { semitones: 4, fifths: 4 }, // E
+          { semitones: 5, fifths: 11 }, // F
+          { semitones: 6, fifths: 6 }, // F#
+          { semitones: 7, fifths: 1 }, // G
+          { semitones: 8, fifths: 8 }, // G#
+          { semitones: 9, fifths: 3 }, // A
+          { semitones: 10, fifths: 10 }, // A#
+          { semitones: 11, fifths: 5 }, // B
+        ];
+
+        conversionTable.forEach(({ semitones, fifths }) => {
+          expect(PitchClass.semitonesToFifthsIndex(semitones)).toBe(fifths);
+        });
+      });
+
+      it('数学的検証: (7 * semitones) % 12 の式が正しい', () => {
+        for (let s = 0; s < 12; s++) {
+          const expected = (7 * s) % 12;
+          expect(PitchClass.semitonesToFifthsIndex(s)).toBe(expected);
+        }
+      });
+    });
+
+    describe('fifthsIndexToSemitones - 五度圏→半音変換', () => {
+      it('正常ケース: 全12音の逆変換', () => {
+        const conversionTable = [
+          { fifths: 0, semitones: 0 }, // C
+          { fifths: 1, semitones: 7 }, // G
+          { fifths: 2, semitones: 2 }, // D
+          { fifths: 3, semitones: 9 }, // A
+          { fifths: 4, semitones: 4 }, // E
+          { fifths: 5, semitones: 11 }, // B
+          { fifths: 6, semitones: 6 }, // F#
+          { fifths: 7, semitones: 1 }, // C#
+          { fifths: 8, semitones: 8 }, // G#
+          { fifths: 9, semitones: 3 }, // D#
+          { fifths: 10, semitones: 10 }, // A#
+          { fifths: 11, semitones: 5 }, // F
+        ];
+
+        conversionTable.forEach(({ fifths, semitones }) => {
+          expect(PitchClass.fifthsIndexToSemitones(fifths)).toBe(semitones);
+        });
+      });
+
+      it('数学的検証: 7は12の法における自己逆元', () => {
+        // (7 * 7) % 12 = 49 % 12 = 1
+        // よって変換と逆変換は同じ式になる
+        expect((7 * 7) % 12).toBe(1);
+      });
+    });
+
+    describe('双方向変換の整合性', () => {
+      it('正常ケース: 往復変換で元に戻る（半音→五度圏→半音）', () => {
+        for (let s = 0; s < 12; s++) {
+          const fifths = PitchClass.semitonesToFifthsIndex(s);
+          const backToSemitones = PitchClass.fifthsIndexToSemitones(fifths);
+          expect(backToSemitones).toBe(s);
+        }
+      });
+
+      it('正常ケース: 往復変換で元に戻る（五度圏→半音→五度圏）', () => {
+        for (let f = 0; f < 12; f++) {
+          const semitones = PitchClass.fifthsIndexToSemitones(f);
+          const backToFifths = PitchClass.semitonesToFifthsIndex(semitones);
+          expect(backToFifths).toBe(f);
+        }
+      });
+
+      it('数学的検証: 2回適用すると元に戻る性質', () => {
+        // f(f(x)) = x という性質（involution）
+        for (let x = 0; x < 12; x++) {
+          const once = PitchClass.semitonesToFifthsIndex(x);
+          const twice = PitchClass.semitonesToFifthsIndex(once);
+          expect(twice).toBe(x);
+        }
+      });
+    });
+
+    describe('音楽理論的な妥当性', () => {
+      it('正常ケース: Circle of Fifthsの順序が正しい', () => {
+        // 五度圏順: C(0)→G(1)→D(2)→A(3)→E(4)→B(5)...
+        const fifthsProgression = [0, 1, 2, 3, 4, 5];
+        const semitonesProgression = fifthsProgression.map(f =>
+          PitchClass.fifthsIndexToSemitones(f)
+        );
+
+        // C=0, G=7, D=2, A=9, E=4, B=11
+        expect(semitonesProgression).toEqual([0, 7, 2, 9, 4, 11]);
+      });
+
+      it('正常ケース: メジャースケールの五度圏表現', () => {
+        // C Major scale: C, D, E, F, G, A, B
+        // 半音: [0, 2, 4, 5, 7, 9, 11]
+        // 五度圏: [0, 2, 4, 11, 1, 3, 5]
+        const majorScaleSemitones = [0, 2, 4, 5, 7, 9, 11];
+        const majorScaleFifths = majorScaleSemitones.map(s => PitchClass.semitonesToFifthsIndex(s));
+
+        expect(majorScaleFifths).toEqual([0, 2, 4, 11, 1, 3, 5]);
       });
     });
   });

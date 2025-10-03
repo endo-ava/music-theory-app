@@ -89,6 +89,23 @@ export class PitchClass {
   }
 
   /**
+   * 半音インデックスから対応するPitchClassインスタンスを生成する
+   * @param index 半音インデックス (C=0, C#=1, D=2, ..., B=11)
+   * @returns 対応するPitchClassインスタンス
+   * @throws {Error} 無効なインデックスが指定された場合
+   * @example
+   * PitchClass.fromChromaticIndex(0)  // C
+   * PitchClass.fromChromaticIndex(7)  // G
+   * PitchClass.fromChromaticIndex(11) // B
+   */
+  static fromChromaticIndex(index: number): PitchClass {
+    const normalizedIndex = PitchClass.modulo12(index);
+    const found = this.ALL_PITCH_CLASSES.find(p => p.index === normalizedIndex);
+    if (!found) throw new Error('無効なインデックスです。');
+    return found;
+  }
+
+  /**
    * 任意の数値をピッチクラスの値（0-11）に正規化する
    * 数学的解釈：任意の数値を法12で正規化し、0-11の範囲に収める。負数にも正しく対応する数学的な剰余演算。
    * @param value 正規化したい数値
@@ -97,6 +114,41 @@ export class PitchClass {
   public static modulo12 = (value: number): number => {
     return ((value % 12) + 12) % 12;
   };
+
+  /**
+   * 半音インデックスと五度圏インデックスの相互変換の共通実装
+   * 数学的には同じ式: (7 * value) % 12
+   * 7は12の法における自己逆元 (7 * 7 ≡ 1 mod 12)
+   * @private
+   */
+  private static convertMod7(value: number): number {
+    return PitchClass.modulo12(7 * value);
+  }
+
+  /**
+   * 半音インデックスを五度圏インデックスに変換
+   * Circle of Fifthsの可視化などで使用
+   * @param semitones 半音インデックス (0-11)
+   * @returns 五度圏インデックス (0-11)
+   * @example
+   * // C Major scale: [0,2,4,5,7,9,11] (semitones)
+   * // → [0,2,4,11,1,3,5] (fifths order)
+   * semitonesToFifthsIndex(7) // 1 (G is 1st in Circle of Fifths)
+   */
+  public static semitonesToFifthsIndex(semitones: number): number {
+    return PitchClass.convertMod7(semitones);
+  }
+
+  /**
+   * 五度圏インデックスを半音インデックスに変換
+   * @param fifthsIndex 五度圏インデックス (0-11)
+   * @returns 半音インデックス (0-11)
+   * @example
+   * fifthsIndexToSemitones(1) // 7 (G is at semitone 7)
+   */
+  public static fifthsIndexToSemitones(fifthsIndex: number): number {
+    return PitchClass.convertMod7(fifthsIndex);
+  }
 
   /**
    * 調号でシャープが付く順序（F, C, G, D, A, E, B）

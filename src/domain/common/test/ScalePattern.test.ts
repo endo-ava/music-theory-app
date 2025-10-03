@@ -8,18 +8,17 @@ import { ScalePattern } from '../ScalePattern';
 import { Interval } from '../Interval';
 
 describe('ScalePattern', () => {
-  describe('constructor', () => {
-    it('正常ケース: 名前とインターバル配列とshortSymbolでインスタンスを作成', () => {
-      const intervals = [Interval.Whole, Interval.Whole, Interval.Half];
-      const pattern = new ScalePattern('Test Pattern', intervals, 'test');
+  describe('インスタンス生成（deriveメソッド経由）', () => {
+    it('正常ケース: deriveメソッドで新しいパターンを作成', () => {
+      const derived = ScalePattern.Major.derive(2, 'Test Pattern', 'test');
 
-      expect(pattern.name).toBe('Test Pattern');
-      expect(pattern.intervals).toEqual(intervals);
-      expect(pattern.shortSymbol).toBe('test');
+      expect(derived.name).toBe('Test Pattern');
+      expect(derived.intervals).toBeDefined();
+      expect(derived.shortSymbol).toBe('test');
     });
 
     it('正常ケース: インスタンスがfreeze（不変）である', () => {
-      const pattern = new ScalePattern('Test', [Interval.Whole], 't');
+      const pattern = ScalePattern.Major.derive(2, 'Test', 't');
       expect(Object.isFrozen(pattern)).toBe(true);
     });
   });
@@ -385,26 +384,6 @@ describe('ScalePattern', () => {
     });
 
     describe('カスタムパターンでの動作検証', () => {
-      it('正常ケース: 単一音程のパターン', () => {
-        const singleInterval = new ScalePattern('Single', [Interval.PerfectFifth], 'single');
-        const intervals = singleInterval.getIntervalsFromRootAsArray();
-
-        const expected = [0, 7]; // ルート + 完全5度
-        expect(intervals).toEqual(expected);
-      });
-
-      it('正常ケース: 3音のパターン', () => {
-        const threeNote = new ScalePattern(
-          'Three Note',
-          [Interval.MajorThird, Interval.MinorThird],
-          'three'
-        );
-        const intervals = threeNote.getIntervalsFromRootAsArray();
-
-        const expected = [0, 4, 7]; // ルート + 長3度 + 短3度
-        expect(intervals).toEqual(expected);
-      });
-
       it('正常ケース: derive後のパターンでも正しく動作', () => {
         const major = ScalePattern.Major;
         const derivedDorian = major.derive(2, 'Test Dorian', 'test-dor');
@@ -413,6 +392,15 @@ describe('ScalePattern', () => {
         // DorianのインターバルとMajorから導出したものが一致することを確認
         const expectedDorian = ScalePattern.Dorian.getIntervalsFromRootAsArray();
         expect(intervals).toEqual(expectedDorian);
+      });
+
+      it('正常ケース: 異なる度数から導出したパターンも正しく動作', () => {
+        const lydian = ScalePattern.Major.derive(4, 'Custom Lydian', 'clyd');
+        const intervals = lydian.getIntervalsFromRootAsArray();
+
+        // LydianのインターバルとMajorから導出したものが一致することを確認
+        const expectedLydian = ScalePattern.Lydian.getIntervalsFromRootAsArray();
+        expect(intervals).toEqual(expectedLydian);
       });
     });
 
@@ -474,6 +462,219 @@ describe('ScalePattern', () => {
         intervals1.push(999);
         const intervals3 = major.getIntervalsFromRootAsArray();
         expect(intervals3).toEqual(intervals2);
+      });
+    });
+  });
+
+  // 新規追加: derivedFromDegree プロパティのテスト
+  describe('derivedFromDegree プロパティ', () => {
+    it('正常ケース: Majorパターンはnull（基本パターン）', () => {
+      expect(ScalePattern.Major.derivedFromDegree).toBeNull();
+    });
+
+    it('正常ケース: HarmonicMinorパターンはnull（基本パターン）', () => {
+      expect(ScalePattern.HarmonicMinor.derivedFromDegree).toBeNull();
+    });
+
+    it('正常ケース: Dorianパターンは2（Majorの2度から派生）', () => {
+      expect(ScalePattern.Dorian.derivedFromDegree).toBe(2);
+    });
+
+    it('正常ケース: Phrygianパターンは3（Majorの3度から派生）', () => {
+      expect(ScalePattern.Phrygian.derivedFromDegree).toBe(3);
+    });
+
+    it('正常ケース: Lydianパターンは4（Majorの4度から派生）', () => {
+      expect(ScalePattern.Lydian.derivedFromDegree).toBe(4);
+    });
+
+    it('正常ケース: Mixolydianパターンは5（Majorの5度から派生）', () => {
+      expect(ScalePattern.Mixolydian.derivedFromDegree).toBe(5);
+    });
+
+    it('正常ケース: Aeolian（Minor）パターンは6（Majorの6度から派生）', () => {
+      expect(ScalePattern.Aeolian.derivedFromDegree).toBe(6);
+    });
+
+    it('正常ケース: Locrianパターンは7（Majorの7度から派生）', () => {
+      expect(ScalePattern.Locrian.derivedFromDegree).toBe(7);
+    });
+
+    it('正常ケース: deriveメソッドで作られたパターンは正しいderivedFromDegreeを持つ', () => {
+      const customDorian = ScalePattern.Major.derive(2, 'Custom Dorian', 'cdor');
+      expect(customDorian.derivedFromDegree).toBe(2);
+
+      const customPhrygian = ScalePattern.Major.derive(3, 'Custom Phrygian', 'cphr');
+      expect(customPhrygian.derivedFromDegree).toBe(3);
+    });
+  });
+
+  // 新規追加: MAJOR_MODE_DEFINITIONS 定数のテスト
+  describe('MAJOR_MODE_DEFINITIONS 定数', () => {
+    it('正常ケース: 7つのモード定義が存在する', () => {
+      const definitions = ScalePattern.MAJOR_MODE_DEFINITIONS;
+      expect(Object.keys(definitions)).toHaveLength(7);
+    });
+
+    it('正常ケース: 各度数に対応する名前とシンボルが正しい', () => {
+      const { MAJOR_MODE_DEFINITIONS } = ScalePattern;
+
+      expect(MAJOR_MODE_DEFINITIONS[1]).toEqual({ name: 'Major', symbol: '' });
+      expect(MAJOR_MODE_DEFINITIONS[2]).toEqual({ name: 'Dorian', symbol: 'dor' });
+      expect(MAJOR_MODE_DEFINITIONS[3]).toEqual({ name: 'Phrygian', symbol: 'phr' });
+      expect(MAJOR_MODE_DEFINITIONS[4]).toEqual({ name: 'Lydian', symbol: 'lyd' });
+      expect(MAJOR_MODE_DEFINITIONS[5]).toEqual({ name: 'Mixolydian', symbol: 'mix' });
+      expect(MAJOR_MODE_DEFINITIONS[6]).toEqual({ name: 'Minor', symbol: 'm' });
+      expect(MAJOR_MODE_DEFINITIONS[7]).toEqual({ name: 'Locrian', symbol: 'loc' });
+    });
+  });
+
+  // 新規追加: MAJOR_MODES_BY_DEGREE 配列のテスト
+  describe('MAJOR_MODES_BY_DEGREE 配列', () => {
+    it('正常ケース: 7つのモードが度数順に並んでいる', () => {
+      const modes = ScalePattern.MAJOR_MODES_BY_DEGREE;
+      expect(modes).toHaveLength(7);
+    });
+
+    it('正常ケース: 度数順の並びが正しい（Ionian→Locrian）', () => {
+      const { MAJOR_MODES_BY_DEGREE } = ScalePattern;
+
+      expect(MAJOR_MODES_BY_DEGREE[0]).toBe(ScalePattern.Major); // 1度 = Ionian
+      expect(MAJOR_MODES_BY_DEGREE[1]).toBe(ScalePattern.Dorian); // 2度
+      expect(MAJOR_MODES_BY_DEGREE[2]).toBe(ScalePattern.Phrygian); // 3度
+      expect(MAJOR_MODES_BY_DEGREE[3]).toBe(ScalePattern.Lydian); // 4度
+      expect(MAJOR_MODES_BY_DEGREE[4]).toBe(ScalePattern.Mixolydian); // 5度
+      expect(MAJOR_MODES_BY_DEGREE[5]).toBe(ScalePattern.Aeolian); // 6度 = Natural Minor
+      expect(MAJOR_MODES_BY_DEGREE[6]).toBe(ScalePattern.Locrian); // 7度
+    });
+
+    it('正常ケース: 各モードがMajorから正しく回転している', () => {
+      const majorIntervals = ScalePattern.Major.intervals;
+
+      ScalePattern.MAJOR_MODES_BY_DEGREE.forEach((mode, index) => {
+        if (index === 0) {
+          // Ionian（Major自身）
+          expect(mode.intervals).toEqual(majorIntervals);
+        } else {
+          // 各モードはMajorを回転させたもの
+          const rotatedIntervals = [
+            ...majorIntervals.slice(index),
+            ...majorIntervals.slice(0, index),
+          ];
+          expect(mode.intervals).toEqual(rotatedIntervals);
+        }
+      });
+    });
+  });
+
+  // 新規追加: MAJOR_MODES_BY_BRIGHTNESS 配列のテスト
+  describe('MAJOR_MODES_BY_BRIGHTNESS 配列', () => {
+    it('正常ケース: 7つのモードが明るさ順（五度圏順）に並んでいる', () => {
+      const modes = ScalePattern.MAJOR_MODES_BY_BRIGHTNESS;
+      expect(modes).toHaveLength(7);
+    });
+
+    it('正常ケース: 明るさ順の並びが正しい（Lydian→Locrian）', () => {
+      const { MAJOR_MODES_BY_BRIGHTNESS } = ScalePattern;
+
+      // シャープ側（明るい）からフラット側（暗い）への順序
+      expect(MAJOR_MODES_BY_BRIGHTNESS[0]).toBe(ScalePattern.Lydian); // 最も明るい（#1つ多い）
+      expect(MAJOR_MODES_BY_BRIGHTNESS[1]).toBe(ScalePattern.Major); // Ionian
+      expect(MAJOR_MODES_BY_BRIGHTNESS[2]).toBe(ScalePattern.Mixolydian);
+      expect(MAJOR_MODES_BY_BRIGHTNESS[3]).toBe(ScalePattern.Dorian);
+      expect(MAJOR_MODES_BY_BRIGHTNESS[4]).toBe(ScalePattern.Aeolian); // Natural Minor
+      expect(MAJOR_MODES_BY_BRIGHTNESS[5]).toBe(ScalePattern.Phrygian);
+      expect(MAJOR_MODES_BY_BRIGHTNESS[6]).toBe(ScalePattern.Locrian); // 最も暗い（♭1つ多い）
+    });
+
+    it('境界値ケース: MAJOR_MODES_BY_DEGREEとMAJOR_MODES_BY_BRIGHTNESSは同じモードを含む', () => {
+      const degreeSet = new Set(ScalePattern.MAJOR_MODES_BY_DEGREE);
+      const brightnessSet = new Set(ScalePattern.MAJOR_MODES_BY_BRIGHTNESS);
+
+      // 両方とも同じ7つのモードを含む（順序は異なる）
+      expect(degreeSet.size).toBe(7);
+      expect(brightnessSet.size).toBe(7);
+
+      ScalePattern.MAJOR_MODES_BY_DEGREE.forEach(mode => {
+        expect(brightnessSet.has(mode)).toBe(true);
+      });
+    });
+  });
+
+  // 新規追加: getFifthsIndexArrayFromRoot メソッドのテスト
+  describe('getFifthsIndexArrayFromRoot メソッド', () => {
+    it('正常ケース: Majorスケールの五度圏インデックス配列が正しい', () => {
+      const fifthsArray = ScalePattern.Major.getFifthsIndexArrayFromRoot();
+
+      // C Major scale: C, D, E, F, G, A, B
+      // 半音: [0, 2, 4, 5, 7, 9, 11]
+      // 五度圏: [0, 2, 4, 11, 1, 3, 5]
+      expect(fifthsArray).toEqual([0, 2, 4, 11, 1, 3, 5]);
+    });
+
+    it('正常ケース: Dorianモードの五度圏インデックス配列が正しい', () => {
+      const fifthsArray = ScalePattern.Dorian.getFifthsIndexArrayFromRoot();
+
+      // D Dorian scale: D, E, F, G, A, B, C
+      // 半音（Dをルートとして）: [0, 2, 3, 5, 7, 9, 10]
+      const expectedSemitones = [0, 2, 3, 5, 7, 9, 10];
+      const expectedFifths = expectedSemitones.map(s => (7 * s) % 12);
+      expect(fifthsArray).toEqual(expectedFifths);
+    });
+
+    it('正常ケース: Aeolian（Minor）スケールの五度圏インデックス配列', () => {
+      const fifthsArray = ScalePattern.Aeolian.getFifthsIndexArrayFromRoot();
+
+      // A Minor scale: A, B, C, D, E, F, G
+      // 半音（Aをルートとして）: [0, 2, 3, 5, 7, 8, 10]
+      const expectedSemitones = [0, 2, 3, 5, 7, 8, 10];
+      const expectedFifths = expectedSemitones.map(s => (7 * s) % 12);
+      expect(fifthsArray).toEqual(expectedFifths);
+    });
+
+    it('境界値ケース: 配列の長さが7である（オクターブ除外）', () => {
+      const modes = [
+        ScalePattern.Major,
+        ScalePattern.Dorian,
+        ScalePattern.Phrygian,
+        ScalePattern.Lydian,
+        ScalePattern.Mixolydian,
+        ScalePattern.Aeolian,
+        ScalePattern.Locrian,
+      ];
+
+      modes.forEach(mode => {
+        const fifthsArray = mode.getFifthsIndexArrayFromRoot();
+        expect(fifthsArray).toHaveLength(7);
+      });
+    });
+
+    it('境界値ケース: オクターブ（12半音）が含まれない', () => {
+      const modes = [ScalePattern.Major, ScalePattern.Dorian, ScalePattern.Aeolian];
+
+      modes.forEach(mode => {
+        const fifthsArray = mode.getFifthsIndexArrayFromRoot();
+
+        // 五度圏インデックスは0-11の範囲
+        fifthsArray.forEach(index => {
+          expect(index).toBeGreaterThanOrEqual(0);
+          expect(index).toBeLessThan(12);
+        });
+
+        // ルート（0）は含まれる
+        expect(fifthsArray).toContain(0);
+      });
+    });
+
+    it('正常ケース: 全モードで五度圏インデックスが0-11の範囲内', () => {
+      const modes = ScalePattern.MAJOR_MODES_BY_DEGREE;
+
+      modes.forEach(mode => {
+        const fifthsArray = mode.getFifthsIndexArrayFromRoot();
+        fifthsArray.forEach(index => {
+          expect(index).toBeGreaterThanOrEqual(0);
+          expect(index).toBeLessThanOrEqual(11);
+        });
       });
     });
   });
