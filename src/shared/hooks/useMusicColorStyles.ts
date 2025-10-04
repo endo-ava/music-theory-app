@@ -3,15 +3,15 @@
  */
 import React, { useMemo } from 'react';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
-import type { Key, KeyDTO } from '@/domain';
+import type { Key, KeyDTO, IMusicalContext } from '@/domain';
 
 /**
  * 音楽カラーシステムを使用したボーダー色を取得するフック
- * @param key - 対象のキー（Key または KeyDTO）
+ * @param key - 対象のキー（Key, KeyDTO, または IMusicalContext）
  * @returns ボーダー色のスタイルオブジェクト
  */
 export const useMusicColorBorder = (
-  key: Key | KeyDTO | null
+  key: Key | KeyDTO | IMusicalContext | null
 ): {
   borderColor: string;
   borderStyle: React.CSSProperties;
@@ -50,9 +50,9 @@ export const useMusicColorText = (
 
 /**
  * 音楽カラーシステムを使用してaccent色を動的に設定するフック
- * @param key - 対象のキー（Key または KeyDTO）
+ * @param key - 対象のキー（Key, KeyDTO, または IMusicalContext）
  */
-export const useMusicColorAccent = (key: Key | KeyDTO | null): void => {
+export const useMusicColorAccent = (key: Key | KeyDTO | IMusicalContext | null): void => {
   React.useEffect(() => {
     const cssVariable = getMusicColorVariable(key);
     // CSS変数--accentを動的に更新
