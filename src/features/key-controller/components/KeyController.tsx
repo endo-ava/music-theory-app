@@ -39,8 +39,6 @@ export interface KeyControllerProps extends ClassNameProps {
  *
  * @param props - コンポーネントのプロパティ
  * @returns KeyControllerのJSX要素
- *
- * @see {@link /home/ryuto/music-theory-app/docs/00.project/screenDesigns/hub/0003-4.controller-panel.md}
  */
 export const KeyController: React.FC<KeyControllerProps> = ({ className, title = 'Key' }) => {
   const { currentKey, currentTonic, currentModeIndex, handleRootChange, handleModeChange } =

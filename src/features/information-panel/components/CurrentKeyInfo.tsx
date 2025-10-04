@@ -63,7 +63,7 @@ export const CurrentKeyInfo: React.FC<ClassNameProps> = ({ className }) => {
       />
 
       {/* 関連調 */}
-      <RelatedKeysTable relatedKeys={relatedKeys} onPlayScale={handlePlayScale} />
+      {relatedKeys && <RelatedKeysTable relatedKeys={relatedKeys} onPlayScale={handlePlayScale} />}
     </div>
   );
 };

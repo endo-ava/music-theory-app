@@ -108,7 +108,13 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
                 />
               </TooltipTrigger>
               <TooltipContent side="top">
-                <p className="font-medium">{modeLabels[hoveredModeIndex]}</p>
+                <p className="font-medium">
+                  {modeLabels[hoveredModeIndex] === 'Major'
+                    ? 'Ionian / Major'
+                    : modeLabels[hoveredModeIndex] === 'Minor'
+                      ? 'Aeolian / Minor'
+                      : modeLabels[hoveredModeIndex]}
+                </p>
               </TooltipContent>
             </Tooltip>
           )}

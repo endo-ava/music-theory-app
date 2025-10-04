@@ -1,6 +1,6 @@
 import { Chord } from '@/domain/chord';
 import { Key } from '@/domain/key';
-import { IAnalysisResult, Note } from '@/domain';
+import { IAnalysisResult, IMusicalContext, Note } from '@/domain';
 
 /**
  * 選択されたコード情報の型定義
@@ -72,7 +72,7 @@ export interface TableComponentProps {
  *
  */
 export interface DiatonicTableProps extends TableComponentProps {
-  currentKey: Key;
+  currentKey: IMusicalContext;
   diatonicChords: IAnalysisResult[];
   scaleNotes: readonly Note[];
   onPlayChord: (chord: Chord) => Promise<void>;
