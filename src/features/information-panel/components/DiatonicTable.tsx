@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/table';
 import { PlayButton } from './shared/PlayButton';
 import type { DiatonicTableProps } from '../types';
+import { Key } from '../../../domain/key';
 
 /**
  * ダイアトニックコード・スケール表示テーブルコンポーネント
@@ -70,12 +71,14 @@ export const DiatonicTable: React.FC<DiatonicTableProps> = React.memo(
               </TableCell>
             ))}
           </TableRow>
-          {/* 日本語音度名行 */}
-          <TableRow>
-            {currentKey.japaneseScaleDegreeNames.map((degreeName, index) => (
-              <TableCell key={index}>{degreeName}</TableCell>
-            ))}
-          </TableRow>
+          {/* 日本語音度名行 (Keyインスタンスのみ表示) */}
+          {currentKey instanceof Key && (
+            <TableRow>
+              {currentKey.japaneseScaleDegreeNames.map((degreeName, index) => (
+                <TableCell key={index}>{degreeName}</TableCell>
+              ))}
+            </TableRow>
+          )}
           {/* 音名行 */}
           <TableRow>
             {scaleNotes.slice(0, 7).map((note, index) => (

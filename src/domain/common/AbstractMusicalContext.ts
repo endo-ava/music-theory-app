@@ -26,7 +26,7 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
   protected _diatonicChordsCache: readonly Chord[] | null = null;
 
   // ローマ数字定数
-  private static readonly ROMAN_NUMERALS = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ', 'Ⅶ'] as const;
+  public static readonly ROMAN_NUMERALS = ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ', 'Ⅵ', 'Ⅶ'] as const;
 
   /**
    * 抽象基底クラスのコンストラクタ

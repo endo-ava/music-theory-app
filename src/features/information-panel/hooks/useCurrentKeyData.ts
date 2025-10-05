@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
+import { Key } from '@/domain/key';
 import type { RelatedKeysInfo } from '../types';
 
 /**
@@ -39,22 +40,28 @@ export const useCurrentKeyData = () => {
   const diatonicChords = useMemo(() => currentKey.getDiatonicChordsInfo(), [currentKey]);
 
   /**
-   * 関連調情報
+   * 関連調情報 - Key型の場合のみ利用可能
    */
-  const relatedKeys = useMemo<RelatedKeysInfo>(
-    () => ({
-      relative: currentKey.getRelativeKey(),
-      parallel: currentKey.getParallelKey(),
-      dominant: currentKey.getDominantKey(),
-      subdominant: currentKey.getSubdominantKey(),
-    }),
+  const relatedKeys = useMemo<RelatedKeysInfo | null>(
+    () =>
+      currentKey instanceof Key
+        ? {
+            relative: currentKey.getRelativeKey(),
+            parallel: currentKey.getParallelKey(),
+            dominant: currentKey.getDominantKey(),
+            subdominant: currentKey.getSubdominantKey(),
+          }
+        : null,
     [currentKey]
   );
 
   /**
-   * 日本語音度名配列
+   * 日本語音度名配列 - Key型の場合のみ利用可能
    */
-  const japaneseScaleDegreeNames = useMemo(() => currentKey.japaneseScaleDegreeNames, [currentKey]);
+  const japaneseScaleDegreeNames = useMemo(
+    () => (currentKey instanceof Key ? currentKey.japaneseScaleDegreeNames : []),
+    [currentKey]
+  );
 
   return {
     currentKey,

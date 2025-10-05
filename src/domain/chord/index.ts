@@ -1,6 +1,5 @@
 import { ChordPattern, Interval, Note, PitchClass } from '../common';
-import type { Key } from '../key';
-import type { KeyDTO } from '../common/IMusicalContext';
+import type { IMusicalContext, KeyDTO } from '../common/IMusicalContext';
 
 /**
  * 和音を表現する集約（Aggregate Root）
@@ -28,7 +27,7 @@ export class Chord {
   }
 
   /** 与えられたKey文脈におけるChord Nameを取得する */
-  public getNameFor(key: Key): string {
+  public getNameFor(key: IMusicalContext): string {
     return `${this.rootNote._pitchClass.getNameFor(key.keySignature)}${this.quality.nameSuffix}`;
   }
 

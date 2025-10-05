@@ -51,7 +51,8 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
   ripple,
 }) => {
   const { fillClassName, textClassName } = states;
-  const { shouldHighlight, romanNumeral, keyAreaColor, currentKeyColor, layout } = presentation;
+  const { shouldHighlight, romanNumeral, isTonic, keyAreaColor, currentKeyColor, layout } =
+    presentation;
 
   return (
     <>
@@ -67,7 +68,7 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
           opacity: 1,
           stroke: shouldHighlight ? currentKeyColor : 'var(--color-border)',
           strokeWidth: '1px',
-          filter: shouldHighlight ? `drop-shadow(0 0 4px ${keyAreaColor})` : '',
+          filter: shouldHighlight && isTonic ? `drop-shadow(0 0 4px ${currentKeyColor})` : '',
           strokeLinejoin: 'miter',
           strokeLinecap: 'square',
         }}
