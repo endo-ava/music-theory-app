@@ -1,164 +1,136 @@
-# プロジェクト概要
+# Music Theory App
 
-本アプリケーションは、複雑な音楽理論の概念と、その相互関係を探求するための**インタラクティブ・ビジュアライゼーションツール**である。視覚的なグラフィック表現と聴覚的なフィードバックを組み合わせることで、抽象的な理論を具体的で感覚的な体験へと転換。
+# 概要
+
+- **目的**: 複雑な音楽理論の概念と、その相互関係を探求するための**インタラクティブ・ビジュアライゼーションツール**。
+- **機能**: 視覚的なグラフィック表現と聴覚的なフィードバックを組み合わせ、抽象的な理論を具体的で感覚的な体験へと転換。
+- **思想**: 音楽理論を、単なる知識ではなく、体感できる対象として提供する探求装置。
+- 詳しくは要件定義書(`docs/00.project/0001.requirements.md`)を参照
+
+# 現状機能
+
+- **Hub画面（実装途中）**:
+  - 五度圏（Circle of Fifths）とクロマチックサークルの切り替え表示
+  - レイヤーシステム: ダイアトニックコード、スケール構成音、近親調などを重ね合わせ表示
+  - ベースキー選択とディグリーネーム表示
+  - コントローラーパネルとインフォメーションパネル
+  - 基本和音の音声再生（Tone.js）
+- **Library画面（仮実装）**: 用語辞書
+- **Tutorial画面（仮実装）**: 物語形式の学習コンテンツ
 
 # 技術スタック
 
-- **フロントエンド**: Next.js 15.x (App Router) + React 19.x + TypeScript 5.x + Shadcn/ui
-- **スタイリング**: Tailwind CSS 4.x + clsx + tailwind-merge
-- **アニメーション**: Framer Motion (motion) 12.x
+- **フロントエンド**: Next.js 15.x (App Router), React 19.x, TypeScript 5.x
+- **UI**: Shadcn/ui (Radix UI), Tailwind CSS 4.x, Framer Motion 12.x
 - **状態管理**: Zustand 5.x
 - **音声処理**: Tone.js 15.x
-- **コード品質**: ESLint + Prettier + Husky + lint-staged
+- **開発ツール**: ESLint, Prettier, Husky, lint-staged, Vitest, Storybook
 
-# 主要な開発コマンド
+# 主要開発コマンド
 
-```bash
-npm run dev            # 開発サーバー起動
-npm run build          # 本番ビルド
-npm run lint           # リンター実行
-npm run test:run       # 単体テスト実行
-npm run test:storybook # Storybookテスト実行
-npm run test:all       # 全テスト実行
-npm run test:coverage  # 単体テストカバレッジ算出
-npx vitest run path/to/file.test.ts # ファイルを指定してテスト実行
+| 目的                   | コマンド                              |
+| :--------------------- | :------------------------------------ |
+| **開発サーバ起動**     | `npm run dev`                         |
+| **本番ビルド**         | `npm run build`                       |
+| **リント**             | `npm run lint`                        |
+| **型チェック**         | `npm run typecheck`                   |
+| **フォーマット**       | `npm run format`                      |
+| **単体テスト**         | `npm run test:run`                    |
+| **Storybook テスト**   | `npm run test:storybook`              |
+| **全テスト**           | `npm run test:all`                    |
+| **カバレッジ算出**     | `npm run test:coverage`               |
+| **特定ファイルテスト** | `npx vitest run path/to/file.test.ts` |
+
+# ディレクトリ構造
+
+```
+src/
+├── app/              # ルーティング・ページ構成
+├── components/       # 共通UI（ui/, layouts/）
+├── features/         # 機能単位（components/, hooks/, store/, index.ts）
+├── domain/           # 音楽理論ロジック（DDD戦術的パターン）
+│   ├── common/       # 値オブジェクト（PitchClass, Note, Interval等）
+│   ├── scale/        # Scale集約
+│   ├── chord/        # Chord集約
+│   ├── key/          # Key集約
+│   └── services/     # ドメインサービス（AudioEngine, ChordAnalyzer等）
+├── shared/           # 全体で共有（型定義、定数、ユーティリティ）
+└── stores/           # グローバル状態管理
 ```
 
-# ドキュメント体系
+# ドキュメント駆動開発
 
-## ドキュメントの意義とAIへの指針
+**重要原則: ドキュメントは、信頼できる唯一の情報源 (Single Source of Truth) です。**
 
-本プロジェクトにおいて、ドキュメントは単なる記録ではなく、\*\*プロジェクトの思想と決定を写す「生きた設計図」**である。コードが「どのように(How)」を表現するのに対し、ドキュメントは**「なぜ(Why)」**と**「何を(What)」\*\*を記録する。これにより、将来の意思決定の質を高め、開発の一貫性と保守性を担保する。
+1. **参照の徹底 (Read Before Write)**: 何かを作成・変更する前には、関連ドキュメントを読み、その内容を尊重。Serena memory読み込みも可。
+2. **同期の維持 (Sync Code and Docs)**: コード変更が設計や規約に影響する場合、**必ず**ドキュメントの更新も同時に提案。Serena memoryとの同期も同様。
+3. **知識の集約 (Accumulate Knowledge)**: 開発で得た新たな知見は、`docs/70.knowledge/` に追記することを積極的に提案。
 
-**AI開発パートナーへの指針:**
-あなた（AI）は、このドキュメント体系の最も重要な利用者であり、同時に保守者でもある。以下の指針を常に念頭に置いて開発支援を行うこと。
+## ドキュメント体系
 
-1.  **参照の徹底 (Read Before Write):** コード生成、リファクタリング、設計提案など、いかなる提案を行う前にも、必ず関連するドキュメントを深く読み込み、その内容を完全に尊重すること。ドキュメントは、プロジェクトにおける\*\*信頼できる唯一の情報源（Single Source of Truth）\*\*である。
-2.  **同期の維持 (Sync Code and Docs):** あなたの提案によって既存の設計や規約が変更される場合は、コードの変更提案と**同時にドキュメントの更新案を提示する**こと。コードとドキュメントの乖離は、プロジェクトの技術的負債となる。
-3.  **知識の集約 (Accumulate Knowledge):** 開発過程で得られた新たな知見や解決策、議論の末に決定された事項は、単なるチャットログで終わらせず、`docs/70.knowledge/` や関連ドキュメントへの追記を積極的に提案すること。あなたの支援を通じて、このプロジェクトの知識ベースを共に成長させることを期待する。
+- **番号体系**: `00xx`:プロジェクト基本情報, `10xx`:ドメイン設計, `20xx`:開発ガイドライン, `30xx`:品質・プロセス, `70xx`:ナレッジベース, `80xx`:日報, `99xx`:テンプレート
+- **主要ドキュメント**:
+  - `0001.requirements.md`: 要件定義書
+  - `0002.screenDesign.md`: 画面設計書
+  - `1001.domainSystem.md`: ドメインシステム設計
+  - `1002.music-theory-guidebook.md`: 音楽理論ガイドブック
+  - `2002.development-principles.md`: 開発原則・思想
+  - `2003.frontend-design.md`: フロントエンド設計規約
+  - `2004.architecture.md`: アーキテクチャ設計
+  - `3001.testing.md`: テスト方針
+  - `3003.mcp-tools-usage.md`: MCPツール活用ガイドライン
 
-## ドキュメント番号体系
+# コーディングスタイル
 
-各ドキュメントには4桁のドキュメント番号を付与し、カテゴリと内容を即座に識別できるようにしている。
+本プロジェクトは、一貫性と可読性を維持するため、以下の規約に基づく。
 
-**番号範囲**:
+- **フォーマッター**: Prettier (`.prettierrc.json` に従う)
+- **リンター**: ESLint (`eslint.config.mjs` に従う)
+- **自動化**: コミット前に `husky` と `lint-staged` により自動実行
+- **命名規則**:
+  - `PascalCase`: コンポーネント、型定義、ファイル名 (コンポーネント)
+  - `camelCase`: 変数、関数、フック、ファイル名 (コンポーネント以外)
+  - `UPPER_SNAKE_CASE`: 定数
+- **構文規約**:
+  - **変数宣言**: 再代入のない変数は `const`、再代入が必要な場合のみ `let`。`var` は使用禁止
+  - **関数**: アロー関数 (`=>`) を基本とする
+  - **モジュール**: ES Modules (`import`/`export`) を使用。CommonJS (`require`/`module.exports`) は使用禁止
+- **TypeScript**:
+  - `any` 型の使用は原則禁止。型推論が困難な場合は理由をコメントで明記
+  - コンポーネントの `Props` や関数の引数・返り値には、明確な型定義を付与
+  - 型定義の配置: コンポーネント固有のProps型は各ファイル冒頭、グローバルな型は `src/types`
+- **JSDoc**: 再利用される関数、コンポーネント、型定義には、役割、引数 (`@param`)、返り値 (`@returns`) を示すJSDocを記述
+- **コメント**: 「なぜ (Why)」その実装になっているのか、という設計意図や背景をコメントで残すことを推奨
 
-- **00xx**: プロジェクト基本情報 (0001-0099)
-- **10xx**: ドメイン設計 (1001-1999)
-- **20xx**: 開発ガイドライン (2001-2999)
-- **30xx**: 品質・プロセス (3001-3999)
-- **70xx**: ナレッジベース (サブディレクトリで管理)
-- **80xx**: 日報 (日付ベース命名)
-- **99xx**: テンプレート (サブディレクトリで管理)
+# Git & Pull Request 規約
 
-例: `2003` = 開発ガイドライン分野の3番目のドキュメント
+- **ブランチ**:
+  - **戦略**: GitHub Flow (`main`への直接コミット禁止)
+  - **命名**: `<type>/<short-description>` (例: `feat/add-sound-playback`, `refactor/optimize-svg-rendering`)
+- **コミット**:
+  - **規約**: Conventional Commits (`<type>: <subject>`)
+  - **主な `<type>`**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+  - **言語**: **英語**
+- **Pull Request (PR)**:
+  - **単位**: 1 PR = 1関心事。巨大化させない
+  - **記述**: テンプレート (`.github/PULL_REQUEST_TEMPLATE.md`) を必ず使用。Descriptionにはそのブランチの変更内容を全て網羅
+- **レビュー**:
+  - GitHub Copilot等からのレビューは鵜呑みにせず、対応要否を自身で判断。不要な場合は理由を伝える
+- **言語**:
+  - **日本語**: コードコメント、PR/Issue、レビュー
+  - **英語**: コミットメッセージ
 
-## ドキュメントインデックス（一覧）
+# MCP (Model Context Protocol) Servers
 
-| カテゴリ             | ファイル             | 相対パス                                                                                                                                                               |
-| -------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| プロジェクト基本情報 | 要件定義             | [`docs/00.project/0001.requirements.md`](docs/00.project/0001.requirements.md)                                                                                         |
-| プロジェクト基本情報 | 画面設計             | [`docs/00.project/0002.screenDesign.md`](docs/00.project/0002.screenDesign.md)                                                                                         |
-| プロジェクト基本情報 | Hub画面設計          | [`docs/00.project/screenDesigns/0003.hub.md`](docs/00.project/screenDesigns/0003.hub.md)                                                                               |
-| プロジェクト基本情報 | Library画面設計      | [`docs/00.project/screenDesigns/0004.library.md`](docs/00.project/screenDesigns/0004.library.md)                                                                       |
-| プロジェクト基本情報 | Tutorial画面設計     | [`docs/00.project/screenDesigns/0005.tutorial.md`](docs/00.project/screenDesigns/0005.tutorial.md)                                                                     |
-| ドメイン設計         | ドメインシステム     | [`docs/10.domain/1001.domainSystem.md`](docs/10.domain/1001.domainSystem.md)                                                                                           |
-| ドメイン設計         | 音楽理論ガイドブック | [`docs/10.domain/1002.music-theory-guidebook.md`](docs/10.domain/1002.music-theory-guidebook.md)                                                                       |
-| 開発ガイドライン     | 基本コーディング     | [`docs/20.development/2001.basic-coding.md`](docs/20.development/2001.basic-coding.md)                                                                                 |
-| 開発ガイドライン     | 開発原則・思想       | [`docs/20.development/2002.development-principles.md`](docs/20.development/2002.development-principles.md)                                                             |
-| 開発ガイドライン     | フロントエンド設計   | [`docs/20.development/2003.frontend-design.md`](docs/20.development/2003.frontend-design.md)                                                                           |
-| 開発ガイドライン     | アーキテクチャ       | [`docs/20.development/2004.architecture.md`](docs/20.development/2004.architecture.md)                                                                                 |
-| 品質・プロセス       | テスト               | [`docs/30.quality/3001.testing.md`](docs/30.quality/3001.testing.md)                                                                                                   |
-| 品質・プロセス       | Git・PR              | [`docs/30.quality/3002.git-pr.md`](docs/30.quality/3002.git-pr.md)                                                                                                     |
-| 品質・プロセス       | MCPツール活用        | [`docs/30.quality/3003.mcp-tools-usage.md`](docs/30.quality/3003.mcp-tools-usage.md)                                                                                   |
-| ナレッジ             | ナレッジ             | [`docs/70.knowledge/`](docs/70.knowledge/)                                                                                                                             |
-| 日誌                 | 日誌                 | [`docs/80.dailyReport/`](docs/80.dailyReport/)                                                                                                                         |
-| テンプレート         | テンプレート         | [`docs/99.templates/`](docs/99.templates/), [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md), [`.github/ISSUE_TEMPLATE`](.github/ISSUE_TEMPLATE) |
+プロジェクトの開発を支援するために、以下のMCPサーバーが設定されている。
 
-# 開発ワークフローと参照ドキュメント
-
-新規機能開発、リファクタリング、不具合修正など、すべての開発作業はこのフローに沿って進める。各フェーズで参照すべきドキュメントを必ず確認し、プロジェクト全体の一貫性を保つこと。
-
-### **Phase 1: 企画・タスク着手**
-
-**目的**: これから何を、なぜ作るのかを正確に理解し、開発の準備を整える。
-
-作業を開始する前に、まずIssueやタスクの背景を完全に理解する。要件や仕様が不明瞭な場合は、実装に着手する前に必ず確認すること。
-
-- **参照ドキュメント**:
-  - **要件の理解**: `docs/00.project/0001.requirements.md`
-  - **UI/UXの確認**: `docs/00.project/0002.screenDesign.md` と配下の各画面設計書
-  - **ブランチ戦略**: `docs/30.quality/3002.git-pr.md`
-  - **Issue起票**: `.github/ISSUE_TEMPLATE`
-
----
-
-### **Phase 2: 設計**
-
-**目的**: 実装に着手する前に、どのように作るかを決定する。システムの保守性と拡張性を担保するための最も重要なフェーズ。
-
-アーキテクチャや設計原則に立ち返り、新しいコードが既存のシステムとどのように調和するかを考える。複雑な機能の場合は、設計内容をドキュメントにまとめること。
-
-- **参照ドキュメント**:
-  - **全体構造の確認**: `docs/20.development/2004.architecture.md`
-  - **設計思想の遵守**: `docs/20.development/2002.development-principles.md`
-  - **コンポーネント設計**: `docs/20.development/2003.frontend-design.md`
-  - **ドメインロジックの確認**: `docs/10.domain/1001.domainSystem.md`
-  - **音楽理論概念の確認**: `docs/10.domain/1002.music-theory-guidebook.md`
-
----
-
-### **Phase 3: 実装**
-
-**目的**: 設計に基づき、クリーンで保守性の高いコードを記述する。
-
-コーディング規約を遵守し、一貫性のあるコードを作成する。実装中に設計上の問題に気づいた場合は、立ち止まってPhase 2に戻る勇気を持つこと。
-
-- **参照ドキュメント**:
-  - **コーディング規約**: `docs/20.development/2001.basic-coding.md`
-  - **スタイリングとコンポーネント実装**: `docs/20.development/2003.frontend-design.md`
-  - **開発効率化ツールの活用**: `docs/30.quality/3003.mcp-tools-usage.md`
-
----
-
-### **Phase 4: 品質保証**
-
-**目的**: 実装したコードが期待通りに動作し、既存の機能を破壊しないことを保証する。
-
-「テストなきコードはレガシーコードである」という原則に基づき、必ずテストコードを記述する。
-
-- **参照ドキュメント**:
-  - **テスト方針の確認**: `docs/30.quality/3001.testing.md`
-
----
-
-### **Phase 5: レビューとマージ**
-
-**目的**: 第三者の視点からコードの品質を評価し、問題がなければメインブランチに統合する。
-
-Github copilotからのレビューは必ずしも鵜呑みにするのではなく、本当に対応すべきかを考察する。
-
-- **参照ドキュメント**:
-  - **PR・マージ手順**: `docs/30.quality/3002.git-pr.md`
-  - **PRテンプレート**: `.github/PULL_REQUEST_TEMPLATE.md`
-
----
-
-### **Phase 6: ドキュメント更新と知識共有**
-
-**目的**: プロジェクトを最新かつ健全な状態に保ち、得られた知見をチームの資産とする。
-
-コードを書き終えたら、開発は終わりではない。変更に伴い古くなったドキュメントを更新する。
-
-- **参照ドキュメント**:
-  - **知見の蓄積**: `docs/70.knowledge/`
-  - **作業記録**: `docs/80.dailyReport/`
-  - **新規ドキュメント作成**: `docs/99.templates`
-
----
-
-### **継続的プロセス: リファクタリング**
-
-**目的**: コードベースの健全性を長期的に維持する。
-
-リファクタリングは特定のフェーズではなく、開発プロセス全体を通じて継続的に行われるべき活動である。「動くコード」で満足せず、常によりクリーンなコードを目指すこと。リファクタリングを行う際は、上記のPhase 2〜5のサイクルを小規模に回す意識を持つ。
+| MCPサーバー名           | 目的                                                         | 主な利用シーン                                                                                 |
+| :---------------------- | :----------------------------------------------------------- | :--------------------------------------------------------------------------------------------- |
+| **playwright**          | ブラウザ操作の自動化                                         | 画面の動作確認、高難度バグの原因調査、エビデンススクリーンショット撮影                         |
+| **serena**              | コードの静的解析・操作、<br>プロジェクト知識の管理           | シンボル検索等の高度なコード理解。常時使用推奨<br>過去の設計判断やドキュメント (memory) の参照 |
+| **shadcn**              | shadcn/uiコンポーネントの検索・追加                          | UIコンポーネントの追加、サンプルコード検索                                                     |
+| **context7**            | 外部技術情報の検索                                           | ライブラリのバージョン違いによる仕様の検索など                                                 |
+| **github**              | GitHubリポジトリとの連携                                     | Issue/PR/PR Reviewの作成・管理                                                                 |
+| **sequential-thinking** | 計画的な問題解決の支援                                       | 複雑な思考が必要と判断した際の体系的な思考サポート                                             |
+| **chrome-devtools**     | Chromeブラウザの自動操作・デバッグ                           | ブラウザのインタラクション、パフォーマンス測定、スクリーンショット取得                         |
+| **ide**                 | IDE (VS Code) の診断情報取得、<br>Jupyter Notebookコード実行 | 言語診断エラーの確認、Notebookでのコード実行                                                   |

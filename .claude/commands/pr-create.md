@@ -41,10 +41,6 @@ GitHub MCPの `mcp__github__create_pull_request` を使用してPRを作成す�
 - `base`: `main` （プロジェクトのデフォルトブランチ）
 - `draft`: コマンドオプションで`--draft`が指定された場合、ドラフトで作成
 
-### Step 5
-
-GitHub MCPの `mcp__github__request_copilot_review` を使用してCopilotレビューを依頼する。
-
 ### Options
 
 - --draft: PRをドラフトとして作成する
