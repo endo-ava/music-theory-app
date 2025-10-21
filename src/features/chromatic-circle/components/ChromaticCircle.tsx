@@ -1,34 +1,34 @@
-import { ClassNameProps } from '@/shared/types';
+import { ChromaticSegment } from './ChromaticSegment';
+import { getChromaticCircleData } from '../utils/chromaticCircleData';
+import type { ClassNameProps } from '@/shared/types';
 
 /**
  * クロマチックサークル表示コンポーネント
  *
- * 半音階で配置された音の輪を表示します。
- * 現在は実装準備中のため、説明テキストのみを表示します。
- *
- * @param props - コンポーネントのプロパティ
- * @returns クロマチックサークルのJSX要素
+ * 12個のピッチクラス（C, C♯, D...）を半音階順に円形配置します。
+ * ピザ型のセグメントで構成され、各セグメントにはピッチクラス名が表示されます。
  */
 export const ChromaticCircle: React.FC<ClassNameProps> = ({ className }) => {
+  const { viewBox, segments } = getChromaticCircleData();
+
   return (
     <div className={className}>
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="max-w-md text-center">
-          {/* プレースホルダー円 */}
-          <div className="border-border bg-muted mx-auto mb-8 flex h-48 w-48 items-center justify-center rounded-full border-2 border-dashed">
-            <div className="text-center">
-              <div className="mb-2 text-4xl">🎵</div>
-              <div className="text-secondary-foreground text-sm">実装準備中</div>
-            </div>
-          </div>
-
-          {/* 説明テキスト */}
-          <div className="space-y-4">
-            <h3 className="text-foreground text-lg font-semibold">クロマチックサークル</h3>
-            <p className="text-secondary-foreground text-sm leading-relaxed">準備中</p>
-          </div>
-        </div>
-      </div>
+      <svg
+        viewBox={viewBox}
+        className="block"
+        aria-label="Chromatic Circle"
+        role="img"
+        style={{ overflow: 'visible' }}
+      >
+        {segments.map(({ segment, paths, textPosition }) => (
+          <ChromaticSegment
+            key={segment.position}
+            segment={segment}
+            paths={paths}
+            textPosition={textPosition}
+          />
+        ))}
+      </svg>
     </div>
   );
 };
