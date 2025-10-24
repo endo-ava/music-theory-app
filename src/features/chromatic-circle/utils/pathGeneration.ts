@@ -1,4 +1,4 @@
-import { calculateAngle, normalizeAngle, polarToCartesian } from './geometry';
+import { calculateAngle, normalizeAngle, polarToCartesian } from '@/shared/utils/geometry';
 import { ChromaticCircleService } from '@/domain/services/ChromaticCircle';
 import { CIRCLE_LAYOUT } from '../constants';
 import type { ChromaticSegmentPaths } from '../types';

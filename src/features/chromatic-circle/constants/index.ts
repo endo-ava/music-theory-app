@@ -2,13 +2,13 @@
  * クロマチックサークルの定数定義
  */
 
-import { ChromaticCircleService } from '@/domain/services/ChromaticCircle';
-
-/** Cが真上（12時の位置）に来るように調整 */
-export const ANGLE_OFFSET = -105;
-
-/** 1セグメントあたりの角度（度） */
-export const ANGLE_PER_SEGMENT = 360 / ChromaticCircleService.SEGMENT_COUNT; // 30度
+// 円形レイアウトの共通定数をインポート
+export {
+  SEGMENT_COUNT,
+  ANGLE_OFFSET,
+  ANGLE_PER_SEGMENT,
+  HALF_ANGLE_PER_SEGMENT_RAD,
+} from '@/shared/constants/circle';
 
 /**
  * クロマチックサークルのレイアウト定数
@@ -31,6 +31,13 @@ export const CIRCLE_LAYOUT = {
  * テキスト配置用半径定数
  */
 export const TEXT_RADIUS = {
-  /** ピッチクラス名の配置半径（152.5px）- 五度圏のMAJOR位置と統一 */
-  PITCH: 152.5,
+  /** ピッチクラス名の配置半径（152.5px）- セグメントの中央にくるように */
+  PITCH: 132.5,
+} as const;
+
+// アニメーション定数（五度圏と統一）
+export const ANIMATION = {
+  FADE_DURATION: 0.3,
+  HOVER_SCALE: 1.03,
+  TAP_SCALE: 0.9,
 } as const;

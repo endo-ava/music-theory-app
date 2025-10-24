@@ -2,7 +2,7 @@ import type { SegmentPaths } from '../types';
 import { CircleOfFifthsError } from '@/features/circle-of-fifths/types';
 import { CIRCLE_LAYOUT } from '../constants/index';
 import { isValidPosition } from './validation';
-import { calculateAngle, normalizeAngle, polarToCartesian } from './geometry';
+import { calculateAngle, normalizeAngle, polarToCartesian } from '@/shared/utils/geometry';
 import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
 /**

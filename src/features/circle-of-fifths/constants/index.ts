@@ -6,14 +6,13 @@
  * スタイル値はTailwind CSSで管理されます。
  */
 
-import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
-
-/** 角度の基本オフセット（Cが一番上に来るように調整）
- * -90度（真上）から-15度（最初のセグメント中心）への調整 */
-export const ANGLE_OFFSET = -105;
-
-/** 1セグメントあたりの角度（度） */
-export const ANGLE_PER_SEGMENT = 360 / CircleOfFifthsService.SEGMENT_COUNT;
+// 円形レイアウトの共通定数をインポート
+export {
+  SEGMENT_COUNT,
+  ANGLE_OFFSET,
+  ANGLE_PER_SEGMENT,
+  HALF_ANGLE_PER_SEGMENT_RAD,
+} from '@/shared/constants/circle';
 
 // ============================================================================
 // レイアウト定数（計算に必要な値のみ）

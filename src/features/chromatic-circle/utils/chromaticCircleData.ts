@@ -1,7 +1,7 @@
 import { ChromaticCircleService } from '@/domain/services/ChromaticCircle';
 import { CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
 import { generateTwoLayerPaths } from './pathGeneration';
-import { calculateTextPosition } from './geometry';
+import { calculateTextPosition } from '@/shared/utils/geometry';
 import type { SegmentData } from '../types';
 
 /**
