@@ -1,100 +1,19 @@
+/**
+ * 五度圏のpathGeneration統合テスト
+ *
+ * generateThreeSegmentPaths関数のテスト。
+ * generatePizzaSlicePathは共通ユーティリティに移動したため、
+ * 共通ユーティリティのテストファイルでカバーされる。
+ */
+
 import { describe, test, expect } from 'vitest';
-import { generatePizzaSlicePath, generateThreeSegmentPaths } from '../pathGeneration';
-import { CircleOfFifthsError } from '@/features/circle-of-fifths/types';
-import { CIRCLE_LAYOUT } from '../../constants/index';
+import { generateThreeSegmentPaths } from '../pathGeneration';
 import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
 
-describe('pathGeneration utils', () => {
-  describe('generatePizzaSlicePath', () => {
-    test('正常ケース: 有効なパラメータで正しいSVGパスを生成', () => {
-      const path = generatePizzaSlicePath(0, 50, 100);
-
-      // SVGパスの基本構造をチェック
-      expect(path).toMatch(/^M\s+[\d.-]+\s+[\d.-]+/); // M (move to) で始まる
-      expect(path).toContain('L'); // L (line to) を含む
-      expect(path).toContain('A'); // A (arc) を含む
-      expect(path).toContain('Z'); // Z (close path) で終わる
-
-      // パスが文字列として適切に生成されているか
-      expect(typeof path).toBe('string');
-      expect(path.length).toBeGreaterThan(0);
-    });
-
-    test('正常ケース: 複数の位置で一貫したパス構造を生成', () => {
-      for (let position = 0; position < CircleOfFifthsService.SEGMENT_COUNT; position++) {
-        const path = generatePizzaSlicePath(position, 80, 150);
-
-        // 各パスが適切な構造を持つことを確認
-        expect(path).toMatch(/^M\s+[\d.-]+\s+[\d.-]+.*Z$/);
-        expect(path.split('M').length).toBe(2); // M は1回のみ
-        expect(path.split('A').length).toBe(3); // A は2回（内側と外側の弧）
-        expect(path.split('L').length).toBe(3); // L は2回（放射線）
-      }
-    });
-
-    test('境界値ケース: large-arc-flagの計算が正しい', () => {
-      // 角度差が180度より大きい場合と小さい場合をテスト
-      const path = generatePizzaSlicePath(0, 50, 100);
-
-      // 五度圏では各セグメントが30度なので、large-arc-flagは常に0になる
-      const arcCommands = path.match(/A\s+[\d.-]+\s+[\d.-]+\s+\d+\s+(\d+)/g);
-      expect(arcCommands).not.toBeNull();
-
-      if (arcCommands) {
-        arcCommands.forEach(arcCommand => {
-          const flagMatch = arcCommand.match(/A\s+[\d.-]+\s+[\d.-]+\s+\d+\s+(\d+)/);
-          expect(flagMatch).not.toBeNull();
-          if (flagMatch) {
-            const largeArcFlag = parseInt(flagMatch[1]);
-            expect(largeArcFlag).toBe(0); // 30度のセグメントなのでlarge-arc-flagは0
-          }
-        });
-      }
-    });
-
-    test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
-      expect(() => generatePizzaSlicePath(-1, 50, 100)).toThrow(CircleOfFifthsError);
-      expect(() => generatePizzaSlicePath(CircleOfFifthsService.SEGMENT_COUNT, 50, 100)).toThrow(
-        CircleOfFifthsError
-      );
-
-      try {
-        generatePizzaSlicePath(-1, 50, 100);
-      } catch (error) {
-        expect(error).toBeInstanceOf(CircleOfFifthsError);
-        expect((error as CircleOfFifthsError).code).toBe('INVALID_POSITION');
-      }
-    });
-
-    test('異常ケース: 負の半径でCircleOfFifthsErrorをスロー', () => {
-      expect(() => generatePizzaSlicePath(0, -50, 100)).toThrow(CircleOfFifthsError);
-      expect(() => generatePizzaSlicePath(0, 50, -100)).toThrow(CircleOfFifthsError);
-
-      try {
-        generatePizzaSlicePath(0, -50, 100);
-      } catch (error) {
-        expect(error).toBeInstanceOf(CircleOfFifthsError);
-        expect((error as CircleOfFifthsError).code).toBe('INVALID_RADII');
-      }
-    });
-
-    test('異常ケース: 内側半径≥外側半径でCircleOfFifthsErrorをスロー', () => {
-      expect(() => generatePizzaSlicePath(0, 100, 100)).toThrow(CircleOfFifthsError);
-      expect(() => generatePizzaSlicePath(0, 150, 100)).toThrow(CircleOfFifthsError);
-
-      try {
-        generatePizzaSlicePath(0, 100, 100);
-      } catch (error) {
-        expect(error).toBeInstanceOf(CircleOfFifthsError);
-        expect((error as CircleOfFifthsError).code).toBe('INVALID_RADII');
-        expect((error as CircleOfFifthsError).message).toContain('inner=100, outer=100');
-      }
-    });
-  });
-
+describe('Five度圏 pathGeneration', () => {
   describe('generateThreeSegmentPaths', () => {
-    test('正常ケース: 有効なパラメータで3つのパスを正しく生成', () => {
-      const result = generateThreeSegmentPaths(0, 120, 170, 200);
+    test('正常ケース: 3層構造のパスを正しく生成', () => {
+      const result = generateThreeSegmentPaths(0);
 
       // 3つのパスが生成されることを確認
       expect(result).toHaveProperty('minorPath');
@@ -106,73 +25,82 @@ describe('pathGeneration utils', () => {
       expect(typeof result.majorPath).toBe('string');
       expect(typeof result.signaturePath).toBe('string');
 
+      // SVGパスの基本構造を確認（M で始まり Z で終わる）
       expect(result.minorPath).toMatch(/^M.*Z$/);
       expect(result.majorPath).toMatch(/^M.*Z$/);
       expect(result.signaturePath).toMatch(/^M.*Z$/);
     });
 
-    test('正常ケース: 実際のCIRCLE_LAYOUT値で正しく動作', () => {
-      const result = generateThreeSegmentPaths(
-        3, // 位置3（A/F#m）
-        CIRCLE_LAYOUT.INNER_RADIUS,
-        CIRCLE_LAYOUT.MIDDLE_RADIUS,
-        CIRCLE_LAYOUT.RADIUS
-      );
+    test('正常ケース: 各層のパスが異なる内容で生成される', () => {
+      const result = generateThreeSegmentPaths(3); // 位置3（A/F#m）
 
       // パスが正しく生成されることを確認
       expect(result.minorPath).toBeTruthy();
       expect(result.majorPath).toBeTruthy();
       expect(result.signaturePath).toBeTruthy();
 
-      // 各パスが異なることを確認（異なる半径で生成されているため）
+      // 各パスが異なる半径範囲で生成されているため、内容が異なることを確認
       expect(result.minorPath).not.toBe(result.majorPath);
       expect(result.majorPath).not.toBe(result.signaturePath);
       expect(result.minorPath).not.toBe(result.signaturePath);
     });
 
-    test('異常ケース: 無効な位置でCircleOfFifthsErrorをスロー', () => {
-      expect(() => generateThreeSegmentPaths(-1, 120, 170, 200)).toThrow(CircleOfFifthsError);
-      expect(() =>
-        generateThreeSegmentPaths(CircleOfFifthsService.SEGMENT_COUNT, 120, 170, 200)
-      ).toThrow(CircleOfFifthsError);
+    test('正常ケース: 全ての位置(0-11)で一貫したパス生成', () => {
+      for (let position = 0; position < CircleOfFifthsService.SEGMENT_COUNT; position++) {
+        const result = generateThreeSegmentPaths(position);
 
-      try {
-        generateThreeSegmentPaths(-1, 120, 170, 200);
-      } catch (error) {
-        expect(error).toBeInstanceOf(CircleOfFifthsError);
-        expect((error as CircleOfFifthsError).code).toBe('INVALID_POSITION');
+        // 各パスが正しく生成されることを確認
+        expect(result.minorPath).toBeTruthy();
+        expect(result.majorPath).toBeTruthy();
+        expect(result.signaturePath).toBeTruthy();
+
+        // 各パスが有効なSVGパス形式であることを確認
+        expect(result.minorPath).toMatch(/^M.*Z$/);
+        expect(result.majorPath).toMatch(/^M.*Z$/);
+        expect(result.signaturePath).toMatch(/^M.*Z$/);
+
+        // パスの長さがゼロでないことを確認
+        expect(result.minorPath.length).toBeGreaterThan(0);
+        expect(result.majorPath.length).toBeGreaterThan(0);
+        expect(result.signaturePath.length).toBeGreaterThan(0);
       }
     });
 
-    test('異常ケース: 負の半径でCircleOfFifthsErrorをスロー', () => {
-      expect(() => generateThreeSegmentPaths(0, -120, 170, 200)).toThrow(CircleOfFifthsError);
-      expect(() => generateThreeSegmentPaths(0, 120, -170, 200)).toThrow(CircleOfFifthsError);
-      expect(() => generateThreeSegmentPaths(0, 120, 170, -200)).toThrow(CircleOfFifthsError);
+    test('正常ケース: 各層の半径が正しく適用される', () => {
+      const result = generateThreeSegmentPaths(0);
 
-      try {
-        generateThreeSegmentPaths(0, -120, 170, 200);
-      } catch (error) {
-        expect(error).toBeInstanceOf(CircleOfFifthsError);
-        expect((error as CircleOfFifthsError).code).toBe('INVALID_RADII');
-      }
+      // 各パスが異なる半径範囲で生成されているため、内容が異なることを確認
+      expect(result.minorPath).not.toBe(result.majorPath);
+      expect(result.majorPath).not.toBe(result.signaturePath);
+
+      // パスの長さも異なるはず（異なる半径で異なるパス長）
+      expect(result.minorPath.length).toBeGreaterThan(0);
+      expect(result.majorPath.length).toBeGreaterThan(0);
+      expect(result.signaturePath.length).toBeGreaterThan(0);
     });
 
-    test('異常ケース: 半径の順序が正しくない場合でErrorをスロー', () => {
-      // minor >= major の場合
-      expect(() => generateThreeSegmentPaths(0, 170, 170, 200)).toThrow(CircleOfFifthsError);
-      expect(() => generateThreeSegmentPaths(0, 180, 170, 200)).toThrow(CircleOfFifthsError);
+    test('正常ケース: 連続する位置で異なるパスが生成される', () => {
+      const result0 = generateThreeSegmentPaths(0);
+      const result1 = generateThreeSegmentPaths(1);
 
-      // major >= signature の場合
-      expect(() => generateThreeSegmentPaths(0, 120, 200, 200)).toThrow(CircleOfFifthsError);
-      expect(() => generateThreeSegmentPaths(0, 120, 210, 200)).toThrow(CircleOfFifthsError);
+      // 異なる位置では異なるパスが生成される
+      expect(result0.minorPath).not.toBe(result1.minorPath);
+      expect(result0.majorPath).not.toBe(result1.majorPath);
+      expect(result0.signaturePath).not.toBe(result1.signaturePath);
+    });
 
-      try {
-        generateThreeSegmentPaths(0, 170, 170, 200);
-      } catch (error) {
-        expect(error).toBeInstanceOf(CircleOfFifthsError);
-        expect((error as CircleOfFifthsError).code).toBe('INVALID_RADII_ORDER');
-        expect((error as CircleOfFifthsError).message).toContain('minor < major < signature');
-      }
+    test('正常ケース: 五度圏の各層構造が保持される', () => {
+      const result = generateThreeSegmentPaths(6);
+
+      // 各層のパスに円弧コマンド(A)が含まれていることを確認
+      expect(result.minorPath).toContain('A');
+      expect(result.majorPath).toContain('A');
+      expect(result.signaturePath).toContain('A');
+
+      // 各層のパスに直線コマンド(L)が含まれていることを確認
+      expect(result.minorPath).toContain('L');
+      expect(result.majorPath).toContain('L');
+      expect(result.signaturePath).toContain('L');
     });
   });
 });

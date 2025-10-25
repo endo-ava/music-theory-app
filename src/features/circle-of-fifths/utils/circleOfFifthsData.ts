@@ -42,12 +42,7 @@ const PRECOMPUTED_SEGMENTS: SegmentData[] = CircleOfFifthsService.getSegmentDTOs
   const { position } = segment;
 
   // 3つの同心円弧からなるセグメントのパスを生成
-  const paths = generateThreeSegmentPaths(
-    position,
-    CIRCLE_LAYOUT.INNER_RADIUS,
-    CIRCLE_LAYOUT.MIDDLE_RADIUS,
-    CIRCLE_LAYOUT.RADIUS
-  );
+  const paths = generateThreeSegmentPaths(position);
 
   // 各領域の中心にテキストを配置するための座標を計算
   const textPositions = {

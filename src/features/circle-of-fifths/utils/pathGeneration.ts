@@ -1,97 +1,45 @@
-import type { SegmentPaths } from '../types';
-import { CircleOfFifthsError } from '@/features/circle-of-fifths/types';
+/**
+ * 五度圏のSVGパス生成ユーティリティ
+ *
+ * 五度圏固有の3層構造（マイナーキー、メジャーキー、調号）の
+ * セグメントパスを生成する。
+ */
+
+import { generateMultiLayerPaths } from '@/shared/utils/circlePathGeneration';
 import { CIRCLE_LAYOUT } from '../constants/index';
-import { isValidPosition } from './validation';
-import { calculateAngle, normalizeAngle, polarToCartesian } from '@/shared/utils/geometry';
-import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
+import type { SegmentPaths } from '../types';
 
 /**
- * ピザ型ブロックのパスを生成
- * @param position 0-11の位置
- * @param innerRadius 内側の半径
- * @param outerRadius 外側の半径
- * @returns SVGパス文字列
- * @throws {CircleOfFifthsError} パラメータが無効な場合
+ * 五度圏の3層構造セグメントパスを生成
+ *
+ * 五度圏特有の3層構造（内側からマイナーキー、メジャーキー、調号）の
+ * 各エリアに対応するSVGパスを生成する。
+ *
+ * 層構造の詳細:
+ * - マイナーキーエリア: CENTER_RADIUS (90px) ～ INNER_RADIUS (130px)
+ * - メジャーキーエリア: INNER_RADIUS (130px) ～ MIDDLE_RADIUS (175px)
+ * - 調号エリア: MIDDLE_RADIUS (175px) ～ RADIUS (200px)
+ *
+ * @param position - 0-11の位置（0=C, 1=G, 2=D, ...五度圏の順序）
+ * @returns 3つのパス（minorPath, majorPath, signaturePath）を含むオブジェクト
+ *
+ * @example
+ * ```tsx
+ * const { minorPath, majorPath, signaturePath } = generateThreeSegmentPaths(0);
+ * <path d={minorPath} className="fill-key-area-minor" />
+ * <path d={majorPath} className="fill-key-area-major" />
+ * <path d={signaturePath} className="fill-signature-area" />
+ * ```
  */
-export const generatePizzaSlicePath = (
-  position: number,
-  innerRadius: number,
-  outerRadius: number
-): string => {
-  if (!isValidPosition(position)) {
-    throw new CircleOfFifthsError(`Invalid position: ${position}`, 'INVALID_POSITION');
-  }
+export const generateThreeSegmentPaths = (position: number): SegmentPaths => {
+  const radii = [
+    CIRCLE_LAYOUT.CENTER_RADIUS, // 90px - 中心空白の外側境界
+    CIRCLE_LAYOUT.INNER_RADIUS, // 130px - マイナーキーエリアの外側境界
+    CIRCLE_LAYOUT.MIDDLE_RADIUS, // 175px - メジャーキーエリアの外側境界
+    CIRCLE_LAYOUT.RADIUS, // 200px - 最外側
+  ];
 
-  if (innerRadius < 0 || outerRadius < 0 || innerRadius >= outerRadius) {
-    throw new CircleOfFifthsError(
-      `Invalid radii: inner=${innerRadius}, outer=${outerRadius}`,
-      'INVALID_RADII'
-    );
-  }
-
-  const startAngle = calculateAngle(position);
-  const endAngle = calculateAngle((position + 1) % CircleOfFifthsService.SEGMENT_COUNT);
-
-  // 内側の円弧の開始点と終了点
-  const innerStart = polarToCartesian(innerRadius, startAngle);
-  const innerEnd = polarToCartesian(innerRadius, endAngle);
-
-  // 外側の円弧の開始点と終了点
-  const outerStart = polarToCartesian(outerRadius, startAngle);
-  const outerEnd = polarToCartesian(outerRadius, endAngle);
-
-  // 角度差を計算
-  const angleDiff = normalizeAngle(endAngle - startAngle);
-  const largeArcFlag = angleDiff > Math.PI ? 1 : 0;
-
-  return [
-    `M ${innerStart.x} ${innerStart.y}`,
-    `L ${outerStart.x} ${outerStart.y}`,
-    `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y}`,
-    `L ${innerEnd.x} ${innerEnd.y}`,
-    `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y}`,
-    'Z',
-  ].join(' ');
-};
-
-/**
- * 3分割されたブロックの各セグメントのパスを生成
- * @param minorOuterRadius マイナーキーエリアの外側の半径
- * @param majorOuterRadius メジャーキーエリアの外側の半径
- * @param signatureOuterRadius 調号エリアの外側の半径
- * @returns 各セグメントのパス文字列のオブジェクト
- * @throws {CircleOfFifthsError} パラメータが無効な場合
- */
-export const generateThreeSegmentPaths = (
-  position: number,
-  minorOuterRadius: number,
-  majorOuterRadius: number,
-  signatureOuterRadius: number
-): SegmentPaths => {
-  if (!isValidPosition(position)) {
-    throw new CircleOfFifthsError(`Invalid position: ${position}`, 'INVALID_POSITION');
-  }
-  if (minorOuterRadius < 0 || majorOuterRadius < 0 || signatureOuterRadius < 0) {
-    throw new CircleOfFifthsError(
-      `Invalid radii: minor=${minorOuterRadius}, major=${majorOuterRadius}, signature=${signatureOuterRadius}`,
-      'INVALID_RADII'
-    );
-  }
-  if (minorOuterRadius >= majorOuterRadius || majorOuterRadius >= signatureOuterRadius) {
-    throw new CircleOfFifthsError(
-      `Radii must be in ascending order: minor < major < signature`,
-      'INVALID_RADII_ORDER'
-    );
-  }
-
-  // マイナーキーエリア（内側）- 内側の半径から始まるドーナツ型
-  const minorPath = generatePizzaSlicePath(position, CIRCLE_LAYOUT.CENTER_RADIUS, minorOuterRadius);
-
-  // メジャーキーエリア（中間）
-  const majorPath = generatePizzaSlicePath(position, minorOuterRadius, majorOuterRadius);
-
-  // 調号エリア（外側）
-  const signaturePath = generatePizzaSlicePath(position, majorOuterRadius, signatureOuterRadius);
+  const [minorPath, majorPath, signaturePath] = generateMultiLayerPaths(position, radii);
 
   return {
     minorPath,

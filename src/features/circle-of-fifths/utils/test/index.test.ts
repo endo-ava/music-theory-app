@@ -9,7 +9,6 @@ describe('utils index exports', () => {
 
     // pathGeneration モジュールのエクスポート確認
     expect(utilsIndex.pathGeneration).toBeDefined();
-    expect(typeof utilsIndex.pathGeneration.generatePizzaSlicePath).toBe('function');
     expect(typeof utilsIndex.pathGeneration.generateThreeSegmentPaths).toBe('function');
   });
 
