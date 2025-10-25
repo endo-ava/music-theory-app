@@ -868,7 +868,7 @@ describe('ChromaticCircle', () => {
 
 ### 6.4. Storybook
 
-****stories**/ChromaticCircle.stories.tsx:**
+\***\*stories**/ChromaticCircle.stories.tsx:\*\*
 
 ```typescript
 import type { Meta, StoryObj } from '@storybook/react';
