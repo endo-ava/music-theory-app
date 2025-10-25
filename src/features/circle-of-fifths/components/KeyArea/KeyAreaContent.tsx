@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ANIMATION, COMMON_TEXT_STYLES, FONT_SIZES } from '../../constants';
+import { ANIMATION } from '../../constants';
 import { SVGRippleEffect } from './SVGRippleEffect';
 import type { Point } from '@/shared/types/graphics';
 import type { KeyAreaStates } from '../../hooks/useKeyState';
@@ -86,10 +86,7 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
         dominantBaseline="middle"
         transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
         initial={{ opacity: 1 }}
-        style={{
-          ...COMMON_TEXT_STYLES,
-          fontSize: FONT_SIZES.PRIMARY,
-        }}
+        style={{ userSelect: 'none' }}
       >
         {keyName}
       </motion.text>
@@ -97,15 +94,14 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
       {/* ダイアトニックコードのローマ数字表記 */}
       {shouldHighlight && romanNumeral && (
         <motion.text
-          className="fill-foreground font-semibold"
+          className="fill-foreground text-key-layer font-semibold"
           x={textPosition.x}
           y={layout.romanTextY}
           textAnchor="middle"
           dominantBaseline="middle"
           transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
           style={{
-            ...COMMON_TEXT_STYLES,
-            fontSize: FONT_SIZES.ROMAN,
+            userSelect: 'none',
             fill: keyAreaColor,
           }}
           initial={{ opacity: 0, scale: 0.8 }}

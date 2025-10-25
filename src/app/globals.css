@@ -98,13 +98,14 @@
   --color-key-area-hover: rgba(255, 255, 255, 0.25);
   --color-key-area-selected: rgba(255, 255, 255, 0.5);
   /* 五度圏専用フォントサイズ (fontSize) */
-  --text-key-minor: 0.8rem;
-  --text-key-major: 1rem;
+  --text-key-minor: 0.75rem;
+  --text-key-major: 0.8rem;
   --text-key-signature: 0.5rem;
+  --text-key-layer: 0.6rem;
   /* 五度圏専用フォントウェイト (fontWeight) */
-  --font-weight-key-minor: 50;
-  --font-weight-key-major: 80;
-  --font-weight-key-signature: 50;
+  --font-key-minor: 50;
+  --font-key-major: 80;
+  --font-key-signature: 50;
 
   /* ヘッダーレイアウト */
   --header-height-min: 3rem;

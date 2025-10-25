@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { motion } from 'motion/react';
-import { ANIMATION, COMMON_TEXT_STYLES } from '../../constants';
+import { ANIMATION } from '../../constants';
 
 import { useKeyAreaBehavior } from '../../hooks/useKeyAreaBehavior';
 import { useKeyAreaPresentation } from '../../hooks/useKeyAreaPresentation';
@@ -58,7 +58,7 @@ export const KeyArea = memo<KeyAreaProps>(
       <motion.g
         style={{
           cursor: 'pointer',
-          ...COMMON_TEXT_STYLES,
+          userSelect: 'none',
         }}
         whileHover={{ scale: ANIMATION.HOVER_SCALE }}
         whileTap={{ scale: ANIMATION.TAP_SCALE }}

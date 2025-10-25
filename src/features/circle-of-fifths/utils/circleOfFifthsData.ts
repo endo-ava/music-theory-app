@@ -1,7 +1,7 @@
 import { CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
 import type { Point } from '@/shared/types/graphics';
 import type { SegmentPaths } from '../types';
-import { calculateTextPosition, calculateTextRotation } from '../utils/geometry';
+import { calculateTextPosition } from '@/shared/utils/geometry';
 import { generateThreeSegmentPaths } from '../utils/pathGeneration';
 import { CircleOfFifthsService, CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 
@@ -42,12 +42,7 @@ const PRECOMPUTED_SEGMENTS: SegmentData[] = CircleOfFifthsService.getSegmentDTOs
   const { position } = segment;
 
   // 3つの同心円弧からなるセグメントのパスを生成
-  const paths = generateThreeSegmentPaths(
-    position,
-    CIRCLE_LAYOUT.INNER_RADIUS,
-    CIRCLE_LAYOUT.MIDDLE_RADIUS,
-    CIRCLE_LAYOUT.RADIUS
-  );
+  const paths = generateThreeSegmentPaths(position);
 
   // 各領域の中心にテキストを配置するための座標を計算
   const textPositions = {
@@ -63,7 +58,8 @@ const PRECOMPUTED_SEGMENTS: SegmentData[] = CircleOfFifthsService.getSegmentDTOs
   };
 });
 
-const PRECOMPUTED_TEXT_ROTATION = calculateTextRotation();
+// テキストは常に垂直に表示（回転なし）
+const PRECOMPUTED_TEXT_ROTATION = 0;
 
 export const getCircleOfFifthsData = () => {
   // 事前計算済みの固定値をそのまま返す
