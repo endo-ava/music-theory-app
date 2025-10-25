@@ -155,4 +155,15 @@ export class AudioEngine {
       }).toDestination();
     });
   }
+
+  /**
+   * Tone.jsリソースのクリーンアップ
+   * メモリリークを防ぐため、コンポーネントのアンマウント時に呼び出す
+   */
+  static cleanup(): void {
+    if (this.sampler) {
+      this.sampler.dispose();
+      this.sampler = null;
+    }
+  }
 }

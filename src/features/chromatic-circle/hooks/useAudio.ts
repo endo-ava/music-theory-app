@@ -3,7 +3,7 @@
  *
  * クロマチックサークルのセグメントから単音を再生する機能を提供します。
  */
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { AudioEngine, Note, PitchClass } from '@/domain';
 import type { ChromaticSegmentDTO } from '@/domain/services/ChromaticCircle';
 
@@ -32,6 +32,15 @@ export const useAudio = () => {
     } catch (error) {
       console.error(`Failed to play pitch class at position ${segment.position}:`, error);
     }
+  }, []);
+
+  // Tone.jsリソースのクリーンアップ
+  useEffect(() => {
+    return () => {
+      // コンポーネントのアンマウント時にAudioEngineのクリーンアップを実施
+      // AudioEngine内部でTone.jsのリソースを適切に破棄
+      AudioEngine.cleanup();
+    };
   }, []);
 
   return {
