@@ -19,7 +19,7 @@
     "test:storybook": "test-storybook",
     "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"http-server storybook-static --port 6006 --silent\" \"wait-on http://127.0.0.1:6006 && test-storybook\"",
     "test:all": "npm run test:run && npm run test:storybook",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },
   "dependencies": {
