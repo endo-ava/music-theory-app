@@ -58,14 +58,7 @@ export const ChromaticSegment = memo<ChromaticSegmentProps>(({ segment, paths, t
       style={{ cursor: 'pointer', userSelect: 'none' }}
       whileHover={{ scale: ANIMATION.HOVER_SCALE }}
       whileTap={{ scale: ANIMATION.TAP_SCALE }}
-      transition={{
-        duration: ANIMATION.FADE_DURATION,
-        // アクセシビリティ: モーション感度に配慮
-        ...(typeof window !== 'undefined' &&
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches
-          ? { duration: 0 }
-          : {}),
-      }}
+      transition={{ duration: ANIMATION.FADE_DURATION }}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
