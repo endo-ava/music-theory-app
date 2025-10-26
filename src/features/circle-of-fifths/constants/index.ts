@@ -6,14 +6,13 @@
  * スタイル値はTailwind CSSで管理されます。
  */
 
-import { CircleOfFifthsService } from '@/domain/services/CircleOfFifths';
-
-/** 角度の基本オフセット（Cが一番上に来るように調整）
- * -90度（真上）から-15度（最初のセグメント中心）への調整 */
-export const ANGLE_OFFSET = -105;
-
-/** 1セグメントあたりの角度（度） */
-export const ANGLE_PER_SEGMENT = 360 / CircleOfFifthsService.SEGMENT_COUNT;
+// 円形レイアウトの共通定数をインポート
+export {
+  SEGMENT_COUNT,
+  ANGLE_OFFSET,
+  ANGLE_PER_SEGMENT,
+  HALF_ANGLE_PER_SEGMENT_RAD,
+} from '@/shared/constants/circle';
 
 // ============================================================================
 // レイアウト定数（計算に必要な値のみ）
@@ -72,26 +71,6 @@ export const ANIMATION = {
   HOVER_SCALE: 1.03,
   /** タップ時のスケール */
   TAP_SCALE: 0.9,
-} as const;
-
-/**
- * テキストスタイル定数
- * userSelectなどの重複を解消
- */
-export const COMMON_TEXT_STYLES = {
-  userSelect: 'none',
-  WebkitUserSelect: 'none',
-  MozUserSelect: 'none',
-  msUserSelect: 'none',
-} as const;
-
-/**
- * フォントサイズ定数
- * マジックナンバーの排除
- */
-export const FONT_SIZES = {
-  PRIMARY: '12px',
-  ROMAN: '10px',
 } as const;
 
 /**

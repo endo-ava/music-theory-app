@@ -68,3 +68,8 @@ storybook-static
 test-results.xml
 
 .serena/
+
+.qwen/
+QWEN.md
+
+.mcp.json
