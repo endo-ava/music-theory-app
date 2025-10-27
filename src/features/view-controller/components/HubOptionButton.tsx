@@ -45,12 +45,12 @@ export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
       onClick={() => onClick(value)}
       className={twMerge(
         // 基本スタイル
-        'bg-muted border-border rounded border px-3 py-2 text-sm font-medium transition-all duration-200',
+        'bg-muted border-border text-secondary-foreground rounded border px-3 py-2 text-sm font-medium transition-all duration-200',
         'focus:ring-foreground focus:ring-1 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none',
         // 状態別スタイル（条件を明確に分離）
         isSelected
           ? 'bg-accent text-accent-foreground border-border border shadow-sm'
-          : 'text-secondary-foreground hover:bg-muted hover:text-foreground'
+          : 'text-secondary-foreground hover:bg-muted hover:text-muted-foreground'
       )}
       role="radio"
       aria-checked={isSelected}

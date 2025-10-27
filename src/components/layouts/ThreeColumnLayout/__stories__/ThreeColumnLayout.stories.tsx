@@ -486,7 +486,7 @@ export const ControllerPanelResponsiveTest: Story = {
 
     // md以上でカード形式のクラスが適用されることを確認
     expect(controllerPanel).toHaveClass(
-      'md:bg-card',
+      'md:bg-panel',
       'md:border-border',
       'md:rounded-lg',
       'md:border',

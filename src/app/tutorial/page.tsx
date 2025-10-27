@@ -21,7 +21,7 @@ export default function TutorialPage() {
           {/* チュートリアルコンテンツ一覧 */}
           <div className="space-y-6">
             {/* チュートリアル1 */}
-            {/* <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
+            {/* <article className="bg-panel rounded-lg border p-6 transition-shadow hover:shadow-md">
               <header className="mb-4">
                 <h2 className="text-foreground mb-2 text-2xl font-semibold">
                   ピタゴラス音律から平均律へ：音階はどうやって生まれたか
@@ -47,7 +47,7 @@ export default function TutorialPage() {
             </article> */}
 
             {/* チュートリアル2 */}
-            {/* <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
+            {/* <article className="bg-panel rounded-lg border p-6 transition-shadow hover:shadow-md">
               <header className="mb-4">
                 <h2 className="text-foreground mb-2 text-2xl font-semibold">
                   ブルースの魔法：ブルース進行とブルーノートスケールの解剖
@@ -73,7 +73,7 @@ export default function TutorialPage() {
             </article> */}
 
             {/* チュートリアル3 */}
-            {/* <article className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md">
+            {/* <article className="bg-panel rounded-lg border p-6 transition-shadow hover:shadow-md">
               <header className="mb-4">
                 <h2 className="text-foreground mb-2 text-2xl font-semibold">
                   モード入門：スケールの性格を変える7つの魔法
