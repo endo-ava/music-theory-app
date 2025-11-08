@@ -203,17 +203,9 @@ export const DiatonicToggleTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 初期状態をリセット
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
-
     const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
 
-    // 初期状態の確認（非表示）
-    expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
-
-    // スイッチをオンにする
-    await userEvent.click(diatonicSwitch);
+    // 初期状態の確認（表示）
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
     expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
 
@@ -221,6 +213,11 @@ export const DiatonicToggleTest: Story = {
     await userEvent.click(diatonicSwitch);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
     expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+
+    // スイッチをオンにする
+    await userEvent.click(diatonicSwitch);
+    expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
+    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
   },
 };
 
@@ -333,31 +330,32 @@ export const StoreIntegrationTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 初期状態をリセット
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
-
     const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
 
-    // 1. UI操作による状態変更
-    await userEvent.click(diatonicSwitch);
+    // 初期状態の確認(新しい初期状態はtrue)
     expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
 
-    // 2. 外部ストア操作による状態変更
-    useLayerStore.getState().toggleDiatonicChords();
-    await new Promise(resolve => setTimeout(resolve, 10)); // re-render待ち
+    // 1. UI操作による状態変更(true -> false)
+    await userEvent.click(diatonicSwitch);
     expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
 
-    // 3. 複数回の切り替えテスト
+    // 2. 外部ストア操作による状態変更(false -> true)
+    useLayerStore.getState().toggleDiatonicChords();
+    await new Promise(resolve => setTimeout(resolve, 10)); // re-render待ち
+    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
+
+    // 3. 複数回の切り替えテスト(開始時はtrue)
     for (let i = 0; i < 3; i++) {
       await userEvent.click(diatonicSwitch);
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
-      await userEvent.click(diatonicSwitch);
       expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      await userEvent.click(diatonicSwitch);
+      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
     }
 
     // 最終状態の確認
-    expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
   },
 };

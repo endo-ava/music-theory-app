@@ -26,7 +26,7 @@ interface LayerActions {
  */
 export const useLayerStore = create<LayerState & LayerActions>(set => ({
   // State
-  isDiatonicChordsVisible: false,
+  isDiatonicChordsVisible: true,
 
   // Actions
   toggleDiatonicChords: () =>

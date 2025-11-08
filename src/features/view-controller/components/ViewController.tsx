@@ -29,9 +29,14 @@ export const ViewController: React.FC<ViewControllerProps> = ({ className, title
     useViewController();
 
   return (
-    <div className={twMerge('space-y-2', className)}>
+    <div
+      className={twMerge(
+        'border-border bg-card space-y-2 rounded-lg border p-4 shadow-sm',
+        className
+      )}
+    >
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
-      <h2 className="text-foreground hidden text-lg md:block">{title}</h2>
+      <h2 className="text-foreground hidden text-lg font-semibold md:block">{title}</h2>
 
       {/* Hub ラジオグループ - 子コンポーネントに分離 */}
       <HubRadioGroup
