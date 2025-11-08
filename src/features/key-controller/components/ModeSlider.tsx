@@ -79,7 +79,7 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
             className="pointer-events-none absolute inset-x-0 h-2 rounded-full opacity-40"
             style={{
               background:
-                'linear-gradient(to right, #fbbf24 0%, #f59e0b 20%, #84cc16 40%, #22c55e 60%, #3b82f6 80%, #8b5cf6 100%)',
+                'linear-gradient(to right, var(--color-mode-gradient-ionian) 0%, var(--color-mode-gradient-dorian) 20%, var(--color-mode-gradient-phrygian) 40%, var(--color-mode-gradient-lydian) 60%, var(--color-mode-gradient-mixolydian) 80%, var(--color-mode-gradient-aeolian) 100%)',
               top: '50%',
               transform: 'translateY(-50%)',
             }}

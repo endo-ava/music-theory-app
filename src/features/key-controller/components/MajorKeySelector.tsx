@@ -63,14 +63,8 @@ export const MajorKeySelector: React.FC<MajorKeySelectorProps> = ({
           const majorKey = Key.major(pitchClass);
           const keySignature = majorKey.keySignature;
 
-          // 調号の数を計算（accidentalsのサイズ）
-          const numAccidentals = keySignature.accidentals.size;
-          const signatureStr =
-            numAccidentals === 0
-              ? '0'
-              : keySignature.fifthsIndex >= 1 && keySignature.fifthsIndex <= 6
-                ? `${numAccidentals}♯`
-                : `${numAccidentals}♭`;
+          // 調号の表記を取得（ドメインロジック）
+          const signatureStr = keySignature.getSignatureNotation();
 
           return (
             <SelectItem

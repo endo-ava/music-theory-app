@@ -165,6 +165,49 @@ describe('KeySignature', () => {
     });
   });
 
+  describe('getSignatureNotation', () => {
+    it('正常ケース: C Major（fifthsIndex 0）で"0"を返す', () => {
+      const keySignature = KeySignature.fromFifthsIndex(0);
+      expect(keySignature.getSignatureNotation()).toBe('0');
+    });
+
+    it('正常ケース: G Major（fifthsIndex 1）で"1♯"を返す', () => {
+      const keySignature = KeySignature.fromFifthsIndex(1);
+      expect(keySignature.getSignatureNotation()).toBe('1♯');
+    });
+
+    it('正常ケース: D Major（fifthsIndex 2）で"2♯"を返す', () => {
+      const keySignature = KeySignature.fromFifthsIndex(2);
+      expect(keySignature.getSignatureNotation()).toBe('2♯');
+    });
+
+    it('正常ケース: F# Major（fifthsIndex 6）で"6♯"を返す（シャープ系境界）', () => {
+      const keySignature = KeySignature.fromFifthsIndex(6);
+      expect(keySignature.getSignatureNotation()).toBe('6♯');
+    });
+
+    it('正常ケース: F Major（fifthsIndex 11）で"1♭"を返す', () => {
+      const keySignature = KeySignature.fromFifthsIndex(11);
+      expect(keySignature.getSignatureNotation()).toBe('1♭');
+    });
+
+    it('正常ケース: Bb Major（fifthsIndex 10）で"2♭"を返す', () => {
+      const keySignature = KeySignature.fromFifthsIndex(10);
+      expect(keySignature.getSignatureNotation()).toBe('2♭');
+    });
+
+    it('正常ケース: Gb Major（fifthsIndex 6）で"6♯"を返す（フラット系境界）', () => {
+      // fifthsIndex 6 はシャープ系として扱われる
+      const keySignature = KeySignature.fromFifthsIndex(6);
+      expect(keySignature.getSignatureNotation()).toBe('6♯');
+    });
+
+    it('正常ケース: Db Major（fifthsIndex 7）で"5♭"を返す', () => {
+      const keySignature = KeySignature.fromFifthsIndex(7);
+      expect(keySignature.getSignatureNotation()).toBe('5♭');
+    });
+  });
+
   describe('エッジケースと音楽理論検証', () => {
     it('正常ケース: 同じ調号内でシャープとフラットが同時に存在しない', () => {
       for (let fifthsIndex = 0; fifthsIndex <= 11; fifthsIndex++) {

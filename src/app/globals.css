@@ -110,6 +110,14 @@
   --font-key-major: 80;
   --font-key-signature: 50;
 
+  /* モードスライダーグラデーション色（Relative Mode Slider） */
+  --color-mode-gradient-ionian: #fbbf24; /* Amber 400 - Ionian (明るい) */
+  --color-mode-gradient-dorian: #f59e0b; /* Amber 500 - Dorian */
+  --color-mode-gradient-phrygian: #84cc16; /* Lime 500 - Phrygian */
+  --color-mode-gradient-lydian: #22c55e; /* Green 500 - Lydian */
+  --color-mode-gradient-mixolydian: #3b82f6; /* Blue 500 - Mixolydian */
+  --color-mode-gradient-aeolian: #8b5cf6; /* Violet 500 - Aeolian (暗い) */
+
   /* ヘッダーレイアウト */
   --header-height-min: 3rem;
   --header-height-actual: calc(var(--header-height-min) + 2rem); /* min-height + py-4 */

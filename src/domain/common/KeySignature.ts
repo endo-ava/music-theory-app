@@ -136,4 +136,35 @@ export class KeySignature {
 
     return map;
   }
+
+  /**
+   * 調号の表記文字列を取得（例: "0", "1♯", "2♭"）
+   *
+   * 調号に含まれる変化記号の数と種類を、人間が読みやすい文字列形式で返します。
+   * この表記は、楽譜の調号表示や、キー選択UIでの表示に使用されます。
+   *
+   * @returns 調号の表記文字列
+   *   - "0": 変化記号なし（C Major / A minor）
+   *   - "1♯", "2♯", ...: シャープ系（G, D, A, E, B, F# Major）
+   *   - "1♭", "2♭", ...: フラット系（F, Bb, Eb, Ab, Db, Gb Major）
+   *
+   * @example
+   * ```typescript
+   * const cMajor = KeySignature.fromFifthsIndex(0);
+   * console.log(cMajor.getSignatureNotation()); // "0"
+   *
+   * const gMajor = KeySignature.fromFifthsIndex(1);
+   * console.log(gMajor.getSignatureNotation()); // "1♯"
+   *
+   * const fMajor = KeySignature.fromFifthsIndex(11);
+   * console.log(fMajor.getSignatureNotation()); // "1♭"
+   * ```
+   */
+  getSignatureNotation(): string {
+    const numAccidentals = this.accidentals.size;
+    if (numAccidentals === 0) return '0';
+
+    const symbol = this.fifthsIndex >= 1 && this.fifthsIndex <= 6 ? '♯' : '♭';
+    return `${numAccidentals}${symbol}`;
+  }
 }

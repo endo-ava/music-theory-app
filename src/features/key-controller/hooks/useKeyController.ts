@@ -127,7 +127,7 @@ export const useKeyController = () => {
       // 親キーのIonian（Major）モードに設定
       setCurrentKey(newMajorKey);
     },
-    [setCurrentKey]
+    [setCurrentKey, setParentMajorKey]
   );
 
   /**

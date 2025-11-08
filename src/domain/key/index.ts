@@ -160,6 +160,11 @@ export class Key extends AbstractMusicalContext {
    * Relative Mode（平行調選択方式）において、親メジャーキーの構成音から
    * 指定されたディグリーの音を主音とするモードを生成します。
    *
+   * **音楽理論的背景:**
+   * - Ionian（Major）とAeolian（Natural Minor）は、調性音楽において「調（Key）」として確立
+   * - その他のモード（Dorian, Phrygian等）は、調性よりも「旋法（Mode）」として扱われる
+   * - したがって、Ionian/AeolianはKeyインスタンス、それ以外はModalContextインスタンスを返す
+   *
    * @param parentMajorKey - 親メジャーキー（例: C Major）
    * @param relativeModeIndex - モードインデックス（0=Ionian, 1=Dorian, 2=Phrygian, 3=Lydian, 4=Mixolydian, 5=Aeolian, 6=Locrian）
    * @returns 対応する音楽文脈（KeyまたはModalContext）
