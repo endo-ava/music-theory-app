@@ -1,4 +1,5 @@
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 import { ClassNameProps } from '@/shared/types';
 
 import { ChordLayerAccordion } from './ChordLayerAccordion';
@@ -11,8 +12,13 @@ import { ChordLayerAccordion } from './ChordLayerAccordion';
  */
 export const LayerController: React.FC<ClassNameProps> = ({ className }) => {
   return (
-    <div className={className}>
-      <h2 className="text-foreground hidden text-lg md:block">Layer</h2>
+    <div
+      className={twMerge(
+        'border-border bg-card space-y-2 rounded-lg border p-4 shadow-sm',
+        className
+      )}
+    >
+      <h2 className="text-foreground hidden text-lg font-semibold md:block">Layer</h2>
 
       {/* アコーディオン2: コードレイヤー */}
       <ChordLayerAccordion />

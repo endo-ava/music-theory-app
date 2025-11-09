@@ -547,4 +547,93 @@ describe('Key', () => {
       });
     });
   });
+
+  // 新規追加: Key.fromRelativeMode() のテスト
+  describe('fromRelativeMode (Relative Mode用)', () => {
+    const cMajor = Key.major(PitchClass.C);
+
+    it('正常ケース: C Major から Ionian (index=0) → C Ionian (C Major)', () => {
+      const result = Key.fromRelativeMode(cMajor, 0);
+      expect(result.centerPitch).toBe(PitchClass.C);
+      expect(result.scale.pattern).toBe(ScalePattern.Major);
+      expect(result.contextName).toBe('C Major');
+    });
+
+    it('正常ケース: C Major から Dorian (index=1) → D Dorian', () => {
+      const result = Key.fromRelativeMode(cMajor, 1);
+      expect(result.centerPitch).toBe(PitchClass.D);
+      expect(result.scale.pattern).toBe(ScalePattern.Dorian);
+      expect(result.contextName).toBe('D Dorian');
+    });
+
+    it('正常ケース: C Major から Phrygian (index=2) → E Phrygian', () => {
+      const result = Key.fromRelativeMode(cMajor, 2);
+      expect(result.centerPitch).toBe(PitchClass.E);
+      expect(result.scale.pattern).toBe(ScalePattern.Phrygian);
+      expect(result.contextName).toBe('E Phrygian');
+    });
+
+    it('正常ケース: C Major から Lydian (index=3) → F Lydian', () => {
+      const result = Key.fromRelativeMode(cMajor, 3);
+      expect(result.centerPitch).toBe(PitchClass.F);
+      expect(result.scale.pattern).toBe(ScalePattern.Lydian);
+      expect(result.contextName).toBe('F Lydian');
+    });
+
+    it('正常ケース: C Major から Mixolydian (index=4) → G Mixolydian', () => {
+      const result = Key.fromRelativeMode(cMajor, 4);
+      expect(result.centerPitch).toBe(PitchClass.G);
+      expect(result.scale.pattern).toBe(ScalePattern.Mixolydian);
+      expect(result.contextName).toBe('G Mixolydian');
+    });
+
+    it('正常ケース: C Major から Aeolian (index=5) → A Aeolian (A Minor)', () => {
+      const result = Key.fromRelativeMode(cMajor, 5);
+      expect(result.centerPitch).toBe(PitchClass.A);
+      expect(result.scale.pattern).toBe(ScalePattern.Aeolian);
+      expect(result.contextName).toBe('A Minor');
+    });
+
+    it('正常ケース: C Major から Locrian (index=6) → B Locrian', () => {
+      const result = Key.fromRelativeMode(cMajor, 6);
+      expect(result.centerPitch).toBe(PitchClass.B);
+      expect(result.scale.pattern).toBe(ScalePattern.Locrian);
+      expect(result.contextName).toBe('B Locrian');
+    });
+
+    it('エラーケース: relativeModeIndex が範囲外（-1）', () => {
+      expect(() => Key.fromRelativeMode(cMajor, -1)).toThrow(
+        'relativeModeIndex must be between 0 and 6'
+      );
+    });
+
+    it('エラーケース: relativeModeIndex が範囲外（7）', () => {
+      expect(() => Key.fromRelativeMode(cMajor, 7)).toThrow(
+        'relativeModeIndex must be between 0 and 6'
+      );
+    });
+
+    it('エラーケース: parentMajorKey が Minor キー', () => {
+      const aMinor = Key.minor(PitchClass.A);
+      expect(() => Key.fromRelativeMode(aMinor, 0)).toThrow('parentMajorKey must be a Major key');
+    });
+
+    it('境界値ケース: G Major から全モードを生成', () => {
+      const gMajor = Key.major(PitchClass.G);
+      const expectedRoots = [
+        PitchClass.G, // Ionian
+        PitchClass.A, // Dorian
+        PitchClass.B, // Phrygian
+        PitchClass.C, // Lydian
+        PitchClass.D, // Mixolydian
+        PitchClass.E, // Aeolian
+        PitchClass.fromChromaticIndex(6), // F# - Locrian
+      ];
+
+      for (let i = 0; i < 7; i++) {
+        const result = Key.fromRelativeMode(gMajor, i);
+        expect(result.centerPitch).toBe(expectedRoots[i]);
+      }
+    });
+  });
 });

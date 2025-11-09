@@ -3,6 +3,7 @@ import { Scale } from '../scale';
 import { Chord } from '../chord';
 import { AbstractMusicalContext } from '../common/AbstractMusicalContext';
 import type { IAnalysisResult, IMusicalContext, KeyDTO } from '../common/IMusicalContext';
+import { ModalContext } from '../modal-context';
 
 /** 和声機能（調性音楽における） */
 type Function = 'Tonic' | 'Dominant' | 'Subdominant' | 'Other';
@@ -151,6 +152,62 @@ export class Key extends AbstractMusicalContext {
   static fromCircleOfFifths(circleIndex: number, isMajor: boolean): Key {
     const centerPitch = PitchClass.fromCircleOfFifths(circleIndex);
     return isMajor ? Key.major(centerPitch) : Key.minor(centerPitch);
+  }
+
+  /**
+   * 親メジャーキーと相対モードインデックスから、対応するKeyまたはModalContextを生成
+   *
+   * Relative Mode（平行調選択方式）において、親メジャーキーの構成音から
+   * 指定されたディグリーの音を主音とするモードを生成します。
+   *
+   * **音楽理論的背景:**
+   * - Ionian（Major）とAeolian（Natural Minor）は、調性音楽において「調（Key）」として確立
+   * - その他のモード（Dorian, Phrygian等）は、調性よりも「旋法（Mode）」として扱われる
+   * - したがって、Ionian/AeolianはKeyインスタンス、それ以外はModalContextインスタンスを返す
+   *
+   * @param parentMajorKey - 親メジャーキー（例: C Major）
+   * @param relativeModeIndex - モードインデックス（0=Ionian, 1=Dorian, 2=Phrygian, 3=Lydian, 4=Mixolydian, 5=Aeolian, 6=Locrian）
+   * @returns 対応する音楽文脈（KeyまたはModalContext）
+   * @throws {Error} relativeModeIndexが範囲外（0-6）の場合
+   *
+   * @example
+   * ```typescript
+   * const cMajor = Key.major(PitchClass.C);
+   * // C Major (C-D-E-F-G-A-B) の II度（D）から始まるDorian
+   * const dDorian = Key.fromRelativeMode(cMajor, 1); // D Dorian
+   * ```
+   */
+  static fromRelativeMode(parentMajorKey: Key, relativeModeIndex: number): IMusicalContext {
+    // 範囲チェック
+    if (relativeModeIndex < 0 || relativeModeIndex >= ScalePattern.MAJOR_MODES_BY_DEGREE.length) {
+      throw new Error(
+        `relativeModeIndex must be between 0 and ${ScalePattern.MAJOR_MODES_BY_DEGREE.length - 1}. Received: ${relativeModeIndex}`
+      );
+    }
+
+    // 親キーがMajorでない場合はエラー
+    if (!parentMajorKey.isMajor) {
+      throw new Error('parentMajorKey must be a Major key');
+    }
+
+    // 対応するモードパターンを取得
+    const modePattern = ScalePattern.MAJOR_MODES_BY_DEGREE[relativeModeIndex];
+
+    // 親キーのスケール構成音を取得（公開メソッドを使用）
+    const scaleNotes = parentMajorKey.scale.getNotes();
+
+    // 対応するディグリーの音をRoot音として抽出
+    const newRoot = scaleNotes[relativeModeIndex]._pitchClass;
+
+    // Ionian（Major）またはAeolian（Minor）の場合はKeyインスタンスを生成
+    if (modePattern === ScalePattern.Major) {
+      return Key.major(newRoot);
+    } else if (modePattern === ScalePattern.Aeolian) {
+      return Key.minor(newRoot);
+    } else {
+      // その他のモードの場合はModalContextを生成
+      return new ModalContext(newRoot, modePattern);
+    }
   }
 
   // === C. ダイアトニックコード関連（集約の主要責務） ===

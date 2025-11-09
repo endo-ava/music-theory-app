@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
-import { ScalePattern } from '@/domain/common';
 import { Slider } from '@/components/ui/slider';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 /**
- * ModeSelectorのProps
+ * RelativeModeSliderコンポーネントのProps
  */
-export interface ModeSliderProps {
+export interface RelativeModeSliderProps {
   /** 現在選択されているモードのインデックス (0-6) */
   value: number;
   /** モード変更時のコールバック */
@@ -18,18 +17,37 @@ export interface ModeSliderProps {
 }
 
 /**
- * Mode Slider - 7つのモードをスライダーで選択
+ * ディグリー情報: ローマ数字、モード名、親キーからのディグリー
+ */
+const DEGREE_INFO = [
+  { roman: 'I', mode: 'Ionian', degree: '1st' },
+  { roman: 'ii', mode: 'Dorian', degree: '2nd' },
+  { roman: 'iii', mode: 'Phrygian', degree: '3rd' },
+  { roman: 'IV', mode: 'Lydian', degree: '4th' },
+  { roman: 'V', mode: 'Mixolydian', degree: '5th' },
+  { roman: 'vi', mode: 'Aeolian', degree: '6th' },
+  { roman: 'vii°', mode: 'Locrian', degree: '7th' },
+] as const;
+
+/**
+ * Relative Mode用のモード選択スライダー
  *
- * 設計書準拠:
- * - 7つのモード（Lydian, Ionian...）を「#多（シャープ系）」から「♭多（フラット系）」への連続的な変化として表現
- * - 背景グラデーション: 調号の特性（#/♭）を視覚的に表現
- * - スナップ動作: 離したときに最も近い整数値（モード）に吸着
- * - ラベル表記: 客観的事実（調号特性）を優先し、解釈的表現（明暗）は使用しない
+ * Relative Mode（平行調選択方式）において、親メジャーキーのダイアトニックモードを選択します。
+ * 各モードは親キーの構成音の何度目から始まるかをディグリーネーム（ローマ数字）で表示します。
+ *
+ * 特徴:
+ * - ディグリーネーム（I, ii, iii...）表示により、親キーとの関係性を視覚化
+ * - ツールチップでモード名と開始度数を表示
+ * - グラデーション背景でモードの明暗を表現（Major → minor）
  *
  * @param props - コンポーネントのプロパティ
- * @returns ModeSliderのJSX要素
+ * @returns RelativeModeSliderのJSX要素
  */
-export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, className }) => {
+export const RelativeModeSlider: React.FC<RelativeModeSliderProps> = ({
+  value,
+  onValueChange,
+  className,
+}) => {
   // ツールチップ表示状態
   const [hoveredModeIndex, setHoveredModeIndex] = React.useState<number | null>(null);
   const sliderRef = React.useRef<HTMLDivElement>(null);
@@ -58,12 +76,6 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
     setHoveredModeIndex(null);
   }, []);
 
-  // 現在のモード名を取得
-  const currentModeName = ScalePattern.MAJOR_MODES_BY_BRIGHTNESS[value].name;
-
-  // 全モード名リスト（ラベル表示用）
-  const modeLabels = ScalePattern.MAJOR_MODES_BY_BRIGHTNESS.map(pattern => pattern.name);
-
   return (
     <TooltipProvider delayDuration={0}>
       <div className={className}>
@@ -85,7 +97,7 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
             }}
           />
 
-          {/* Sliderコンポーネント - Thumbサイズ拡大 */}
+          {/* Shadcn/ui Slider */}
           <Slider
             value={[value]}
             onValueChange={handleValueChange}
@@ -95,7 +107,7 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
             className="relative [&_[data-slot=slider-thumb]]:size-4 [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:shadow-lg [&_[data-slot=slider-thumb]]:hover:ring-2 [&_[data-slot=slider-thumb]]:focus-visible:ring-2 [&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-transparent"
           />
 
-          {/* ホバー時のツールチップ */}
+          {/* ホバー時のツールチップ - ディグリー情報付き */}
           {hoveredModeIndex !== null && (
             <Tooltip open={true}>
               <TooltipTrigger asChild>
@@ -103,51 +115,52 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
                   className="pointer-events-none absolute top-1/2 h-4 w-4 -translate-y-1/2"
                   style={{
                     left: `${(hoveredModeIndex / 6) * 100}%`,
-                    transform: 'translate(-50%, -50%)',
+                    transform: 'translateX(-50%)',
                   }}
                 />
               </TooltipTrigger>
               <TooltipContent side="top">
-                <p className="font-medium">
-                  {modeLabels[hoveredModeIndex] === 'Major'
-                    ? 'Ionian / Major'
-                    : modeLabels[hoveredModeIndex] === 'Minor'
-                      ? 'Aeolian / Minor'
-                      : modeLabels[hoveredModeIndex]}
+                <p className="font-medium">{DEGREE_INFO[hoveredModeIndex].mode}</p>
+                <p className="text-muted-foreground text-xs">
+                  {DEGREE_INFO[hoveredModeIndex].degree} degree (
+                  {DEGREE_INFO[hoveredModeIndex].roman})
                 </p>
               </TooltipContent>
             </Tooltip>
           )}
         </div>
 
-        {/* モード名ラベル - クリック可能 */}
+        {/* ディグリーネームラベル - 2行表示（ローマ数字 + モード名） */}
         <div className="text-muted-foreground mt-3 flex justify-between text-xs">
-          {modeLabels.map((label, index) => {
-            const isMajor = label === 'Major';
-            const isMinor = label === 'Minor';
-            const isSelected = index === value;
-            const displayLabel = isMajor ? 'Ion/Maj' : isMinor ? 'Aeo/Min' : label.slice(0, 3);
+          {DEGREE_INFO.map((info, index) => {
+            const isMajor = info.mode === 'Ionian';
+            const isMinor = info.mode === 'Aeolian';
+            const modeLabel = isMajor ? 'Ion/Maj' : isMinor ? 'Aeo/Min' : info.mode.slice(0, 3);
 
             return (
               <button
-                key={label}
-                type="button"
+                key={info.roman}
                 onClick={() => onValueChange(index)}
-                className={`hover:text-foreground cursor-pointer transition-colors ${
-                  isSelected ? 'text-foreground font-bold' : ''
+                className={`text-secondary-foreground hover:text-foreground flex cursor-pointer flex-col items-center transition-colors ${
+                  index === value ? 'text-foreground font-bold' : ''
                 }`}
+                type="button"
+                aria-label={`Select ${info.mode} mode (${info.roman})`}
               >
-                {displayLabel}
+                <span className="mb-1">{info.roman}</span>
+                <span className="text-[10px]">{modeLabel}</span>
               </button>
             );
           })}
         </div>
 
-        {/* 調号ラベル（シャープ/フラット） */}
+        {/* 現在選択されているディグリー情報 */}
         <div className="text-muted-foreground mt-2 flex justify-between text-xs font-medium">
-          <span>#</span>
-          <span className="text-foreground text-center font-semibold">{currentModeName}</span>
-          <span>♭</span>
+          <span>I</span>
+          <span className="text-foreground text-center font-semibold">
+            {DEGREE_INFO[value].roman} - {DEGREE_INFO[value].mode}
+          </span>
+          <span>vii°</span>
         </div>
       </div>
     </TooltipProvider>
