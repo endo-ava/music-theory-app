@@ -53,7 +53,7 @@ function AccordionTrigger({ className, children, variant, ...props }: AccordionT
       >
         {variant === 'layer' ? (
           <div className="flex items-center gap-2">
-            <div className="bg-accent/60 group-hover:bg-accent h-4 w-1 rounded-full transition-all duration-300 group-data-[state=open]:h-6" />
+            <div className="bg-accent group-hover:bg-accent h-4 w-1 rounded-full transition-all duration-300 group-data-[state=open]:h-6" />
             {children}
           </div>
         ) : (
