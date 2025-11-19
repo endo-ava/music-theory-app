@@ -19,11 +19,15 @@ export default function RootLayout({
   return (
     <html lang="ja" className="dark">
       <head>
+        {/* Typography: Poppins (heading) + DM Sans (body) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Noto+Serif+JP&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP&family=Noto+Serif+JP&family=JetBrains+Mono&display=swap"
           rel="stylesheet"
         />
 
+        {/* Music Color Theme - Dynamic 84 colors */}
         <style
           dangerouslySetInnerHTML={{
             __html: `

@@ -34,7 +34,7 @@ function Label({ className, variant, children, ...props }: LabelProps) {
     >
       {variant === 'layer' ? (
         <>
-          <div className="bg-accent/60 group-hover:bg-accent h-2 w-2 rounded-full transition-colors duration-300" />
+          <div className="bg-accent group-hover:bg-accent h-2 w-2 rounded-full transition-colors duration-300" />
           {children}
         </>
       ) : (
