@@ -1,14 +1,9 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { CircleOfFifthsService } from '../CircleOfFifths';
 import { Key } from '@/domain/key';
+import { PitchClass } from '@/domain/common';
 
 describe('CircleOfFifthsService', () => {
-  beforeEach(() => {
-    // キャッシュをクリアするため、プライベートプロパティを直接操作
-    // @ts-expect-error - テスト用にプライベートプロパティにアクセス
-    CircleOfFifthsService.segments = undefined;
-  });
-
   describe('getSegments', () => {
     test('正常ケース: 12個のセグメントを生成する', () => {
       const segments = CircleOfFifthsService.getSegments();
@@ -22,54 +17,32 @@ describe('CircleOfFifthsService', () => {
       });
     });
 
-    test('正常ケース: position 0 は C Major と A minor を持つ', () => {
-      const segments = CircleOfFifthsService.getSegments();
-      const cSegment = segments[0];
+    test.each([
+      { position: 0, majorShortName: 'C', minorShortName: 'Am', keySignature: '' },
+      { position: 1, majorShortName: 'G', minorShortName: 'Em', keySignature: '♯1' },
+      { position: 2, majorShortName: 'D', minorShortName: 'Bm', keySignature: '♯2' },
+      { position: 3, majorShortName: 'A', minorShortName: 'F#m', keySignature: '♯3' },
+      { position: 4, majorShortName: 'E', minorShortName: 'C#m', keySignature: '♯4' },
+      { position: 5, majorShortName: 'B', minorShortName: 'G#m', keySignature: '♯5' },
+      { position: 6, majorShortName: 'G♭', minorShortName: 'D#m', keySignature: '♯♭6' },
+      { position: 7, majorShortName: 'D♭', minorShortName: 'A#m', keySignature: '♭5' },
+      { position: 8, majorShortName: 'A♭', minorShortName: 'Fm', keySignature: '♭4' },
+      { position: 9, majorShortName: 'E♭', minorShortName: 'Cm', keySignature: '♭3' },
+      { position: 10, majorShortName: 'B♭', minorShortName: 'Gm', keySignature: '♭2' },
+      { position: 11, majorShortName: 'F', minorShortName: 'Dm', keySignature: '♭1' },
+    ])(
+      '正常ケース: position $position は $majorShortName Major と $minorShortName minor を持つ',
+      ({ position, majorShortName, minorShortName, keySignature }) => {
+        const segments = CircleOfFifthsService.getSegments();
+        const segment = segments[position];
 
-      expect(cSegment.majorKey.shortName).toBe('C');
-      expect(cSegment.majorKey.isMajor).toBe(true);
-      expect(cSegment.minorKey.shortName).toBe('Am');
-      expect(cSegment.minorKey.isMajor).toBe(false);
-    });
-
-    test('正常ケース: position 1 は G Major と E minor を持つ', () => {
-      const segments = CircleOfFifthsService.getSegments();
-      const gSegment = segments[1];
-
-      expect(gSegment.majorKey.shortName).toBe('G');
-      expect(gSegment.majorKey.isMajor).toBe(true);
-      expect(gSegment.minorKey.shortName).toBe('Em');
-      expect(gSegment.minorKey.isMajor).toBe(false);
-    });
-
-    test('正常ケース: position 6 は F#/G♭ Major と D#m/E♭m minor を持つ', () => {
-      const segments = CircleOfFifthsService.getSegments();
-      const fSharpSegment = segments[6];
-
-      // F# Majorの場合
-      expect(fSharpSegment.majorKey.isMajor).toBe(true);
-      // D#m minorの場合
-      expect(fSharpSegment.minorKey.isMajor).toBe(false);
-    });
-
-    test('正常ケース: 調号の文字列が正しく生成される', () => {
-      const segments = CircleOfFifthsService.getSegments();
-
-      // C (position 0): 調号なし
-      expect(segments[0].keySignature).toBe('');
-
-      // G (position 1): ♯1
-      expect(segments[1].keySignature).toBe('♯1');
-
-      // F (position 11): ♭1
-      expect(segments[11].keySignature).toBe('♭1');
-
-      // B♭ (position 10): ♭2
-      expect(segments[10].keySignature).toBe('♭2');
-
-      // F♯/G♭ (position 6): ♯♭6
-      expect(segments[6].keySignature).toBe('♯♭6');
-    });
+        expect(segment.majorKey.shortName).toBe(majorShortName);
+        expect(segment.majorKey.isMajor).toBe(true);
+        expect(segment.minorKey.shortName).toBe(minorShortName);
+        expect(segment.minorKey.isMajor).toBe(false);
+        expect(segment.keySignature).toBe(keySignature);
+      }
+    );
 
     test('正常ケース: 同じインスタンスがキャッシュされる', () => {
       const segments1 = CircleOfFifthsService.getSegments();
@@ -161,6 +134,75 @@ describe('CircleOfFifthsService', () => {
   describe('SEGMENT_COUNT', () => {
     test('正常ケース: セグメント数が12である', () => {
       expect(CircleOfFifthsService.SEGMENT_COUNT).toBe(12);
+    });
+  });
+
+  describe('不変性と境界値テスト', () => {
+    test('境界値ケース: 範囲外のpositionにアクセスしてもundefinedを返す', () => {
+      const segments = CircleOfFifthsService.getSegments();
+      expect(segments[12]).toBeUndefined();
+      expect(segments[-1]).toBeUndefined();
+      expect(segments[100]).toBeUndefined();
+    });
+
+    test('不変性テスト: セグメント配列を変更しようとしてもエラーになる', () => {
+      const segments = CircleOfFifthsService.getSegments();
+
+      // freeze されているので変更できない
+      expect(() => {
+        // @ts-expect-error - テストのために型を無視して変更を試みる
+        segments.push({
+          position: 12,
+          majorKey: Key.major(PitchClass.C),
+          minorKey: Key.minor(PitchClass.A),
+          keySignature: '',
+        });
+      }).toThrow();
+    });
+
+    test('不変性テスト: DTO配列は変更可能である（シャローコピー）', () => {
+      const dtos = CircleOfFifthsService.getSegmentDTOs();
+
+      // DTOは通常の配列なので変更可能（新しい配列として返される）
+      expect(() => {
+        dtos.push({
+          position: 12,
+          majorKey: { shortName: 'X', isMajor: true },
+          minorKey: { shortName: 'Xm', isMajor: false },
+          keySignature: '',
+        });
+      }).not.toThrow();
+
+      // しかし元のDTOには影響しない
+      const newDtos = CircleOfFifthsService.getSegmentDTOs();
+      expect(newDtos).toHaveLength(12);
+    });
+
+    test('境界値ケース: すべてのセグメントのpositionが0-11の範囲内である', () => {
+      const segments = CircleOfFifthsService.getSegments();
+      segments.forEach(segment => {
+        expect(segment.position).toBeGreaterThanOrEqual(0);
+        expect(segment.position).toBeLessThan(12);
+      });
+    });
+
+    test('境界値ケース: すべてのキーがKeyインスタンスの不変条件を満たす', () => {
+      const allKeys = CircleOfFifthsService.getAllKeys();
+      allKeys.forEach(key => {
+        // Keyインスタンスは必ずshortNameを持つ
+        expect(key.shortName).toBeTruthy();
+        expect(typeof key.shortName).toBe('string');
+        // isMajorはbooleanである
+        expect(typeof key.isMajor).toBe('boolean');
+      });
+    });
+
+    test('境界値ケース: 調号の文字列が有効な範囲である', () => {
+      const dtos = CircleOfFifthsService.getSegmentDTOs();
+      dtos.forEach(dto => {
+        // 調号は空文字列、または♯/♭ + 数字の形式
+        expect(dto.keySignature).toMatch(/^$|^[♯♭]+\d{1,2}$/);
+      });
     });
   });
 });

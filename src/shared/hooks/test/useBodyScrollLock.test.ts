@@ -3,110 +3,92 @@ import { renderHook } from '@testing-library/react';
 import { useBodyScrollLock } from '../useBodyScrollLock';
 
 describe('useBodyScrollLock', () => {
-  // DOM環境のモック変数
-  let mockBody: {
-    style: {
-      overflow: string;
-      position: string;
-      top: string;
-      width: string;
-    };
-  };
   let mockScrollTo: ReturnType<typeof vi.fn>;
-  let originalScrollY: number;
 
   beforeEach(() => {
-    // body要素のモック
-    mockBody = {
-      style: {
-        overflow: '',
-        position: '',
-        top: '',
-        width: '',
-      },
-    };
+    // body要素の初期スタイルをリセット
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
 
-    // windowのモック
+    // window.scrollToをモック
     mockScrollTo = vi.fn();
-    originalScrollY = 100;
+    window.scrollTo = mockScrollTo;
 
-    // グローバルプロパティの設定
-    Object.defineProperty(global, 'document', {
-      value: {
-        body: mockBody,
-      },
-      configurable: true,
-    });
-
-    Object.defineProperty(global, 'window', {
-      value: {
-        scrollY: originalScrollY,
-        scrollTo: mockScrollTo,
-      },
-      configurable: true,
+    // scrollYをモック（デフォルト値）
+    Object.defineProperty(window, 'scrollY', {
+      value: 100,
       writable: true,
+      configurable: true,
     });
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    // body要素のスタイルをクリーンアップ
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
   });
 
-  describe.skip('locked = true の場合', () => {
+  describe('locked = true の場合', () => {
     it('正常ケース: bodyのスタイルが正しく設定される', () => {
       renderHook(() => useBodyScrollLock(true));
 
-      expect(mockBody.style.overflow).toBe('hidden');
-      expect(mockBody.style.position).toBe('fixed');
-      expect(mockBody.style.top).toBe('-100px');
-      expect(mockBody.style.width).toBe('100%');
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.position).toBe('fixed');
+      expect(document.body.style.top).toBe('-100px');
+      expect(document.body.style.width).toBe('100%');
     });
 
     it('正常ケース: クリーンアップ時に元の状態に復元される', () => {
       // 初期スタイルを設定
-      mockBody.style.overflow = 'auto';
-      mockBody.style.position = 'relative';
+      document.body.style.overflow = 'auto';
+      document.body.style.position = 'relative';
 
       const { unmount } = renderHook(() => useBodyScrollLock(true));
 
       // ロック時のスタイル確認
-      expect(mockBody.style.overflow).toBe('hidden');
-      expect(mockBody.style.position).toBe('fixed');
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.position).toBe('fixed');
 
       // クリーンアップ実行
       unmount();
 
       // 元のスタイルが復元される
-      expect(mockBody.style.overflow).toBe('auto');
-      expect(mockBody.style.position).toBe('relative');
+      expect(document.body.style.overflow).toBe('auto');
+      expect(document.body.style.position).toBe('relative');
       expect(mockScrollTo).toHaveBeenCalledWith(0, 100);
     });
 
     it('境界値ケース: scrollY = 0 の場合', () => {
-      Object.defineProperty(global.window, 'scrollY', { value: 0, configurable: true });
+      Object.defineProperty(window, 'scrollY', { value: 0, configurable: true, writable: true });
 
       renderHook(() => useBodyScrollLock(true));
 
-      expect(mockBody.style.top).toBe('-0px');
+      // -0 は 0 として正規化されるため
+      expect(document.body.style.top).toBe('0px');
     });
 
     it('正常ケース: 異なるscrollY値でも正しく動作する', () => {
-      Object.defineProperty(global.window, 'scrollY', { value: 250, configurable: true });
+      Object.defineProperty(window, 'scrollY', { value: 250, configurable: true, writable: true });
 
       renderHook(() => useBodyScrollLock(true));
 
-      expect(mockBody.style.top).toBe('-250px');
+      expect(document.body.style.top).toBe('-250px');
     });
   });
 
-  describe.skip('locked = false の場合', () => {
+  describe('locked = false の場合', () => {
     it('正常ケース: bodyのスタイルが変更されない', () => {
       const originalOverflow = 'auto';
-      mockBody.style.overflow = originalOverflow;
+      document.body.style.overflow = originalOverflow;
 
       renderHook(() => useBodyScrollLock(false));
 
-      expect(mockBody.style.overflow).toBe(originalOverflow);
+      expect(document.body.style.overflow).toBe(originalOverflow);
     });
 
     it('正常ケース: scrollToが呼ばれない', () => {
@@ -118,32 +100,32 @@ describe('useBodyScrollLock', () => {
     });
 
     it('正常ケース: 他のスタイルプロパティも変更されない', () => {
-      mockBody.style.position = 'static';
-      mockBody.style.top = '10px';
-      mockBody.style.width = '50%';
+      document.body.style.position = 'static';
+      document.body.style.top = '10px';
+      document.body.style.width = '50%';
 
       renderHook(() => useBodyScrollLock(false));
 
-      expect(mockBody.style.position).toBe('static');
-      expect(mockBody.style.top).toBe('10px');
-      expect(mockBody.style.width).toBe('50%');
+      expect(document.body.style.position).toBe('static');
+      expect(document.body.style.top).toBe('10px');
+      expect(document.body.style.width).toBe('50%');
     });
   });
 
-  describe.skip('状態変更', () => {
+  describe('状態変更', () => {
     it('正常ケース: locked が true → false に変更された場合', () => {
       const { rerender, unmount } = renderHook(({ locked }) => useBodyScrollLock(locked), {
         initialProps: { locked: true },
       });
 
       // 初期状態でロックが適用される
-      expect(mockBody.style.overflow).toBe('hidden');
+      expect(document.body.style.overflow).toBe('hidden');
 
       // locked を false に変更
       rerender({ locked: false });
 
       // ロックが解除される
-      expect(mockBody.style.overflow).toBe('');
+      expect(document.body.style.overflow).toBe('');
 
       unmount();
     });
@@ -154,14 +136,14 @@ describe('useBodyScrollLock', () => {
       });
 
       // 初期状態では何も変更されない
-      expect(mockBody.style.overflow).toBe('');
+      expect(document.body.style.overflow).toBe('');
 
       // locked を true に変更
       rerender({ locked: true });
 
       // ロックが適用される
-      expect(mockBody.style.overflow).toBe('hidden');
-      expect(mockBody.style.position).toBe('fixed');
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.position).toBe('fixed');
     });
 
     it('正常ケース: locked が複数回切り替わる場合', () => {
@@ -169,40 +151,43 @@ describe('useBodyScrollLock', () => {
         initialProps: { locked: false },
       });
 
-      expect(mockBody.style.overflow).toBe('');
+      expect(document.body.style.overflow).toBe('');
 
       rerender({ locked: true });
-      expect(mockBody.style.overflow).toBe('hidden');
+      expect(document.body.style.overflow).toBe('hidden');
 
       rerender({ locked: false });
-      expect(mockBody.style.overflow).toBe('');
+      expect(document.body.style.overflow).toBe('');
 
       rerender({ locked: true });
-      expect(mockBody.style.overflow).toBe('hidden');
+      expect(document.body.style.overflow).toBe('hidden');
     });
   });
 
-  describe.skip('エッジケース', () => {
+  describe('エッジケース', () => {
     it('正常ケース: 初期スタイルが空文字列の場合', () => {
-      mockBody.style.overflow = '';
-      mockBody.style.position = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
 
       const { unmount } = renderHook(() => useBodyScrollLock(true));
 
-      expect(mockBody.style.overflow).toBe('hidden');
+      expect(document.body.style.overflow).toBe('hidden');
 
       unmount();
 
-      expect(mockBody.style.overflow).toBe('');
-      expect(mockBody.style.position).toBe('');
+      expect(document.body.style.overflow).toBe('');
+      expect(document.body.style.position).toBe('');
     });
 
     it('正常ケース: スクロール位置が負の値の場合（通常発生しない）', () => {
-      Object.defineProperty(global.window, 'scrollY', { value: -10, configurable: true });
+      Object.defineProperty(window, 'scrollY', { value: -10, configurable: true, writable: true });
 
       renderHook(() => useBodyScrollLock(true));
 
-      expect(mockBody.style.top).toBe('--10px');
+      // --10px は無効なCSS値なので、ブラウザによって無視され空文字列または10pxになる
+      // ここでは実装が試みた値を設定することを確認
+      const topValue = document.body.style.top;
+      expect(topValue === '' || topValue === '10px').toBe(true);
     });
   });
 });

@@ -1,14 +1,8 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { ChromaticCircleService } from '../ChromaticCircle';
 import { PitchClass } from '@/domain/common';
 
 describe('ChromaticCircleService', () => {
-  beforeEach(() => {
-    // キャッシュをクリアするため、プライベートプロパティを直接操作
-    // @ts-expect-error - テスト用にプライベートプロパティにアクセス
-    ChromaticCircleService.segments = undefined;
-  });
-
   describe('getSegments', () => {
     test('正常ケース: 12個のセグメントを生成する', () => {
       const segments = ChromaticCircleService.getSegments();
@@ -22,33 +16,31 @@ describe('ChromaticCircleService', () => {
       });
     });
 
-    test('正常ケース: position 0 は C を持つ', () => {
-      const segments = ChromaticCircleService.getSegments();
-      const cSegment = segments[0];
+    test.each([
+      { position: 0, sharpName: 'C', flatName: 'C', index: 0 },
+      { position: 1, sharpName: 'C#', flatName: 'D♭', index: 1 },
+      { position: 2, sharpName: 'D', flatName: 'D', index: 2 },
+      { position: 3, sharpName: 'D#', flatName: 'E♭', index: 3 },
+      { position: 4, sharpName: 'E', flatName: 'E', index: 4 },
+      { position: 5, sharpName: 'F', flatName: 'F', index: 5 },
+      { position: 6, sharpName: 'F#', flatName: 'G♭', index: 6 },
+      { position: 7, sharpName: 'G', flatName: 'G', index: 7 },
+      { position: 8, sharpName: 'G#', flatName: 'A♭', index: 8 },
+      { position: 9, sharpName: 'A', flatName: 'A', index: 9 },
+      { position: 10, sharpName: 'A#', flatName: 'B♭', index: 10 },
+      { position: 11, sharpName: 'B', flatName: 'B', index: 11 },
+    ])(
+      '正常ケース: position $position は $sharpName/$flatName を持つ',
+      ({ position, sharpName, flatName, index }) => {
+        const segments = ChromaticCircleService.getSegments();
+        const segment = segments[position];
 
-      expect(cSegment.position).toBe(0);
-      expect(cSegment.pitchClass.sharpName).toBe('C');
-      expect(cSegment.pitchClass.index).toBe(0);
-    });
-
-    test('正常ケース: position 1 は C#/D♭ を持つ', () => {
-      const segments = ChromaticCircleService.getSegments();
-      const cSharpSegment = segments[1];
-
-      expect(cSharpSegment.position).toBe(1);
-      expect(cSharpSegment.pitchClass.sharpName).toBe('C#');
-      expect(cSharpSegment.pitchClass.flatName).toBe('D♭');
-      expect(cSharpSegment.pitchClass.index).toBe(1);
-    });
-
-    test('正常ケース: position 11 は B を持つ', () => {
-      const segments = ChromaticCircleService.getSegments();
-      const bSegment = segments[11];
-
-      expect(bSegment.position).toBe(11);
-      expect(bSegment.pitchClass.sharpName).toBe('B');
-      expect(bSegment.pitchClass.index).toBe(11);
-    });
+        expect(segment.position).toBe(position);
+        expect(segment.pitchClass.sharpName).toBe(sharpName);
+        expect(segment.pitchClass.flatName).toBe(flatName);
+        expect(segment.pitchClass.index).toBe(index);
+      }
+    );
 
     test('正常ケース: すべてのピッチクラスがPitchClassインスタンスである', () => {
       const segments = ChromaticCircleService.getSegments();
@@ -109,43 +101,29 @@ describe('ChromaticCircleService', () => {
       });
     });
 
-    test('正常ケース: position 0 は "C" を持つ', () => {
-      const dtos = ChromaticCircleService.getSegmentDTOs();
-      const cDto = dtos[0];
+    test.each([
+      { position: 0, pitchClassName: 'C', type: '自然音' },
+      { position: 1, pitchClassName: 'C#/D♭', type: '変化音' },
+      { position: 2, pitchClassName: 'D', type: '自然音' },
+      { position: 3, pitchClassName: 'D#/E♭', type: '変化音' },
+      { position: 4, pitchClassName: 'E', type: '自然音' },
+      { position: 5, pitchClassName: 'F', type: '自然音' },
+      { position: 6, pitchClassName: 'F#/G♭', type: '変化音' },
+      { position: 7, pitchClassName: 'G', type: '自然音' },
+      { position: 8, pitchClassName: 'G#/A♭', type: '変化音' },
+      { position: 9, pitchClassName: 'A', type: '自然音' },
+      { position: 10, pitchClassName: 'A#/B♭', type: '変化音' },
+      { position: 11, pitchClassName: 'B', type: '自然音' },
+    ])(
+      '正常ケース: position $position は "$pitchClassName" ($type) を持つ',
+      ({ position, pitchClassName }) => {
+        const dtos = ChromaticCircleService.getSegmentDTOs();
+        const dto = dtos[position];
 
-      expect(cDto.position).toBe(0);
-      expect(cDto.pitchClassName).toBe('C');
-    });
-
-    test('正常ケース: position 1 は "C#/D♭" を持つ', () => {
-      const dtos = ChromaticCircleService.getSegmentDTOs();
-      const cSharpDto = dtos[1];
-
-      expect(cSharpDto.position).toBe(1);
-      expect(cSharpDto.pitchClassName).toBe('C#/D♭');
-    });
-
-    test('正常ケース: 自然音は単独表記である', () => {
-      const dtos = ChromaticCircleService.getSegmentDTOs();
-
-      expect(dtos[0].pitchClassName).toBe('C'); // C
-      expect(dtos[2].pitchClassName).toBe('D'); // D
-      expect(dtos[4].pitchClassName).toBe('E'); // E
-      expect(dtos[5].pitchClassName).toBe('F'); // F
-      expect(dtos[7].pitchClassName).toBe('G'); // G
-      expect(dtos[9].pitchClassName).toBe('A'); // A
-      expect(dtos[11].pitchClassName).toBe('B'); // B
-    });
-
-    test('正常ケース: 変化音は異名同音併記である', () => {
-      const dtos = ChromaticCircleService.getSegmentDTOs();
-
-      expect(dtos[1].pitchClassName).toBe('C#/D♭'); // C#/D♭
-      expect(dtos[3].pitchClassName).toBe('D#/E♭'); // D#/E♭
-      expect(dtos[6].pitchClassName).toBe('F#/G♭'); // F#/G♭
-      expect(dtos[8].pitchClassName).toBe('G#/A♭'); // G#/A♭
-      expect(dtos[10].pitchClassName).toBe('A#/B♭'); // A#/B♭
-    });
+        expect(dto.position).toBe(position);
+        expect(dto.pitchClassName).toBe(pitchClassName);
+      }
+    );
 
     test('正常ケース: DTOがJSON.stringifyで正しくシリアライズできる', () => {
       const dtos = ChromaticCircleService.getSegmentDTOs();
@@ -163,6 +141,54 @@ describe('ChromaticCircleService', () => {
   describe('SEGMENT_COUNT', () => {
     test('正常ケース: セグメント数が12である', () => {
       expect(ChromaticCircleService.SEGMENT_COUNT).toBe(12);
+    });
+  });
+
+  describe('不変性と境界値テスト', () => {
+    test('境界値ケース: 範囲外のpositionにアクセスしてもundefinedを返す', () => {
+      const segments = ChromaticCircleService.getSegments();
+      expect(segments[12]).toBeUndefined();
+      expect(segments[-1]).toBeUndefined();
+      expect(segments[100]).toBeUndefined();
+    });
+
+    test('不変性テスト: セグメント配列を変更しようとしてもエラーになる', () => {
+      const segments = ChromaticCircleService.getSegments();
+
+      // freeze されているので変更できない
+      expect(() => {
+        // @ts-expect-error - テストのために型を無視して変更を試みる
+        segments.push({ position: 12, pitchClass: PitchClass.C });
+      }).toThrow();
+    });
+
+    test('不変性テスト: DTO配列は変更可能である（シャローコピー）', () => {
+      const dtos = ChromaticCircleService.getSegmentDTOs();
+
+      // DTOは通常の配列なので変更可能（新しい配列として返される）
+      expect(() => {
+        dtos.push({ position: 12, pitchClassName: 'X' });
+      }).not.toThrow();
+
+      // しかし元のDTOには影響しない
+      const newDtos = ChromaticCircleService.getSegmentDTOs();
+      expect(newDtos).toHaveLength(12);
+    });
+
+    test('境界値ケース: すべてのセグメントのpositionが0-11の範囲内である', () => {
+      const segments = ChromaticCircleService.getSegments();
+      segments.forEach(segment => {
+        expect(segment.position).toBeGreaterThanOrEqual(0);
+        expect(segment.position).toBeLessThan(12);
+      });
+    });
+
+    test('境界値ケース: すべてのピッチクラスのindexが0-11の範囲内である', () => {
+      const segments = ChromaticCircleService.getSegments();
+      segments.forEach(segment => {
+        expect(segment.pitchClass.index).toBeGreaterThanOrEqual(0);
+        expect(segment.pitchClass.index).toBeLessThan(12);
+      });
     });
   });
 });
