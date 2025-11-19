@@ -54,7 +54,7 @@ describe('useCurrentKeyData', () => {
 
       expect(result.current.currentKey).toBeInstanceOf(Key);
       expect(result.current.currentKey.shortName).toBe('C');
-      expect(result.current.currentKey.isMajor).toBe(true);
+      expect((result.current.currentKey as Key).isMajor).toBe(true);
     });
   });
 
@@ -76,7 +76,7 @@ describe('useCurrentKeyData', () => {
       const { result } = renderHook(() => useCurrentKeyData());
 
       expect(result.current.scaleNotes[0]._pitchClass.sharpName).toBe('A');
-      expect(result.current.currentKey.isMajor).toBe(false);
+      expect((result.current.currentKey as Key).isMajor).toBe(false);
     });
 
     test('Aマイナーキーの関連調が正しく計算される', () => {
