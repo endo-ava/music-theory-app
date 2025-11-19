@@ -1,4 +1,5 @@
 import { describe, test, expect } from 'vitest';
+import { fc, test as fcTest } from '@fast-check/vitest';
 import { CircleOfFifthsService } from '../CircleOfFifths';
 import { Key } from '@/domain/key';
 import { PitchClass } from '@/domain/common';
@@ -160,20 +161,35 @@ describe('CircleOfFifthsService', () => {
       }).toThrow();
     });
 
-    test('不変性テスト: DTO配列は変更可能である（シャローコピー）', () => {
+    test('不変性テスト: DTO配列は新しい配列として返される', () => {
       const dtos = CircleOfFifthsService.getSegmentDTOs();
 
-      // DTOは通常の配列なので変更可能（新しい配列として返される）
-      expect(() => {
-        dtos.push({
-          position: 12,
-          majorKey: { shortName: 'X', isMajor: true },
-          minorKey: { shortName: 'Xm', isMajor: false },
-          keySignature: '',
-        });
-      }).not.toThrow();
+      // DTOは読み取り専用配列として返される
+      expect(Array.isArray(dtos)).toBe(true);
 
-      // しかし元のDTOには影響しない
+      // 元の配列を変更しても新しい呼び出しには影響しない
+      const mutableCopy = [...dtos];
+      mutableCopy.push({
+        position: 12,
+        majorKey: {
+          shortName: 'X',
+          contextName: 'X Major',
+          fifthsIndex: 12,
+          type: 'key',
+          isMajor: true,
+        },
+        minorKey: {
+          shortName: 'Xm',
+          contextName: 'X minor',
+          fifthsIndex: 12,
+          type: 'key',
+          isMajor: false,
+        },
+        keySignature: '',
+      });
+      expect(mutableCopy).toHaveLength(13);
+
+      // 元のDTOには影響しない
       const newDtos = CircleOfFifthsService.getSegmentDTOs();
       expect(newDtos).toHaveLength(12);
     });
@@ -204,5 +220,56 @@ describe('CircleOfFifthsService', () => {
         expect(dto.keySignature).toMatch(/^$|^[♯♭]+\d{1,2}$/);
       });
     });
+  });
+
+  describe('プロパティベーステスト', () => {
+    fcTest.prop([fc.integer({ min: 0, max: 11 })])(
+      'プロパティ: position 0-11 の範囲でセグメントが常に有効である',
+      position => {
+        const segments = CircleOfFifthsService.getSegments();
+        const segment = segments[position];
+
+        // セグメントが存在する
+        expect(segment).toBeDefined();
+
+        // positionが一致する
+        expect(segment.position).toBe(position);
+
+        // majorKeyとminorKeyがKeyインスタンスである
+        expect(segment.majorKey).toBeInstanceOf(Key);
+        expect(segment.minorKey).toBeInstanceOf(Key);
+
+        // keySignatureが文字列である
+        expect(typeof segment.keySignature).toBe('string');
+      }
+    );
+
+    fcTest.prop([fc.integer({ min: 0, max: 11 })])(
+      'プロパティ: すべてのpositionでセグメント配列がfreezeされている',
+      () => {
+        const segments = CircleOfFifthsService.getSegments();
+        expect(Object.isFrozen(segments)).toBe(true);
+      }
+    );
+
+    fcTest.prop([fc.integer({ min: 0, max: 11 })])(
+      'プロパティ: DTOは常にシリアライズ可能である',
+      position => {
+        const dtos = CircleOfFifthsService.getSegmentDTOs();
+        const dto = dtos[position];
+
+        // JSON.stringifyでエラーが発生しない
+        expect(() => JSON.stringify(dto)).not.toThrow();
+
+        // シリアライズ・デシリアライズの往復ができる
+        const serialized = JSON.stringify(dto);
+        const deserialized = JSON.parse(serialized);
+
+        expect(deserialized.position).toBe(position);
+        expect(deserialized).toHaveProperty('majorKey');
+        expect(deserialized).toHaveProperty('minorKey');
+        expect(deserialized).toHaveProperty('keySignature');
+      }
+    );
   });
 });

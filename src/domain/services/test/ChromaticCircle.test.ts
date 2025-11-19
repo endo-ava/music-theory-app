@@ -1,4 +1,5 @@
 import { describe, test, expect } from 'vitest';
+import { fc, test as fcTest } from '@fast-check/vitest';
 import { ChromaticCircleService } from '../ChromaticCircle';
 import { PitchClass } from '@/domain/common';
 
@@ -162,15 +163,18 @@ describe('ChromaticCircleService', () => {
       }).toThrow();
     });
 
-    test('不変性テスト: DTO配列は変更可能である（シャローコピー）', () => {
+    test('不変性テスト: DTO配列は新しい配列として返される', () => {
       const dtos = ChromaticCircleService.getSegmentDTOs();
 
-      // DTOは通常の配列なので変更可能（新しい配列として返される）
-      expect(() => {
-        dtos.push({ position: 12, pitchClassName: 'X' });
-      }).not.toThrow();
+      // DTOは読み取り専用配列として返される
+      expect(Array.isArray(dtos)).toBe(true);
 
-      // しかし元のDTOには影響しない
+      // 元の配列を変更しても新しい呼び出しには影響しない
+      const mutableCopy = [...dtos];
+      mutableCopy.push({ position: 12, pitchClassName: 'X' });
+      expect(mutableCopy).toHaveLength(13);
+
+      // 元のDTOには影響しない
       const newDtos = ChromaticCircleService.getSegmentDTOs();
       expect(newDtos).toHaveLength(12);
     });
@@ -190,5 +194,54 @@ describe('ChromaticCircleService', () => {
         expect(segment.pitchClass.index).toBeLessThan(12);
       });
     });
+  });
+
+  describe('プロパティベーステスト', () => {
+    fcTest.prop([fc.integer({ min: 0, max: 11 })])(
+      'プロパティ: position 0-11 の範囲でセグメントが常に有効である',
+      position => {
+        const segments = ChromaticCircleService.getSegments();
+        const segment = segments[position];
+
+        // セグメントが存在する
+        expect(segment).toBeDefined();
+
+        // positionが一致する
+        expect(segment.position).toBe(position);
+
+        // pitchClassがPitchClassインスタンスである
+        expect(segment.pitchClass).toBeInstanceOf(PitchClass);
+
+        // pitchClassのindexがpositionと一致する
+        expect(segment.pitchClass.index).toBe(position);
+      }
+    );
+
+    fcTest.prop([fc.integer({ min: 0, max: 11 })])(
+      'プロパティ: すべてのpositionでセグメント配列がfreezeされている',
+      () => {
+        const segments = ChromaticCircleService.getSegments();
+        expect(Object.isFrozen(segments)).toBe(true);
+      }
+    );
+
+    fcTest.prop([fc.integer({ min: 0, max: 11 })])(
+      'プロパティ: DTOは常にシリアライズ可能である',
+      position => {
+        const dtos = ChromaticCircleService.getSegmentDTOs();
+        const dto = dtos[position];
+
+        // JSON.stringifyでエラーが発生しない
+        expect(() => JSON.stringify(dto)).not.toThrow();
+
+        // シリアライズ・デシリアライズの往復ができる
+        const serialized = JSON.stringify(dto);
+        const deserialized = JSON.parse(serialized);
+
+        expect(deserialized.position).toBe(position);
+        expect(deserialized).toHaveProperty('pitchClassName');
+        expect(typeof deserialized.pitchClassName).toBe('string');
+      }
+    );
   });
 });

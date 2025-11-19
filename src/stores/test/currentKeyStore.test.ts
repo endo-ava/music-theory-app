@@ -14,7 +14,7 @@ describe('currentKeyStore', () => {
     const { currentKey } = useCurrentKeyStore.getState();
 
     expect(currentKey.centerPitch.sharpName).toBe('C');
-    expect(currentKey.isMajor).toBe(true);
+    expect((currentKey as Key).isMajor).toBe(true);
     expect(currentKey.contextName).toBe('C Major');
   });
 
@@ -25,7 +25,7 @@ describe('currentKeyStore', () => {
 
     const { currentKey } = useCurrentKeyStore.getState();
     expect(currentKey.centerPitch.sharpName).toBe('G');
-    expect(currentKey.isMajor).toBe(true);
+    expect((currentKey as Key).isMajor).toBe(true);
     expect(currentKey.contextName).toBe('G Major');
   });
 
@@ -44,7 +44,7 @@ describe('currentKeyStore', () => {
 
     const { currentKey } = useCurrentKeyStore.getState();
     expect(currentKey.centerPitch.sharpName).toBe('C');
-    expect(currentKey.isMajor).toBe(true);
+    expect((currentKey as Key).isMajor).toBe(true);
   });
 
   it('メジャーキーとマイナーキーを正しく区別する', () => {
