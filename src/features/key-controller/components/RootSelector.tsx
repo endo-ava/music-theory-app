@@ -51,7 +51,7 @@ export const RootSelector: React.FC<RootSelectorProps> = ({ value, onValueChange
       <SelectTrigger className={className}>
         <SelectValue placeholder="Select a root..." />
       </SelectTrigger>
-      <SelectContent className="bg-panel border-border shadow-lg">
+      <SelectContent className="shadow-lg">
         {PitchClass.ALL_PITCH_CLASSES.map(pitchClass => (
           <SelectItem
             key={pitchClass.sharpName}

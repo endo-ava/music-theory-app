@@ -58,7 +58,7 @@ export const MajorKeySelector: React.FC<MajorKeySelectorProps> = ({
       <SelectTrigger className={className}>
         <SelectValue placeholder="Select a major key..." />
       </SelectTrigger>
-      <SelectContent className="bg-panel border-border shadow-lg">
+      <SelectContent className="shadow-lg">
         {PitchClass.ALL_PITCH_CLASSES.map(pitchClass => {
           const majorKey = Key.major(pitchClass);
           const keySignature = majorKey.keySignature;

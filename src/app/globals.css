@@ -1,105 +1,109 @@
 @import 'tailwindcss';
 
-/* shadcn / default */
-:root {
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --panel: oklch(0.985 0 0);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+/* ================================================================ */
+/* Tailwind CSS v4 デザインシステム - 音楽理論アプリ               */
+/* ================================================================ */
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.17 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.885 0 0);
-  --muted: oklch(0.269 0 0);
-  --selected: oklch(0.45 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.55 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 18%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --panel: oklch(0.205 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
+/**
+ * デザイン思想:
+ * - 音楽ビジュアライゼーションツールに着想を得た独自の美学
+ * - 心理学に基づくUX（視覚的階層、認知負荷の削減）
+ * - OKLCH色空間による知覚的に均一な色設計
+ * - 任意の値ではなく、意味のあるデザイントークン
+ */
 
-/* テーマ設定 */
 @theme {
-  /* フォントファミリー (font-family) */
-  --font-family-sans: 'Noto Sans JP', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
-  --font-family-serif: 'Noto Serif JP', 'Times New Roman', 'Georgia', serif;
+  /* ============================================================ */
+  /* タイポグラフィシステム                                       */
+  /* ============================================================ */
 
-  /* カラーパレット - Shadcn/ui変数参照 */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-panel: var(--panel);
-  --color-card: var(--card);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-selected: var(--selected);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
+  /**
+   * フォント戦略:
+   * - 見出し: Poppins（モダン、幾何学的、優れた視認性）
+   * - 本文: DM Sans（親しみやすく、技術的、UI向け）
+   * - 明朝: Noto Serif JP（日本語コンテンツ、エレガントなフォールバック）
+   *
+   * 心理的効果:
+   * - サンセリフ体がモダンで親しみやすい雰囲気を作る
+   * - 幾何学的な形状が円形の音楽ビジュアライゼーションと調和
+   */
 
-  /* 五度圏専用カラー */
-  --color-key-area-minor: rgba(255, 255, 255, 0.1);
-  --color-key-area-major: rgba(255, 255, 255, 0.15);
-  --color-key-area-signature: rgba(255, 255, 255, 0);
-  --color-key-area-hover: rgba(255, 255, 255, 0.25);
-  --color-key-area-selected: rgba(255, 255, 255, 0.5);
+  /**
+   * フォントファミリー
+   * カスタムフォントのみ定義 - サイズとウェイトはTailwindデフォルトを使用
+   */
+  --font-family-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-family-heading: 'Poppins', var(--font-family-sans);
+  --font-family-serif: 'Noto Serif JP', 'Georgia', serif;
+
+  /* ============================================================ */
+  /* カラーシステム - ダークテーマ（デフォルト）                  */
+  /* ============================================================ */
+
+  /**
+   * 色彩心理学:
+   * - 深い青紫: 信頼感、創造性、深み
+   * - シアンアクセント: エネルギー、モダンさ、明瞭性
+   * - 高コントラスト: アクセシビリティ、視覚的階層
+   *
+   * OKLCHの利点:
+   * - 知覚的に均一な明度
+   * - 色相全体で一貫した彩度
+   * - アクセシビリティ計算の精度向上
+   */
+
+  /* 基本カラー */
+  --color-background: oklch(0.12 0.02 260);
+  --color-foreground: oklch(0.98 0 0);
+
+  /* 表面カラー */
+  --color-card: oklch(0.17 0.02 260);
+  --color-popover: oklch(0.2 0.02 260);
+  --color-panel: oklch(0.2 0.02 260);
+
+  /* セマンティックカラー */
+  --color-primary: oklch(0.75 0.18 195);
+  --color-primary-foreground: oklch(0.12 0.02 260);
+
+  --color-secondary: oklch(0.28 0.02 260);
+  --color-secondary-foreground: oklch(0.75 0.02 260);
+
+  --color-accent: oklch(0.55 0.1 195);
+  --color-accent-foreground: oklch(0.98 0 0);
+
+  --color-muted: oklch(0.28 0.02 260);
+  --color-muted-foreground: oklch(0.65 0.02 260);
+
+  --color-selected: oklch(0.35 0.03 260);
+
+  --color-subtle: oklch(0.75 0.18 195 / 0.2);
+
+  /* ボーダー・入力 */
+  --color-border: oklch(0.18 0.02 260);
+
+  /* ============================================================ */
+  /* 音楽理論専用カラー                                           */
+  /* ============================================================ */
+
+  /**
+   * 五度圏のビジュアルフィードバック
+   * レイヤー表示に適した繊細さと、明確な識別性のバランス
+   */
+
+  --color-key-area-minor: oklch(0.98 0 0 / 0.12);
+  --color-key-area-major: oklch(0.98 0 0 / 0.18); /* 白のオーバーレイ - 長調 */
+  --color-key-area-hover: oklch(0.75 0.18 195 / 0.2); /* ホバー時のシアンの光 */
+  --color-key-area-selected: oklch(0.75 0.18 195 / 0.4); /* クリック時はより強く */
+
+  /* モードスライダーのグラデーションカラー（相対モード） */
+  --color-mode-ionian: oklch(0.8 0.18 80); /* 明るい - イオニアン */
+  --color-mode-dorian: oklch(0.75 0.16 65); /* アンバー - ドリアン */
+  --color-mode-phrygian: oklch(0.7 0.17 120); /* ライム - フリジアン */
+  --color-mode-lydian: oklch(0.72 0.18 145); /* グリーン - リディアン */
+  --color-mode-mixolydian: oklch(0.68 0.17 240); /* ブルー - ミクソリディアン */
+  --color-mode-aeolian: oklch(0.65 0.18 285); /* バイオレット - エオリアン（暗い） */
+  --color-mode-locrian: oklch(0.6 0.16 310); /* パープル - ロクリアン（最も暗い） */
+
   /* 五度圏専用フォントサイズ (fontSize) */
   --text-key-minor: 0.75rem;
   --text-key-major: 0.8rem;
@@ -110,28 +114,41 @@
   --font-key-major: 80;
   --font-key-signature: 50;
 
-  /* モードスライダーグラデーション色（Relative Mode Slider） */
-  --color-mode-gradient-ionian: #fbbf24; /* Amber 400 - Ionian (明るい) */
-  --color-mode-gradient-dorian: #f59e0b; /* Amber 500 - Dorian */
-  --color-mode-gradient-phrygian: #84cc16; /* Lime 500 - Phrygian */
-  --color-mode-gradient-lydian: #22c55e; /* Green 500 - Lydian */
-  --color-mode-gradient-mixolydian: #3b82f6; /* Blue 500 - Mixolydian */
-  --color-mode-gradient-aeolian: #8b5cf6; /* Violet 500 - Aeolian (暗い) */
-
-  /* ヘッダーレイアウト */
+  /* ============================================================ */
+  /* レイアウト変数（アプリ固有）                                 */
+  /* ============================================================ */
   --header-height-min: 3rem;
   --header-height-actual: calc(var(--header-height-min) + 2rem); /* min-height + py-4 */
   --content-height-full: calc(100dvh - var(--header-height-actual));
 }
 
-/* ベーススタイル */
+/* ============================================================ */
+/* ベーススタイル                                               */
+/* ============================================================ */
+
 @layer base {
-  body {
-    font-family: theme('font-family.sans');
-    color: theme('colors.foreground');
-    background-color: theme('colors.background');
-    min-height: 100dvh;
+  /**
+   * フォントレンダリングの最適化で視認性向上
+   */
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
+
+  body {
+    font-family: var(--font-family-sans);
+    color: var(--color-foreground);
+    background-color: var(--color-background);
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /**
+   * タイポグラフィ - 見出しはPoppinsを使用
+   * サイズはTailwindクラス（text-4xl、text-3xlなど）で指定
+   */
 
   h1,
   h2,
@@ -139,14 +156,66 @@
   h4,
   h5,
   h6 {
+    font-family: var(--font-family-heading);
     margin: 0;
-    padding: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  /**
+   * フォーカススタイル（アクセシビリティ + 美観）
+   * テーマカラーでの視認性の高いフォーカスリング
+   */
+
+  *:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /**
+   * 選択カラー（ブランドとの一体感）
+   */
+
+  ::selection {
+    background-color: oklch(0.75 0.18 195 / 0.25);
+    color: var(--color-foreground);
+  }
+
+  /**
+   * スクロールバースタイリング（控えめなテーマ色）
+   */
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: oklch(0.16 0.02 260);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-muted);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.5 0.02 260);
   }
 }
 
+/* ============================================================ */
+/* ユーティリティクラス                                         */
+/* ============================================================ */
+
 @layer utilities {
-  /* Hub表示切り替え (Canvas component) */
-  /* hub-containerクラスで、data-hub-typeが"circle-of-fifths"の時、その中の..hub-chromatic-circleを隠す */
+  /**
+   * Hub表示の切り替え（Canvasコンポーネント）
+   * data属性による条件付き表示
+   */
+
   .hub-container[data-hub-type='circle-of-fifths'] .hub-chromatic-circle {
     display: none;
   }
@@ -155,26 +224,32 @@
     display: none;
   }
 
-  /* カスタムタッチハンドラー用スタイル */
+  /**
+   * カスタムタッチハンドラー
+   * モバイルでの音楽インタラクションに最適化
+   */
+
   .custom-touch-handler-active {
     overscroll-behavior: contain;
     touch-action: pan-x pinch-zoom;
   }
 }
 
-/* ---------------------------------- */
-/* 動的生成カラーシステム          */
-/* ---------------------------------- */
-/* 
-  12音×7モードの色相システム（84色）は、
-  layout.tsx でビルド時に動的生成されます。
-  
-  使用可能なクラス例:
-  - bg-key-c-lydian     （C Lydian）
-  - text-key-g-dorian   （G Dorian）  
-  - bg-key-fsharp-locrian（F# Locrian）
-  
-  色相: 五度圏順に30°ずつ（C=0°, G=30°...）
-  彩度: 85%固定
-  明度: Lydian(70%) → Locrian(40%)の階層
-*/
+/* ============================================================ */
+/* 動的カラーシステム（キー × モード）                          */
+/* ============================================================ */
+
+/**
+ * 12音 × 7モード = 84色クラス
+ * layout.tsxでビルド時に動的生成
+ *
+ * 色ロジック:
+ * - 色相: 五度圏順（30°ステップ）
+ * - 彩度: 85%（鮮やかで一貫性あり）
+ * - 明度: モード依存（リディアン 70% → ロクリアン 40%）
+ *
+ * 使用例:
+ * - bg-key-c-lydian
+ * - text-key-g-dorian
+ * - border-key-fsharp-locrian
+ */
