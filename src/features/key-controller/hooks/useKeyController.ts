@@ -28,9 +28,6 @@ export const useKeyController = () => {
   // === 選択モード管理 ===
   const [selectionMode, setSelectionMode] = React.useState<KeySelectionMode>('parallel');
 
-  // === Relative Mode用の状態 ===
-  const [parentMajorKey, setParentMajorKey] = React.useState<Key>(Key.major(PitchClass.C));
-
   // 現在のTonicとModeを抽出
   const currentTonic = React.useMemo(() => {
     // AbstractMusicalContextのcenterPitchを使用
@@ -58,6 +55,15 @@ export const useKeyController = () => {
 
     // 見つからない場合はIonian(0)をデフォルトとする
     return index >= 0 ? index : 0;
+  }, [currentKey]);
+
+  // 親メジャーキー（Relative Mode用）
+  // currentKeyから逆算して親メジャーキーを派生状態として計算
+  const parentMajorKey = React.useMemo(() => {
+    // getRelativeMajorTonic()で親メジャーキーのトニックを取得
+    const parentTonic = currentKey.getRelativeMajorTonic();
+    // Key.major()で親メジャーキーを生成
+    return Key.major(parentTonic);
   }, [currentKey]);
 
   /**
@@ -123,11 +129,11 @@ export const useKeyController = () => {
    */
   const handleMajorKeyChange = React.useCallback(
     (newMajorKey: Key) => {
-      setParentMajorKey(newMajorKey);
       // 親キーのIonian（Major）モードに設定
+      // parentMajorKeyは派生状態なので、currentKeyを更新すれば自動的に再計算される
       setCurrentKey(newMajorKey);
     },
-    [setCurrentKey, setParentMajorKey]
+    [setCurrentKey]
   );
 
   /**

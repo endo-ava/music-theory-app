@@ -72,8 +72,11 @@ export const MajorKeySelector: React.FC<MajorKeySelectorProps> = ({
               value={pitchClass.sharpName}
               className="hover:bg-accent focus:bg-accent transition-colors"
             >
-              <span className="font-medium">{pitchClass.sharpName} Major</span>
-              <span className="text-muted-foreground ml-2 text-xs">({signatureStr})</span>
+              <span className="font-medium">{pitchClass.sharpName}</span>
+              {pitchClass.flatName !== pitchClass.sharpName && (
+                <span className="text-muted-foreground ml-1 text-xs">/ {pitchClass.flatName}</span>
+              )}
+              <span className="font-medium">Major</span>
             </SelectItem>
           );
         })}

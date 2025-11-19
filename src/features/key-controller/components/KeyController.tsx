@@ -96,7 +96,7 @@ export const KeyController: React.FC<KeyControllerProps> = ({
           {/* Root Selector */}
           <div className="space-y-2">
             <h3 className="text-secondary-foreground text-sm font-medium">Root</h3>
-            <RootSelector value={currentTonic} onValueChange={handleRootChange} className="w-26" />
+            <RootSelector value={currentTonic} onValueChange={handleRootChange} className="w-30" />
           </div>
 
           {/* Mode Slider */}
@@ -120,7 +120,7 @@ export const KeyController: React.FC<KeyControllerProps> = ({
             <MajorKeySelector
               value={parentMajorKey}
               onValueChange={handleMajorKeyChange}
-              className="w-26"
+              className="w-42"
             />
           </div>
 
