@@ -62,7 +62,6 @@ describe('useKeyAreaPresentation hook', () => {
       expect(result.current).toHaveProperty('shouldHighlight');
       expect(result.current).toHaveProperty('romanNumeral');
       expect(result.current).toHaveProperty('keyAreaColor');
-      expect(result.current).toHaveProperty('currentKeyColor');
       expect(result.current).toHaveProperty('layout');
 
       expect(typeof result.current.shouldHighlight).toBe('boolean');
@@ -70,7 +69,6 @@ describe('useKeyAreaPresentation hook', () => {
         result.current.romanNumeral === null || typeof result.current.romanNumeral === 'string'
       ).toBe(true);
       expect(typeof result.current.keyAreaColor).toBe('string');
-      expect(typeof result.current.currentKeyColor).toBe('string');
       expect(typeof result.current.layout).toBe('object');
     });
 
@@ -142,22 +140,6 @@ describe('useKeyAreaPresentation hook', () => {
       expect(mockGetMusicColorVariable).toHaveBeenCalledWith(defaultKeyDTO);
     });
 
-    test('正常ケース: currentKeyColorの計算', () => {
-      const expectedKeyAreaColor = 'var(--color-c-major)';
-      const expectedCurrentKeyColor = 'var(--color-c-major-current)';
-
-      // モックをリセットして順番に設定
-      mockGetMusicColorVariable.mockReset();
-      mockGetMusicColorVariable
-        .mockReturnValueOnce(expectedKeyAreaColor) // keyAreaColor用
-        .mockReturnValueOnce(expectedCurrentKeyColor); // currentKeyColor用
-
-      const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
-
-      expect(result.current.currentKeyColor).toBe(expectedCurrentKeyColor);
-      expect(mockGetMusicColorVariable).toHaveBeenNthCalledWith(2, defaultCurrentKey);
-    });
-
     test('正常ケース: 異なるキーでの色計算', () => {
       const gMajorKeyDTO: KeyDTO = {
         shortName: 'G',
@@ -174,14 +156,11 @@ describe('useKeyAreaPresentation hook', () => {
         currentKey: gMajorKey,
       };
 
-      mockGetMusicColorVariable
-        .mockReturnValueOnce('var(--color-g-major)')
-        .mockReturnValueOnce('var(--color-g-major-current)');
+      mockGetMusicColorVariable.mockReturnValueOnce('var(--color-g-major)');
 
       renderHook(() => useKeyAreaPresentation(props));
 
       expect(mockGetMusicColorVariable).toHaveBeenCalledWith(gMajorKeyDTO);
-      expect(mockGetMusicColorVariable).toHaveBeenCalledWith(gMajorKey);
     });
 
     test('正常ケース: マイナーキーでの色計算', () => {
@@ -200,14 +179,11 @@ describe('useKeyAreaPresentation hook', () => {
         currentKey: aMinorKey,
       };
 
-      mockGetMusicColorVariable
-        .mockReturnValueOnce('var(--color-a-minor)')
-        .mockReturnValueOnce('var(--color-a-minor-current)');
+      mockGetMusicColorVariable.mockReturnValueOnce('var(--color-a-minor)');
 
       renderHook(() => useKeyAreaPresentation(props));
 
       expect(mockGetMusicColorVariable).toHaveBeenCalledWith(aMinorKeyDTO);
-      expect(mockGetMusicColorVariable).toHaveBeenCalledWith(aMinorKey);
     });
   });
 
@@ -292,9 +268,7 @@ describe('useKeyAreaPresentation hook', () => {
       };
 
       // 新しいモック戻り値を設定
-      mockGetMusicColorVariable
-        .mockReturnValueOnce('var(--color-d-major)')
-        .mockReturnValueOnce('var(--color-d-major-current)');
+      mockGetMusicColorVariable.mockReturnValueOnce('var(--color-d-major)');
 
       rerender(newProps);
 

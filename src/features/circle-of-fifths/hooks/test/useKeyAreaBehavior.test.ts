@@ -7,14 +7,14 @@ import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { useAudio } from '../useAudio';
 import { useKeyState } from '../useKeyState';
 import { useKeyInteraction } from '../useKeyInteraction';
-import { useRippleEffect } from '../useRippleEffect';
+import { useRippleStore } from '@/stores/rippleStore';
 
 // 依存関係のモック
 vi.mock('@/stores/circleOfFifthsStore');
+vi.mock('@/stores/rippleStore');
 vi.mock('../useAudio');
 vi.mock('../useKeyState');
 vi.mock('../useKeyInteraction');
-vi.mock('../useRippleEffect');
 
 // モック関数の定義
 const mockSetSelectedKey = vi.fn();
@@ -40,10 +40,12 @@ const mockHandlers = {
   onTouchMove: vi.fn(),
 };
 
-const mockRipple = {
-  isRippleActive: false,
-  triggerRipple: vi.fn(),
-  resetRipple: vi.fn(),
+const mockAddRipple = vi.fn();
+
+const mockRippleStore = {
+  addRipple: mockAddRipple,
+  ripples: [],
+  removeRipple: vi.fn(),
 };
 
 describe('useKeyAreaBehavior integration hook', () => {
@@ -100,7 +102,7 @@ describe('useKeyAreaBehavior integration hook', () => {
     // 個別フックのモック設定
     (useKeyState as unknown as Mock).mockReturnValue(mockStates);
     (useKeyInteraction as unknown as Mock).mockReturnValue(mockHandlers);
-    (useRippleEffect as unknown as Mock).mockReturnValue(mockRipple);
+    (useRippleStore as unknown as Mock).mockReturnValue(mockRippleStore);
   });
 
   describe('統合機能', () => {
@@ -109,12 +111,12 @@ describe('useKeyAreaBehavior integration hook', () => {
 
       expect(result.current).toHaveProperty('states');
       expect(result.current).toHaveProperty('handlers');
-      expect(result.current).toHaveProperty('ripple');
+      expect(result.current).toHaveProperty('addRipple');
 
       // 各プロパティが個別フックから返されることを確認
       expect(result.current.states).toBe(mockStates);
       expect(result.current.handlers).toBe(mockHandlers);
-      expect(result.current.ripple).toBe(mockRipple);
+      expect(typeof result.current.addRipple).toBe('function');
     });
 
     test('正常ケース: 個別フックが正しい引数で呼ばれる', () => {
@@ -135,11 +137,10 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: mockRipple.triggerRipple,
       });
 
-      // useRippleEffectが呼ばれることを確認
-      expect(useRippleEffect).toHaveBeenCalled();
+      // useRippleStoreが呼ばれることを確認
+      expect(useRippleStore).toHaveBeenCalled();
     });
 
     test('正常ケース: ストア状態変更時の個別フック再実行', () => {
@@ -186,7 +187,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: mockRipple.triggerRipple,
       });
     });
 
@@ -220,34 +220,15 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: mockRipple.triggerRipple,
       });
     });
   });
 
   describe('リップルエフェクト統合', () => {
-    test('正常ケース: リップルトリガーが正しく統合される', () => {
-      renderHook(() => useKeyAreaBehavior(defaultProps));
-
-      // useKeyInteractionのonRippleTriggerにuseRippleEffectのtriggerRippleが渡されることを確認
-      const keyInteractionCall = (useKeyInteraction as unknown as Mock).mock.calls[0][0];
-      expect(keyInteractionCall.onRippleTrigger).toBe(mockRipple.triggerRipple);
-    });
-
-    test('正常ケース: リップル状態が正しく返される', () => {
-      const activeRippleMock = {
-        isRippleActive: true,
-        triggerRipple: vi.fn(),
-        resetRipple: vi.fn(),
-      };
-
-      (useRippleEffect as unknown as Mock).mockReturnValue(activeRippleMock);
-
+    test('正常ケース: リップル追加関数が正しく返される', () => {
       const { result } = renderHook(() => useKeyAreaBehavior(defaultProps));
 
-      expect(result.current.ripple.isRippleActive).toBe(true);
-      expect(result.current.ripple.triggerRipple).toBe(activeRippleMock.triggerRipple);
-      expect(result.current.ripple.resetRipple).toBe(activeRippleMock.resetRipple);
+      expect(result.current.addRipple).toBe(mockAddRipple);
     });
   });
 
@@ -288,7 +269,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: mockRipple.triggerRipple,
       });
     });
 
@@ -302,7 +282,7 @@ describe('useKeyAreaBehavior integration hook', () => {
       // 同じモックオブジェクトが返されることを確認
       expect(firstResult.states).toBe(secondResult.states);
       expect(firstResult.handlers).toBe(secondResult.handlers);
-      expect(firstResult.ripple).toBe(secondResult.ripple);
+      expect(firstResult.addRipple).toBe(secondResult.addRipple);
     });
   });
 
@@ -323,7 +303,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: undefined,
         playScaleAtPosition: undefined,
-        onRippleTrigger: mockRipple.triggerRipple,
       });
     });
 
@@ -345,7 +324,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: null,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: mockRipple.triggerRipple,
       });
     });
   });

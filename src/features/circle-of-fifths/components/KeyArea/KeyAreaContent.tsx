@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { ANIMATION } from '../../constants';
-import { SVGRippleEffect } from './SVGRippleEffect';
 import type { Point } from '@/shared/types/graphics';
 import type { KeyAreaStates } from '../../hooks/useKeyState';
 import type { KeyAreaPresentationInfo } from '../../hooks/useKeyAreaPresentation';
@@ -21,11 +20,6 @@ interface KeyAreaContentProps {
   states: KeyAreaStates;
   /** プレゼンテーション情報（ハイライト・色・レイアウト） */
   presentation: KeyAreaPresentationInfo;
-  /** リップルエフェクトの状態 */
-  ripple: {
-    isRippleActive: boolean;
-    resetRipple: () => void;
-  };
 }
 
 /**
@@ -48,11 +42,9 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
   textRotation,
   states,
   presentation,
-  ripple,
 }) => {
   const { fillClassName, textClassName } = states;
-  const { shouldHighlight, romanNumeral, isTonic, keyAreaColor, currentKeyColor, layout } =
-    presentation;
+  const { shouldHighlight, romanNumeral, keyAreaColor, layout } = presentation;
 
   return (
     <>
@@ -66,9 +58,8 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
         }}
         animate={{
           opacity: 1,
-          stroke: shouldHighlight ? currentKeyColor : 'var(--color-border)',
+          stroke: 'var(--color-border)',
           strokeWidth: '1px',
-          filter: shouldHighlight && isTonic ? `drop-shadow(0 0 4px ${currentKeyColor})` : '',
           strokeLinejoin: 'miter',
           strokeLinecap: 'square',
         }}
@@ -114,15 +105,6 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
           {romanNumeral}
         </motion.text>
       )}
-
-      {/* リップルエフェクト */}
-      <SVGRippleEffect
-        isTriggered={ripple.isRippleActive}
-        centerX={textPosition.x}
-        centerY={textPosition.y}
-        color={keyAreaColor}
-        onAnimationComplete={ripple.resetRipple}
-      />
     </>
   );
 };
