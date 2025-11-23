@@ -67,6 +67,7 @@ export const DiatonicHighlightLayer: React.FC = memo(() => {
               {/* マイナーキーのハイライト */}
               {minorInfo.shouldHighlight && (
                 <HighlightPath
+                  key={`${segment.position}-minor`}
                   path={paths.minorPath}
                   color={currentKeyColor}
                   isTonic={minorInfo.isTonic}
@@ -76,6 +77,7 @@ export const DiatonicHighlightLayer: React.FC = memo(() => {
               {/* メジャーキーのハイライト */}
               {majorInfo.shouldHighlight && (
                 <HighlightPath
+                  key={`${segment.position}-major`}
                   path={paths.majorPath}
                   color={currentKeyColor}
                   isTonic={majorInfo.isTonic}

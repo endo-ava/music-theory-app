@@ -60,12 +60,6 @@ export const MajorKeySelector: React.FC<MajorKeySelectorProps> = ({
       </SelectTrigger>
       <SelectContent className="shadow-lg">
         {PitchClass.ALL_PITCH_CLASSES.map(pitchClass => {
-          const majorKey = Key.major(pitchClass);
-          const keySignature = majorKey.keySignature;
-
-          // 調号の表記を取得（ドメインロジック）
-          const signatureStr = keySignature.getSignatureNotation();
-
           return (
             <SelectItem
               key={pitchClass.sharpName}

@@ -71,6 +71,8 @@ export const useKeyAreaBehavior = ({
   });
 
   // イベントハンドリング（クリック、ホバー）
+  // Note: リップルエフェクトの座標取得は KeyArea.tsx で Framer Motion の onTap を使用して
+  // クリック座標を取得し、直接 addRipple を呼ぶ設計としている
   const handlers = useKeyInteraction({
     keyDTO,
     position,
@@ -78,13 +80,6 @@ export const useKeyAreaBehavior = ({
     setHoveredKey,
     playChordAtPosition,
     playScaleAtPosition,
-    onRippleTrigger: () => {
-      // Note: リップルエフェクトの座標取得は KeyArea.tsx で行う設計としている
-      // 理由: useLongPress が座標情報を onLongPressStart に渡さないため、
-      // ここで座標を取得するには useLongPress の大幅な変更が必要になる。
-      // 代わりに、KeyArea.tsx で Framer Motion の onTap を使用して
-      // クリック座標を取得し、直接 addRipple を呼ぶ方がシンプルで保守しやすい。
-    },
   });
 
   return {

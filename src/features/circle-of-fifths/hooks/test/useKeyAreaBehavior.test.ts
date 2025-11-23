@@ -137,7 +137,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: expect.any(Function),
       });
 
       // useRippleStoreが呼ばれることを確認
@@ -188,7 +187,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: expect.any(Function),
       });
     });
 
@@ -222,7 +220,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: expect.any(Function),
       });
     });
   });
@@ -272,7 +269,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: expect.any(Function),
       });
     });
 
@@ -307,7 +303,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: mockSetHoveredKey,
         playChordAtPosition: undefined,
         playScaleAtPosition: undefined,
-        onRippleTrigger: expect.any(Function),
       });
     });
 
@@ -329,7 +324,6 @@ describe('useKeyAreaBehavior integration hook', () => {
         setHoveredKey: null,
         playChordAtPosition: mockPlayChordAtPosition,
         playScaleAtPosition: mockPlayScaleAtPosition,
-        onRippleTrigger: expect.any(Function),
       });
     });
   });

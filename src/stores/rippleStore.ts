@@ -8,7 +8,6 @@ export interface RippleInstance {
   x: number;
   y: number;
   color: string;
-  startTime: number;
 }
 
 /**
@@ -57,7 +56,6 @@ export const useRippleStore = create<RippleState & RippleActions>(set => ({
           x,
           y,
           color,
-          startTime: Date.now(),
         },
       ],
       nextId: state.nextId + 1,
