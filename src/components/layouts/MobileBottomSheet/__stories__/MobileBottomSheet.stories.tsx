@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import { within, expect, userEvent, waitFor } from '@storybook/test';
 import { MobileBottomSheet, useMobileBottomSheet, SNAP_POINTS } from '../index';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 
@@ -135,6 +135,16 @@ export const SnapPointInteraction: Story = {
 
     // HALFボタンをクリック
     const halfButton = canvas.getByRole('button', { name: 'HALF', hidden: true });
+
+    // Vaulのアニメーション完了を待機（CI環境での安定性向上）
+    await waitFor(
+      () => {
+        const computedStyle = window.getComputedStyle(halfButton);
+        expect(computedStyle.pointerEvents).not.toBe('none');
+      },
+      { timeout: 3000 }
+    );
+
     await userEvent.click(halfButton);
 
     // スナップポイントがHALFに変更されることを確認
@@ -214,6 +224,15 @@ export const HookFunctionality: Story = {
     const halfButton = canvas.getByRole('button', { name: 'HALF', hidden: true });
     const expandedButton = canvas.getByRole('button', { name: 'EXPANDED', hidden: true });
     const lowestButton = canvas.getByRole('button', { name: 'LOWEST', hidden: true });
+
+    // Vaulのアニメーション完了を待機（CI環境での安定性向上）
+    await waitFor(
+      () => {
+        const computedStyle = window.getComputedStyle(halfButton);
+        expect(computedStyle.pointerEvents).not.toBe('none');
+      },
+      { timeout: 3000 }
+    );
 
     // HALF状態への変更
     await userEvent.click(halfButton);
