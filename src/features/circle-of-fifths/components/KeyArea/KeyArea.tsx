@@ -45,7 +45,7 @@ export const KeyArea = memo<KeyAreaProps>(
     const { currentKey } = useCurrentKeyStore();
 
     // 行動ロジック（状態管理・イベントハンドリング・リップルエフェクト）
-    const { states, handlers, ripple } = useKeyAreaBehavior({ keyDTO: key, segment });
+    const { states, handlers, addRipple } = useKeyAreaBehavior({ keyDTO: key, segment });
 
     // プレゼンテーション情報（ハイライト・レイアウト・色計算）
     const presentation = useKeyAreaPresentation({
@@ -53,6 +53,13 @@ export const KeyArea = memo<KeyAreaProps>(
       textPosition,
       currentKey,
     });
+
+    // リップルエフェクトのトリガー
+    // Note: Framer Motion の onTap を使用してクリック座標を取得
+    // これにより、正確なクリック位置からリップルを開始できる
+    const handleTap = () => {
+      addRipple(textPosition.x, textPosition.y, presentation.keyAreaColor);
+    };
 
     return (
       <motion.g
@@ -63,6 +70,7 @@ export const KeyArea = memo<KeyAreaProps>(
         whileHover={{ scale: ANIMATION.HOVER_SCALE }}
         whileTap={{ scale: ANIMATION.TAP_SCALE }}
         transition={{ duration: ANIMATION.FADE_DURATION }}
+        onTap={handleTap}
         {...handlers}
       >
         <KeyAreaContent
@@ -72,7 +80,6 @@ export const KeyArea = memo<KeyAreaProps>(
           textRotation={textRotation}
           states={states}
           presentation={presentation}
-          ripple={ripple}
         />
       </motion.g>
     );

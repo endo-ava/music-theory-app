@@ -7,4 +7,3 @@ export type { KeyAreaProps } from './KeyArea';
 
 // 内部コンポーネント（統合済み）
 export { KeyAreaContent } from './KeyAreaContent';
-export { SVGRippleEffect } from './SVGRippleEffect';

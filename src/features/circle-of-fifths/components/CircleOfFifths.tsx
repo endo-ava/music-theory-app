@@ -1,4 +1,6 @@
 import { CircleSegment } from './CircleSegment';
+import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
+import { RippleLayer } from './RippleLayer';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 import { ClassNameProps } from '@/shared/types';
 
@@ -35,6 +37,12 @@ export const CircleOfFifths: React.FC<ClassNameProps> = ({ className }) => {
             textRotation={textRotation}
           />
         ))}
+
+        {/* ダイアトニックハイライトレイヤー（最前面に描画） */}
+        <DiatonicHighlightLayer />
+
+        {/* リップルレイヤー（さらに最前面に描画） */}
+        <RippleLayer />
       </svg>
     </div>
   );

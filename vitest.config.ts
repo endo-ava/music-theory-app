@@ -7,6 +7,8 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
     css: true,
+    // git worktreeディレクトリを除外
+    exclude: ['**/node_modules/**', '**/dist/**', 'w-1/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

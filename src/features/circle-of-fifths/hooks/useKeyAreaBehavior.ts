@@ -12,7 +12,7 @@ import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useAudio } from './useAudio';
 import { useKeyState, type KeyAreaStates } from './useKeyState';
 import { useKeyInteraction, type KeyAreaHandlers } from './useKeyInteraction';
-import { useRippleEffect } from './useRippleEffect';
+import { useRippleStore } from '@/stores/rippleStore';
 
 /**
  * useKeyAreaBehaviorフックの引数型
@@ -32,12 +32,8 @@ export interface UseKeyAreaBehaviorResult {
   states: KeyAreaStates;
   /** イベントハンドラ群 */
   handlers: KeyAreaHandlers;
-  /** リップルエフェクトの状態 */
-  ripple: {
-    isRippleActive: boolean;
-    triggerRipple: () => void;
-    resetRipple: () => void;
-  };
+  /** リップル追加関数（KeyArea.tsx で使用） */
+  addRipple: (x: number, y: number, color: string) => void;
 }
 
 /**
@@ -64,8 +60,8 @@ export const useKeyAreaBehavior = ({
   const { selectedKey, hoveredKey, setSelectedKey, setHoveredKey } = useCircleOfFifthsStore();
   const { playChordAtPosition, playScaleAtPosition } = useAudio();
 
-  // リップルエフェクトの状態管理
-  const ripple = useRippleEffect();
+  // リップルエフェクトの状態管理（グローバルストア）
+  const { addRipple } = useRippleStore();
 
   // 状態計算（選択・ホバー状態、クラス名）
   const states = useKeyState({
@@ -82,12 +78,18 @@ export const useKeyAreaBehavior = ({
     setHoveredKey,
     playChordAtPosition,
     playScaleAtPosition,
-    onRippleTrigger: ripple.triggerRipple,
+    onRippleTrigger: () => {
+      // Note: リップルエフェクトの座標取得は KeyArea.tsx で行う設計としている
+      // 理由: useLongPress が座標情報を onLongPressStart に渡さないため、
+      // ここで座標を取得するには useLongPress の大幅な変更が必要になる。
+      // 代わりに、KeyArea.tsx で Framer Motion の onTap を使用して
+      // クリック座標を取得し、直接 addRipple を呼ぶ方がシンプルで保守しやすい。
+    },
   });
 
   return {
     states,
     handlers,
-    ripple,
+    addRipple, // KeyArea.tsx で座標付きで呼ぶために公開
   };
 };

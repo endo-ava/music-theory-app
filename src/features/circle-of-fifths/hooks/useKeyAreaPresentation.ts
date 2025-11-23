@@ -37,12 +37,8 @@ export interface KeyAreaPresentationInfo {
   readonly shouldHighlight: boolean;
   /** ローマ数字表記（ダイアトニック度数） */
   readonly romanNumeral: string | null;
-  /** 現在のキーのTonicか */
-  readonly isTonic: boolean;
   /** 各keyAreaの色（CSS変数形式） */
   readonly keyAreaColor: string;
-  /** CunrrentKeyの色（CSS変数形式） */
-  readonly currentKeyColor: string;
   /** テキストレイアウト計算結果 */
   readonly layout: {
     /** プライマリテキストのY座標 */
@@ -78,11 +74,10 @@ export const useKeyAreaPresentation = ({
 
   return useMemo(() => {
     // ダイアトニックハイライト判定
-    const { shouldHighlight, romanNumeral, isTonic } = getHighlightInfo(keyDTO);
+    const { shouldHighlight, romanNumeral } = getHighlightInfo(keyDTO);
 
     // 色計算（音楽色相システム）
     const keyAreaColor = getMusicColorVariable(keyDTO);
-    const currentKeyColor = getMusicColorVariable(currentKey);
 
     // レイアウト計算（ローマ数字表示時の位置調整）
     const layout = {
@@ -96,9 +91,7 @@ export const useKeyAreaPresentation = ({
     return {
       shouldHighlight,
       romanNumeral,
-      isTonic,
       keyAreaColor,
-      currentKeyColor,
       layout,
     };
   }, [
