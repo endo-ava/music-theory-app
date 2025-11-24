@@ -82,8 +82,8 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
     const fifth = scaleNotes[(degree + 3) % 7];
 
     // 半音距離を計算
-    const interval3 = Interval.between(root._pitchClass, third._pitchClass);
-    const interval5 = Interval.between(root._pitchClass, fifth._pitchClass);
+    const interval3 = Interval.between(root.pitchClass, third.pitchClass);
+    const interval5 = Interval.between(root.pitchClass, fifth.pitchClass);
 
     const quality = ChordPattern.findByIntervals([interval3, interval5]);
     if (!quality) throw new Error('未知のコード品質');
@@ -165,7 +165,7 @@ export abstract class AbstractMusicalContext implements IMusicalContext {
    * @returns 基本分析結果（ローマ数字、ダイアトニック判定）
    */
   public analyzeChord(chord: Chord): IAnalysisResult {
-    const steps = PitchClass.modulo12(chord.rootNote._pitchClass.index - this.centerPitch.index);
+    const steps = PitchClass.modulo12(chord.rootNote.pitchClass.index - this.centerPitch.index);
     const degreeAnalysisResult: DegreeAnalysisResult = this.scale.getDegreeFromSteps(steps);
     const [flatDegreeName, sharpDegreeName] = [
       chord.quality.getChordDegreeName(

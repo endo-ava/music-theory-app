@@ -28,7 +28,7 @@ export const useDiatonicHighlight = (currentKey: IMusicalContext) => {
 
     // 各ダイアトニックコードのルート音を抽出
     diatonicChordInfo.forEach(info => {
-      const rootPitchClass = info.chord.rootNote._pitchClass;
+      const rootPitchClass = info.chord.rootNote.pitchClass;
       // 半音インデックス（0-11）をSetに追加
       positions.add(rootPitchClass.index);
     });

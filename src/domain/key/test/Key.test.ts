@@ -306,7 +306,7 @@ describe('Key', () => {
         const key = Key.fromCircleOfFifths(circleIndex, true);
         const centerPitch = key.getTonicChord();
 
-        expect(centerPitch.rootNote._pitchClass.sharpName).toBe(name);
+        expect(centerPitch.rootNote.pitchClass.sharpName).toBe(name);
         expect(centerPitch.quality).toBe(ChordPattern.MajorTriad);
       });
     });

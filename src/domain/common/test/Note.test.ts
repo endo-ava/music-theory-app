@@ -15,7 +15,7 @@ describe('Note', () => {
       const pitchClass = PitchClass.fromCircleOfFifths(0); // C
       const note = new Note(pitchClass, 4);
 
-      expect(note._pitchClass.sharpName).toBe('C');
+      expect(note.pitchClass.sharpName).toBe('C');
       expect(note._octave).toBe(4);
     });
 
@@ -38,7 +38,7 @@ describe('Note', () => {
       testCases.forEach(({ circleIndex, name }) => {
         const pitchClass = PitchClass.fromCircleOfFifths(circleIndex);
         const note = new Note(pitchClass, 4);
-        expect(note._pitchClass.sharpName).toBe(name);
+        expect(note.pitchClass.sharpName).toBe(name);
         expect(note._octave).toBe(4);
       });
     });
@@ -137,7 +137,7 @@ describe('Note', () => {
       const note = new Note(cPitchClass, 4); // C4
 
       const transposedNote = note.transposeBy(Interval.MajorThird); // +4半音
-      expect(transposedNote._pitchClass.sharpName).toBe('E');
+      expect(transposedNote.pitchClass.sharpName).toBe('E');
       expect(transposedNote._octave).toBe(4);
       expect(transposedNote.toString).toBe('E4');
     });
@@ -147,7 +147,7 @@ describe('Note', () => {
       const note = new Note(aPitchClass, 4); // A4
 
       const transposedNote = note.transposeBy(Interval.MajorThird); // +4半音
-      expect(transposedNote._pitchClass.sharpName).toBe('C#');
+      expect(transposedNote.pitchClass.sharpName).toBe('C#');
       expect(transposedNote._octave).toBe(5);
       expect(transposedNote.toString).toBe('C#5');
     });
@@ -157,7 +157,7 @@ describe('Note', () => {
       const note = new Note(cPitchClass, 4); // C4
 
       const transposedNote = note.transposeBy(Interval.MinorThird.invert()); // -3半音
-      expect(transposedNote._pitchClass.sharpName).toBe('A');
+      expect(transposedNote.pitchClass.sharpName).toBe('A');
       expect(transposedNote._octave).toBe(3);
       expect(transposedNote.toString).toBe('A3');
     });
@@ -167,7 +167,7 @@ describe('Note', () => {
       const note = new Note(cPitchClass, 4); // C4
 
       const transposedNote = note.transposeBy(Interval.Octave); // +12半音
-      expect(transposedNote._pitchClass.sharpName).toBe('C');
+      expect(transposedNote.pitchClass.sharpName).toBe('C');
       expect(transposedNote._octave).toBe(5);
       expect(transposedNote.toString).toBe('C5');
     });
@@ -178,7 +178,7 @@ describe('Note', () => {
       const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
       const note = new Note(cPitchClass, 0);
 
-      expect(note._pitchClass.sharpName).toBe('C');
+      expect(note.pitchClass.sharpName).toBe('C');
       expect(note._octave).toBe(0);
       expect(note.toString).toBe('C0');
     });
@@ -187,7 +187,7 @@ describe('Note', () => {
       const bPitchClass = PitchClass.fromCircleOfFifths(5); // B
       const note = new Note(bPitchClass, 8);
 
-      expect(note._pitchClass.sharpName).toBe('B');
+      expect(note.pitchClass.sharpName).toBe('B');
       expect(note._octave).toBe(8);
       expect(note.toString).toBe('B8');
     });
@@ -199,7 +199,7 @@ describe('Note', () => {
       circleIndexes.forEach((index, i) => {
         const pitchClass = PitchClass.fromCircleOfFifths(index);
         const note = new Note(pitchClass, 4);
-        expect(note._pitchClass.sharpName).toBe(expectedNames[i]);
+        expect(note.pitchClass.sharpName).toBe(expectedNames[i]);
         expect(note._octave).toBe(4);
         expect(note.toString).toBe(`${expectedNames[i]}4`);
       });
@@ -211,7 +211,7 @@ describe('Note', () => {
       const cPitchClass = PitchClass.fromCircleOfFifths(0); // C
       const middleC = new Note(cPitchClass, 4);
 
-      expect(middleC._pitchClass.sharpName).toBe('C');
+      expect(middleC.pitchClass.sharpName).toBe('C');
       expect(middleC._octave).toBe(4);
       expect(middleC.toString).toBe('C4');
     });
@@ -223,8 +223,8 @@ describe('Note', () => {
       const c5 = new Note(cPitchClass, 5);
 
       // 同じ音名だが異なるオクターブ
-      expect(c3._pitchClass.sharpName).toBe(c4._pitchClass.sharpName);
-      expect(c4._pitchClass.sharpName).toBe(c5._pitchClass.sharpName);
+      expect(c3.pitchClass.sharpName).toBe(c4.pitchClass.sharpName);
+      expect(c4.pitchClass.sharpName).toBe(c5.pitchClass.sharpName);
 
       // オクターブの数値関係
       expect(c4._octave - c3._octave).toBe(1);
@@ -238,7 +238,7 @@ describe('Note', () => {
       sharpIndexes.forEach((index, i) => {
         const pitchClass = PitchClass.fromCircleOfFifths(index);
         const note = new Note(pitchClass, 4);
-        expect(note._pitchClass.sharpName).toBe(sharpNames[i]);
+        expect(note.pitchClass.sharpName).toBe(sharpNames[i]);
         expect(note.toString).toContain('#');
         expect(note.toString).toBe(`${sharpNames[i]}4`);
       });
@@ -251,7 +251,7 @@ describe('Note', () => {
       naturalIndexes.forEach((index, i) => {
         const pitchClass = PitchClass.fromCircleOfFifths(index);
         const note = new Note(pitchClass, 4);
-        expect(note._pitchClass.sharpName).toBe(naturalNames[i]);
+        expect(note.pitchClass.sharpName).toBe(naturalNames[i]);
         expect(note.toString).not.toContain('#');
         expect(note.toString).toBe(`${naturalNames[i]}4`);
       });
@@ -265,12 +265,12 @@ describe('Note', () => {
 
       // C4 + 長3度 = E4
       const e4 = c4.transposeBy(Interval.MajorThird);
-      expect(e4._pitchClass.sharpName).toBe('E');
+      expect(e4.pitchClass.sharpName).toBe('E');
       expect(e4._octave).toBe(4);
 
       // C4 + 完全5度 = G4
       const g4 = c4.transposeBy(Interval.PerfectFifth);
-      expect(g4._pitchClass.sharpName).toBe('G');
+      expect(g4.pitchClass.sharpName).toBe('G');
       expect(g4._octave).toBe(4);
     });
 
@@ -280,7 +280,7 @@ describe('Note', () => {
 
       // F#3 + 短7度 = E4
       const e4 = fSharp3.transposeBy(Interval.MinorSeventh);
-      expect(e4._pitchClass.sharpName).toBe('E');
+      expect(e4.pitchClass.sharpName).toBe('E');
       expect(e4._octave).toBe(4);
     });
   });

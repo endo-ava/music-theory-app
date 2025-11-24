@@ -197,7 +197,7 @@ export class Key extends AbstractMusicalContext {
     const scaleNotes = parentMajorKey.scale.getNotes();
 
     // 対応するディグリーの音をRoot音として抽出
-    const newRoot = scaleNotes[relativeModeIndex]._pitchClass;
+    const newRoot = scaleNotes[relativeModeIndex].pitchClass;
 
     // Ionian（Major）またはAeolian（Minor）の場合はKeyインスタンスを生成
     if (modePattern === ScalePattern.Major) {

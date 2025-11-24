@@ -159,7 +159,7 @@ export class ChordAnalyzer {
    * 2音間のボイスリーディングコストを計算する
    */
   private getVoiceLeadingCost(n1: Note, n2: Note): number {
-    const diff = Math.abs(n1._pitchClass.index - n2._pitchClass.index);
+    const diff = Math.abs(n1.pitchClass.index - n2.pitchClass.index);
     const dist = Math.min(diff, 12 - diff);
 
     if (dist === 0) return 0; // 共通音

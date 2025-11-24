@@ -7,10 +7,24 @@ import { PitchClass } from './PitchClass';
  */
 export class Note {
   constructor(
-    public readonly _pitchClass: PitchClass,
+    private readonly _pitchClass: PitchClass,
     public readonly _octave: number = 4
   ) {
     Object.freeze(this);
+  }
+
+  /**
+   * このNoteのピッチクラス（オクターブを除いた音名）を取得する
+   */
+  get pitchClass(): PitchClass {
+    return this._pitchClass;
+  }
+
+  /**
+   * このNoteのオクターブを取得する
+   */
+  get octave(): number {
+    return this._octave;
   }
 
   /**
@@ -19,14 +33,14 @@ export class Note {
    * @returns 適切な表記での音名
    */
   getNameFor(keySignature: KeySignature): string {
-    return this._pitchClass.getNameFor(keySignature);
+    return this.pitchClass.getNameFor(keySignature);
   }
 
   /**
    * Tone.jsで使用する文字列表現（例: "C4", "F#3"）
    */
   get toString(): string {
-    return `${this._pitchClass}${this._octave}`;
+    return `${this.pitchClass}${this._octave}`;
   }
 
   /**
@@ -34,7 +48,7 @@ export class Note {
    * C0 = 0, C#0 = 1, ..., C4 = 48, C5 = 60, ...
    */
   get absolutePitch(): number {
-    return this._octave * 12 + this._pitchClass.index;
+    return this._octave * 12 + this.pitchClass.index;
   }
 
   /**
@@ -42,7 +56,7 @@ export class Note {
    * @param interval 移調するインターバル
    */
   transposeBy(interval: Interval): Note {
-    const totalSemitones = this._pitchClass.index + this._octave * 12 + interval.semitones;
+    const totalSemitones = this.pitchClass.index + this._octave * 12 + interval.semitones;
 
     const newOctave = Math.floor(totalSemitones / 12);
     const newChromaticIndex = totalSemitones % 12;
@@ -65,7 +79,7 @@ export class Note {
   equals(other: Note): boolean {
     if (!(other instanceof Note)) return false;
 
-    return this._pitchClass.index === other._pitchClass.index && this._octave === other._octave;
+    return this.pitchClass.index === other.pitchClass.index && this._octave === other._octave;
   }
 
   /**

@@ -18,49 +18,49 @@ const mockDiatonicChordInfo = [
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.C, // C
+        pitchClass: PitchClass.C, // C
       },
     },
   },
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.D, // D
+        pitchClass: PitchClass.D, // D
       },
     },
   },
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.E, // E
+        pitchClass: PitchClass.E, // E
       },
     },
   },
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.F, // F
+        pitchClass: PitchClass.F, // F
       },
     },
   },
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.G, // G
+        pitchClass: PitchClass.G, // G
       },
     },
   },
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.A, // A
+        pitchClass: PitchClass.A, // A
       },
     },
   },
   {
     chord: {
       rootNote: {
-        _pitchClass: PitchClass.B, // B
+        pitchClass: PitchClass.B, // B
       },
     },
   },

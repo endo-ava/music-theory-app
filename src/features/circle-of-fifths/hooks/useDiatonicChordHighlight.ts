@@ -42,7 +42,7 @@ export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
     const diatonicChordInfo = currentKey.getDiatonicChordsInfo();
 
     diatonicChordInfo.forEach(info => {
-      const chordRootFifthsIndex = info.chord.rootNote._pitchClass.fifthsIndex;
+      const chordRootFifthsIndex = info.chord.rootNote.pitchClass.fifthsIndex;
       const chordIsMajor = info.chord.quality.quality === 'major';
 
       // 型安全な複合キー生成

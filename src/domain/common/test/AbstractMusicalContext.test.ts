@@ -512,7 +512,7 @@ describe('AbstractMusicalContext', () => {
           it('正常ケース: 異なるクオリティの同じルート音和音をfalseと分析', () => {
             // 同じルート音だが異なるクオリティの和音（例：メジャーキーのI度をマイナー化）
             const firstDiatonicChord = context.diatonicChords[0];
-            const rootPitch = firstDiatonicChord.rootNote._pitchClass;
+            const rootPitch = firstDiatonicChord.rootNote.pitchClass;
             const rootNote = new Note(rootPitch, 4);
 
             // 元のクオリティと逆のクオリティで和音を作成

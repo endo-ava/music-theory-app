@@ -16,7 +16,7 @@ describe('useCurrentKeyData', () => {
       const { result } = renderHook(() => useCurrentKeyData());
 
       expect(result.current.scaleNotes.length).toBeGreaterThanOrEqual(7);
-      expect(result.current.scaleNotes[0]._pitchClass.sharpName).toBe('C');
+      expect(result.current.scaleNotes[0].pitchClass.sharpName).toBe('C');
     });
 
     test('ダイアトニックコードが7つ取得できる', () => {
@@ -65,8 +65,8 @@ describe('useCurrentKeyData', () => {
 
       const { result } = renderHook(() => useCurrentKeyData());
 
-      expect(result.current.scaleNotes[0]._pitchClass.sharpName).toBe('G');
-      expect(result.current.scaleNotes[6]._pitchClass.sharpName).toBe('F#');
+      expect(result.current.scaleNotes[0].pitchClass.sharpName).toBe('G');
+      expect(result.current.scaleNotes[6].pitchClass.sharpName).toBe('F#');
     });
 
     test('Aマイナーキーで正しいスケール音を返す', () => {
@@ -75,7 +75,7 @@ describe('useCurrentKeyData', () => {
 
       const { result } = renderHook(() => useCurrentKeyData());
 
-      expect(result.current.scaleNotes[0]._pitchClass.sharpName).toBe('A');
+      expect(result.current.scaleNotes[0].pitchClass.sharpName).toBe('A');
       expect((result.current.currentKey as Key).isMajor).toBe(false);
     });
 
@@ -119,7 +119,7 @@ describe('useCurrentKeyData', () => {
       rerender();
 
       expect(result.current.scaleNotes).not.toBe(firstScaleNotes);
-      expect(result.current.scaleNotes[0]._pitchClass.sharpName).toBe('G');
+      expect(result.current.scaleNotes[0].pitchClass.sharpName).toBe('G');
     });
   });
 });
