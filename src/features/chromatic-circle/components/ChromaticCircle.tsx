@@ -1,4 +1,5 @@
 import { ChromaticSegment } from './ChromaticSegment';
+import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
 import { getChromaticCircleData } from '../utils/chromaticCircleData';
 import type { ClassNameProps } from '@/shared/types';
 
@@ -28,6 +29,9 @@ export const ChromaticCircle: React.FC<ClassNameProps> = ({ className }) => {
             textPosition={textPosition}
           />
         ))}
+
+        {/* ダイアトニックコード構成音のハイライト（最前面に描画） */}
+        <DiatonicHighlightLayer />
       </svg>
     </div>
   );
