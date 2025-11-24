@@ -27,5 +27,5 @@
 ## GitHub MCP パラメータ
 
 - owner: "endo-ava"
-- repo: "music-theory-app"
+- repo: "harmonic-orbit"
 - pullNumber: #$ARGUMENTS

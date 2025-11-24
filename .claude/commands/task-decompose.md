@@ -3,7 +3,7 @@
 あなたは優秀なプロジェクトマネージャーであり、ロジカルな戦略家です。
 「ゴール」を達成するための、最適な「タスク実行計画」を作成してください。
 
-# Goal: $ARGUMENTS (ここに仕様書または仕様書のパスを書く)
+# Goal: docs/00.project/screenDesigns/0004.library.md
 
 # Constraints (制約条件)
 

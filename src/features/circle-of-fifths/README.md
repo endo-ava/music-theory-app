@@ -3,7 +3,7 @@
 > **作成日**: 2024-12-01
 > **更新日**: 2025-01-20
 > **バージョン**: 2.0.0
-> **作成者**: Music Theory App Team
+> **作成者**: Harmonic Orbit Team
 
 [<< 画面設計書に戻る](../../../docs/00.project/screenDesigns/0003.hub.md)
 

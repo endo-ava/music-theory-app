@@ -1,6 +1,6 @@
-# Music Theory App
+# Harmonic Orbit
 
-[![Vercel](https://img.shields.io/badge/Vercel-deployed-black?logo=vercel)](https://music-theory-app-phi.vercel.app/)
+[![Vercel](https://img.shields.io/badge/Vercel-deployed-black?logo=vercel)](https://harmonic-orbit.vercel.app/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8+-blue.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black.svg)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0-61dafb.svg)](https://react.dev/)
@@ -12,7 +12,7 @@
 
 ## 概要 (Overview)
 
-Music Theory Appは、音楽理論の複雑な構造を直感的に理解するための可視化プラットフォームです。従来の教科書的なアプローチではなく、インタラクティブな視覚表現と音響フィードバックを通じて、理論概念の「つながり」と「構造」を体験的に学習できます。
+Harmonic Orbitは、音楽理論の複雑な構造を直感的に理解するための可視化プラットフォームです。従来の教科書的なアプローチではなく、インタラクティブな視覚表現と音響フィードバックを通じて、理論概念の「つながり」と「構造」を体験的に学習できます。
 
 五度圏やクロマチックサークルといった伝統的な可視化手法を基盤としながら、レイヤーシステムによる複数の理論概念の重ね合わせ表示により、調性・スケール・コード進行の関係性を多層的に探求できます。
 
@@ -88,7 +88,7 @@ Music Theory Appは、音楽理論の複雑な構造を直感的に理解する�
 ## プロジェクト構成 (Project Structure)
 
 ```
-music-theory-app/
+harmonic-orbit/
 ├── src/
 │   ├── app/                      # Next.js App Router: ページとルーティング
 │   ├── components/               # 共通UIコンポーネント
@@ -156,4 +156,4 @@ music-theory-app/
 
 ## リンク (Links)
 
-- https://music-theory-app-phi.vercel.app/
+- https://harmonic-orbit.vercel.app/

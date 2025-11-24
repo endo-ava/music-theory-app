@@ -354,8 +354,8 @@ export const Canvas: React.FC<ClassNameProps> = (props) => {
 
 ## 参考資料
 
-- [Issue #34](https://github.com/endo-ava/music-theory-app/issues/34)
-- [PR #35](https://github.com/endo-ava/music-theory-app/pull/35)
+- [Issue #34](https://github.com/endo-ava/harmonic-orbit/issues/34)
+- [PR #35](https://github.com/endo-ava/harmonic-orbit/pull/35)
 - [Canvas コンポーネント設計書](../../src/features/canvas/README.md)
 - [開発規約](../../03.developmentAgreement.md)
 - [アーキテクチャ知見](../architecture/component-design.md)

@@ -10,5 +10,5 @@ PR #$ARGUMENTS のレビューコメントのうち、GitHub MCPを用いて未�
 ### GitHub MCP パラメータ
 
 - owner: "endo-ava"
-- repo: "music-theory-app"
+- repo: "harmonic-orbit"
 - pullNumber: #$ARGUMENTS

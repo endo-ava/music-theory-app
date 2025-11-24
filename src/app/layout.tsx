@@ -4,8 +4,8 @@ import { GlobalHeader } from '@/components/layouts/GlobalHeader';
 import { generateMusicColorTheme } from '@/shared/utils/musicColorSystem';
 
 export const metadata: Metadata = {
-  title: '音楽理論学習アプリ',
-  description: '音楽理論学習アプリ',
+  title: 'Harmonic Orbit',
+  description: 'Harmonic Orbit',
 };
 
 export default function RootLayout({

@@ -230,7 +230,7 @@ className = 'h-[250px] w-[250px] sm:h-[350px] sm:w-[350px] lg:h-[750px] lg:w-[75
 
 ## 📚 参考資料
 
-- [Issue #38: CircleOfFifthsコンポーネントのレスポンシブ対応強化](https://github.com/endo-ava/music-theory-app/issues/38)
+- [Issue #38: CircleOfFifthsコンポーネントのレスポンシブ対応強化](https://github.com/endo-ava/harmonic-orbit/issues/38)
 - [現在のCircleOfFifthsコンポーネント実装](../../../src/features/circle-of-fifths/components/CircleOfFifths.tsx)
 - [コンポーネント設計書](../architecture/component-design.md)
 

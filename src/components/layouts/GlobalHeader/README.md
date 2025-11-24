@@ -341,7 +341,7 @@ WCAG 2.1 AAレベルの準拠を目指した設計。
 describe('GlobalHeader', () => {
   it('正常にレンダリングされること', () => {
     render(<GlobalHeader />);
-    expect(screen.getByText('Music Theory App')).toBeInTheDocument();
+    expect(screen.getByText('Harmonic Orbit')).toBeInTheDocument();
   });
 
   it('アクティブリンクが正しく表示されること', () => {
