@@ -338,12 +338,12 @@ describe('Chord', () => {
 
       // メジャートライアド: ルート + 長3度 + 完全5度
       const majorChord = Chord.major(rootNote);
-      const majorNotes = majorChord.constituentNotes.map(n => n._pitchClass.sharpName);
+      const majorNotes = majorChord.constituentNotes.map(n => n.pitchClass.sharpName);
       expect(majorNotes).toEqual(['C', 'E', 'G']);
 
       // マイナートライアド: ルート + 短3度 + 完全5度
       const minorChord = Chord.minor(rootNote);
-      const minorNotes = minorChord.constituentNotes.map(n => n._pitchClass.sharpName);
+      const minorNotes = minorChord.constituentNotes.map(n => n.pitchClass.sharpName);
       expect(minorNotes).toEqual(['C', 'D#', 'G']);
     });
 
@@ -353,17 +353,17 @@ describe('Chord', () => {
 
       // メジャー7th: トライアド + 長7度
       const maj7Chord = Chord.from(rootNote, ChordPattern.MajorSeventh);
-      const maj7Notes = maj7Chord.constituentNotes.map(n => n._pitchClass.sharpName);
+      const maj7Notes = maj7Chord.constituentNotes.map(n => n.pitchClass.sharpName);
       expect(maj7Notes).toEqual(['C', 'E', 'G', 'B']);
 
       // マイナー7th: マイナートライアド + 短7度
       const min7Chord = Chord.from(rootNote, ChordPattern.MinorSeventh);
-      const min7Notes = min7Chord.constituentNotes.map(n => n._pitchClass.sharpName);
+      const min7Notes = min7Chord.constituentNotes.map(n => n.pitchClass.sharpName);
       expect(min7Notes).toEqual(['C', 'D#', 'G', 'A#']);
 
       // ドミナント7th: メジャートライアド + 短7度
       const dom7Chord = Chord.dominantSeventh(rootNote);
-      const dom7Notes = dom7Chord.constituentNotes.map(n => n._pitchClass.sharpName);
+      const dom7Notes = dom7Chord.constituentNotes.map(n => n.pitchClass.sharpName);
       expect(dom7Notes).toEqual(['C', 'E', 'G', 'A#']);
     });
 

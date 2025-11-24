@@ -46,7 +46,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
+        expect(note.pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
 
@@ -60,7 +60,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
+        expect(note.pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
 
@@ -74,7 +74,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
+        expect(note.pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
   });
@@ -97,7 +97,7 @@ describe('Scale', () => {
 
       expectedNotes.forEach(({ degree, name }) => {
         const note = scale.getNoteForDegree(degree);
-        expect(note?._pitchClass.sharpName).toBe(name);
+        expect(note?.pitchClass.sharpName).toBe(name);
       });
     });
 
@@ -107,7 +107,7 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
 
       const note = scale.getNoteForDegree(1);
-      expect(note?._pitchClass.sharpName).toBe('C');
+      expect(note?.pitchClass.sharpName).toBe('C');
     });
 
     it('境界値ケース: 最後の度数（7度）', () => {
@@ -116,7 +116,7 @@ describe('Scale', () => {
       const scale = new Scale(root, pattern);
 
       const note = scale.getNoteForDegree(7);
-      expect(note?._pitchClass.sharpName).toBe('B');
+      expect(note?.pitchClass.sharpName).toBe('B');
     });
 
     it('異常ケース: 無効な度数（0）でundefinedを返す', () => {
@@ -155,7 +155,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       expect(notes[0]._octave).toBe(2);
-      expect(notes[0]._pitchClass.sharpName).toBe('C');
+      expect(notes[0].pitchClass.sharpName).toBe('C');
     });
 
     it('正常ケース: 高いオクターブでのスケール', () => {
@@ -165,7 +165,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       expect(notes[0]._octave).toBe(6);
-      expect(notes[0]._pitchClass.sharpName).toBe('C');
+      expect(notes[0].pitchClass.sharpName).toBe('C');
     });
 
     it('正常ケース: オクターブを跨ぐスケール', () => {
@@ -175,7 +175,7 @@ describe('Scale', () => {
       const notes = scale.getNotes();
 
       // B, C#, D#, E, F#, G#, A#
-      expect(notes[0]._pitchClass.sharpName).toBe('B');
+      expect(notes[0].pitchClass.sharpName).toBe('B');
       expect(notes[0]._octave).toBe(4);
 
       // 上位の音は次のオクターブに進む
@@ -195,7 +195,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
+        expect(note.pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
 
@@ -209,7 +209,7 @@ describe('Scale', () => {
       expect(notes.length).toBe(8);
 
       notes.forEach((note, index) => {
-        expect(note._pitchClass.sharpName).toBe(expectedNames[index]);
+        expect(note.pitchClass.sharpName).toBe(expectedNames[index]);
       });
     });
   });
@@ -227,7 +227,7 @@ describe('Scale', () => {
         const prev = notes[i - 1];
         const curr = notes[i];
         const semitones =
-          curr._pitchClass.index + curr._octave * 12 - (prev._pitchClass.index + prev._octave * 12);
+          curr.pitchClass.index + curr._octave * 12 - (prev.pitchClass.index + prev._octave * 12);
         intervals.push(semitones);
       }
 
@@ -247,7 +247,7 @@ describe('Scale', () => {
         const prev = notes[i - 1];
         const curr = notes[i];
         const semitones =
-          curr._pitchClass.index + curr._octave * 12 - (prev._pitchClass.index + prev._octave * 12);
+          curr.pitchClass.index + curr._octave * 12 - (prev.pitchClass.index + prev._octave * 12);
         intervals.push(semitones);
       }
 

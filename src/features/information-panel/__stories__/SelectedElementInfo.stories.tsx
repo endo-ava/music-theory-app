@@ -12,7 +12,7 @@ import { ChordPattern } from '@/domain/common/ChordPattern';
 
 // ストーリー用ヘルパー関数：C Majorキー内でのコードの正しい位置を計算
 const createKeyDTOForChordInCMajor = (chord: Chord): KeyDTO => {
-  const rootPitchClass = chord.rootNote._pitchClass;
+  const rootPitchClass = chord.rootNote.pitchClass;
   const chordQuality = chord.quality;
 
   // C Majorスケール内の各度数に対応する五度圏位置のマッピング

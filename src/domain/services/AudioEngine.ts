@@ -104,7 +104,7 @@ export class AudioEngine {
     }
     // Chordインスタンス場合
     if (source instanceof Chord) {
-      const rootPitchClass = source.rootNote._pitchClass;
+      const rootPitchClass = source.rootNote.pitchClass;
       const optimalOctave = this.getOptimalOctave(rootPitchClass);
       return Chord.from(new Note(rootPitchClass, optimalOctave), source.quality).getNotes();
     }

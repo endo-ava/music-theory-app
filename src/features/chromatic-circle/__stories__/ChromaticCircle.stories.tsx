@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { within, expect, userEvent } from '@storybook/test';
 import { ChromaticCircle } from '../components/ChromaticCircle';
+import { useLayerStore } from '@/stores/layerStore';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
+import { Key } from '@/domain';
+import { PitchClass } from '@/domain/common';
 
 const meta: Meta<typeof ChromaticCircle> = {
   title: 'Components/ChromaticCircle',
@@ -265,5 +269,199 @@ export const PitchClassDisplay: Story = {
     // すべてのセグメントが適切に表示されていることを確認
     const pathElements = circleContainer.querySelectorAll('path');
     expect(pathElements.length).toBeGreaterThanOrEqual(24); // 12セグメント × 2層
+  },
+};
+
+/**
+ * ダイアトニックコードハイライト表示テスト
+ * DiatonicHighlightLayerが正しく表示されることを確認
+ */
+export const DiatonicHighlightDisplay: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'DiatonicHighlightLayerが正しく表示されることを確認します。ダイアトニックコードハイライトが有効な場合、ダイアトニックコードのルート音がハイライト表示されます。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      // ダイアトニックコードハイライトを有効化
+      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      // Cメジャーキーを設定
+      useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.C) });
+      return <Story />;
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 初期レンダリング完了を待つ
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
+    expect(circleContainer).toBeInTheDocument();
+
+    // ハイライトパス要素が存在することを確認 (g.diatonic-highlight-layer内)
+    const highlightLayers = circleContainer.querySelectorAll('.diatonic-highlight-layer');
+    expect(highlightLayers.length).toBeGreaterThanOrEqual(1);
+
+    // ハイライトパスが存在することを確認
+    const highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
+    expect(highlightPaths.length).toBeGreaterThanOrEqual(7); // Cメジャーの7つのダイアトニックコード
+
+    // 内側の円周ハイライトも存在することを確認
+    const innerCircleHighlights = circleContainer.querySelectorAll(
+      '.diatonic-highlight-layer circle'
+    );
+    expect(innerCircleHighlights.length).toBeGreaterThanOrEqual(1);
+  },
+};
+
+/**
+ * ダイアトニックコードハイライト非表示テスト
+ * DiatonicHighlightLayerが非表示になることを確認
+ */
+export const DiatonicHighlightHidden: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'DiatonicHighlightLayerが非表示になることを確認します。ダイアトニックコードハイライトが無効な場合、ハイライトは表示されません。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      // ダイアトニックコードハイライトを無効化
+      useLayerStore.setState({ isDiatonicChordsVisible: false });
+      return <Story />;
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 初期レンダリング完了を待つ
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
+    expect(circleContainer).toBeInTheDocument();
+
+    // ハイライトパス要素が存在しないことを確認
+    const highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
+    expect(highlightPaths.length).toBe(0);
+
+    // 内側の円周ハイライトも存在しないことを確認
+    const innerCircleHighlights = circleContainer.querySelectorAll(
+      '.diatonic-highlight-layer circle'
+    );
+    expect(innerCircleHighlights.length).toBe(0);
+  },
+};
+
+/**
+ * トニック強調表示テスト
+ * トニック（現在のキーの中心音）が強調表示されることを確認
+ */
+export const TonicEmphasis: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'トニック（現在のキーの中心音）が強調表示されることを確認します。トニック位置のハイライトは太線とシャドウで強調されます。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      // ダイアトニックコードハイライトを有効化
+      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      // Gメジャーキーを設定（トニックはG）
+      useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.G) });
+      return <Story />;
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 初期レンダリング完了を待つ
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
+    expect(circleContainer).toBeInTheDocument();
+
+    // ハイライトパス要素が存在することを確認
+    const highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
+    expect(highlightPaths.length).toBeGreaterThanOrEqual(7); // Gメジャーの7つのダイアトニックコード
+
+    // トニック位置（G、index=7）のハイライトを特定（太線になっているか確認）
+    // ストローク幅が1.2pxのパスがトニック（太線）、0.8pxが通常のダイアトニック音
+    const thickPaths = Array.from(highlightPaths).filter(
+      path => path.getAttribute('stroke-width') === '1.2px' || path.getAttribute('filter') !== null // トニックはシャドウ効果がある
+    );
+
+    expect(thickPaths.length).toBeGreaterThanOrEqual(1); // トニックが強調表示されている
+  },
+};
+
+/**
+ * ダイアトニックコードハイライト切り替えテスト
+ * ハイライト表示の切り替え機能を確認
+ */
+export const DiatonicHighlightToggle: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'ダイアトニックコードハイライト表示の切り替え機能を確認します。ストアの状態変更に応じてハイライトが表示/非表示に切り替わることを検証します。',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 初期レンダリング完了を待つ
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
+    expect(circleContainer).toBeInTheDocument();
+
+    // 初期状態：ハイライトが表示されているか確認（デフォルト値による）
+    let highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
+    const initialHighlightCount = highlightPaths.length;
+
+    // ダイアトニックコードハイライトを無効化
+    useLayerStore.setState({ isDiatonicChordsVisible: false });
+
+    // 再レンダリング待ち
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    // ハイライトが消えていることを確認
+    highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
+    expect(highlightPaths.length).toBeLessThan(initialHighlightCount);
+    expect(highlightPaths.length).toBe(0);
+
+    // 再度有効化
+    useLayerStore.setState({ isDiatonicChordsVisible: true });
+
+    // 再レンダリング待ち
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    // ハイライトが再表示されることを確認
+    highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
+    expect(highlightPaths.length).toBeGreaterThanOrEqual(7); // Cメジャーの7つのダイアトニックコード
   },
 };

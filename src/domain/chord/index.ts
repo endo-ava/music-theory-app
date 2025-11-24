@@ -28,14 +28,14 @@ export class Chord {
 
   /** 与えられたKey文脈におけるChord Nameを取得する */
   public getNameFor(key: IMusicalContext): string {
-    return `${this.rootNote._pitchClass.getNameFor(key.keySignature)}${this.quality.nameSuffix}`;
+    return `${this.rootNote.pitchClass.getNameFor(key.keySignature)}${this.quality.nameSuffix}`;
   }
 
   /** 五度圏表示用のコード名 メジャーは♭、マイナーは♯ */
   public getNameForCircleOfFifth(): string {
     return this.quality.nameSuffix === ''
-      ? `${this.rootNote._pitchClass.flatName}${this.quality.nameSuffix}`
-      : `${this.rootNote._pitchClass.sharpName}${this.quality.nameSuffix}`;
+      ? `${this.rootNote.pitchClass.flatName}${this.quality.nameSuffix}`
+      : `${this.rootNote.pitchClass.sharpName}${this.quality.nameSuffix}`;
   }
 
   /**
@@ -81,7 +81,7 @@ export class Chord {
    * // 結果: [P5, M7, M2, P4]
    */
   getIntervalsFromKey(keyRoot: PitchClass): Interval[] {
-    return this.constituentNotes.map(note => Interval.between(keyRoot, note._pitchClass));
+    return this.constituentNotes.map(note => Interval.between(keyRoot, note.pitchClass));
   }
 
   /**
@@ -118,7 +118,7 @@ export class Chord {
     }
 
     // null/undefinedを除外
-    const validNotes = constituentNotes.filter(note => note && note._pitchClass);
+    const validNotes = constituentNotes.filter(note => note && note.pitchClass);
     if (validNotes.length === 0) {
       throw new Error('有効な構成音が見つかりません');
     }
@@ -130,7 +130,7 @@ export class Chord {
     // ルート音以外の音を使って、ルートからのインターバル配列を生成
     const intervals = sortedNotes
       .slice(1) // ルート音自身は除く
-      .map(note => Interval.between(rootNote._pitchClass, note._pitchClass));
+      .map(note => Interval.between(rootNote.pitchClass, note.pitchClass));
 
     // 既知のコード品質と一致するかチェック
     const quality = ChordPattern.findByIntervals(intervals);
@@ -154,7 +154,7 @@ export class Chord {
 
     // ルート音とコード品質が同じかチェック
     return (
-      this.rootNote._pitchClass.equals(other.rootNote._pitchClass) && this.quality === other.quality
+      this.rootNote.pitchClass.equals(other.rootNote.pitchClass) && this.quality === other.quality
     );
   }
 }
