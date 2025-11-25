@@ -13,6 +13,7 @@ import { RemoveScroll } from 'react-remove-scroll';
 interface MobileBottomSheetProps extends ClassNameProps {
   activeSnapPoint: number | string | null;
   setActiveSnapPoint: (point: number | string | null) => void;
+  children?: React.ReactNode;
 }
 
 /**
@@ -37,6 +38,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
   className,
   activeSnapPoint,
   setActiveSnapPoint,
+  children,
 }) => {
   return (
     <VaulDrawer.Root
@@ -96,7 +98,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
             as="div"
             className="flex-1 overflow-y-auto p-6"
           >
-            <ControllerPanel />
+            {children || <ControllerPanel />}
           </RemoveScroll>
         </VaulDrawer.Content>
       </VaulDrawer.Portal>

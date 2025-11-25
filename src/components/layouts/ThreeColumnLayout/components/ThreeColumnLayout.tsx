@@ -23,6 +23,7 @@ export const ThreeColumnLayout: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <ResizableLayoutProvider
       className={className}
+      storageId="hub-layout"
       leftPanel={<ControllerPanel className="h-full" />}
       centerPanel={<Canvas className="h-full min-w-0" />}
       rightPanel={<InformationPanel className="h-full" />}
