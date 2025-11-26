@@ -47,7 +47,7 @@ export const LibraryLayout: React.FC = () => {
           {isDetailPanelOpen && (
             <>
               <ResizeHandle id="canvas-detail-divider" />
-              <Panel defaultSize={25} minSize={20} className="min-w-[200px]">
+              <Panel defaultSize={20} minSize={10} className="min-w-[200px]">
                 <LibraryDetailPanel className="h-full" />
               </Panel>
             </>

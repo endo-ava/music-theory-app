@@ -20,6 +20,8 @@ export interface LibraryNode {
   // Atlas上の論理座標 (後で計算・調整可能)
   x?: number;
   y?: number;
+  // 親ノードID (階層構造用)
+  parentId?: string;
   // ドメイン固有データ (Domainオブジェクトへの参照やシリアライズデータ)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
