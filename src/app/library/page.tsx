@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { LibraryLayout } from '@/features/library/components/LibraryLayout';
+import { LibraryLayout } from '@/features/library';
 
 export const metadata: Metadata = {
   title: 'Library | Harmonic Orbit',
