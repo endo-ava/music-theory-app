@@ -270,6 +270,14 @@ export const generateLibraryDataset = (): LibraryDataset => {
       target: minorKeyId,
       type: 'structure',
     });
+
+    // Link Minor Key to Pitch (Cross-hierarchy edge)
+    edges.push({
+      id: `edge-${minorKeyId}-tonic`,
+      source: minorKeyId,
+      target: `pitch-${pc.index}`,
+      type: 'constituent',
+    });
   });
 
   return { nodes, edges };
