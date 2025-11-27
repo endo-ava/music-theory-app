@@ -18,13 +18,18 @@ interface UseAtlasFlowProps {
 export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
   // 展開されているノードのIDセット
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set(['root-theory']));
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // React Flow State
   const [nodes, setNodes] = useNodesState<Node>([]);
   const [edges, setEdges] = useEdgesState<Edge>([]);
 
-  // ノードの展開/折りたたみ切り替え
-  const toggleNode = useCallback((nodeId: string) => {
+  // ノードクリック時のハンドラ（選択 ＋ 展開トグル）
+  const handleNodeClick = useCallback((nodeId: string) => {
+    // 選択状態の更新
+    setSelectedNodeId(nodeId);
+
+    // 展開状態のトグル
     setExpandedNodeIds(prev => {
       const next = new Set(prev);
       if (next.has(nodeId)) {
@@ -47,7 +52,8 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
       // ルートノードは常に表示
       if (node.id === 'root-theory') {
         visibleNodeIds.add(node.id);
-        visibleNodes.push(mapLibraryNodeToFlow(node, true)); // Root is always expanded effectively
+        const isSelected = node.id === selectedNodeId;
+        visibleNodes.push(mapLibraryNodeToFlow(node, true, isSelected)); // Root is always expanded effectively
         return;
       }
 
@@ -55,7 +61,8 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
       if (node.parentId && expandedNodeIds.has(node.parentId)) {
         visibleNodeIds.add(node.id);
         const isExpanded = expandedNodeIds.has(node.id);
-        visibleNodes.push(mapLibraryNodeToFlow(node, isExpanded));
+        const isSelected = node.id === selectedNodeId;
+        visibleNodes.push(mapLibraryNodeToFlow(node, isExpanded, isSelected));
       }
     });
 
@@ -76,7 +83,7 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
 
     setNodes(visibleNodes);
     setEdges(visibleEdges);
-  }, [dataset, expandedNodeIds, setNodes, setEdges]);
+  }, [dataset, expandedNodeIds, selectedNodeId, setNodes, setEdges]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -93,17 +100,23 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
     edges,
     onNodesChange,
     onEdgesChange,
-    toggleNode,
+    handleNodeClick,
     expandedNodeIds,
+    selectedNodeId,
   };
 };
 
 // Helper: LibraryNode -> React Flow Node conversion
-const mapLibraryNodeToFlow = (node: LibraryNode, isExpanded: boolean): Node => {
+const mapLibraryNodeToFlow = (
+  node: LibraryNode,
+  isExpanded: boolean,
+  isSelected: boolean
+): Node => {
   return {
     id: node.id,
     type: 'atlasNode', // Custom node type
     position: { x: node.x || 0, y: node.y || 0 },
+    selected: isSelected,
     data: {
       label: node.label,
       type: node.type,

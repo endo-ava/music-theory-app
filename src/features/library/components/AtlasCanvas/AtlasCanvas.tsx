@@ -20,7 +20,7 @@ export const AtlasCanvas: React.FC<ClassNameProps> = ({ className }) => {
   const dataset = useMemo(() => generateLibraryDataset(), []);
 
   // Use Custom Hook for Logic
-  const { nodes, edges, onNodesChange, onEdgesChange, toggleNode } = useAtlasFlow({ dataset });
+  const { nodes, edges, onNodesChange, onEdgesChange, handleNodeClick } = useAtlasFlow({ dataset });
 
   return (
     <div className={cn('bg-background relative h-full w-full', className)}>
@@ -30,7 +30,7 @@ export const AtlasCanvas: React.FC<ClassNameProps> = ({ className }) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
-        onNodeClick={(_, node) => toggleNode(node.id)}
+        onNodeClick={(_, node) => handleNodeClick(node.id)}
         fitView
         minZoom={0.1}
         maxZoom={4}

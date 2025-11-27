@@ -30,28 +30,14 @@ export const LibraryLayout: React.FC = () => {
           <Panel minSize={30} className="relative min-w-[300px]">
             <div className="border-border h-full w-full overflow-hidden rounded-lg border">
               <AtlasCanvas className="h-full" />
-
-              {/* Temporary Toggle Button for Detail Panel */}
-              <div className="absolute top-4 right-4 z-10">
-                <button
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded px-3 py-1 text-sm"
-                  onClick={() => setIsDetailPanelOpen(!isDetailPanelOpen)}
-                >
-                  {isDetailPanelOpen ? 'Close Details' : 'Open Details'}
-                </button>
-              </div>
             </div>
           </Panel>
 
           {/* Right: Detail Panel (Conditional) */}
-          {isDetailPanelOpen && (
-            <>
-              <ResizeHandle id="canvas-detail-divider" />
-              <Panel defaultSize={20} minSize={10} className="min-w-[200px]">
-                <LibraryDetailPanel className="h-full" />
-              </Panel>
-            </>
-          )}
+          <ResizeHandle id="canvas-detail-divider" />
+          <Panel defaultSize={20} minSize={10} className="min-w-[200px]">
+            <LibraryDetailPanel className="h-full" />
+          </Panel>
         </PanelGroup>
       </div>
 
