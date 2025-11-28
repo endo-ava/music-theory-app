@@ -24,7 +24,7 @@ Harmonic Orbitは、音楽理論の複雑な構造を直感的に理解するた
 
 ## 主要機能 (Features)
 
-### Hub画面（実装途中）
+### Circle画面（実装途中）
 
 #### ビジュアライゼーション
 
@@ -51,13 +51,13 @@ Harmonic Orbitは、音楽理論の複雑な構造を直感的に理解するた
 - **Tone.js統合**: 基本和音の音声再生
 - **リアルタイム再生**: 選択したコードを即座に聴覚確認
 
-### Library画面（仮実装）
+### Atlas画面（仮実装）
 
 - 音楽理論用語辞書（将来実装予定）
 
-### Tutorial画面（仮実装）
+### About画面
 
-- 物語形式の学習コンテンツ（将来実装予定）
+- 設計思想と世界観（Philosophy）
 
 ## 技術スタック (Technology Stack)
 
@@ -101,6 +101,7 @@ harmonic-orbit/
 │   │   ├── layer-controller/     # レイヤー制御機能
 │   │   ├── information-panel/    # 情報パネル
 │   │   └── view-controller/      # ビュー切り替え機能
+│   │   ├── atlas/                # Atlas機能 (旧 Library)
 │   ├── domain/                   # ドメイン層: 音楽理論ロジック
 │   │   ├── common/               # 値オブジェクト (PitchClass, Note, Interval等)
 │   │   ├── scale/                # Scale集約

@@ -9,10 +9,10 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
 } from '@xyflow/react';
-import { LibraryDataset, LibraryNode } from '../../../types';
+import { AtlasDataset, AtlasNodeData } from '../../../types';
 
 interface UseAtlasFlowProps {
-  dataset: LibraryDataset;
+  dataset: AtlasDataset;
 }
 
 export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
@@ -53,7 +53,7 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
       if (node.id === 'root-theory') {
         visibleNodeIds.add(node.id);
         const isSelected = node.id === selectedNodeId;
-        visibleNodes.push(mapLibraryNodeToFlow(node, true, isSelected)); // Root is always expanded effectively
+        visibleNodes.push(mapAtlasNodeToFlow(node, true, isSelected)); // Root is always expanded effectively
         return;
       }
 
@@ -62,7 +62,7 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
         visibleNodeIds.add(node.id);
         const isExpanded = expandedNodeIds.has(node.id);
         const isSelected = node.id === selectedNodeId;
-        visibleNodes.push(mapLibraryNodeToFlow(node, isExpanded, isSelected));
+        visibleNodes.push(mapAtlasNodeToFlow(node, isExpanded, isSelected));
       }
     });
 
@@ -106,9 +106,9 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
   };
 };
 
-// Helper: LibraryNode -> React Flow Node conversion
-const mapLibraryNodeToFlow = (
-  node: LibraryNode,
+// Helper: AtlasNodeData -> React Flow Node conversion
+const mapAtlasNodeToFlow = (
+  node: AtlasNodeData,
   isExpanded: boolean,
   isSelected: boolean
 ): Node => {

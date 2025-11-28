@@ -1,6 +1,6 @@
 import { PitchClass, ScalePattern, ChordPattern } from '@/domain/common';
 import { Key } from '@/domain/key';
-import { LibraryDataset, LibraryNode, LibraryEdge } from '../types';
+import { AtlasDataset, AtlasNodeData, AtlasEdge } from '../types';
 
 // Coordinate Constants (Must match domainConfig.ts)
 const WORLD_SIZE = 5000;
@@ -33,11 +33,11 @@ const getCircleOfFifthsAngle = (index: number) => {
 };
 
 /**
- * Library用のモックデータセットを生成する
+ * Atlas用のモックデータセットを生成する
  */
-export const generateLibraryDataset = (): LibraryDataset => {
-  const nodes: LibraryNode[] = [];
-  const edges: LibraryEdge[] = [];
+export const generateAtlasDataset = (): AtlasDataset => {
+  const nodes: AtlasNodeData[] = [];
+  const edges: AtlasEdge[] = [];
 
   // ==========================================
   // 0. Root & Concept Nodes

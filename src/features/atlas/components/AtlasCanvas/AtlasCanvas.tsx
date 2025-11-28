@@ -6,7 +6,7 @@ import '@xyflow/react/dist/style.css';
 
 import { ClassNameProps } from '@/shared/types';
 import { cn } from '@/lib/utils';
-import { generateLibraryDataset } from '../../data/mockData';
+import { generateAtlasDataset } from '../../data/mockData';
 import { useAtlasFlow } from './hooks/useAtlasFlow';
 import { AtlasNode } from './components/AtlasNode';
 
@@ -17,7 +17,7 @@ const nodeTypes: NodeTypes = {
 
 export const AtlasCanvas: React.FC<ClassNameProps> = ({ className }) => {
   // Generate Data (Memoized)
-  const dataset = useMemo(() => generateLibraryDataset(), []);
+  const dataset = useMemo(() => generateAtlasDataset(), []);
 
   // Use Custom Hook for Logic
   const { nodes, edges, onNodesChange, onEdgesChange, handleNodeClick } = useAtlasFlow({ dataset });

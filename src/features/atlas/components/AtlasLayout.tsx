@@ -4,24 +4,23 @@ import React from 'react';
 import { Panel, PanelGroup } from 'react-resizable-panels';
 import { ResizeHandle } from '@/components/layouts/ThreeColumnLayout/components/ResizeHandle';
 import { MobileBottomSheet, SNAP_POINTS } from '@/components/layouts/MobileBottomSheet';
-import { LibrarySidebar } from './LibrarySidebar/LibrarySidebar';
+import { AtlasSidebar } from './AtlasSidebar/AtlasSidebar';
 import { AtlasCanvas } from './AtlasCanvas/AtlasCanvas';
-import { LibraryDetailPanel } from './LibraryDetailPanel/LibraryDetailPanel';
+import { AtlasDetailPanel } from './AtlasDetailPanel/AtlasDetailPanel';
 
-export const LibraryLayout: React.FC = () => {
+export const AtlasLayout: React.FC = () => {
   const [activeSnapPoint, setActiveSnapPoint] = React.useState<number | string | null>(
     SNAP_POINTS.LOWEST
   );
-  const [isDetailPanelOpen, setIsDetailPanelOpen] = React.useState(false);
 
   return (
     <div className="h-[calc(100dvh-4rem)] w-full p-6">
       {/* PC Layout (md and up) */}
       <div className="hidden h-full md:block">
-        <PanelGroup direction="horizontal" autoSaveId="library-layout" className="h-full">
+        <PanelGroup direction="horizontal" autoSaveId="atlas-layout" className="h-full">
           {/* Left: Sidebar */}
           <Panel defaultSize={20} minSize={15} className="min-w-[200px]">
-            <LibrarySidebar className="h-full" />
+            <AtlasSidebar className="h-full" />
           </Panel>
 
           <ResizeHandle id="sidebar-canvas-divider" />
@@ -36,7 +35,7 @@ export const LibraryLayout: React.FC = () => {
           {/* Right: Detail Panel (Conditional) */}
           <ResizeHandle id="canvas-detail-divider" />
           <Panel defaultSize={20} minSize={10} className="min-w-[200px]">
-            <LibraryDetailPanel className="h-full" />
+            <AtlasDetailPanel className="h-full" />
           </Panel>
         </PanelGroup>
       </div>
@@ -71,7 +70,7 @@ export const LibraryLayout: React.FC = () => {
             activeSnapPoint={activeSnapPoint}
             setActiveSnapPoint={setActiveSnapPoint}
           >
-            <LibraryDetailPanel className="h-full border-0" />
+            <AtlasDetailPanel className="h-full border-0" />
           </MobileBottomSheet>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { ClassNameProps } from '@/shared/types';
 import { cn } from '@/lib/utils';
 
-export const LibraryDetailPanel: React.FC<ClassNameProps> = ({ className }) => {
+export const AtlasDetailPanel: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <aside
       className={cn(

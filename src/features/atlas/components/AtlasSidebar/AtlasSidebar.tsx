@@ -2,7 +2,7 @@ import React from 'react';
 import { ClassNameProps } from '@/shared/types';
 import { cn } from '@/lib/utils';
 
-export const LibrarySidebar: React.FC<ClassNameProps> = ({ className }) => {
+export const AtlasSidebar: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <aside
       className={cn(

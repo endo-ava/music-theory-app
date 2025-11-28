@@ -5,17 +5,17 @@
  * - instance: 具体インスタンス (C Major Scale, Cmaj7)
  * - context: 文脈付き概念 (Key, Function)
  */
-export type LibraryNodeType = 'foundation' | 'pattern' | 'instance' | 'context';
+export type AtlasNodeType = 'foundation' | 'pattern' | 'instance' | 'context';
 
 /**
  * 具体的なデータの種類
  */
-export type LibraryDataType = 'pitch' | 'interval' | 'scale' | 'chord' | 'key' | 'function';
+export type AtlasDataType = 'pitch' | 'interval' | 'scale' | 'chord' | 'key' | 'function';
 
-export interface LibraryNode {
+export interface AtlasNodeData {
   id: string;
-  type: LibraryNodeType;
-  dataType: LibraryDataType;
+  type: AtlasNodeType;
+  dataType: AtlasDataType;
   label: string;
   // Atlas上の論理座標 (後で計算・調整可能)
   x?: number;
@@ -29,7 +29,7 @@ export interface LibraryNode {
   tags: string[];
 }
 
-export type LibraryEdgeType =
+export type AtlasEdgeType =
   | 'constituent' // 構成要素 (Scale -> Note)
   | 'structure' // 構造 (ScaleInstance -> ScalePattern)
   | 'diatonic' // ダイアトニック (Key -> Chord)
@@ -38,15 +38,15 @@ export type LibraryEdgeType =
   | 'dominant' // ドミナント関係
   | 'subdominant'; // サブドミナント関係
 
-export interface LibraryEdge {
+export interface AtlasEdge {
   id: string;
   source: string;
   target: string;
-  type: LibraryEdgeType;
+  type: AtlasEdgeType;
   weight?: number;
 }
 
-export interface LibraryDataset {
-  nodes: LibraryNode[];
-  edges: LibraryEdge[];
+export interface AtlasDataset {
+  nodes: AtlasNodeData[];
+  edges: AtlasEdge[];
 }

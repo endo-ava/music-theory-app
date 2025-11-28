@@ -1,20 +1,20 @@
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps, Node } from '@xyflow/react';
 import { cn } from '@/lib/utils';
-import { LibraryNodeType, LibraryDataType } from '../../../types';
+import { AtlasNodeType, AtlasDataType } from '../../../types';
 
 // Node Data Interface
-interface AtlasNodeData extends Record<string, unknown> {
+interface AtlasNodeReactFlowData extends Record<string, unknown> {
   label: string;
-  type: LibraryNodeType;
-  dataType: LibraryDataType;
+  type: AtlasNodeType;
+  dataType: AtlasDataType;
   isExpanded: boolean;
 }
 
 // Custom Node Type
-type AtlasNodeType = Node<AtlasNodeData, 'atlasNode'>;
+type AtlasNodeComponentType = Node<AtlasNodeReactFlowData, 'atlasNode'>;
 
-const getNodeColor = (type: LibraryNodeType, dataType: LibraryDataType) => {
+const getNodeColor = (type: AtlasNodeType, dataType: AtlasDataType) => {
   switch (type) {
     case 'foundation':
       if (dataType === 'function')
@@ -33,7 +33,7 @@ const getNodeColor = (type: LibraryNodeType, dataType: LibraryDataType) => {
   }
 };
 
-const getNodeSize = (type: LibraryNodeType, dataType: LibraryDataType) => {
+const getNodeSize = (type: AtlasNodeType, dataType: AtlasDataType) => {
   if (dataType === 'function') return 'w-16 h-16 text-sm'; // Concept/Root
   switch (type) {
     case 'foundation':
@@ -49,7 +49,7 @@ const getNodeSize = (type: LibraryNodeType, dataType: LibraryDataType) => {
   }
 };
 
-export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeType>) => {
+export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentType>) => {
   const { label, type, dataType, isExpanded } = data;
   const colorClass = getNodeColor(type, dataType);
   const sizeClass = getNodeSize(type, dataType);
