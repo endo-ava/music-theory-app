@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { LAYOUT_OFFSETS } from '../constants';
+import { useLayerStore } from '@/stores/layerStore';
 import { useDiatonicChordHighlight } from './useDiatonicChordHighlight';
+import { useFunctionalHarmonyData } from './useFunctionalHarmonyData';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 import type { Point } from '@/shared/types/graphics';
 import type { IMusicalContext, KeyDTO } from '@/domain';
@@ -10,6 +12,7 @@ import type { IMusicalContext, KeyDTO } from '@/domain';
  *
  * 以下の表示関連機能を統合:
  * - ダイアトニックハイライト判定
+ * - 機能和声表示判定
  * - レイアウト計算（テキスト位置調整）
  * - 色計算（リップル色等）
  *
@@ -45,6 +48,8 @@ export interface KeyAreaPresentationInfo {
     readonly primaryTextY: number;
     /** ローマ数字テキストのY座標 */
     readonly romanTextY: number;
+    /** ローマ数字テキストのX座標（デュアルレイヤー対応） */
+    readonly romanNumeralX: number;
   };
 }
 
@@ -72,20 +77,40 @@ export const useKeyAreaPresentation = ({
   // ダイアトニックハイライト情報を取得
   const { getHighlightInfo } = useDiatonicChordHighlight(currentKey);
 
+  // 機能和声データを取得
+  const functionalHarmonyData = useFunctionalHarmonyData(currentKey);
+
+  // レイヤー表示状態を取得
+  const { isDiatonicVisible, isFunctionalHarmonyVisible } = useLayerStore();
+
   return useMemo(() => {
     // ダイアトニックハイライト判定
     const { shouldHighlight, romanNumeral } = getHighlightInfo(keyDTO);
 
+    // 機能和声表示判定（このkeyDTOが機能和声表示対象か）
+    const hasFunctionalHarmony = functionalHarmonyData.some(
+      data => data.fifthsIndex === keyDTO.fifthsIndex && data.isMajor === keyDTO.isMajor
+    );
+
     // 色計算（音楽色相システム）
     const keyAreaColor = getMusicColorVariable(keyDTO);
 
-    // レイアウト計算（ローマ数字表示時の位置調整）
+    // デュアルレイヤー判定（両方のレイヤーが表示されているか）
+    const bothLayersVisible = isDiatonicVisible && isFunctionalHarmonyVisible;
+
+    // レイアウト計算（ローマ数字または機能和声表示時の位置調整）
+    // ダイアトニックレイヤーまたは機能和声レイヤーが表示される場合、キー名を上に移動
+    const shouldOffsetText = (shouldHighlight && romanNumeral) || hasFunctionalHarmony;
+
     const layout = {
-      primaryTextY:
-        shouldHighlight && romanNumeral
-          ? textPosition.y + LAYOUT_OFFSETS.PRIMARY_Y_OFFSET
-          : textPosition.y,
+      primaryTextY: shouldOffsetText
+        ? textPosition.y + LAYOUT_OFFSETS.PRIMARY_Y_OFFSET
+        : textPosition.y,
       romanTextY: textPosition.y + LAYOUT_OFFSETS.ROMAN_Y_OFFSET,
+      // 両方のレイヤーがONの場合、ローマ数字を左にオフセット
+      romanNumeralX: bothLayersVisible
+        ? textPosition.x - LAYOUT_OFFSETS.DUAL_LAYER_X_OFFSET
+        : textPosition.x,
     };
 
     return {
@@ -102,5 +127,8 @@ export const useKeyAreaPresentation = ({
     textPosition.y,
     getHighlightInfo,
     currentKey?.shortName,
+    functionalHarmonyData,
+    isDiatonicVisible,
+    isFunctionalHarmonyVisible,
   ]);
 };

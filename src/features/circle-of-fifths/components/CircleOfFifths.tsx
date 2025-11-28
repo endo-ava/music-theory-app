@@ -1,5 +1,6 @@
 import { CircleSegment } from './CircleSegment';
 import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
+import { FunctionalHarmonyLayer } from './FunctionalHarmonyLayer';
 import { RippleLayer } from './RippleLayer';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 import { ClassNameProps } from '@/shared/types';
@@ -40,6 +41,9 @@ export const CircleOfFifths: React.FC<ClassNameProps> = ({ className }) => {
 
         {/* ダイアトニックハイライトレイヤー（最前面に描画） */}
         <DiatonicHighlightLayer />
+
+        {/* 機能和声レイヤー（新規：T/D/SD文字表示） */}
+        <FunctionalHarmonyLayer />
 
         {/* リップルレイヤー（さらに最前面に描画） */}
         <RippleLayer />

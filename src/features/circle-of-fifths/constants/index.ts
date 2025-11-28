@@ -80,4 +80,6 @@ export const ANIMATION = {
 export const LAYOUT_OFFSETS = {
   ROMAN_Y_OFFSET: 6,
   PRIMARY_Y_OFFSET: -6,
+  /** ダイアトニックと機能和声が両方表示される時のX方向オフセット */
+  DUAL_LAYER_X_OFFSET: 10,
 } as const;

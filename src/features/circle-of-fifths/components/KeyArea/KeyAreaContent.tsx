@@ -86,7 +86,7 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
       {shouldHighlight && romanNumeral && (
         <motion.text
           className="fill-foreground text-key-layer font-semibold"
-          x={textPosition.x}
+          x={layout.romanNumeralX}
           y={layout.romanTextY}
           textAnchor="middle"
           dominantBaseline="middle"
