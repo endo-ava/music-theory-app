@@ -290,8 +290,8 @@ export const DiatonicHighlightDisplay: Story = {
   },
   decorators: [
     Story => {
-      // ダイアトニックコードハイライトを有効化
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      // ダイアトニックレイヤーを有効化
+      useLayerStore.setState({ isDiatonicVisible: true });
       // Cメジャーキーを設定
       useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.C) });
       return <Story />;
@@ -341,7 +341,7 @@ export const DiatonicHighlightHidden: Story = {
   decorators: [
     Story => {
       // ダイアトニックコードハイライトを無効化
-      useLayerStore.setState({ isDiatonicChordsVisible: false });
+      useLayerStore.setState({ isDiatonicVisible: false });
       return <Story />;
     },
   ],
@@ -385,7 +385,7 @@ export const TonicEmphasis: Story = {
   decorators: [
     Story => {
       // ダイアトニックコードハイライトを有効化
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
       // Gメジャーキーを設定（トニックはG）
       useCurrentKeyStore.setState({ currentKey: Key.major(PitchClass.G) });
       return <Story />;
@@ -444,7 +444,7 @@ export const DiatonicHighlightToggle: Story = {
     const initialHighlightCount = highlightPaths.length;
 
     // ダイアトニックコードハイライトを無効化
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
+    useLayerStore.setState({ isDiatonicVisible: false });
 
     // 再レンダリング待ち
     await new Promise(resolve => setTimeout(resolve, 200));
@@ -455,7 +455,7 @@ export const DiatonicHighlightToggle: Story = {
     expect(highlightPaths.length).toBe(0);
 
     // 再度有効化
-    useLayerStore.setState({ isDiatonicChordsVisible: true });
+    useLayerStore.setState({ isDiatonicVisible: true });
 
     // 再レンダリング待ち
     await new Promise(resolve => setTimeout(resolve, 200));

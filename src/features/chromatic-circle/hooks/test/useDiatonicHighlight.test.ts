@@ -90,7 +90,7 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
     it('正常ケース: ダイアトニックコード可視状態で7つの位置がハイライトされる', async () => {
       // モックの設定
       mockedUseLayerStore.mockReturnValue({
-        isDiatonicChordsVisible: true,
+        isDiatonicVisible: true,
       });
 
       // フックをレンダリング
@@ -112,7 +112,7 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
     it('正常ケース: ダイアトニックコード非可視状態でハイライト位置が空になる', async () => {
       // モックの設定
       mockedUseLayerStore.mockReturnValue({
-        isDiatonicChordsVisible: false,
+        isDiatonicVisible: false,
       });
 
       // フックをレンダリング
@@ -134,7 +134,7 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
     it('正常ケース: currentKeyのgetDiatonicChordsInfoが呼び出される', async () => {
       // モックの設定
       mockedUseLayerStore.mockReturnValue({
-        isDiatonicChordsVisible: true,
+        isDiatonicVisible: true,
       });
 
       const getDiatonicChordsInfoSpy = vi.spyOn(mockCurrentKey, 'getDiatonicChordsInfo');
@@ -153,7 +153,7 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
     it('正常ケース: トニック位置がcurrentKeyのcenterPitch.indexと一致する', async () => {
       // モックの設定
       mockedUseLayerStore.mockReturnValue({
-        isDiatonicChordsVisible: true,
+        isDiatonicVisible: true,
       });
 
       const mockKeyWithGAsTonic = {
@@ -175,7 +175,7 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
     it('正常ケース: ダイアトニックコード非可視状態でトニック位置がnullになる', async () => {
       // モックの設定
       mockedUseLayerStore.mockReturnValue({
-        isDiatonicChordsVisible: false,
+        isDiatonicVisible: false,
       });
 
       // フックをレンダリング
@@ -191,11 +191,11 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
   });
 
   describe('[依存関係の変更] リアクティブな更新', () => {
-    it('境界値ケース: isDiatonicChordsVisibleが切り替わった時に結果が更新される', async () => {
+    it('境界値ケース: isDiatonicVisibleが切り替わった時に結果が更新される', async () => {
       // 初期値を非表示に設定
-      let isDiatonicChordsVisible = false;
+      let isDiatonicVisible = false;
       mockedUseLayerStore.mockImplementation(() => ({
-        isDiatonicChordsVisible,
+        isDiatonicVisible,
       }));
 
       const { result, rerender } = renderHook(() => useDiatonicHighlight(mockCurrentKey));
@@ -207,7 +207,7 @@ describe('[useDiatonicHighlight] ダイアトニックハイライトフック',
       expect(result.current.highlightPositions.size).toBe(0);
 
       // 表示に切り替え
-      isDiatonicChordsVisible = true;
+      isDiatonicVisible = true;
       rerender();
 
       // 更新後: 表示

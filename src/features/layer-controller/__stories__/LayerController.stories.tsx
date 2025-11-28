@@ -207,17 +207,17 @@ export const DiatonicToggleTest: Story = {
 
     // 初期状態の確認（表示）
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
     // スイッチをオフにする
     await userEvent.click(diatonicSwitch);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
 
     // スイッチをオンにする
     await userEvent.click(diatonicSwitch);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
   },
 };
 
@@ -237,7 +237,7 @@ export const InitialOnStateTest: Story = {
   decorators: [
     Story => {
       // テスト開始時にストア状態を設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
       return (
         <div className="flex min-h-[400px] items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8">
           <div className="w-80">
@@ -257,16 +257,16 @@ export const InitialOnStateTest: Story = {
 
     // 初期状態がオンであることを確認
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
     // ストア操作によるUI更新を確認
-    useLayerStore.getState().toggleDiatonicChords();
+    useLayerStore.getState().toggleDiatonic();
 
     // UI更新を待つ
     await new Promise(resolve => setTimeout(resolve, 100));
 
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
   },
 };
 
@@ -287,7 +287,7 @@ export const AccessibilityTest: Story = {
     const canvas = within(canvasElement);
 
     // 初期状態をリセット
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
+    useLayerStore.setState({ isDiatonicVisible: false });
 
     // 初期レンダリング待ち
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -307,10 +307,10 @@ export const AccessibilityTest: Story = {
     expect(label).toHaveAttribute('for', 'diatonic-chords');
 
     // 基本的なインタラクション確認（クリックによるスイッチ操作）
-    const initialState = useLayerStore.getState().isDiatonicChordsVisible;
+    const initialState = useLayerStore.getState().isDiatonicVisible;
     await userEvent.click(diatonicSwitch);
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(!initialState);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(!initialState);
   },
 };
 
@@ -333,26 +333,26 @@ export const StoreIntegrationTest: Story = {
     const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
 
     // 初期状態の確認(新しい初期状態はtrue)
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
 
     // 1. UI操作による状態変更(true -> false)
     await userEvent.click(diatonicSwitch);
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
 
     // 2. 外部ストア操作による状態変更(false -> true)
-    useLayerStore.getState().toggleDiatonicChords();
+    useLayerStore.getState().toggleDiatonic();
     await new Promise(resolve => setTimeout(resolve, 10)); // re-render待ち
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
 
     // 3. 複数回の切り替えテスト(開始時はtrue)
     for (let i = 0; i < 3; i++) {
       await userEvent.click(diatonicSwitch);
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
       await userEvent.click(diatonicSwitch);
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     }
 
     // 最終状態の確認

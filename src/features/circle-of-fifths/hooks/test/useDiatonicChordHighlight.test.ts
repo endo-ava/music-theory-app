@@ -20,13 +20,13 @@ const createKeyDTO = (
 describe('useDiatonicChordHighlight hook', () => {
   beforeEach(() => {
     // 各テスト前にストアをリセット
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
+    useLayerStore.setState({ isDiatonicVisible: false });
   });
 
   describe('getHighlightInfo function', () => {
     test('正常ケース: ダイアトニックコード非表示時、常にfalseを返す', () => {
       // ダイアトニックコード非表示に設定
-      useLayerStore.setState({ isDiatonicChordsVisible: false });
+      useLayerStore.setState({ isDiatonicVisible: false });
 
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
@@ -42,7 +42,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
     test('正常ケース: ダイアトニックコード表示時、該当コードでtrueを返す', () => {
       // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
 
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
@@ -66,7 +66,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
     test('正常ケース: ダイアトニックコード表示時、非該当コードでfalseを返す', () => {
       // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
 
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
@@ -83,7 +83,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
     test('境界値ケース: 異なるキーでのダイアトニックコード判定', () => {
       // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
 
       // G majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.G);
@@ -118,7 +118,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       // ダイアトニックコード表示に変更
       act(() => {
-        useLayerStore.setState({ isDiatonicChordsVisible: true });
+        useLayerStore.setState({ isDiatonicVisible: true });
       });
 
       // フックを再レンダリングして状態変更を反映
@@ -129,7 +129,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       // 再度非表示に変更
       act(() => {
-        useLayerStore.setState({ isDiatonicChordsVisible: false });
+        useLayerStore.setState({ isDiatonicVisible: false });
       });
 
       // フックを再レンダリングして状態変更を反映
@@ -141,7 +141,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
     test('キー変更テスト: 異なるキー引数での動作確認', () => {
       // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
 
       const testKeyDTO = createKeyDTO(PitchClass.C.fifthsIndex, true); // C major
 
@@ -163,7 +163,7 @@ describe('useDiatonicChordHighlight hook', () => {
     });
 
     test('メモ化テスト: 同じ引数で複数回呼び出した際の一貫性', () => {
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
 
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
@@ -185,7 +185,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
   describe('createCompositeKey utility function', () => {
     test('正常ケース: 異なる引数で異なるキーを生成', () => {
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
 
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);

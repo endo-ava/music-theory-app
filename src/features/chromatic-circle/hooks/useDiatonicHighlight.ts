@@ -13,13 +13,13 @@ import { IMusicalContext } from '@/domain';
  * @returns ハイライト対象のピッチクラス位置（0-11）のSet
  */
 export const useDiatonicHighlight = (currentKey: IMusicalContext) => {
-  const { isDiatonicChordsVisible } = useLayerStore();
+  const { isDiatonicVisible } = useLayerStore();
 
   // ダイアトニックコードのルート音を半音インデックスのSetに変換
   const highlightPositions = useMemo(() => {
     const positions = new Set<number>();
 
-    if (!isDiatonicChordsVisible) {
+    if (!isDiatonicVisible) {
       return positions;
     }
 
@@ -34,19 +34,19 @@ export const useDiatonicHighlight = (currentKey: IMusicalContext) => {
     });
 
     return positions;
-  }, [currentKey, isDiatonicChordsVisible]);
+  }, [currentKey, isDiatonicVisible]);
 
   // トニック（CurrentKeyの中心音）の位置
   const tonicPosition = useMemo(() => {
-    if (!isDiatonicChordsVisible) {
+    if (!isDiatonicVisible) {
       return null;
     }
     return currentKey.centerPitch.index;
-  }, [currentKey, isDiatonicChordsVisible]);
+  }, [currentKey, isDiatonicVisible]);
 
   return {
     highlightPositions,
     tonicPosition,
-    isVisible: isDiatonicChordsVisible,
+    isVisible: isDiatonicVisible,
   };
 };

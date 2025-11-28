@@ -25,7 +25,7 @@ const createCompositeKey = (fifthsIndex: number, isMajor: boolean): CompositeKey
  * 指定されたキーがダイアトニックコードとしてハイライト表示されるべきかを判定する。
  */
 export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
-  const { isDiatonicChordsVisible } = useLayerStore();
+  const { isDiatonicVisible } = useLayerStore();
 
   // ダイアトニックコード情報を一括計算してMapで管理
   const diatonicChordMap = useMemo(() => {
@@ -34,7 +34,7 @@ export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
       { romanNumeral: string; shouldHighlight: boolean; isTonic: boolean }
     >();
 
-    if (!isDiatonicChordsVisible) {
+    if (!isDiatonicVisible) {
       return chordMap;
     }
 
@@ -58,7 +58,7 @@ export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
     });
 
     return chordMap;
-  }, [currentKey, isDiatonicChordsVisible]);
+  }, [currentKey, isDiatonicVisible]);
 
   // KeyAreaが呼び出すための関数を提供
   const getHighlightInfo = useCallback(

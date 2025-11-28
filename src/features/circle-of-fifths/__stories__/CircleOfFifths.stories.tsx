@@ -177,7 +177,7 @@ export const DiatonicHighlightDisplay: Story = {
   decorators: [
     Story => {
       // ダイアトニックコード表示に設定し、C majorキーに設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
       useCurrentKeyStore.setState({
         currentKey: Key.major(PitchClass.C), // C major
       });
@@ -230,7 +230,7 @@ export const DiatonicHighlightToggle: Story = {
   decorators: [
     Story => {
       // 初期はダイアトニックコード非表示
-      useLayerStore.setState({ isDiatonicChordsVisible: false });
+      useLayerStore.setState({ isDiatonicVisible: false });
       useCurrentKeyStore.setState({
         currentKey: Key.major(PitchClass.C), // C major
       });
@@ -256,7 +256,7 @@ export const DiatonicHighlightToggle: Story = {
     expect(romanText).not.toBeInTheDocument();
 
     // ダイアトニックコード表示をオンに変更
-    useLayerStore.getState().toggleDiatonicChords();
+    useLayerStore.getState().toggleDiatonic();
     await new Promise(resolve => setTimeout(resolve, 200));
 
     // ローマ数字が表示されることを確認
@@ -264,7 +264,7 @@ export const DiatonicHighlightToggle: Story = {
     expect(romanText).toBeInTheDocument();
 
     // 再度オフに変更
-    useLayerStore.getState().toggleDiatonicChords();
+    useLayerStore.getState().toggleDiatonic();
     await new Promise(resolve => setTimeout(resolve, 200));
 
     // ローマ数字が非表示になることを確認
@@ -291,7 +291,7 @@ export const DiatonicRomanNumerals: Story = {
   decorators: [
     Story => {
       // ダイアトニックコード表示に設定し、C majorキーに設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
       useCurrentKeyStore.setState({
         currentKey: Key.major(PitchClass.C), // C major
       });
@@ -354,7 +354,7 @@ export const KeyAreaInteractiveTest: Story = {
   },
   decorators: [
     Story => {
-      useLayerStore.setState({ isDiatonicChordsVisible: false });
+      useLayerStore.setState({ isDiatonicVisible: false });
       return (
         <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8 text-white">
           <Story />
