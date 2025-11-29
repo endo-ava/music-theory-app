@@ -1,5 +1,6 @@
 import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import { useLayerStore } from '@/stores/layerStore';
 import {
   useKeyAreaPresentation,
   type UseKeyAreaPresentationProps,
@@ -165,6 +166,9 @@ describe('useKeyAreaPresentation hook', () => {
 
   describe('レイアウト計算機能', () => {
     test('正常ケース: レイアウトオフセットの適用', () => {
+      // 度数表示を有効にする
+      useLayerStore.setState({ isDegreeVisible: true });
+
       const testPosition: Point = { x: 120, y: 80 };
 
       // ハイライト表示の場合のテスト

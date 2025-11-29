@@ -5,35 +5,21 @@ describe('layerStore', () => {
   beforeEach(() => {
     // 各テスト前にストアを初期状態にリセット
     useLayerStore.setState({
-      isDiatonicVisible: false,
+      isDiatonicVisible: true,
       isDegreeVisible: false,
       isFunctionalHarmonyVisible: false,
     });
   });
 
   describe('initial state', () => {
-    test('正常ケース: 初期状態でダイアトニックコード非表示', () => {
+    test('正常ケース: 初期状態でダイアトニックコード表示', () => {
       const state = useLayerStore.getState();
-      expect(state.isDiatonicVisible).toBe(false);
+      expect(state.isDiatonicVisible).toBe(true);
     });
   });
 
   describe('toggleDiatonic action', () => {
-    test('正常ケース: falseからtrueに切り替わる', () => {
-      const initialState = useLayerStore.getState();
-      expect(initialState.isDiatonicVisible).toBe(false);
-
-      // toggleDiatonicを実行
-      useLayerStore.getState().toggleDiatonic();
-
-      const newState = useLayerStore.getState();
-      expect(newState.isDiatonicVisible).toBe(true);
-    });
-
     test('正常ケース: trueからfalseに切り替わる', () => {
-      // 初期状態をtrueに設定
-      useLayerStore.setState({ isDiatonicVisible: true });
-
       const initialState = useLayerStore.getState();
       expect(initialState.isDiatonicVisible).toBe(true);
 
@@ -44,27 +30,41 @@ describe('layerStore', () => {
       expect(newState.isDiatonicVisible).toBe(false);
     });
 
+    test('正常ケース: falseからtrueに切り替わる', () => {
+      // 初期状態をfalseに設定
+      useLayerStore.setState({ isDiatonicVisible: false });
+
+      const initialState = useLayerStore.getState();
+      expect(initialState.isDiatonicVisible).toBe(false);
+
+      // toggleDiatonicを実行
+      useLayerStore.getState().toggleDiatonic();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isDiatonicVisible).toBe(true);
+    });
+
     test('正常ケース: 複数回のトグル動作', () => {
       const { toggleDiatonic } = useLayerStore.getState();
 
       // 初期状態の確認
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
+
+      // 1回目: true -> false
+      toggleDiatonic();
       expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
 
-      // 1回目: false -> true
+      // 2回目: false -> true
       toggleDiatonic();
       expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
-      // 2回目: true -> false
+      // 3回目: true -> false
       toggleDiatonic();
       expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
 
-      // 3回目: false -> true
+      // 4回目: false -> true
       toggleDiatonic();
       expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
-
-      // 4回目: true -> false
-      toggleDiatonic();
-      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
     });
 
     test('正常ケース: 関数の参照が安定している', () => {
@@ -242,14 +242,14 @@ describe('layerStore', () => {
 
       // subscriberが1回呼ばれることを確認
       expect(callCount).toBe(1);
-      expect(receivedState!.isDiatonicVisible).toBe(true);
+      expect(receivedState!.isDiatonicVisible).toBe(false);
 
       // もう一度状態を変更
       useLayerStore.getState().toggleDiatonic();
 
       // subscriberが2回目も呼ばれることを確認
       expect(callCount).toBe(2);
-      expect(receivedState!.isDiatonicVisible).toBe(false);
+      expect(receivedState!.isDiatonicVisible).toBe(true);
 
       // subscription解除
       unsubscribe();
@@ -263,25 +263,25 @@ describe('layerStore', () => {
   describe('direct state manipulation', () => {
     test('正常ケース: setStateによる直接的な状態変更', () => {
       // 初期状態の確認
-      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
-
-      // 直接状態を設定
-      useLayerStore.setState({ isDiatonicVisible: true });
       expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
-      // 再度直接状態を設定
+      // 直接状態を設定
       useLayerStore.setState({ isDiatonicVisible: false });
       expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
+
+      // 再度直接状態を設定
+      useLayerStore.setState({ isDiatonicVisible: true });
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     });
 
     test('正常ケース: 部分的な状態更新', () => {
       // 初期状態からアクションは保持されることを確認
       const initialAction = useLayerStore.getState().toggleDiatonic;
 
-      useLayerStore.setState({ isDiatonicVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: false });
 
       const newState = useLayerStore.getState();
-      expect(newState.isDiatonicVisible).toBe(true);
+      expect(newState.isDiatonicVisible).toBe(false);
       expect(newState.toggleDiatonic).toBe(initialAction);
     });
   });

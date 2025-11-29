@@ -2,6 +2,7 @@ import type { PitchClass } from './PitchClass';
 import type { DegreeAnalysisResult, Scale } from '../scale';
 import type { Chord } from '../chord';
 import { KeySignature } from './KeySignature';
+import { Function } from '../key';
 
 /**
  * 音楽的文脈のDTO型
@@ -29,6 +30,8 @@ export type IAnalysisResult = DegreeAnalysisResult & {
   sharpDegreeName: string;
   /** フラット表記の度数名 */
   flatDegreeName: string;
+  /** 和声機能（調性音楽の場合） */
+  function?: Function | null;
 };
 
 /**

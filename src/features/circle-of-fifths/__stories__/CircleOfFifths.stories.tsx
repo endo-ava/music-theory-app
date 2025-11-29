@@ -177,7 +177,7 @@ export const DiatonicHighlightDisplay: Story = {
   decorators: [
     Story => {
       // ダイアトニックコード表示に設定し、C majorキーに設定
-      useLayerStore.setState({ isDiatonicVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true, isDegreeVisible: true });
       useCurrentKeyStore.setState({
         currentKey: Key.major(PitchClass.C), // C major
       });
@@ -294,7 +294,7 @@ export const DiatonicRomanNumerals: Story = {
   decorators: [
     Story => {
       // ダイアトニックコード表示に設定し、C majorキーに設定
-      useLayerStore.setState({ isDiatonicVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true, isDegreeVisible: true });
       useCurrentKeyStore.setState({
         currentKey: Key.major(PitchClass.C), // C major
       });

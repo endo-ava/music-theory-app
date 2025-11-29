@@ -35,7 +35,7 @@ interface LayerActions {
 export const useLayerStore = create<LayerState & LayerActions>(set => ({
   // State
   isDiatonicVisible: true,
-  isDegreeVisible: true,
+  isDegreeVisible: false,
   isFunctionalHarmonyVisible: false,
 
   // Actions

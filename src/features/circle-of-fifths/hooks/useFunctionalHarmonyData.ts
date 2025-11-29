@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useLayerStore } from '@/stores/layerStore';
-import type { IMusicalContext, IAnalysisResultWithFunction, Function } from '@/domain';
+import type { IMusicalContext, Function } from '@/domain';
 import type { Point } from '@/shared/types/graphics';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 
@@ -96,8 +96,7 @@ export const useFunctionalHarmonyData = (
     }
 
     // 現在のキーのダイアトニック和音情報を取得（機能情報を含む）
-    // Key クラスは IAnalysisResultWithFunction[] を返すが、IMusicalContext の型定義上は IAnalysisResult[]
-    const diatonicChordsInfo = currentKey.getDiatonicChordsInfo() as IAnalysisResultWithFunction[];
+    const diatonicChordsInfo = currentKey.getDiatonicChordsInfo();
 
     // 表示データを生成
     const displayData: FunctionalHarmonyDisplayData[] = [];

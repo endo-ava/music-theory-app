@@ -25,11 +25,17 @@ interface DegreeTextProps {
 }
 
 /**
+ * Hydration error対策として座標を丸める
+ * 10桁精度（1e10）: SVG座標系において視覚的影響なく精度の問題を解決
+ */
+const COORDINATE_PRECISION = 1e10;
+
+/**
  * 座標値を丸める（hydrationエラー対策）
  * 浮動小数点の精度問題を回避するため、小数点以下10桁に丸める
  */
 const roundCoordinate = (value: number): number => {
-  return Math.round(value * 1e10) / 1e10;
+  return Math.round(value * COORDINATE_PRECISION) / COORDINATE_PRECISION;
 };
 
 /**

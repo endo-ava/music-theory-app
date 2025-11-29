@@ -241,12 +241,7 @@ export const DegreeToggleTest: Story = {
     // 度数表記スイッチを取得（ラベルの一部で検索）
     const degreeSwitch = canvas.getByRole('switch', { name: /Degree/ });
 
-    // 初期状態の確認（表示）
-    expect(degreeSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDegreeVisible).toBe(true);
-
-    // スイッチをオフにする
-    await userEvent.click(degreeSwitch);
+    // 初期状態：表示（true）
     expect(degreeSwitch).toHaveAttribute('aria-checked', 'false');
     expect(useLayerStore.getState().isDegreeVisible).toBe(false);
 
@@ -254,6 +249,11 @@ export const DegreeToggleTest: Story = {
     await userEvent.click(degreeSwitch);
     expect(degreeSwitch).toHaveAttribute('aria-checked', 'true');
     expect(useLayerStore.getState().isDegreeVisible).toBe(true);
+
+    // スイッチをオフにする
+    await userEvent.click(degreeSwitch);
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(false);
   },
 };
 
