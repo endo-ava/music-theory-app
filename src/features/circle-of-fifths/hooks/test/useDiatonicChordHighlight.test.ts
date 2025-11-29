@@ -1,7 +1,6 @@
-import { describe, test, expect, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { describe, test, expect } from 'vitest';
+import { renderHook } from '@testing-library/react';
 import { useDiatonicChordHighlight } from '../useDiatonicChordHighlight';
-import { useLayerStore } from '@/stores/layerStore';
 import { KeyDTO, Key, PitchClass } from '@/domain';
 
 // テスト用のヘルパー関数：KeyDTOを生成
@@ -18,32 +17,8 @@ const createKeyDTO = (
 });
 
 describe('useDiatonicChordHighlight hook', () => {
-  beforeEach(() => {
-    // 各テスト前にストアをリセット
-    useLayerStore.setState({ isDiatonicVisible: false });
-  });
-
   describe('getHighlightInfo function', () => {
-    test('正常ケース: ダイアトニックコード非表示時、常にfalseを返す', () => {
-      // ダイアトニックコード非表示に設定
-      useLayerStore.setState({ isDiatonicVisible: false });
-
-      // C majorキーを引数として渡す
-      const currentKey = Key.major(PitchClass.C);
-      const { result } = renderHook(() => useDiatonicChordHighlight(currentKey));
-
-      // 任意のKeyDTOでテスト
-      const testKeyDTO = createKeyDTO(PitchClass.C.fifthsIndex, true); // C major
-      const highlightInfo = result.current.getHighlightInfo(testKeyDTO);
-
-      expect(highlightInfo.shouldHighlight).toBe(false);
-      expect(highlightInfo.romanNumeral).toBe(null);
-    });
-
-    test('正常ケース: ダイアトニックコード表示時、該当コードでtrueを返す', () => {
-      // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicVisible: true });
-
+    test('正常ケース: 該当するダイアトニックコードでtrueを返す', () => {
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
       const { result } = renderHook(() => useDiatonicChordHighlight(currentKey));
@@ -64,10 +39,7 @@ describe('useDiatonicChordHighlight hook', () => {
       expect(dMinorResult.romanNumeral).toBe('Ⅱm'); // C major の ii度
     });
 
-    test('正常ケース: ダイアトニックコード表示時、非該当コードでfalseを返す', () => {
-      // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicVisible: true });
-
+    test('正常ケース: 非該当コードでfalseを返す', () => {
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
       const { result } = renderHook(() => useDiatonicChordHighlight(currentKey));
@@ -82,9 +54,6 @@ describe('useDiatonicChordHighlight hook', () => {
     });
 
     test('境界値ケース: 異なるキーでのダイアトニックコード判定', () => {
-      // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicVisible: true });
-
       // G majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.G);
       const { result } = renderHook(() => useDiatonicChordHighlight(currentKey));
@@ -105,44 +74,7 @@ describe('useDiatonicChordHighlight hook', () => {
       expect(cMajorResult.romanNumeral).toBe('Ⅳ'); // G major の IV度
     });
 
-    test('ストア変更テスト: layerStore状態変更時の再計算', () => {
-      // C majorキーを引数として渡す
-      const currentKey = Key.major(PitchClass.C);
-      const { result, rerender } = renderHook(() => useDiatonicChordHighlight(currentKey));
-
-      const testKeyDTO = createKeyDTO(PitchClass.C.fifthsIndex, true);
-
-      // 初期状態（非表示）
-      let highlightInfo = result.current.getHighlightInfo(testKeyDTO);
-      expect(highlightInfo.shouldHighlight).toBe(false);
-
-      // ダイアトニックコード表示に変更
-      act(() => {
-        useLayerStore.setState({ isDiatonicVisible: true });
-      });
-
-      // フックを再レンダリングして状態変更を反映
-      rerender();
-
-      highlightInfo = result.current.getHighlightInfo(testKeyDTO);
-      expect(highlightInfo.shouldHighlight).toBe(true);
-
-      // 再度非表示に変更
-      act(() => {
-        useLayerStore.setState({ isDiatonicVisible: false });
-      });
-
-      // フックを再レンダリングして状態変更を反映
-      rerender();
-
-      highlightInfo = result.current.getHighlightInfo(testKeyDTO);
-      expect(highlightInfo.shouldHighlight).toBe(false);
-    });
-
     test('キー変更テスト: 異なるキー引数での動作確認', () => {
-      // ダイアトニックコード表示に設定
-      useLayerStore.setState({ isDiatonicVisible: true });
-
       const testKeyDTO = createKeyDTO(PitchClass.C.fifthsIndex, true); // C major
 
       // C majorキーでのテスト
@@ -163,8 +95,6 @@ describe('useDiatonicChordHighlight hook', () => {
     });
 
     test('メモ化テスト: 同じ引数で複数回呼び出した際の一貫性', () => {
-      useLayerStore.setState({ isDiatonicVisible: true });
-
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
       const { result } = renderHook(() => useDiatonicChordHighlight(currentKey));
@@ -185,8 +115,6 @@ describe('useDiatonicChordHighlight hook', () => {
 
   describe('createCompositeKey utility function', () => {
     test('正常ケース: 異なる引数で異なるキーを生成', () => {
-      useLayerStore.setState({ isDiatonicVisible: true });
-
       // C majorキーを引数として渡す
       const currentKey = Key.major(PitchClass.C);
       const { result } = renderHook(() => useDiatonicChordHighlight(currentKey));

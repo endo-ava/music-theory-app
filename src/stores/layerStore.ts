@@ -6,8 +6,10 @@ import { create } from 'zustand';
  * レイヤー表示状態の管理
  */
 interface LayerState {
-  /** ダイアトニックレイヤーの表示状態 */
+  /** ダイアトニックレイヤーの表示状態（ボーダーハイライト） */
   isDiatonicVisible: boolean;
+  /** 度数（ローマ数字）表記の表示状態 */
+  isDegreeVisible: boolean;
   /** 機能和声（T/D/SD）色分けの表示状態 */
   isFunctionalHarmonyVisible: boolean;
 }
@@ -18,6 +20,8 @@ interface LayerState {
 interface LayerActions {
   /** ダイアトニックレイヤー表示の切り替え */
   toggleDiatonic: () => void;
+  /** 度数表記の切り替え */
+  toggleDegree: () => void;
   /** 機能和声色分けの切り替え */
   toggleFunctionalHarmony: () => void;
 }
@@ -31,12 +35,17 @@ interface LayerActions {
 export const useLayerStore = create<LayerState & LayerActions>(set => ({
   // State
   isDiatonicVisible: true,
+  isDegreeVisible: true,
   isFunctionalHarmonyVisible: false,
 
   // Actions
   toggleDiatonic: () =>
     set(state => ({
       isDiatonicVisible: !state.isDiatonicVisible,
+    })),
+  toggleDegree: () =>
+    set(state => ({
+      isDegreeVisible: !state.isDegreeVisible,
     })),
   toggleFunctionalHarmony: () =>
     set(state => ({

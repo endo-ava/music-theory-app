@@ -12,26 +12,26 @@ import { ANIMATION, LAYOUT_OFFSETS } from '../constants';
  * T（Tonic）、D（Dominant）、SD（Subdominant）の文字を
  * それぞれ固有の色で表示するレイヤーコンポーネント。
  *
- * ダイアトニックレイヤーとは完全に独立した新規レイヤーで、
+ * 度数レイヤーとは独立したレイヤーで、
  * ローマ数字は表示せず、機能記号のみを表示します。
  *
  * 責務:
  * - useFunctionalHarmonyDataから受け取ったデータを視覚的に描画
- * - ダイアトニックレイヤーとの共存時のレイアウト調整
+ * - 度数レイヤーとの共存時のレイアウト調整
  *
  * データ計算ロジックはuseFunctionalHarmonyDataに集約されています。
  */
 export const FunctionalHarmonyLayer: React.FC = memo(() => {
   const { currentKey } = useCurrentKeyStore();
   const functionalHarmonyData = useFunctionalHarmonyData(currentKey);
-  const { isDiatonicVisible, isFunctionalHarmonyVisible } = useLayerStore();
+  const { isDegreeVisible, isFunctionalHarmonyVisible } = useLayerStore();
 
-  if (functionalHarmonyData.length === 0) {
+  if (!isFunctionalHarmonyVisible || functionalHarmonyData.length === 0) {
     return null;
   }
 
-  // 両方のレイヤーがONの場合、機能記号を右にオフセット
-  const bothLayersVisible = isDiatonicVisible && isFunctionalHarmonyVisible;
+  // 度数レイヤーと機能和声レイヤーの両方がONの場合、機能記号を右にオフセット
+  const bothLayersVisible = isDegreeVisible && isFunctionalHarmonyVisible;
 
   return (
     <g className="functional-harmony-layer" style={{ pointerEvents: 'none' }}>
@@ -40,7 +40,7 @@ export const FunctionalHarmonyLayer: React.FC = memo(() => {
           ({ abbreviation, color, textPosition, isMajor, fifthsIndex }) => {
             const key = `${currentKey.shortName}-${fifthsIndex}-${isMajor ? 'major' : 'minor'}`;
 
-            // 両方のレイヤーがONの場合、機能記号を右にオフセット
+            // 度数レイヤーと機能和声レイヤーの両方がONの場合、機能記号を右にオフセット
             const functionalX = bothLayersVisible
               ? textPosition.x + LAYOUT_OFFSETS.DUAL_LAYER_X_OFFSET
               : textPosition.x;

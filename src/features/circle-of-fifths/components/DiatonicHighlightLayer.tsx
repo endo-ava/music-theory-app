@@ -2,6 +2,7 @@
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
+import { useLayerStore } from '@/stores/layerStore';
 import { useDiatonicChordHighlight } from '../hooks/useDiatonicChordHighlight';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
@@ -47,11 +48,17 @@ HighlightPath.displayName = 'HighlightPath';
  */
 export const DiatonicHighlightLayer: React.FC = memo(() => {
   const { currentKey } = useCurrentKeyStore();
+  const { isDiatonicVisible } = useLayerStore();
   const { getHighlightInfo } = useDiatonicChordHighlight(currentKey);
   const { segments } = getCircleOfFifthsData();
 
   // 現在のキーの色（ハイライト色）
   const currentKeyColor = getMusicColorVariable(currentKey);
+
+  // レイヤーが非表示の場合は何も描画しない
+  if (!isDiatonicVisible) {
+    return null;
+  }
 
   return (
     <g className="diatonic-highlight-layer" style={{ pointerEvents: 'none' }}>

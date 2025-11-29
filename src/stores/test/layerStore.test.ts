@@ -4,7 +4,11 @@ import { useLayerStore } from '../layerStore';
 describe('layerStore', () => {
   beforeEach(() => {
     // 各テスト前にストアを初期状態にリセット
-    useLayerStore.setState({ isDiatonicVisible: false });
+    useLayerStore.setState({
+      isDiatonicVisible: false,
+      isDegreeVisible: false,
+      isFunctionalHarmonyVisible: false,
+    });
   });
 
   describe('initial state', () => {
@@ -66,6 +70,64 @@ describe('layerStore', () => {
     test('正常ケース: 関数の参照が安定している', () => {
       const action1 = useLayerStore.getState().toggleDiatonic;
       const action2 = useLayerStore.getState().toggleDiatonic;
+
+      // 同じ参照であることを確認
+      expect(action1).toBe(action2);
+    });
+  });
+
+  describe('toggleDegree action', () => {
+    test('正常ケース: falseからtrueに切り替わる', () => {
+      const initialState = useLayerStore.getState();
+      expect(initialState.isDegreeVisible).toBe(false);
+
+      // toggleDegreeを実行
+      useLayerStore.getState().toggleDegree();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isDegreeVisible).toBe(true);
+    });
+
+    test('正常ケース: trueからfalseに切り替わる', () => {
+      // 初期状態をtrueに設定
+      useLayerStore.setState({ isDegreeVisible: true });
+
+      const initialState = useLayerStore.getState();
+      expect(initialState.isDegreeVisible).toBe(true);
+
+      // toggleDegreeを実行
+      useLayerStore.getState().toggleDegree();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isDegreeVisible).toBe(false);
+    });
+
+    test('正常ケース: 複数回のトグル動作', () => {
+      const { toggleDegree } = useLayerStore.getState();
+
+      // 初期状態の確認
+      expect(useLayerStore.getState().isDegreeVisible).toBe(false);
+
+      // 1回目: false -> true
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(true);
+
+      // 2回目: true -> false
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(false);
+
+      // 3回目: false -> true
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(true);
+
+      // 4回目: true -> false
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(false);
+    });
+
+    test('正常ケース: 関数の参照が安定している', () => {
+      const action1 = useLayerStore.getState().toggleDegree;
+      const action2 = useLayerStore.getState().toggleDegree;
 
       // 同じ参照であることを確認
       expect(action1).toBe(action2);
@@ -172,7 +234,11 @@ describe('layerStore', () => {
 
       // TypeScriptの型チェックが通ることを確認
       expect(typeof state.isDiatonicVisible).toBe('boolean');
+      expect(typeof state.isDegreeVisible).toBe('boolean');
+      expect(typeof state.isFunctionalHarmonyVisible).toBe('boolean');
       expect(typeof state.toggleDiatonic).toBe('function');
+      expect(typeof state.toggleDegree).toBe('function');
+      expect(typeof state.toggleFunctionalHarmony).toBe('function');
 
       // 存在しないプロパティにアクセスしようとするとTypeScriptエラーになる
       // @ts-expect-error - 存在しないプロパティ

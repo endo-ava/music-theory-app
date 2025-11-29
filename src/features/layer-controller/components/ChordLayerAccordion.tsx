@@ -19,8 +19,14 @@ import { useCurrentKeyStore } from '../../../stores/currentKeyStore';
  * Shadcn/uiのAccordion、Switchを使用してUIを構築。
  */
 export const ChordLayerAccordion: React.FC = () => {
-  const { isDiatonicVisible, toggleDiatonic, isFunctionalHarmonyVisible, toggleFunctionalHarmony } =
-    useLayerStore();
+  const {
+    isDiatonicVisible,
+    toggleDiatonic,
+    isDegreeVisible,
+    toggleDegree,
+    isFunctionalHarmonyVisible,
+    toggleFunctionalHarmony,
+  } = useLayerStore();
   const { currentKey } = useCurrentKeyStore();
 
   // メジャー/マイナーキーかどうかをチェック（モードではなくキーであること）
@@ -32,12 +38,20 @@ export const ChordLayerAccordion: React.FC = () => {
       <AccordionItem value="chord-layer">
         <AccordionTrigger variant="layer">Chord Layers</AccordionTrigger>
         <AccordionContent className="space-y-4">
-          {/* ダイアトニックレイヤー表示トグル */}
+          {/* ダイアトニックボーダーハイライト表示トグル */}
           <div className="flex items-center justify-between">
             <Label htmlFor="diatonic" variant="layer" className="ml-4 pl-2">
               Diatonic
             </Label>
             <Switch id="diatonic" checked={isDiatonicVisible} onCheckedChange={toggleDiatonic} />
+          </div>
+
+          {/* 度数表記表示トグル */}
+          <div className="flex items-center justify-between">
+            <Label htmlFor="degree" variant="layer" className="ml-4 pl-2">
+              Degree (Roman numerals)
+            </Label>
+            <Switch id="degree" checked={isDegreeVisible} onCheckedChange={toggleDegree} />
           </div>
 
           {/* 機能和声トグル（メジャー/マイナーキーの時のみ表示） */}

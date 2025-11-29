@@ -60,14 +60,10 @@ describe('useKeyAreaPresentation hook', () => {
       const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
 
       expect(result.current).toHaveProperty('shouldHighlight');
-      expect(result.current).toHaveProperty('romanNumeral');
       expect(result.current).toHaveProperty('keyAreaColor');
       expect(result.current).toHaveProperty('layout');
 
       expect(typeof result.current.shouldHighlight).toBe('boolean');
-      expect(
-        result.current.romanNumeral === null || typeof result.current.romanNumeral === 'string'
-      ).toBe(true);
       expect(typeof result.current.keyAreaColor).toBe('string');
       expect(typeof result.current.layout).toBe('object');
     });
@@ -76,9 +72,7 @@ describe('useKeyAreaPresentation hook', () => {
       const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
 
       expect(result.current.layout).toHaveProperty('primaryTextY');
-      expect(result.current.layout).toHaveProperty('romanTextY');
       expect(typeof result.current.layout.primaryTextY).toBe('number');
-      expect(typeof result.current.layout.romanTextY).toBe('number');
     });
   });
 
@@ -92,7 +86,6 @@ describe('useKeyAreaPresentation hook', () => {
       const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
 
       expect(result.current.shouldHighlight).toBe(false);
-      expect(result.current.romanNumeral).toBe(null);
       expect(mockGetHighlightInfo).toHaveBeenCalledWith(defaultKeyDTO);
     });
 
@@ -105,27 +98,7 @@ describe('useKeyAreaPresentation hook', () => {
       const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
 
       expect(result.current.shouldHighlight).toBe(true);
-      expect(result.current.romanNumeral).toBe('Ⅰ');
       expect(mockGetHighlightInfo).toHaveBeenCalledWith(defaultKeyDTO);
-    });
-
-    test('正常ケース: 異なるローマ数字での動作確認', () => {
-      const testCases = [
-        { romanNumeral: 'Ⅰ', expected: 'Ⅰ' },
-        { romanNumeral: 'Ⅱm', expected: 'Ⅱm' },
-        { romanNumeral: 'Ⅴ', expected: 'Ⅴ' },
-        { romanNumeral: 'ⅶ°', expected: 'ⅶ°' },
-      ];
-
-      testCases.forEach(({ romanNumeral, expected }) => {
-        mockGetHighlightInfo.mockReturnValue({
-          shouldHighlight: true,
-          romanNumeral,
-        });
-
-        const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
-        expect(result.current.romanNumeral).toBe(expected);
-      });
     });
   });
 
@@ -206,11 +179,9 @@ describe('useKeyAreaPresentation hook', () => {
 
       // LAYOUT_OFFSETSが正しく適用されていることを確認
       expect(typeof result.current.layout.primaryTextY).toBe('number');
-      expect(typeof result.current.layout.romanTextY).toBe('number');
 
       // ハイライト表示時はprimaryTextYにオフセットが適用される
       expect(result.current.layout.primaryTextY).not.toBe(testPosition.y);
-      expect(result.current.layout.romanTextY).not.toBe(testPosition.y);
     });
 
     test('正常ケース: 異なるテキスト位置での計算', () => {
@@ -230,9 +201,7 @@ describe('useKeyAreaPresentation hook', () => {
         const { result } = renderHook(() => useKeyAreaPresentation(props));
 
         expect(typeof result.current.layout.primaryTextY).toBe('number');
-        expect(typeof result.current.layout.romanTextY).toBe('number');
         expect(isFinite(result.current.layout.primaryTextY)).toBe(true);
-        expect(isFinite(result.current.layout.romanTextY)).toBe(true);
       });
     });
   });
@@ -310,7 +279,6 @@ describe('useKeyAreaPresentation hook', () => {
 
       // 内容が同じなので同じ結果が返されることを確認
       expect(firstResult.shouldHighlight).toBe(secondResult.shouldHighlight);
-      expect(firstResult.romanNumeral).toBe(secondResult.romanNumeral);
     });
   });
 
