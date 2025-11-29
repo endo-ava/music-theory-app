@@ -50,6 +50,7 @@ describe('useKeyAreaPresentation hook', () => {
     mockGetHighlightInfo.mockReturnValue({
       shouldHighlight: false,
       romanNumeral: null,
+      isTonic: false,
     });
 
     mockGetMusicColorVariable.mockReturnValue('var(--color-c-major)'); // デフォルト戻り値
@@ -81,6 +82,7 @@ describe('useKeyAreaPresentation hook', () => {
       mockGetHighlightInfo.mockReturnValue({
         shouldHighlight: false,
         romanNumeral: null,
+        isTonic: false,
       });
 
       const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
@@ -93,6 +95,7 @@ describe('useKeyAreaPresentation hook', () => {
       mockGetHighlightInfo.mockReturnValue({
         shouldHighlight: true,
         romanNumeral: 'Ⅰ',
+        isTonic: true,
       });
 
       const { result } = renderHook(() => useKeyAreaPresentation(defaultProps));
@@ -168,6 +171,7 @@ describe('useKeyAreaPresentation hook', () => {
       mockGetHighlightInfo.mockReturnValue({
         shouldHighlight: true,
         romanNumeral: 'Ⅰ',
+        isTonic: true,
       });
 
       const props: UseKeyAreaPresentationProps = {

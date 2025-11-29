@@ -134,6 +134,64 @@ describe('layerStore', () => {
     });
   });
 
+  describe('toggleFunctionalHarmony action', () => {
+    test('正常ケース: falseからtrueに切り替わる', () => {
+      const initialState = useLayerStore.getState();
+      expect(initialState.isFunctionalHarmonyVisible).toBe(false);
+
+      // toggleFunctionalHarmonyを実行
+      useLayerStore.getState().toggleFunctionalHarmony();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isFunctionalHarmonyVisible).toBe(true);
+    });
+
+    test('正常ケース: trueからfalseに切り替わる', () => {
+      // 初期状態をtrueに設定
+      useLayerStore.setState({ isFunctionalHarmonyVisible: true });
+
+      const initialState = useLayerStore.getState();
+      expect(initialState.isFunctionalHarmonyVisible).toBe(true);
+
+      // toggleFunctionalHarmonyを実行
+      useLayerStore.getState().toggleFunctionalHarmony();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isFunctionalHarmonyVisible).toBe(false);
+    });
+
+    test('正常ケース: 複数回のトグル動作', () => {
+      const { toggleFunctionalHarmony } = useLayerStore.getState();
+
+      // 初期状態の確認
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+
+      // 1回目: false -> true
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(true);
+
+      // 2回目: true -> false
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+
+      // 3回目: false -> true
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(true);
+
+      // 4回目: true -> false
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+    });
+
+    test('正常ケース: 関数の参照が安定している', () => {
+      const action1 = useLayerStore.getState().toggleFunctionalHarmony;
+      const action2 = useLayerStore.getState().toggleFunctionalHarmony;
+
+      // 同じ参照であることを確認
+      expect(action1).toBe(action2);
+    });
+  });
+
   describe('state immutability', () => {
     test('正常ケース: setState後に元のstateが変更されない', () => {
       const initialState = useLayerStore.getState();

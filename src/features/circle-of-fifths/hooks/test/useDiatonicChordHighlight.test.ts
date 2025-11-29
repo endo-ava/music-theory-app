@@ -30,6 +30,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       expect(cMajorResult.shouldHighlight).toBe(true);
       expect(cMajorResult.romanNumeral).toBe('Ⅰ'); // C major の I度
+      expect(cMajorResult.isTonic).toBe(true);
 
       // D minor (supertonic) - fifthsIndex: 2, major: false
       const dMinorKeyDTO = createKeyDTO(PitchClass.D.fifthsIndex, false);
@@ -37,6 +38,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       expect(dMinorResult.shouldHighlight).toBe(true);
       expect(dMinorResult.romanNumeral).toBe('Ⅱm'); // C major の ii度
+      expect(dMinorResult.isTonic).toBe(false);
     });
 
     test('正常ケース: 非該当コードでfalseを返す', () => {
@@ -51,6 +53,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       expect(result1.shouldHighlight).toBe(false);
       expect(result1.romanNumeral).toBe(null);
+      expect(result1.isTonic).toBe(false);
     });
 
     test('境界値ケース: 異なるキーでのダイアトニックコード判定', () => {
@@ -65,6 +68,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       expect(gMajorResult.shouldHighlight).toBe(true);
       expect(gMajorResult.romanNumeral).toBe('Ⅰ'); // G major の I度
+      expect(gMajorResult.isTonic).toBe(true);
 
       // C major - G majorのダイアトニックコード（IV度）
       const cMajorKeyDTO = createKeyDTO(PitchClass.C.fifthsIndex, true);
@@ -72,6 +76,7 @@ describe('useDiatonicChordHighlight hook', () => {
 
       expect(cMajorResult.shouldHighlight).toBe(true);
       expect(cMajorResult.romanNumeral).toBe('Ⅳ'); // G major の IV度
+      expect(cMajorResult.isTonic).toBe(false);
     });
 
     test('キー変更テスト: 異なるキー引数での動作確認', () => {
@@ -84,6 +89,7 @@ describe('useDiatonicChordHighlight hook', () => {
       let highlightInfo = cMajorResult.current.getHighlightInfo(testKeyDTO);
       expect(highlightInfo.shouldHighlight).toBe(true);
       expect(highlightInfo.romanNumeral).toBe('Ⅰ');
+      expect(highlightInfo.isTonic).toBe(true);
 
       // D majorキーでのテスト（C majorはダイアトニックコードではない）
       const { result: dMajorResult } = renderHook(() =>
@@ -92,6 +98,7 @@ describe('useDiatonicChordHighlight hook', () => {
       highlightInfo = dMajorResult.current.getHighlightInfo(testKeyDTO);
       expect(highlightInfo.shouldHighlight).toBe(false);
       expect(highlightInfo.romanNumeral).toBe(null);
+      expect(highlightInfo.isTonic).toBe(false);
     });
 
     test('メモ化テスト: 同じ引数で複数回呼び出した際の一貫性', () => {
@@ -110,6 +117,7 @@ describe('useDiatonicChordHighlight hook', () => {
       expect(result2).toEqual(result3);
       expect(result1.shouldHighlight).toBe(true);
       expect(result1.romanNumeral).toBe('Ⅰ');
+      expect(result1.isTonic).toBe(true);
     });
   });
 
