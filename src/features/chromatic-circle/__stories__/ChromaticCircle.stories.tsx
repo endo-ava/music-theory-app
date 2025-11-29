@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent } from 'storybook/test';
 import { ChromaticCircle } from '../components/ChromaticCircle';
 import { useLayerStore } from '@/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';

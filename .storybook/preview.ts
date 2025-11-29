@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/nextjs';
+import type { Preview } from '@storybook/nextjs-vite';
 import '../src/app/globals.css';
 
 const preview: Preview = {
@@ -10,24 +10,26 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: 'dark',
-      values: [
-        {
+      options: {
+        light: {
           name: 'light',
           value: '#ffffff',
         },
-        {
+
+        dark: {
           name: 'dark',
           value: '#1a1a1a',
         },
-        {
+
+        'app-bg': {
           name: 'app-bg',
           value: 'linear-gradient(to bottom, #111827, #0a0a0a)',
         },
-      ],
+      },
     },
     layout: 'fullscreen',
   },
+
   globalTypes: {
     theme: {
       description: 'Global theme for components',
@@ -38,6 +40,12 @@ const preview: Preview = {
         items: ['light', 'dark'],
         dynamicTitle: true,
       },
+    },
+  },
+
+  initialGlobals: {
+    backgrounds: {
+      value: 'dark',
     },
   },
 };

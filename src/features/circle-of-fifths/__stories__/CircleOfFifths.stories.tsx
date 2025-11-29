@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent } from 'storybook/test';
 import { CircleOfFifths } from '../components/CircleOfFifths';
 import { useLayerStore } from '@/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
@@ -244,32 +244,35 @@ export const DiatonicHighlightToggle: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // テスト実行前に確実に初期状態をセット（デコレータのタイミング問題を回避）
+    useLayerStore.setState({ isDiatonicVisible: false });
+
+    // 初期レンダリングと状態反映を待つ
+    await new Promise(resolve => setTimeout(resolve, 300));
 
     // 五度圏のメイン要素が存在することを確認
     const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
     expect(circleContainer).toBeInTheDocument();
 
-    // 初期状態：ローマ数字が表示されていないことを確認
-    let romanText = canvas.queryByText('Ⅰ');
-    expect(romanText).not.toBeInTheDocument();
+    // 初期状態：ダイアトニックハイライトレイヤーが表示されていないことを確認
+    let highlightLayer = canvasElement.querySelector('.diatonic-highlight-layer');
+    expect(highlightLayer).not.toBeInTheDocument();
 
     // ダイアトニックコード表示をオンに変更
     useLayerStore.getState().toggleDiatonic();
     await new Promise(resolve => setTimeout(resolve, 200));
 
-    // ローマ数字が表示されることを確認
-    romanText = canvas.getByText('Ⅰ');
-    expect(romanText).toBeInTheDocument();
+    // ハイライトレイヤーが表示されることを確認
+    highlightLayer = canvasElement.querySelector('.diatonic-highlight-layer');
+    expect(highlightLayer).toBeInTheDocument();
 
     // 再度オフに変更
     useLayerStore.getState().toggleDiatonic();
     await new Promise(resolve => setTimeout(resolve, 200));
 
-    // ローマ数字が非表示になることを確認
-    romanText = canvas.queryByText('Ⅰ');
-    expect(romanText).not.toBeInTheDocument();
+    // ハイライトレイヤーが非表示になることを確認
+    highlightLayer = canvasElement.querySelector('.diatonic-highlight-layer');
+    expect(highlightLayer).not.toBeInTheDocument();
   },
 };
 

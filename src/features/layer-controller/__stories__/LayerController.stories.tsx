@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent } from 'storybook/test';
 import { LayerController } from '../components/LayerController';
 import { useLayerStore } from '@/stores/layerStore';
 
@@ -171,7 +171,7 @@ export const AccordionToggleTest: Story = {
     expect(accordionTrigger).toHaveAttribute('aria-expanded', 'true');
 
     // スイッチが表示されていることを確認
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toBeInTheDocument();
 
     // アコーディオンを閉じる
@@ -183,7 +183,7 @@ export const AccordionToggleTest: Story = {
     expect(accordionTrigger).toHaveAttribute('aria-expanded', 'true');
 
     // スイッチが再び表示されることを確認
-    expect(canvas.getByRole('switch', { name: 'Diatonic chords' })).toBeInTheDocument();
+    expect(canvas.getByRole('switch', { name: 'Diatonic' })).toBeInTheDocument();
   },
 };
 
@@ -203,7 +203,7 @@ export const DiatonicToggleTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
     // 初期状態の確認（表示）
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
@@ -253,7 +253,7 @@ export const InitialOnStateTest: Story = {
     // 初期レンダリング完了を待つ
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
     // 初期状態がオンであることを確認
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
@@ -298,13 +298,13 @@ export const AccessibilityTest: Story = {
     expect(accordionTrigger).toHaveAttribute('aria-controls');
 
     // スイッチのアクセシビリティ
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toHaveAttribute('aria-checked');
-    expect(diatonicSwitch).toHaveAttribute('id', 'diatonic-chords');
+    expect(diatonicSwitch).toHaveAttribute('id', 'diatonic');
 
     // ラベルとスイッチの関連付け確認
-    const label = canvas.getByText('Diatonic chords');
-    expect(label).toHaveAttribute('for', 'diatonic-chords');
+    const label = canvas.getByText('Diatonic');
+    expect(label).toHaveAttribute('for', 'diatonic');
 
     // 基本的なインタラクション確認（クリックによるスイッチ操作）
     const initialState = useLayerStore.getState().isDiatonicVisible;
@@ -330,7 +330,7 @@ export const StoreIntegrationTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
     // 初期状態の確認(新しい初期状態はtrue)
     expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
