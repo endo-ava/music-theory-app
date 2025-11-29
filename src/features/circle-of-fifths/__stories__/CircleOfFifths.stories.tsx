@@ -341,6 +341,158 @@ export const DiatonicRomanNumerals: Story = {
 };
 
 /**
+ * 度数レイヤー切り替えテスト
+ */
+export const DegreeToggle: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: '度数レイヤー（ローマ数字）の表示/非表示切り替えをテストします。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      useLayerStore.setState({ isDegreeVisible: false });
+      useCurrentKeyStore.setState({
+        currentKey: Key.major(PitchClass.C),
+      });
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8 text-white">
+          <Story />
+        </div>
+      );
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 初期状態セット
+    useLayerStore.setState({ isDegreeVisible: false });
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // 初期状態：ローマ数字が表示されていないことを確認
+    let romanText = canvas.queryByText('Ⅰ');
+    expect(romanText).not.toBeInTheDocument();
+
+    // 度数表示をオンに変更
+    useLayerStore.getState().toggleDegree();
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    // ローマ数字が表示されることを確認
+    romanText = canvas.getByText('Ⅰ');
+    expect(romanText).toBeInTheDocument();
+
+    // 再度オフに変更
+    useLayerStore.getState().toggleDegree();
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    // ローマ数字が非表示になることを確認
+    romanText = canvas.queryByText('Ⅰ');
+    expect(romanText).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * 機能和声レイヤー表示テスト
+ */
+export const FunctionalHarmonyDisplay: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '機能和声レイヤー（T/D/SD）の表示をテストします。C majorキーでのトニック(T)、ドミナント(D)、サブドミナント(SD)の表示を確認します。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      useLayerStore.setState({
+        isFunctionalHarmonyVisible: true,
+        isDegreeVisible: false, // オフセットなしの状態を確認するため度数はオフ
+      });
+      useCurrentKeyStore.setState({
+        currentKey: Key.major(PitchClass.C),
+      });
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8 text-white">
+          <Story />
+        </div>
+      );
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // C major (Tonic) の機能表記確認
+    const tonic = canvas.getAllByText('T');
+    expect(tonic.length).toBeGreaterThan(0);
+
+    // G major (Dominant) の機能表記確認
+    const dominant = canvas.getAllByText('D');
+    expect(dominant.length).toBeGreaterThan(0);
+
+    // F major (Subdominant) の機能表記確認
+    const subdominant = canvas.getAllByText('SD');
+    expect(subdominant.length).toBeGreaterThan(0);
+  },
+};
+
+/**
+ * 2つのレイヤー同時表示時のレイアウトテスト
+ */
+export const DualLayerLayout: Story = {
+  args: {
+    className: 'w-[500px] h-[500px]',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '度数レイヤーと機能和声レイヤーが両方表示されている場合のレイアウトをテストします。両方のテキストが表示され、重ならないように配置されていることを確認します。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      useLayerStore.setState({
+        isFunctionalHarmonyVisible: true,
+        isDegreeVisible: true,
+      });
+      useCurrentKeyStore.setState({
+        currentKey: Key.major(PitchClass.C),
+      });
+      return (
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8 text-white">
+          <Story />
+        </div>
+      );
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // 両方のレイヤーのテキストが表示されていることを確認
+    const romanText = canvas.getByText('Ⅰ');
+    const tonicText = canvas.getAllByText('T');
+
+    expect(romanText).toBeInTheDocument();
+    expect(tonicText.length).toBeGreaterThan(0);
+
+    // 注: 厳密な位置座標のテストは壊れやすいため、
+    // 両方がDOMに存在し、視覚的に確認できることを主目的とする
+  },
+};
+
+/**
  * KeyArea インタラクティブテスト（五度圏統合版）
  */
 export const KeyAreaInteractiveTest: Story = {

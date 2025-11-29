@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { within, expect, userEvent } from 'storybook/test';
 import { LayerController } from '../components/LayerController';
 import { useLayerStore } from '@/stores/layerStore';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
+import { Key, PitchClass } from '@/domain';
 
 const meta: Meta<typeof LayerController> = {
   title: 'Components/LayerController',
@@ -218,6 +220,83 @@ export const DiatonicToggleTest: Story = {
     await userEvent.click(diatonicSwitch);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
     expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
+  },
+};
+
+/**
+ * 度数表記スイッチのトグル動作テスト
+ */
+export const DegreeToggleTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story: 'LayerController内の度数表記スイッチのトグル動作をテストします。',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 度数表記スイッチを取得（ラベルの一部で検索）
+    const degreeSwitch = canvas.getByRole('switch', { name: /Degree/ });
+
+    // 初期状態の確認（表示）
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'true');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(true);
+
+    // スイッチをオフにする
+    await userEvent.click(degreeSwitch);
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(false);
+
+    // スイッチをオンにする
+    await userEvent.click(degreeSwitch);
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'true');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(true);
+  },
+};
+
+/**
+ * 機能和声スイッチのトグル動作テスト
+ */
+export const FunctionalHarmonyToggleTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story: 'LayerController内の機能和声スイッチのトグル動作をテストします。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      // 機能和声スイッチを表示させるためにメジャーキーを設定
+      useCurrentKeyStore.setState({
+        currentKey: Key.major(PitchClass.C),
+      });
+      return <Story />;
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 機能和声スイッチを取得（ラベルの一部で検索）
+    const functionalSwitch = canvas.getByRole('switch', { name: /Functional harmony/ });
+
+    // 初期状態の確認（非表示）
+    expect(functionalSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+
+    // スイッチをオンにする
+    await userEvent.click(functionalSwitch);
+    expect(functionalSwitch).toHaveAttribute('aria-checked', 'true');
+    expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(true);
+
+    // スイッチをオフにする
+    await userEvent.click(functionalSwitch);
+    expect(functionalSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
   },
 };
 
