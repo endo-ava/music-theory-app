@@ -58,9 +58,6 @@ export default function AboutPage() {
               It's not just a glossary, but a "map of knowledge" that visualizes concepts and their
               relationships.
               <br />
-              Which scale does a certain chord belong to, and which key does that scale have an
-              affinity with?
-              <br />
               It serves as a compass to guide fragmented knowledge towards a systematic
               understanding.
               {/* Atlas（地図帳）は、広大な音楽理論の海を航海するための道標です。<br />
