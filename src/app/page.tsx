@@ -4,7 +4,7 @@ import { MobileTwoColumnLayout } from '@/components/layouts/MobileTwoColumnLayou
 /**
  * ホームページコンポーネント
  *
- * Hub画面のメインレイアウトを提供する。
+ * Circle画面のメインレイアウトを提供する。
  * レスポンシブ対応：
  * - デスクトップ：3分割レイアウト（Canvas中央 + Controller左 + Information右）
  * - モバイル：2分割レイアウト（Canvas上 + Information下） + BottomSheet（Controller）

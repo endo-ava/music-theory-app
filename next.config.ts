@@ -17,6 +17,15 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  env: {
+    // ビルド時の現在時刻をUTC基準の英語フォーマットで埋め込む (e.g., "November 29, 2025")
+    NEXT_PUBLIC_LAST_UPDATED: new Date().toLocaleDateString('en-US', {
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }),
+  },
 };
 
 export default nextConfig;

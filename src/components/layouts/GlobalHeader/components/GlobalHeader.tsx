@@ -7,9 +7,9 @@ import { ActiveLinkProvider } from './ActiveLinkProvider';
  * ナビゲーションリンクの定義
  */
 const navigationLinks: NavigationLink[] = [
-  { id: 'hub', label: 'Hub', href: '/' },
-  { id: 'library', label: 'Library', href: '/library' },
-  { id: 'tutorial', label: 'Tutorial', href: '/tutorial' },
+  { id: 'circle', label: 'Circle', href: '/' },
+  { id: 'atlas', label: 'Atlas', href: '/atlas' },
+  { id: 'about', label: 'About', href: '/about' },
 ];
 
 /**
