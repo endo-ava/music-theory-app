@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { LAYOUT_OFFSETS } from '../constants';
+import { useLayerStore } from '@/stores/layerStore';
 import { useDiatonicChordHighlight } from './useDiatonicChordHighlight';
+import { useFunctionalHarmonyData } from './useFunctionalHarmonyData';
 import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
 import type { Point } from '@/shared/types/graphics';
 import type { IMusicalContext, KeyDTO } from '@/domain';
@@ -10,6 +12,7 @@ import type { IMusicalContext, KeyDTO } from '@/domain';
  *
  * 以下の表示関連機能を統合:
  * - ダイアトニックハイライト判定
+ * - 機能和声表示判定
  * - レイアウト計算（テキスト位置調整）
  * - 色計算（リップル色等）
  *
@@ -35,16 +38,12 @@ export interface UseKeyAreaPresentationProps {
 export interface KeyAreaPresentationInfo {
   /** ダイアトニックハイライト表示するべきか */
   readonly shouldHighlight: boolean;
-  /** ローマ数字表記（ダイアトニック度数） */
-  readonly romanNumeral: string | null;
   /** 各keyAreaの色（CSS変数形式） */
   readonly keyAreaColor: string;
   /** テキストレイアウト計算結果 */
   readonly layout: {
     /** プライマリテキストのY座標 */
     readonly primaryTextY: number;
-    /** ローマ数字テキストのY座標 */
-    readonly romanTextY: number;
   };
 }
 
@@ -72,25 +71,37 @@ export const useKeyAreaPresentation = ({
   // ダイアトニックハイライト情報を取得
   const { getHighlightInfo } = useDiatonicChordHighlight(currentKey);
 
+  // 機能和声データを取得
+  const functionalHarmonyData = useFunctionalHarmonyData(currentKey);
+
+  // レイヤー表示状態を取得
+  const { isDegreeVisible, isFunctionalHarmonyVisible } = useLayerStore();
+
   return useMemo(() => {
     // ダイアトニックハイライト判定
-    const { shouldHighlight, romanNumeral } = getHighlightInfo(keyDTO);
+    const { shouldHighlight } = getHighlightInfo(keyDTO);
+
+    // 機能和声表示判定（このkeyDTOが機能和声表示対象か）
+    const hasFunctionalHarmony = functionalHarmonyData.some(
+      data => data.fifthsIndex === keyDTO.fifthsIndex && data.isMajor === keyDTO.isMajor
+    );
 
     // 色計算（音楽色相システム）
     const keyAreaColor = getMusicColorVariable(keyDTO);
 
-    // レイアウト計算（ローマ数字表示時の位置調整）
+    // レイアウト計算（度数レイヤーまたは機能和声レイヤー表示時の位置調整）
+    // 度数レイヤーまたは機能和声レイヤーが表示される場合、キー名を上に移動
+    const shouldOffsetText =
+      (isDegreeVisible && shouldHighlight) || (isFunctionalHarmonyVisible && hasFunctionalHarmony);
+
     const layout = {
-      primaryTextY:
-        shouldHighlight && romanNumeral
-          ? textPosition.y + LAYOUT_OFFSETS.PRIMARY_Y_OFFSET
-          : textPosition.y,
-      romanTextY: textPosition.y + LAYOUT_OFFSETS.ROMAN_Y_OFFSET,
+      primaryTextY: shouldOffsetText
+        ? textPosition.y + LAYOUT_OFFSETS.PRIMARY_Y_OFFSET
+        : textPosition.y,
     };
 
     return {
       shouldHighlight,
-      romanNumeral,
       keyAreaColor,
       layout,
     };
@@ -98,9 +109,11 @@ export const useKeyAreaPresentation = ({
     keyDTO.shortName,
     keyDTO.isMajor,
     keyDTO.fifthsIndex,
-    textPosition.x,
     textPosition.y,
     getHighlightInfo,
     currentKey?.shortName,
+    functionalHarmonyData,
+    isDegreeVisible,
+    isFunctionalHarmonyVisible,
   ]);
 };

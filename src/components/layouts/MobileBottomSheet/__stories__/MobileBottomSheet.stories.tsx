@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent, waitFor } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent, waitFor } from 'storybook/test';
 import { MobileBottomSheet, useMobileBottomSheet, SNAP_POINTS } from '../index';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 

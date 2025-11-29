@@ -1,5 +1,4 @@
 import { useMemo, useCallback } from 'react';
-import { useLayerStore } from '@/stores/layerStore';
 import { IMusicalContext, KeyDTO } from '@/domain';
 import { AbstractMusicalContext } from '../../../domain/common/AbstractMusicalContext';
 
@@ -25,18 +24,12 @@ const createCompositeKey = (fifthsIndex: number, isMajor: boolean): CompositeKey
  * 指定されたキーがダイアトニックコードとしてハイライト表示されるべきかを判定する。
  */
 export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
-  const { isDiatonicChordsVisible } = useLayerStore();
-
   // ダイアトニックコード情報を一括計算してMapで管理
   const diatonicChordMap = useMemo(() => {
     const chordMap = new Map<
       CompositeKey,
       { romanNumeral: string; shouldHighlight: boolean; isTonic: boolean }
     >();
-
-    if (!isDiatonicChordsVisible) {
-      return chordMap;
-    }
 
     // 現在のキーのダイアトニックコード情報を取得
     const diatonicChordInfo = currentKey.getDiatonicChordsInfo();
@@ -58,7 +51,7 @@ export const useDiatonicChordHighlight = (currentKey: IMusicalContext) => {
     });
 
     return chordMap;
-  }, [currentKey, isDiatonicChordsVisible]);
+  }, [currentKey]);
 
   // KeyAreaが呼び出すための関数を提供
   const getHighlightInfo = useCallback(

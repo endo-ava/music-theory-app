@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent } from 'storybook/test';
 import { ThreeColumnLayout } from '../components/ThreeColumnLayout';
 import { withStores } from '../../__stories__/decorators/withStores';
 
@@ -435,10 +435,15 @@ export const ControllerPanelIntegrationTest: Story = {
     // LayerControllerの存在確認
     const layerAccordion = canvas.getByRole('button', { name: 'Chord Layers' });
     expect(layerAccordion).toBeInTheDocument();
-    expect(layerAccordion).toHaveAttribute('aria-expanded'); // アコーディオン機能
+
+    // アコーディオンが開いていない場合は開く
+    if (layerAccordion.getAttribute('aria-expanded') === 'false') {
+      await userEvent.click(layerAccordion);
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
 
     // LayerControllerのスイッチ確認
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = await canvas.findByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toBeInTheDocument();
     expect(diatonicSwitch).toHaveAttribute('aria-checked');
 

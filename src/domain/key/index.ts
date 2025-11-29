@@ -6,7 +6,7 @@ import type { IAnalysisResult, IMusicalContext, KeyDTO } from '../common/IMusica
 import { ModalContext } from '../modal-context';
 
 /** 和声機能（調性音楽における） */
-type Function = 'Tonic' | 'Dominant' | 'Subdominant' | 'Other';
+export type Function = 'Tonic' | 'Dominant' | 'Subdominant' | 'Other';
 
 /** keyの品質（major or minor） */
 type KeyQuality = Omit<ScaleQuality, 'diminished' | 'other'>;
@@ -334,6 +334,22 @@ export class Key extends AbstractMusicalContext {
       7: 'Dominant', // vii° (Vの代理)
     };
     return functions[degree];
+  }
+
+  /**
+   * ダイアトニック和音の情報一覧を機能和声情報付きで返す
+   * AbstractMusicalContextのメソッドをオーバーライドして、
+   * 各和音に和声機能（Tonic/Dominant/Subdominant）情報を付与する
+   * @returns ダイアトニック和音情報の配列（機能和声情報を含む）
+   */
+  public override getDiatonicChordsInfo(): IAnalysisResultWithFunction[] {
+    return this.diatonicChords.map((chord, index) => {
+      const degree = index + 1; // 1-7
+      return {
+        ...this.analyzeChord(chord),
+        function: this.deriveFunction(degree),
+      };
+    });
   }
 
   // === F. シリアライゼーション ===

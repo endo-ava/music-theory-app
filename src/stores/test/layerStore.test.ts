@@ -4,68 +4,188 @@ import { useLayerStore } from '../layerStore';
 describe('layerStore', () => {
   beforeEach(() => {
     // 各テスト前にストアを初期状態にリセット
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
-  });
-
-  describe('initial state', () => {
-    test('正常ケース: 初期状態でダイアトニックコード非表示', () => {
-      const state = useLayerStore.getState();
-      expect(state.isDiatonicChordsVisible).toBe(false);
+    useLayerStore.setState({
+      isDiatonicVisible: true,
+      isDegreeVisible: false,
+      isFunctionalHarmonyVisible: false,
     });
   });
 
-  describe('toggleDiatonicChords action', () => {
-    test('正常ケース: falseからtrueに切り替わる', () => {
-      const initialState = useLayerStore.getState();
-      expect(initialState.isDiatonicChordsVisible).toBe(false);
+  describe('initial state', () => {
+    test('正常ケース: 初期状態でダイアトニックコード表示', () => {
+      const state = useLayerStore.getState();
+      expect(state.isDiatonicVisible).toBe(true);
+    });
+  });
 
-      // toggleDiatonicChordsを実行
-      useLayerStore.getState().toggleDiatonicChords();
+  describe('toggleDiatonic action', () => {
+    test('正常ケース: trueからfalseに切り替わる', () => {
+      const initialState = useLayerStore.getState();
+      expect(initialState.isDiatonicVisible).toBe(true);
+
+      // toggleDiatonicを実行
+      useLayerStore.getState().toggleDiatonic();
 
       const newState = useLayerStore.getState();
-      expect(newState.isDiatonicChordsVisible).toBe(true);
+      expect(newState.isDiatonicVisible).toBe(false);
+    });
+
+    test('正常ケース: falseからtrueに切り替わる', () => {
+      // 初期状態をfalseに設定
+      useLayerStore.setState({ isDiatonicVisible: false });
+
+      const initialState = useLayerStore.getState();
+      expect(initialState.isDiatonicVisible).toBe(false);
+
+      // toggleDiatonicを実行
+      useLayerStore.getState().toggleDiatonic();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isDiatonicVisible).toBe(true);
+    });
+
+    test('正常ケース: 複数回のトグル動作', () => {
+      const { toggleDiatonic } = useLayerStore.getState();
+
+      // 初期状態の確認
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
+
+      // 1回目: true -> false
+      toggleDiatonic();
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
+
+      // 2回目: false -> true
+      toggleDiatonic();
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
+
+      // 3回目: true -> false
+      toggleDiatonic();
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
+
+      // 4回目: false -> true
+      toggleDiatonic();
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
+    });
+
+    test('正常ケース: 関数の参照が安定している', () => {
+      const action1 = useLayerStore.getState().toggleDiatonic;
+      const action2 = useLayerStore.getState().toggleDiatonic;
+
+      // 同じ参照であることを確認
+      expect(action1).toBe(action2);
+    });
+  });
+
+  describe('toggleDegree action', () => {
+    test('正常ケース: falseからtrueに切り替わる', () => {
+      const initialState = useLayerStore.getState();
+      expect(initialState.isDegreeVisible).toBe(false);
+
+      // toggleDegreeを実行
+      useLayerStore.getState().toggleDegree();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isDegreeVisible).toBe(true);
     });
 
     test('正常ケース: trueからfalseに切り替わる', () => {
       // 初期状態をtrueに設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDegreeVisible: true });
 
       const initialState = useLayerStore.getState();
-      expect(initialState.isDiatonicChordsVisible).toBe(true);
+      expect(initialState.isDegreeVisible).toBe(true);
 
-      // toggleDiatonicChordsを実行
-      useLayerStore.getState().toggleDiatonicChords();
+      // toggleDegreeを実行
+      useLayerStore.getState().toggleDegree();
 
       const newState = useLayerStore.getState();
-      expect(newState.isDiatonicChordsVisible).toBe(false);
+      expect(newState.isDegreeVisible).toBe(false);
     });
 
     test('正常ケース: 複数回のトグル動作', () => {
-      const { toggleDiatonicChords } = useLayerStore.getState();
+      const { toggleDegree } = useLayerStore.getState();
 
       // 初期状態の確認
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      expect(useLayerStore.getState().isDegreeVisible).toBe(false);
 
       // 1回目: false -> true
-      toggleDiatonicChords();
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(true);
 
       // 2回目: true -> false
-      toggleDiatonicChords();
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(false);
 
       // 3回目: false -> true
-      toggleDiatonicChords();
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(true);
 
       // 4回目: true -> false
-      toggleDiatonicChords();
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      toggleDegree();
+      expect(useLayerStore.getState().isDegreeVisible).toBe(false);
     });
 
     test('正常ケース: 関数の参照が安定している', () => {
-      const action1 = useLayerStore.getState().toggleDiatonicChords;
-      const action2 = useLayerStore.getState().toggleDiatonicChords;
+      const action1 = useLayerStore.getState().toggleDegree;
+      const action2 = useLayerStore.getState().toggleDegree;
+
+      // 同じ参照であることを確認
+      expect(action1).toBe(action2);
+    });
+  });
+
+  describe('toggleFunctionalHarmony action', () => {
+    test('正常ケース: falseからtrueに切り替わる', () => {
+      const initialState = useLayerStore.getState();
+      expect(initialState.isFunctionalHarmonyVisible).toBe(false);
+
+      // toggleFunctionalHarmonyを実行
+      useLayerStore.getState().toggleFunctionalHarmony();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isFunctionalHarmonyVisible).toBe(true);
+    });
+
+    test('正常ケース: trueからfalseに切り替わる', () => {
+      // 初期状態をtrueに設定
+      useLayerStore.setState({ isFunctionalHarmonyVisible: true });
+
+      const initialState = useLayerStore.getState();
+      expect(initialState.isFunctionalHarmonyVisible).toBe(true);
+
+      // toggleFunctionalHarmonyを実行
+      useLayerStore.getState().toggleFunctionalHarmony();
+
+      const newState = useLayerStore.getState();
+      expect(newState.isFunctionalHarmonyVisible).toBe(false);
+    });
+
+    test('正常ケース: 複数回のトグル動作', () => {
+      const { toggleFunctionalHarmony } = useLayerStore.getState();
+
+      // 初期状態の確認
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+
+      // 1回目: false -> true
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(true);
+
+      // 2回目: true -> false
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+
+      // 3回目: false -> true
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(true);
+
+      // 4回目: true -> false
+      toggleFunctionalHarmony();
+      expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+    });
+
+    test('正常ケース: 関数の参照が安定している', () => {
+      const action1 = useLayerStore.getState().toggleFunctionalHarmony;
+      const action2 = useLayerStore.getState().toggleFunctionalHarmony;
 
       // 同じ参照であることを確認
       expect(action1).toBe(action2);
@@ -75,22 +195,22 @@ describe('layerStore', () => {
   describe('state immutability', () => {
     test('正常ケース: setState後に元のstateが変更されない', () => {
       const initialState = useLayerStore.getState();
-      const initialValue = initialState.isDiatonicChordsVisible;
+      const initialValue = initialState.isDiatonicVisible;
 
       // 新しい状態を設定
-      useLayerStore.setState({ isDiatonicChordsVisible: !initialValue });
+      useLayerStore.setState({ isDiatonicVisible: !initialValue });
 
       // 元の状態オブジェクトの値は変更されていないことを確認
-      expect(initialState.isDiatonicChordsVisible).toBe(initialValue);
+      expect(initialState.isDiatonicVisible).toBe(initialValue);
 
       // 新しい状態が正しく設定されていることを確認
       const newState = useLayerStore.getState();
-      expect(newState.isDiatonicChordsVisible).toBe(!initialValue);
+      expect(newState.isDiatonicVisible).toBe(!initialValue);
     });
 
-    test('正常ケース: toggleDiatonicChords後の不変性', () => {
+    test('正常ケース: toggleDiatonic後の不変性', () => {
       const initialState = useLayerStore.getState();
-      const initialToggle = initialState.toggleDiatonicChords;
+      const initialToggle = initialState.toggleDiatonic;
 
       // アクションを実行
       initialToggle();
@@ -102,7 +222,7 @@ describe('layerStore', () => {
       expect(newState).not.toBe(initialState);
 
       // アクション関数は同じ参照であることを確認
-      expect(newState.toggleDiatonicChords).toBe(initialToggle);
+      expect(newState.toggleDiatonic).toBe(initialToggle);
     });
   });
 
@@ -118,24 +238,24 @@ describe('layerStore', () => {
       });
 
       // 状態を変更
-      useLayerStore.getState().toggleDiatonicChords();
+      useLayerStore.getState().toggleDiatonic();
 
       // subscriberが1回呼ばれることを確認
       expect(callCount).toBe(1);
-      expect(receivedState!.isDiatonicChordsVisible).toBe(true);
+      expect(receivedState!.isDiatonicVisible).toBe(false);
 
       // もう一度状態を変更
-      useLayerStore.getState().toggleDiatonicChords();
+      useLayerStore.getState().toggleDiatonic();
 
       // subscriberが2回目も呼ばれることを確認
       expect(callCount).toBe(2);
-      expect(receivedState!.isDiatonicChordsVisible).toBe(false);
+      expect(receivedState!.isDiatonicVisible).toBe(true);
 
       // subscription解除
       unsubscribe();
 
       // subscription解除後は呼ばれないことを確認
-      useLayerStore.getState().toggleDiatonicChords();
+      useLayerStore.getState().toggleDiatonic();
       expect(callCount).toBe(2); // 増えない
     });
   });
@@ -143,26 +263,26 @@ describe('layerStore', () => {
   describe('direct state manipulation', () => {
     test('正常ケース: setStateによる直接的な状態変更', () => {
       // 初期状態の確認
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
       // 直接状態を設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+      useLayerStore.setState({ isDiatonicVisible: false });
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
 
       // 再度直接状態を設定
-      useLayerStore.setState({ isDiatonicChordsVisible: false });
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      useLayerStore.setState({ isDiatonicVisible: true });
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     });
 
     test('正常ケース: 部分的な状態更新', () => {
       // 初期状態からアクションは保持されることを確認
-      const initialAction = useLayerStore.getState().toggleDiatonicChords;
+      const initialAction = useLayerStore.getState().toggleDiatonic;
 
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: false });
 
       const newState = useLayerStore.getState();
-      expect(newState.isDiatonicChordsVisible).toBe(true);
-      expect(newState.toggleDiatonicChords).toBe(initialAction);
+      expect(newState.isDiatonicVisible).toBe(false);
+      expect(newState.toggleDiatonic).toBe(initialAction);
     });
   });
 
@@ -171,8 +291,12 @@ describe('layerStore', () => {
       const state = useLayerStore.getState();
 
       // TypeScriptの型チェックが通ることを確認
-      expect(typeof state.isDiatonicChordsVisible).toBe('boolean');
-      expect(typeof state.toggleDiatonicChords).toBe('function');
+      expect(typeof state.isDiatonicVisible).toBe('boolean');
+      expect(typeof state.isDegreeVisible).toBe('boolean');
+      expect(typeof state.isFunctionalHarmonyVisible).toBe('boolean');
+      expect(typeof state.toggleDiatonic).toBe('function');
+      expect(typeof state.toggleDegree).toBe('function');
+      expect(typeof state.toggleFunctionalHarmony).toBe('function');
 
       // 存在しないプロパティにアクセスしようとするとTypeScriptエラーになる
       // @ts-expect-error - 存在しないプロパティ

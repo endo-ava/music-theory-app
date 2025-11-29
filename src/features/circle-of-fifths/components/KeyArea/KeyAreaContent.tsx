@@ -1,5 +1,4 @@
 import { motion } from 'motion/react';
-import { ANIMATION } from '../../constants';
 import type { Point } from '@/shared/types/graphics';
 import type { KeyAreaStates } from '../../hooks/useKeyState';
 import type { KeyAreaPresentationInfo } from '../../hooks/useKeyAreaPresentation';
@@ -44,7 +43,7 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
   presentation,
 }) => {
   const { fillClassName, textClassName } = states;
-  const { shouldHighlight, romanNumeral, keyAreaColor, layout } = presentation;
+  const { layout } = presentation;
 
   return (
     <>
@@ -81,30 +80,6 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
       >
         {keyName}
       </motion.text>
-
-      {/* ダイアトニックコードのローマ数字表記 */}
-      {shouldHighlight && romanNumeral && (
-        <motion.text
-          className="fill-foreground text-key-layer font-semibold"
-          x={textPosition.x}
-          y={layout.romanTextY}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
-          style={{
-            userSelect: 'none',
-            fill: keyAreaColor,
-          }}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{
-            duration: ANIMATION.FADE_DURATION * 0.8,
-          }}
-        >
-          {romanNumeral}
-        </motion.text>
-      )}
     </>
   );
 };

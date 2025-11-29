@@ -1,7 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect, userEvent } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect, userEvent } from 'storybook/test';
 import { LayerController } from '../components/LayerController';
 import { useLayerStore } from '@/stores/layerStore';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
+import { Key, PitchClass } from '@/domain';
 
 const meta: Meta<typeof LayerController> = {
   title: 'Components/LayerController',
@@ -171,7 +173,7 @@ export const AccordionToggleTest: Story = {
     expect(accordionTrigger).toHaveAttribute('aria-expanded', 'true');
 
     // スイッチが表示されていることを確認
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toBeInTheDocument();
 
     // アコーディオンを閉じる
@@ -183,7 +185,7 @@ export const AccordionToggleTest: Story = {
     expect(accordionTrigger).toHaveAttribute('aria-expanded', 'true');
 
     // スイッチが再び表示されることを確認
-    expect(canvas.getByRole('switch', { name: 'Diatonic chords' })).toBeInTheDocument();
+    expect(canvas.getByRole('switch', { name: 'Diatonic' })).toBeInTheDocument();
   },
 };
 
@@ -203,21 +205,98 @@ export const DiatonicToggleTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
     // 初期状態の確認（表示）
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
     // スイッチをオフにする
     await userEvent.click(diatonicSwitch);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
 
     // スイッチをオンにする
     await userEvent.click(diatonicSwitch);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
+  },
+};
+
+/**
+ * 度数表記スイッチのトグル動作テスト
+ */
+export const DegreeToggleTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story: 'LayerController内の度数表記スイッチのトグル動作をテストします。',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 度数表記スイッチを取得（ラベルの一部で検索）
+    const degreeSwitch = canvas.getByRole('switch', { name: /Degree/ });
+
+    // 初期状態：表示（true）
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(false);
+
+    // スイッチをオンにする
+    await userEvent.click(degreeSwitch);
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'true');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(true);
+
+    // スイッチをオフにする
+    await userEvent.click(degreeSwitch);
+    expect(degreeSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isDegreeVisible).toBe(false);
+  },
+};
+
+/**
+ * 機能和声スイッチのトグル動作テスト
+ */
+export const FunctionalHarmonyToggleTest: Story = {
+  args: {},
+  parameters: {
+    docs: {
+      description: {
+        story: 'LayerController内の機能和声スイッチのトグル動作をテストします。',
+      },
+    },
+  },
+  decorators: [
+    Story => {
+      // 機能和声スイッチを表示させるためにメジャーキーを設定
+      useCurrentKeyStore.setState({
+        currentKey: Key.major(PitchClass.C),
+      });
+      return <Story />;
+    },
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // 機能和声スイッチを取得（ラベルの一部で検索）
+    const functionalSwitch = canvas.getByRole('switch', { name: /Functional harmony/ });
+
+    // 初期状態の確認（非表示）
+    expect(functionalSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
+
+    // スイッチをオンにする
+    await userEvent.click(functionalSwitch);
+    expect(functionalSwitch).toHaveAttribute('aria-checked', 'true');
+    expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(true);
+
+    // スイッチをオフにする
+    await userEvent.click(functionalSwitch);
+    expect(functionalSwitch).toHaveAttribute('aria-checked', 'false');
+    expect(useLayerStore.getState().isFunctionalHarmonyVisible).toBe(false);
   },
 };
 
@@ -237,7 +316,7 @@ export const InitialOnStateTest: Story = {
   decorators: [
     Story => {
       // テスト開始時にストア状態を設定
-      useLayerStore.setState({ isDiatonicChordsVisible: true });
+      useLayerStore.setState({ isDiatonicVisible: true });
       return (
         <div className="flex min-h-[400px] items-center justify-center bg-gradient-to-b from-gray-900 to-black p-8">
           <div className="w-80">
@@ -253,20 +332,20 @@ export const InitialOnStateTest: Story = {
     // 初期レンダリング完了を待つ
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
     // 初期状態がオンであることを確認
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
 
     // ストア操作によるUI更新を確認
-    useLayerStore.getState().toggleDiatonicChords();
+    useLayerStore.getState().toggleDiatonic();
 
     // UI更新を待つ
     await new Promise(resolve => setTimeout(resolve, 100));
 
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
   },
 };
 
@@ -287,7 +366,7 @@ export const AccessibilityTest: Story = {
     const canvas = within(canvasElement);
 
     // 初期状態をリセット
-    useLayerStore.setState({ isDiatonicChordsVisible: false });
+    useLayerStore.setState({ isDiatonicVisible: false });
 
     // 初期レンダリング待ち
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -298,19 +377,19 @@ export const AccessibilityTest: Story = {
     expect(accordionTrigger).toHaveAttribute('aria-controls');
 
     // スイッチのアクセシビリティ
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toHaveAttribute('aria-checked');
-    expect(diatonicSwitch).toHaveAttribute('id', 'diatonic-chords');
+    expect(diatonicSwitch).toHaveAttribute('id', 'diatonic');
 
     // ラベルとスイッチの関連付け確認
-    const label = canvas.getByText('Diatonic chords');
-    expect(label).toHaveAttribute('for', 'diatonic-chords');
+    const label = canvas.getByText('Diatonic');
+    expect(label).toHaveAttribute('for', 'diatonic');
 
     // 基本的なインタラクション確認（クリックによるスイッチ操作）
-    const initialState = useLayerStore.getState().isDiatonicChordsVisible;
+    const initialState = useLayerStore.getState().isDiatonicVisible;
     await userEvent.click(diatonicSwitch);
     await new Promise(resolve => setTimeout(resolve, 100));
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(!initialState);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(!initialState);
   },
 };
 
@@ -330,29 +409,29 @@ export const StoreIntegrationTest: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic chords' });
+    const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
     // 初期状態の確認(新しい初期状態はtrue)
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
 
     // 1. UI操作による状態変更(true -> false)
     await userEvent.click(diatonicSwitch);
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'false');
 
     // 2. 外部ストア操作による状態変更(false -> true)
-    useLayerStore.getState().toggleDiatonicChords();
+    useLayerStore.getState().toggleDiatonic();
     await new Promise(resolve => setTimeout(resolve, 10)); // re-render待ち
-    expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+    expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     expect(diatonicSwitch).toHaveAttribute('aria-checked', 'true');
 
     // 3. 複数回の切り替えテスト(開始時はtrue)
     for (let i = 0; i < 3; i++) {
       await userEvent.click(diatonicSwitch);
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(false);
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(false);
       await userEvent.click(diatonicSwitch);
-      expect(useLayerStore.getState().isDiatonicChordsVisible).toBe(true);
+      expect(useLayerStore.getState().isDiatonicVisible).toBe(true);
     }
 
     // 最終状態の確認

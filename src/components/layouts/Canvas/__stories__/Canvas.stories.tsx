@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, expect } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, expect } from 'storybook/test';
 import { Canvas } from '../components/Canvas';
 
 const meta: Meta<typeof Canvas> = {

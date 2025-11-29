@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { expect, within, userEvent, waitFor } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within, userEvent, waitFor } from 'storybook/test';
 import { KeyController } from '../components/KeyController';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain/key';

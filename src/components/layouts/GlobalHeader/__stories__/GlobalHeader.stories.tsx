@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { within, userEvent, expect } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { within, userEvent, expect } from 'storybook/test';
 import { GlobalHeader } from '../components/GlobalHeader';
 
 const meta: Meta<typeof GlobalHeader> = {
@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * デフォルトのGlobalHeaderの表示
- * ロゴとナビゲーションリンク（Hub, Library, Tutorial）を含む基本状態
+ * ロゴとナビゲーションリンク（Circle, Atlas, About）を含む基本状態
  */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
@@ -34,23 +34,23 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // ロゴが存在することを確認
-    const logo = canvas.getByRole('link', { name: /hub/i });
+    const logo = canvas.getByRole('link', { name: /harmonic orbit/i });
     await expect(logo).toBeInTheDocument();
 
     // ナビゲーションリンクが存在することを確認
-    const hubLink = canvas.getByRole('link', { name: 'Hub' });
-    const libraryLink = canvas.getByRole('link', { name: 'Library' });
-    const tutorialLink = canvas.getByRole('link', { name: 'Tutorial' });
+    const circleLink = canvas.getByRole('link', { name: 'Circle' });
+    const atlasLink = canvas.getByRole('link', { name: 'Atlas' });
+    const aboutLink = canvas.getByRole('link', { name: 'About' });
 
-    await expect(hubLink).toBeInTheDocument();
-    await expect(libraryLink).toBeInTheDocument();
-    await expect(tutorialLink).toBeInTheDocument();
+    await expect(circleLink).toBeInTheDocument();
+    await expect(atlasLink).toBeInTheDocument();
+    await expect(aboutLink).toBeInTheDocument();
 
     // ナビゲーションリンクのクリック動作をテスト
-    await user.click(libraryLink);
+    await user.click(atlasLink);
     // Note: 実際のページ遷移は発生しないが、クリックが可能であることを確認
 
-    await user.click(tutorialLink);
+    await user.click(aboutLink);
     // Note: 実際のページ遷移は発生しないが、クリックが可能であることを確認
   },
 };
@@ -70,7 +70,7 @@ export const MobileView: Story = {
     const canvas = within(canvasElement);
 
     // モバイルビューでもロゴが存在することを確認
-    const logo = canvas.getByRole('link', { name: /hub/i });
+    const logo = canvas.getByRole('link', { name: /harmonic orbit/i });
     await expect(logo).toBeInTheDocument();
 
     // モバイルメニューボタンの存在確認（存在する場合）
@@ -107,22 +107,22 @@ export const DesktopView: Story = {
     const canvas = within(canvasElement);
 
     // デスクトップビューでのロゴ確認
-    const logo = canvas.getByRole('link', { name: /hub/i });
+    const logo = canvas.getByRole('link', { name: /harmonic orbit/i });
     await expect(logo).toBeInTheDocument();
 
     // 全ナビゲーションリンクが表示されていることを確認
-    const hubLink = canvas.getByRole('link', { name: 'Hub' });
-    const libraryLink = canvas.getByRole('link', { name: 'Library' });
-    const tutorialLink = canvas.getByRole('link', { name: 'Tutorial' });
+    const circleLink = canvas.getByRole('link', { name: 'Circle' });
+    const atlasLink = canvas.getByRole('link', { name: 'Atlas' });
+    const aboutLink = canvas.getByRole('link', { name: 'About' });
 
-    await expect(hubLink).toBeInTheDocument();
-    await expect(libraryLink).toBeInTheDocument();
-    await expect(tutorialLink).toBeInTheDocument();
+    await expect(circleLink).toBeInTheDocument();
+    await expect(atlasLink).toBeInTheDocument();
+    await expect(aboutLink).toBeInTheDocument();
 
     // ホバー効果のテスト
-    await user.hover(libraryLink);
-    await user.hover(tutorialLink);
-    await user.hover(hubLink);
+    await user.hover(atlasLink);
+    await user.hover(aboutLink);
+    await user.hover(circleLink);
 
     // フォーカス動作のテスト
     await user.tab(); // 最初のフォーカス可能要素へ
@@ -181,14 +181,14 @@ export const ActiveLinkState: Story = {
     const canvas = within(canvasElement);
 
     // ナビゲーションリンクの取得
-    const hubLink = canvas.getByRole('link', { name: 'Hub' });
-    const libraryLink = canvas.getByRole('link', { name: 'Library' });
-    const tutorialLink = canvas.getByRole('link', { name: 'Tutorial' });
+    const circleLink = canvas.getByRole('link', { name: 'Circle' });
+    const atlasLink = canvas.getByRole('link', { name: 'Atlas' });
+    const aboutLink = canvas.getByRole('link', { name: 'About' });
 
     // リンクが存在することを確認
-    await expect(hubLink).toBeInTheDocument();
-    await expect(libraryLink).toBeInTheDocument();
-    await expect(tutorialLink).toBeInTheDocument();
+    await expect(circleLink).toBeInTheDocument();
+    await expect(atlasLink).toBeInTheDocument();
+    await expect(aboutLink).toBeInTheDocument();
 
     // アクティブ状態のスタイルが適用されているかを確認
     // Note: Storybookの環境ではNext.jsのrouterコンテキストが異なるため、
