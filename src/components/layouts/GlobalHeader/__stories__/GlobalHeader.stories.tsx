@@ -34,20 +34,20 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // ロゴが存在することを確認
-    const logo = canvas.getByRole('link', { name: /hub/i });
+    const logo = canvas.getByRole('link', { name: /harmonic orbit/i });
     await expect(logo).toBeInTheDocument();
 
     // ナビゲーションリンクが存在することを確認
-    const hubLink = canvas.getByRole('link', { name: 'Hub' });
-    const libraryLink = canvas.getByRole('link', { name: 'Library' });
+    const circleLink = canvas.getByRole('link', { name: 'Circle' });
+    const atlasLink = canvas.getByRole('link', { name: 'Atlas' });
     const tutorialLink = canvas.getByRole('link', { name: 'Tutorial' });
 
-    await expect(hubLink).toBeInTheDocument();
-    await expect(libraryLink).toBeInTheDocument();
+    await expect(circleLink).toBeInTheDocument();
+    await expect(atlasLink).toBeInTheDocument();
     await expect(tutorialLink).toBeInTheDocument();
 
     // ナビゲーションリンクのクリック動作をテスト
-    await user.click(libraryLink);
+    await user.click(atlasLink);
     // Note: 実際のページ遷移は発生しないが、クリックが可能であることを確認
 
     await user.click(tutorialLink);
@@ -70,7 +70,7 @@ export const MobileView: Story = {
     const canvas = within(canvasElement);
 
     // モバイルビューでもロゴが存在することを確認
-    const logo = canvas.getByRole('link', { name: /hub/i });
+    const logo = canvas.getByRole('link', { name: /harmonic orbit/i });
     await expect(logo).toBeInTheDocument();
 
     // モバイルメニューボタンの存在確認（存在する場合）
@@ -107,22 +107,22 @@ export const DesktopView: Story = {
     const canvas = within(canvasElement);
 
     // デスクトップビューでのロゴ確認
-    const logo = canvas.getByRole('link', { name: /hub/i });
+    const logo = canvas.getByRole('link', { name: /harmonic orbit/i });
     await expect(logo).toBeInTheDocument();
 
     // 全ナビゲーションリンクが表示されていることを確認
-    const hubLink = canvas.getByRole('link', { name: 'Hub' });
-    const libraryLink = canvas.getByRole('link', { name: 'Library' });
+    const circleLink = canvas.getByRole('link', { name: 'Circle' });
+    const atlasLink = canvas.getByRole('link', { name: 'Atlas' });
     const tutorialLink = canvas.getByRole('link', { name: 'Tutorial' });
 
-    await expect(hubLink).toBeInTheDocument();
-    await expect(libraryLink).toBeInTheDocument();
+    await expect(circleLink).toBeInTheDocument();
+    await expect(atlasLink).toBeInTheDocument();
     await expect(tutorialLink).toBeInTheDocument();
 
     // ホバー効果のテスト
-    await user.hover(libraryLink);
+    await user.hover(atlasLink);
     await user.hover(tutorialLink);
-    await user.hover(hubLink);
+    await user.hover(circleLink);
 
     // フォーカス動作のテスト
     await user.tab(); // 最初のフォーカス可能要素へ
