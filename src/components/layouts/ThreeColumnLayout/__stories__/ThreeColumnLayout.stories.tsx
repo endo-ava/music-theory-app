@@ -430,17 +430,16 @@ export const ControllerPanelIntegrationTest: Story = {
     const titles = canvas.getAllByRole('heading', { level: 2 });
     const controllerTitle = titles.find(title => title.textContent === 'Controller');
     expect(controllerTitle).toBeInTheDocument();
-    expect(controllerTitle).toHaveClass('hidden', 'md:block'); // レスポンシブクラス
+    expect(controllerTitle).toHaveClass(
+      'text-foreground',
+      'text-lg',
+      'font-semibold',
+      'tracking-tight'
+    );
 
     // LayerControllerの存在確認
-    const layerAccordion = canvas.getByRole('button', { name: 'Chord Layers' });
-    expect(layerAccordion).toBeInTheDocument();
-
-    // アコーディオンが開いていない場合は開く
-    if (layerAccordion.getAttribute('aria-expanded') === 'false') {
-      await userEvent.click(layerAccordion);
-      await new Promise(resolve => setTimeout(resolve, 300));
-    }
+    const layerHeading = canvas.getByRole('heading', { name: 'Chord Layers', level: 3 });
+    expect(layerHeading).toBeInTheDocument();
 
     // LayerControllerのスイッチ確認
     const diatonicSwitch = await canvas.findByRole('switch', { name: 'Diatonic' });
@@ -448,7 +447,7 @@ export const ControllerPanelIntegrationTest: Story = {
     expect(diatonicSwitch).toHaveAttribute('aria-checked');
 
     // 両コンポーネントが同じパネル内に統合されていることを確認
-    expect(controllerPanel).toContainElement(layerAccordion);
+    expect(controllerPanel).toContainElement(layerHeading);
     expect(controllerPanel).toContainElement(diatonicSwitch);
   },
 };
@@ -493,14 +492,20 @@ export const ControllerPanelResponsiveTest: Story = {
     expect(controllerPanel).toHaveClass(
       'md:bg-panel',
       'md:border-border',
-      'md:rounded-lg',
+      'md:rounded-xl',
       'md:border',
-      'md:backdrop-blur-sm'
+      'md:backdrop-blur-xl'
     );
 
-    // タイトルのレスポンシブクラス確認
+    // タイトルの存在確認
     const titles = canvas.getAllByRole('heading', { level: 2 });
     const controllerTitle = titles.find(title => title.textContent === 'Controller');
-    expect(controllerTitle).toHaveClass('hidden', 'md:block');
+    expect(controllerTitle).toBeInTheDocument();
+    expect(controllerTitle).toHaveClass(
+      'text-foreground',
+      'text-lg',
+      'font-semibold',
+      'tracking-tight'
+    );
   },
 };

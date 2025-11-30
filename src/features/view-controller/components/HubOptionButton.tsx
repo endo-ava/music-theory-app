@@ -30,6 +30,9 @@ interface HubOptionButtonProps {
  * - 再利用可能な設計
  * - パフォーマンス最適化（propsによる制御）
  */
+const FOCUS_STYLES =
+  'focus:ring-ring focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:outline-none';
+
 export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
   value,
   label,
@@ -45,12 +48,12 @@ export const HubOptionButton: React.FC<HubOptionButtonProps> = ({
       onClick={() => onClick(value)}
       className={twMerge(
         // 基本スタイル
-        'bg-muted border-border text-secondary-foreground rounded border px-3 py-2 text-sm font-medium transition-all duration-200',
-        'focus:ring-foreground focus:ring-1 focus:ring-offset-0 focus:ring-offset-transparent focus:outline-none',
+        'bg-muted flex-1 rounded-md px-3 py-2 text-xs font-medium transition-all duration-200',
+        FOCUS_STYLES,
         // 状態別スタイル（条件を明確に分離）
         isSelected
-          ? 'bg-accent text-accent-foreground border-border border shadow-sm'
-          : 'text-secondary-foreground hover:bg-muted hover:text-muted-foreground'
+          ? 'bg-primary text-primary-foreground shadow-md'
+          : 'text-muted-foreground hover:text-foreground'
       )}
       role="radio"
       aria-checked={isSelected}

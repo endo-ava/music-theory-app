@@ -100,8 +100,8 @@ export const InteractiveTest: Story = {
     expect(title).toHaveTextContent('View');
 
     // 初期状態で五度圏ボタンが選択されていることを確認
-    const circleButton = canvas.getByRole('radio', { name: '五度圏' });
-    const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
+    const circleButton = canvas.getByRole('radio', { name: 'Circle of Fifths' });
+    const chromaticButton = canvas.getByRole('radio', { name: 'Chromatic Circle' });
 
     expect(circleButton).toBeInTheDocument();
     expect(chromaticButton).toBeInTheDocument();
@@ -109,7 +109,7 @@ export const InteractiveTest: Story = {
     expect(chromaticButton).toHaveAttribute('aria-checked', 'false');
 
     // 共通データ構造から取得された説明テキストの確認
-    expect(canvas.getByText('五度関係で配置された調の輪')).toBeInTheDocument();
+    expect(canvas.getByText('Keys arranged by fifths')).toBeInTheDocument();
   },
 };
 
@@ -133,8 +133,8 @@ export const HubTypeSwitchTest: Story = {
     useHubStore.setState({ hubType: 'circle-of-fifths' });
 
     // 初期状態の確認
-    const circleButton = canvas.getByRole('radio', { name: '五度圏' });
-    const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
+    const circleButton = canvas.getByRole('radio', { name: 'Circle of Fifths' });
+    const chromaticButton = canvas.getByRole('radio', { name: 'Chromatic Circle' });
 
     expect(circleButton).toHaveAttribute('aria-checked', 'true');
     expect(chromaticButton).toHaveAttribute('aria-checked', 'false');
@@ -147,7 +147,7 @@ export const HubTypeSwitchTest: Story = {
     expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
 
     // 共通データ構造からの説明文が切り替わったことを確認
-    expect(canvas.getByText('半音階で配置された音の輪')).toBeInTheDocument();
+    expect(canvas.getByText('Notes arranged chromatically')).toBeInTheDocument();
 
     // 五度圏ボタンをクリックして戻す
     await userEvent.click(circleButton);
@@ -155,7 +155,7 @@ export const HubTypeSwitchTest: Story = {
     // 元の状態に戻ったことを確認
     expect(circleButton).toHaveAttribute('aria-checked', 'true');
     expect(chromaticButton).toHaveAttribute('aria-checked', 'false');
-    expect(canvas.getByText('五度関係で配置された調の輪')).toBeInTheDocument();
+    expect(canvas.getByText('Keys arranged by fifths')).toBeInTheDocument();
   },
 };
 
@@ -184,8 +184,8 @@ export const AccessibilityTest: Story = {
     expect(radioGroup).toHaveAttribute('aria-label', 'Hub種類の選択');
 
     // ラジオボタンの確認
-    const circleButton = canvas.getByRole('radio', { name: '五度圏' });
-    const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
+    const circleButton = canvas.getByRole('radio', { name: 'Circle of Fifths' });
+    const chromaticButton = canvas.getByRole('radio', { name: 'Chromatic Circle' });
 
     // roving tabindexパターンの確認
     expect(circleButton).toHaveAttribute('tabindex', '0'); // 選択されているボタンはfocusable
@@ -220,8 +220,8 @@ export const KeyboardNavigationTest: Story = {
     // 初期状態を設定
     useHubStore.setState({ hubType: 'circle-of-fifths' });
 
-    const circleButton = canvas.getByRole('radio', { name: '五度圏' });
-    const chromaticButton = canvas.getByRole('radio', { name: 'クロマチック' });
+    const circleButton = canvas.getByRole('radio', { name: 'Circle of Fifths' });
+    const chromaticButton = canvas.getByRole('radio', { name: 'Chromatic Circle' });
 
     // 初期フォーカス確認
     circleButton.focus();

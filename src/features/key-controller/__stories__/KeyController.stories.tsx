@@ -52,8 +52,7 @@ export const RootSelectionTest: Story = {
     const canvas = within(canvasElement);
 
     // 初期状態: C Majorであることを確認
-    const currentDisplay = canvas.getByText(/Current:/);
-    expect(currentDisplay.textContent).toContain('C Major');
+    expect(canvas.getByText('C Major')).toBeInTheDocument();
 
     // RootSelectorをクリック
     const rootSelector = canvas.getByRole('combobox');
@@ -66,7 +65,7 @@ export const RootSelectionTest: Story = {
 
     // 結果確認: D Majorになっていることを確認
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('D Major');
+      expect(canvas.getByText('D Major')).toBeInTheDocument();
     });
   },
 };
@@ -81,8 +80,8 @@ export const ModeChangeTest: Story = {
     const canvas = within(canvasElement);
 
     // 初期状態: C Majorであることを確認
-    const currentDisplay = canvas.getByText(/Current:/);
-    expect(currentDisplay.textContent).toContain('C Major');
+    // Current Keyバッジを確認
+    expect(canvas.getByText('C Major')).toBeInTheDocument();
 
     // Dorianラベル（"Dor"）をクリック
     const dorianLabel = canvas.getByRole('button', { name: /Dor/i });
@@ -90,7 +89,7 @@ export const ModeChangeTest: Story = {
 
     // 結果確認: C Dorianになっていることを確認
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('C Dorian');
+      expect(canvas.getByText('C Dorian')).toBeInTheDocument();
     });
   },
 };
@@ -103,14 +102,14 @@ export const BrightnessRangeTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentDisplay = canvas.getByText(/Current:/);
+    // Current Keyバッジを確認
 
     // Lydian（最も明るい）に変更
     const lydianLabel = canvas.getByRole('button', { name: /Lyd/i });
     await userEvent.click(lydianLabel);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('C Lydian');
+      expect(canvas.getByText('C Lydian')).toBeInTheDocument();
     });
 
     // Locrian（最も暗い）に変更
@@ -118,7 +117,7 @@ export const BrightnessRangeTest: Story = {
     await userEvent.click(locrianLabel);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('C Locrian');
+      expect(canvas.getByText('C Locrian')).toBeInTheDocument();
     });
   },
 };
@@ -131,10 +130,10 @@ export const IntegrationTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentDisplay = canvas.getByText(/Current:/);
+    // Current Keyバッジを確認
 
     // 初期状態確認
-    expect(currentDisplay.textContent).toContain('C Major');
+    expect(canvas.getByText('C Major')).toBeInTheDocument();
 
     // Step 1: Root を D に変更
     const rootSelector = canvas.getByRole('combobox');
@@ -145,7 +144,7 @@ export const IntegrationTest: Story = {
     await userEvent.click(dOption);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('D Major');
+      expect(canvas.getByText('D Major')).toBeInTheDocument();
     });
 
     // Step 2: Mode を Dorian に変更
@@ -153,7 +152,7 @@ export const IntegrationTest: Story = {
     await userEvent.click(dorianLabel);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('D Dorian');
+      expect(canvas.getByText('D Dorian')).toBeInTheDocument();
     });
   },
 };
@@ -166,17 +165,17 @@ export const MajorMinorToggleTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentDisplay = canvas.getByText(/Current:/);
+    // Current Keyバッジを確認
 
     // 初期状態: C Major
-    expect(currentDisplay.textContent).toContain('C Major');
+    expect(canvas.getByText('C Major')).toBeInTheDocument();
 
     // Minor（Aeolian）に変更
     const minorLabel = canvas.getByRole('button', { name: /Aeo\/Min/i });
     await userEvent.click(minorLabel);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('C Minor');
+      expect(canvas.getByText('C Minor')).toBeInTheDocument();
     });
 
     // 再びMajorに戻す
@@ -184,7 +183,7 @@ export const MajorMinorToggleTest: Story = {
     await userEvent.click(majorLabel);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('C Major');
+      expect(canvas.getByText('C Major')).toBeInTheDocument();
     });
   },
 };
@@ -197,7 +196,7 @@ export const AllModesVisualCheck: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentDisplay = canvas.getByText(/Current:/);
+    // Current Keyバッジを確認
 
     // テスト用のモード名とラベル
     const modes = [
@@ -215,7 +214,7 @@ export const AllModesVisualCheck: Story = {
       await userEvent.click(modeLabel);
 
       await waitFor(() => {
-        expect(currentDisplay.textContent).toContain(mode.expected);
+        expect(canvas.getByText(mode.expected)).toBeInTheDocument();
       });
     }
   },
@@ -229,7 +228,7 @@ export const SharpKeyTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentDisplay = canvas.getByText(/Current:/);
+    // Current Keyバッジを確認
 
     // G Majorを設定
     const rootSelector = canvas.getByRole('combobox');
@@ -240,7 +239,7 @@ export const SharpKeyTest: Story = {
     await userEvent.click(gOption);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('G Major');
+      expect(canvas.getByText('G Major')).toBeInTheDocument();
     });
   },
 };
@@ -253,7 +252,7 @@ export const FlatKeyTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const currentDisplay = canvas.getByText(/Current:/);
+    // Current Keyバッジを確認
 
     // F Majorを設定
     const rootSelector = canvas.getByRole('combobox');
@@ -264,7 +263,7 @@ export const FlatKeyTest: Story = {
     await userEvent.click(fOption);
 
     await waitFor(() => {
-      expect(currentDisplay.textContent).toContain('F Major');
+      expect(canvas.getByText('F Major')).toBeInTheDocument();
     });
   },
 };

@@ -39,7 +39,7 @@ export const HubRadioGroup = forwardRef<HTMLDivElement, HubRadioGroupProps>(
     return (
       <div
         ref={ref}
-        className="grid grid-cols-2 gap-2 rounded-md p-1"
+        className="flex rounded-lg p-1"
         role="radiogroup"
         aria-label="Hub種類の選択"
         onKeyDown={onKeyDown}

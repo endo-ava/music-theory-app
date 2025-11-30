@@ -11,16 +11,16 @@ import type { HubType, HubInfo } from '../types';
  */
 export const HUBS: Record<HubType, HubInfo> = {
   'circle-of-fifths': {
-    nameJa: '五度圏',
+    nameJa: 'Circle of Fifths',
     nameEn: 'Circle of Fifths',
-    description: '五度関係で配置された調の輪',
-    shortName: '五度圏',
+    description: 'Keys arranged by fifths',
+    shortName: 'Circle of Fifths',
   },
   'chromatic-circle': {
-    nameJa: 'クロマチックサークル',
+    nameJa: 'Chromatic Circle',
     nameEn: 'Chromatic Circle',
-    description: '半音階で配置された音の輪',
-    shortName: 'クロマチック',
+    description: 'Notes arranged chromatically',
+    shortName: 'Chromatic Circle',
   },
 };
 

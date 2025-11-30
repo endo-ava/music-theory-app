@@ -106,14 +106,16 @@ export const ResponsiveTest: Story = {
     const layerContainer = canvas.getByText('Layer').closest('div');
     expect(layerContainer).toBeInTheDocument();
 
-    // ChordLayerAccordionが含まれていることを確認
-    const accordionTrigger = canvas.getByRole('button', { name: 'Chord Layers' });
-    expect(accordionTrigger).toBeInTheDocument();
+    // ChordLayerセクションが含まれていることを確認
+    const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers', level: 3 });
+    expect(chordLayersHeading).toBeInTheDocument();
 
-    // h2タイトルの存在確認（レスポンシブクラスは実際のブラウザで動作）
+    // h2タイトルの存在確認
     const title = canvas.getByRole('heading', { level: 2 });
     expect(title).toHaveTextContent('Layer');
-    expect(title).toHaveClass('hidden', 'md:block');
+    // レスポンシブ表示は親divで制御されている（hidden md:flex）
+    const titleContainer = title.parentElement;
+    expect(titleContainer).toHaveClass('hidden', 'md:flex');
   },
 };
 
@@ -136,14 +138,17 @@ export const StructureTest: Story = {
     // h2レベルのタイトル確認
     const title = canvas.getByRole('heading', { level: 2 });
     expect(title).toHaveTextContent('Layer');
-    expect(title).toHaveClass('text-foreground', 'text-lg');
+    expect(title).toHaveClass(
+      'text-foreground',
+      'text-sm',
+      'font-semibold',
+      'uppercase',
+      'tracking-wider'
+    );
 
-    // アコーディオンコンポーネントの存在確認
-    const accordion = canvas.getByRole('button', { name: 'Chord Layers' });
-    expect(accordion).toBeInTheDocument();
-
-    // アコーディオンがExpandableUIとして機能することを確認
-    expect(accordion).toHaveAttribute('aria-expanded');
+    // Chord Layersセクション見出しの存在確認
+    const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers', level: 3 });
+    expect(chordLayersHeading).toBeInTheDocument();
 
     // 基本的なレイアウト構造の確認
     const container = title.parentElement;
@@ -154,38 +159,33 @@ export const StructureTest: Story = {
 /**
  * ChordLayerAccordion アコーディオン開閉テスト
  */
-export const AccordionToggleTest: Story = {
+export const ChordLayersSectionTest: Story = {
   args: {},
   parameters: {
     docs: {
       description: {
         story:
-          'LayerController内のChordLayerAccordionの開閉動作をテストします。デフォルトで開いている状態から、クリックによる閉じる/開く動作を確認します。',
+          'LayerController内のChord Layersセクションの表示をテストします。セクション見出しと各スイッチコントロールが正しく表示されることを確認します。',
       },
     },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const accordionTrigger = canvas.getByRole('button', { name: 'Chord Layers' });
+    // Chord Layersセクション見出しの確認
+    const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers', level: 3 });
+    expect(chordLayersHeading).toBeInTheDocument();
 
-    // 初期状態では開いている（defaultValue="chord-layer"）
-    expect(accordionTrigger).toHaveAttribute('aria-expanded', 'true');
-
-    // スイッチが表示されていることを確認
+    // 各スイッチが表示されていることを確認
     const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toBeInTheDocument();
 
-    // アコーディオンを閉じる
-    await userEvent.click(accordionTrigger);
-    expect(accordionTrigger).toHaveAttribute('aria-expanded', 'false');
+    const degreeSwitch = canvas.getByRole('switch', { name: 'Degree (Roman numerals)' });
+    expect(degreeSwitch).toBeInTheDocument();
 
-    // 再度開く
-    await userEvent.click(accordionTrigger);
-    expect(accordionTrigger).toHaveAttribute('aria-expanded', 'true');
-
-    // スイッチが再び表示されることを確認
-    expect(canvas.getByRole('switch', { name: 'Diatonic' })).toBeInTheDocument();
+    // セクションが常に表示されている（アコーディオンではない）
+    expect(chordLayersHeading).toBeVisible();
+    expect(diatonicSwitch).toBeVisible();
   },
 };
 
@@ -371,10 +371,9 @@ export const AccessibilityTest: Story = {
     // 初期レンダリング待ち
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    // アコーディオントリガーのアクセシビリティ
-    const accordionTrigger = canvas.getByRole('button', { name: 'Chord Layers' });
-    expect(accordionTrigger).toHaveAttribute('aria-expanded');
-    expect(accordionTrigger).toHaveAttribute('aria-controls');
+    // Chord Layersセクション見出しのアクセシビリティ
+    const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers', level: 3 });
+    expect(chordLayersHeading).toBeInTheDocument();
 
     // スイッチのアクセシビリティ
     const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
@@ -408,6 +407,9 @@ export const StoreIntegrationTest: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+
+    // テスト開始前にストアを初期状態にリセット
+    useLayerStore.setState({ isDiatonicVisible: true });
 
     const diatonicSwitch = canvas.getByRole('switch', { name: 'Diatonic' });
 
