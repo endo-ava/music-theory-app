@@ -32,6 +32,8 @@ import type { RelatedKeysTableProps } from '../types';
  * @returns 関連調情報を表示するテーブルコンポーネント
  *
  */
+const CENTERED_HEADER = 'flex items-center justify-center';
+
 export const RelatedKeysTable: React.FC<RelatedKeysTableProps> = React.memo(
   ({ relatedKeys, onPlayScale, className }) => {
     return (
@@ -42,29 +44,29 @@ export const RelatedKeysTable: React.FC<RelatedKeysTableProps> = React.memo(
         )}
       >
         <TableHeader>
-          <TableRow>
-            <TableHead className="flex items-center justify-center">
+          <TableRow className="text-secondary-foreground">
+            <TableHead className={CENTERED_HEADER}>
               <div>
-                <div>平行調</div>
-                <div>(Relative)</div>
+                {/* <div>平行調</div> */}
+                <div>Relative Key</div>
               </div>
             </TableHead>
-            <TableHead className="flex items-center justify-center">
+            <TableHead className={CENTERED_HEADER}>
               <div>
-                <div>同主調</div>
-                <div>(Parallel)</div>
+                {/* <div>同主調</div> */}
+                <div>Parallel Key</div>
               </div>
             </TableHead>
-            <TableHead className="flex items-center justify-center">
+            <TableHead className={CENTERED_HEADER}>
               <div>
-                <div>属調</div>
-                <div>(Dominant)</div>
+                {/* <div>属調</div> */}
+                <div>Dominant Key</div>
               </div>
             </TableHead>
-            <TableHead className="flex items-center justify-center">
+            <TableHead className={CENTERED_HEADER}>
               <div>
-                <div>下属調</div>
-                <div>(Subdominant)</div>
+                {/* <div>下属調</div> */}
+                <div>Subdominant Key</div>
               </div>
             </TableHead>
           </TableRow>
@@ -76,7 +78,7 @@ export const RelatedKeysTable: React.FC<RelatedKeysTableProps> = React.memo(
               <PlayButton
                 onClick={() => onPlayScale(relatedKeys.relative)}
                 ariaLabel={`Play ${relatedKeys.relative.shortName} key`}
-                className="w-full"
+                variant="cell"
               >
                 {relatedKeys.relative.shortName}
               </PlayButton>
@@ -85,7 +87,7 @@ export const RelatedKeysTable: React.FC<RelatedKeysTableProps> = React.memo(
               <PlayButton
                 onClick={() => onPlayScale(relatedKeys.parallel)}
                 ariaLabel={`Play ${relatedKeys.parallel.shortName} key`}
-                className="w-full"
+                variant="cell"
               >
                 {relatedKeys.parallel.shortName}
               </PlayButton>
@@ -94,7 +96,7 @@ export const RelatedKeysTable: React.FC<RelatedKeysTableProps> = React.memo(
               <PlayButton
                 onClick={() => onPlayScale(relatedKeys.dominant)}
                 ariaLabel={`Play ${relatedKeys.dominant.shortName} key`}
-                className="w-full"
+                variant="cell"
               >
                 {relatedKeys.dominant.shortName}
               </PlayButton>
@@ -103,7 +105,7 @@ export const RelatedKeysTable: React.FC<RelatedKeysTableProps> = React.memo(
               <PlayButton
                 onClick={() => onPlayScale(relatedKeys.subdominant)}
                 ariaLabel={`Play ${relatedKeys.subdominant.shortName} key`}
-                className="w-full"
+                variant="cell"
               >
                 {relatedKeys.subdominant.shortName}
               </PlayButton>

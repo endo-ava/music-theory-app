@@ -127,9 +127,7 @@ export const Default: Story = {
     await expect(selectedInfoContainer).toBeInTheDocument();
 
     // プレースホルダーメッセージが表示されることを確認
-    const placeholderText = canvas.getByText(
-      /サークル上のエリアをクリックすると、詳細情報が表示されます/
-    );
+    const placeholderText = canvas.getByText(/Click an area on the circle/i);
     await expect(placeholderText).toBeInTheDocument();
 
     // Selected Chordヘッダーや詳細テーブルが表示されないことを確認

@@ -8,7 +8,6 @@ import { DiatonicTable } from './DiatonicTable';
 import { RelatedKeysTable } from './RelatedKeysTable';
 import { useCurrentKeyData } from '../hooks/useCurrentKeyData';
 import { useAudioPlayback } from '../hooks/useAudioPlayback';
-import { BUTTON_STYLES } from '../utils';
 
 /**
  * 現在のキー情報エリアコンポーネント
@@ -34,23 +33,26 @@ export const CurrentKeyInfo: React.FC<ClassNameProps> = ({ className }) => {
   const { handlePlayChord, handlePlayNote, handlePlayScale } = useAudioPlayback();
 
   return (
-    <div className={twMerge('bg-card space-y-4 p-4', className)} aria-label="Selected Key">
+    <div
+      className={twMerge(
+        'animate-in fade-in slide-in-from-bottom-2 space-y-4 duration-500',
+        className
+      )}
+      aria-label="Selected Key"
+    >
       {/* キー情報ヘッダー */}
-      <div className="border-border mb-2 flex items-center justify-between">
-        <div className="text-secondary-foreground text-xs">Current Key</div>
-        <div className="text-center">
-          <PlayButton
-            onClick={() => handlePlayScale(currentKey)}
-            ariaLabel={`Play ${currentKey.contextName} Key`}
-            className={BUTTON_STYLES.header}
-          >
-            {currentKey.contextName}
-          </PlayButton>
-        </div>
-        {/* スペーサー */}
-        <div className="text-xs text-transparent" aria-hidden="true">
+      <div className="grid grid-cols-[1fr_auto_1fr] items-center py-1">
+        <span className="text-muted-foreground text-left text-[10px] font-medium tracking-wider uppercase">
           Current Key
-        </div>
+        </span>
+        <PlayButton
+          onClick={() => handlePlayScale(currentKey)}
+          ariaLabel={`Play ${currentKey.contextName} Key`}
+          variant="header"
+        >
+          {currentKey.contextName}
+        </PlayButton>
+        <div /> {/* Spacer for centering */}
       </div>
 
       {/* ダイアトニックスケール & コード */}

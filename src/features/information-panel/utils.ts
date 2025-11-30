@@ -4,22 +4,6 @@ import { IAnalysisResultWithFunction } from '@/domain/key';
 import { SelectedChordInfo } from './types';
 
 /**
- * 共通ボタンスタイルクラス
- *
- * information-panel内で使用されるボタンの統一されたスタイル定義。
- * ホバーエフェクト、トランジション、パディングなどの
- * 一貫したデザインを提供する。
- *
- * @constant {Object} BUTTON_STYLES
- * @property {string} primary - 一般的なボタン用スタイル
- * @property {string} header - ヘッダー部分用ボタンスタイル
- */
-export const BUTTON_STYLES = {
-  primary: 'hover:bg-selected transition-colors rounded px-2 py-1 w-full',
-  header: 'text-foreground hover:bg-selected rounded px-2 py-1 text-lg font-bold transition-colors',
-} as const;
-
-/**
  * 選択されたキーからコード情報を生成する
  *
  * Circle of Fifths上で選択されたキー情報（KeyDTO）から

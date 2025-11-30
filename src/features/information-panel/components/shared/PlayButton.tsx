@@ -24,18 +24,23 @@ export const PlayButton: React.FC<PlayButtonProps> = ({
   onClick,
   ariaLabel,
   className,
+  variant,
 }) => {
+  const variants = {
+    header:
+      'text-xl font-bold text-primary hover:text-primary/80 active:scale-95 hover:bg-selected active:bg-selected',
+    cell: 'w-full py-2 hover:bg-primary/10 hover:text-primary text-foreground font-medium active:bg-primary/20',
+  };
+
   return (
     <button
       className={twMerge(
         // ベーススタイル
         'rounded px-2 py-1 transition-all duration-150 ease-out',
-        // ホバー（デスクトップ）
-        'hover:bg-selected',
-        // アクティブ（タップ時）
-        'active:bg-selected active:scale-95',
         // フォーカス（キーボードナビゲーション）
         'focus-visible:ring-2 focus-visible:outline-none',
+        // バリアントスタイル
+        variants[variant],
         className
       )}
       onClick={onClick}
