@@ -27,6 +27,9 @@ export interface AtlasNodeData {
   data: any;
   // 検索用メタデータ
   tags: string[];
+  // 初期表示フラグ（デフォルト true）
+  // instance タイプのノードは初期非表示（情報過多防止）
+  visible?: boolean;
 }
 
 export type AtlasEdgeType =
