@@ -6,6 +6,11 @@
  * 座標計算ロジックを提供する。
  */
 
+import {
+  polarToCartesian as polarToCartesianBase,
+  degreesToRadians,
+} from '@/shared/utils/geometry';
+
 /**
  * 2次元座標
  */
@@ -78,38 +83,27 @@ export class CoordinateSystem {
   /**
    * 極座標からデカルト座標への変換
    *
+   * shared/utils/geometry.tsのpolarToCartesian関数をベースに、
+   * Atlas特有の処理（中心座標オフセット、SVG y軸反転、丸め処理）を追加。
+   *
    * @param radius 中心からの半径
    * @param angleDegrees 角度（度）、0度=東、反時計回り
    * @returns デカルト座標 (x, y)
    */
   static polarToCartesian(radius: number, angleDegrees: number): Coordinate {
-    const angleRadians = (angleDegrees * Math.PI) / 180;
-    const x = CoordinateConstants.CENTER + radius * Math.cos(angleRadians);
-    const y = CoordinateConstants.CENTER - radius * Math.sin(angleRadians); // SVG y軸は下向き
+    const angleRadians = degreesToRadians(angleDegrees);
+    const point = polarToCartesianBase(radius, angleRadians);
+
+    // 中心座標のオフセットを追加
+    const x = CoordinateConstants.CENTER + point.x;
+    // SVG y軸は下向きなので反転
+    const y = CoordinateConstants.CENTER - point.y;
 
     // 浮動小数点誤差を避けるため、小数点以下4桁に丸める
     return {
       x: Math.round(x * 10000) / 10000,
       y: Math.round(y * 10000) / 10000,
     };
-  }
-
-  /**
-   * 五度圏の角度を計算
-   *
-   * 五度圏は、C(index=0)を北（90度）に配置し、
-   * 時計回りに30度ずつ回転する。
-   *
-   * @param index ピッチクラスのインデックス（0-11）
-   * @returns 角度（度）
-   *
-   * @example
-   * getCircleOfFifthsAngle(0) // C → 90度（北）
-   * getCircleOfFifthsAngle(1) // G → 60度
-   * getCircleOfFifthsAngle(2) // D → 30度
-   */
-  static getCircleOfFifthsAngle(index: number): number {
-    return 90 - index * 30;
   }
 
   /**
@@ -149,18 +143,6 @@ export class CoordinateSystem {
     if (angle >= 360) angle -= 360;
 
     return angle;
-  }
-
-  /**
-   * 五度圏配置の座標を取得
-   *
-   * @param index ピッチクラスのインデックス（0-11）
-   * @param radius 中心からの半径
-   * @returns デカルト座標 (x, y)
-   */
-  static getCircleOfFifthsPosition(index: number, radius: number): Coordinate {
-    const angle = this.getCircleOfFifthsAngle(index);
-    return this.polarToCartesian(radius, angle);
   }
 
   /**

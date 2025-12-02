@@ -75,7 +75,7 @@ export class AtlasDataGenerator {
   private generateRootNode(): void {
     const center = CoordinateSystem.getCenter();
 
-    const rootNode = AtlasNodeBuilder.foundation('root-theory')
+    const rootNode = AtlasNodeBuilder.context('root-theory')
       .dataType('function')
       .label('Music Theory')
       .coordinate(center)
@@ -482,9 +482,9 @@ export class AtlasDataGenerator {
       'harmonic-minor',
     ];
 
-    scalePatternLabels.forEach((label, index) => {
+    scalePatternLabels.forEach(label => {
       this.addEdge(
-        `edge-concept-scale-${index}`,
+        `edge-concept-scale-pattern-${label}`,
         'concept-scale',
         `pattern-scale-${label}`,
         'structure'
@@ -501,9 +501,9 @@ export class AtlasDataGenerator {
       'minor-7th',
     ];
 
-    chordPatternLabels.forEach((label, index) => {
+    chordPatternLabels.forEach(label => {
       this.addEdge(
-        `edge-concept-chord-${index}`,
+        `edge-concept-chord-pattern-${label}`,
         'concept-chord',
         `pattern-chord-${label}`,
         'structure'

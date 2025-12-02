@@ -143,6 +143,8 @@ export class AtlasNodeBuilder {
     if (!type) throw new Error('AtlasNodeBuilder: type is required');
     if (!dataType) throw new Error('AtlasNodeBuilder: dataType is required');
     if (!label) throw new Error('AtlasNodeBuilder: label is required');
+    if (x === undefined) throw new Error('AtlasNodeBuilder: x座標は必須です');
+    if (y === undefined) throw new Error('AtlasNodeBuilder: y座標は必須です');
     if (data === undefined) throw new Error('AtlasNodeBuilder: data is required');
     if (!tags) throw new Error('AtlasNodeBuilder: tags is required');
 
