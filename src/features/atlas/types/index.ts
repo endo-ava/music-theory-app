@@ -22,11 +22,27 @@ export interface AtlasNodeData {
   y?: number;
   // 親ノードID (階層構造用)
   parentId?: string;
-  // ドメイン固有データ (Domainオブジェクトへの参照やシリアライズデータ)
+  /**
+   * ドメイン固有データ (PitchClass, Key, ScalePattern, ChordPattern等)
+   *
+   * 各ノードタイプが異なるドメインオブジェクトを参照するため、
+   * 型安全性を保ちながら統一的に扱うことが困難です。
+   * ジェネリック型を使用すると、型パラメータの伝播により
+   * コードベース全体に複雑性が波及します。
+   *
+   * 現状の `any` 型は、実装の柔軟性とコード可読性のバランスを考慮した
+   * 意図的な設計判断です。各ノードの `dataType` フィールドと組み合わせることで、
+   * 実行時に適切な型を判断できます。
+   *
+   * @see docs/2004.architecture.md - Type Strategy セクション
+   */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   // 検索用メタデータ
   tags: string[];
+  // 初期表示フラグ（デフォルト true）
+  // instance タイプのノードは初期非表示（情報過多防止）
+  visible?: boolean;
 }
 
 export type AtlasEdgeType =

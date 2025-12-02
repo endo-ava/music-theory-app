@@ -6,7 +6,7 @@ import '@xyflow/react/dist/style.css';
 
 import { ClassNameProps } from '@/shared/types';
 import { cn } from '@/lib/utils';
-import { generateAtlasDataset } from '../../data/mockData';
+import { generateAtlasDataset } from '../../data/AtlasDataGenerator';
 import { useAtlasFlow } from './hooks/useAtlasFlow';
 import { AtlasNode } from './components/AtlasNode';
 
