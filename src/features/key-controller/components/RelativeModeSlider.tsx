@@ -76,19 +76,28 @@ export const RelativeModeSlider: React.FC<RelativeModeSliderProps> = ({
     setHoveredModeIndex(null);
   }, []);
 
+  // 現在のモード色を取得
+  const currentModeName = DEGREE_INFO[value].mode.toLowerCase();
+  const currentColor = `var(--color-mode-${currentModeName})`;
+
   return (
     <TooltipProvider delayDuration={0}>
       <div className={className}>
         {/* スライダー本体 */}
         <div
           ref={sliderRef}
-          className="relative cursor-pointer"
+          className="relative cursor-pointer py-2"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          style={
+            {
+              '--current-mode-color': currentColor,
+            } as React.CSSProperties
+          }
         >
           {/* グラデーション背景トラック */}
           <div
-            className="pointer-events-none absolute inset-x-0 h-2 rounded-full opacity-40"
+            className="pointer-events-none absolute inset-x-0 h-3 rounded-full opacity-30 blur-[2px] transition-opacity duration-300 hover:opacity-50"
             style={{
               background:
                 'linear-gradient(to right, var(--color-mode-ionian) 0%, var(--color-mode-dorian) 17%, var(--color-mode-phrygian) 33%, var(--color-mode-lydian) 50%, var(--color-mode-mixolydian) 67%, var(--color-mode-aeolian) 83%, var(--color-mode-locrian) 100%)',
@@ -104,7 +113,7 @@ export const RelativeModeSlider: React.FC<RelativeModeSliderProps> = ({
             min={0}
             max={6}
             step={1}
-            className="relative [&_[data-slot=slider-thumb]]:size-4 [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:shadow-lg [&_[data-slot=slider-thumb]]:hover:ring-2 [&_[data-slot=slider-thumb]]:focus-visible:ring-2 [&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-transparent"
+            className="[&_[data-slot=slider-thumb]]:bg-background relative [&_[data-slot=slider-thumb]]:size-5 [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:border-[var(--current-mode-color)] [&_[data-slot=slider-thumb]]:shadow-[0_0_15px_-2px_var(--current-mode-color)] [&_[data-slot=slider-thumb]]:transition-all [&_[data-slot=slider-thumb]]:hover:scale-110 [&_[data-slot=slider-track]]:h-3 [&_[data-slot=slider-track]]:bg-transparent"
           />
 
           {/* ホバー時のツールチップ - ディグリー情報付き */}

@@ -16,14 +16,15 @@ import { Key } from '../../../domain/key';
  * ダイアトニックコード・スケール表示テーブルコンポーネント
  *
  * 現在のキーにおけるダイアトニックコード（I, ii, iii, IV, V, vi, vii°）と
- * ダイアトニックスケールの音符を7列のテーブル形式で表示する。
+ * ダイアトニックスケールの音符を8列のテーブル形式で表示する。
+ * （最初の列は行ラベル、残り7列がコード/音符データ）
  * 各コードと音符は再生可能なPlayButtonとして実装されており、クリックによる音声フィードバックを提供する。
  *
  * テーブル構成：
  * - 1行目: ローマ数字度数（I, ii, iii, IV, V, vi, vii°）
  * - 2行目: コード名（クリック可能な再生ボタン）
- * - 3行目: 日本語音度名（ド、レ、ミ、ファ、ソ、ラ、シ）
- * - 4行目: 音名（クリック可能な再生ボタン）
+ * - 3行目: 音名（クリック可能な再生ボタン）
+ * - 4行目: 日本語音度名（ド、レ、ミ、ファ、ソ、ラ、シ）※Keyインスタンスの場合のみ
  *
  * @component
  * @param props - DiatonicTableコンポーネントのプロパティ
@@ -37,36 +38,59 @@ import { Key } from '../../../domain/key';
  * @returns ダイアトニック情報を表示するテーブルコンポーネント
  *
  */
+const CENTERED_CONTENT = 'flex items-center justify-center';
+const CENTERED_HEADER_COL = 'flex flex-col items-center justify-center';
+
 export const DiatonicTable: React.FC<DiatonicTableProps> = React.memo(
   ({ currentKey, diatonicChords, scaleNotes, onPlayChord, onPlayNote, className }) => {
     return (
       <Table
         className={twMerge(
-          'text-foreground text-center text-xs [&_tr]:grid [&_tr]:grid-cols-7',
+          'text-foreground text-center text-xs [&_tr]:grid [&_tr]:grid-cols-8',
           className
         )}
       >
         <TableHeader>
           {/* ローマ数字度数行 */}
           <TableRow>
+            <TableHead className={twMerge(CENTERED_HEADER_COL, 'text-[10px]')}>
+              <span>Roman</span>
+              <span>Numerals</span>
+            </TableHead>
             {diatonicChords.map((chordInfo, index) => (
-              <TableHead key={index} className="flex items-center justify-center">
+              <TableCell key={index} className={CENTERED_CONTENT}>
                 {chordInfo.perfectDegreeName}
-              </TableHead>
+              </TableCell>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
           {/* コード名行 */}
           <TableRow>
+            <TableHead className={CENTERED_CONTENT}>Chord</TableHead>
             {diatonicChords.map((chordInfo, index) => (
               <TableCell key={index}>
                 <PlayButton
                   onClick={() => onPlayChord(chordInfo.chord)}
                   ariaLabel={`Play chord ${chordInfo.chord.getNameFor(currentKey)}`}
-                  className="w-full"
+                  variant="cell"
                 >
                   {chordInfo.chord.getNameFor(currentKey)}
+                </PlayButton>
+              </TableCell>
+            ))}
+          </TableRow>
+          {/* 音名行 */}
+          <TableRow>
+            <TableHead className={CENTERED_CONTENT}>Note</TableHead>
+            {scaleNotes.slice(0, 7).map((note, index) => (
+              <TableCell key={index}>
+                <PlayButton
+                  onClick={() => onPlayNote(note)}
+                  ariaLabel={`Play note ${note.getNameFor(currentKey.keySignature)}`}
+                  variant="cell"
+                >
+                  {note.getNameFor(currentKey.keySignature)}
                 </PlayButton>
               </TableCell>
             ))}
@@ -74,25 +98,17 @@ export const DiatonicTable: React.FC<DiatonicTableProps> = React.memo(
           {/* 日本語音度名行 (Keyインスタンスのみ表示) */}
           {currentKey instanceof Key && (
             <TableRow>
+              <TableHead className={twMerge(CENTERED_HEADER_COL, 'text-[10px]')}>
+                <span>Scale</span>
+                <span>Degree</span>
+              </TableHead>
               {currentKey.japaneseScaleDegreeNames.map((degreeName, index) => (
-                <TableCell key={index}>{degreeName}</TableCell>
+                <TableCell key={index} className="flex items-center justify-center text-[10px]">
+                  {degreeName}
+                </TableCell>
               ))}
             </TableRow>
           )}
-          {/* 音名行 */}
-          <TableRow>
-            {scaleNotes.slice(0, 7).map((note, index) => (
-              <TableCell key={index}>
-                <PlayButton
-                  onClick={() => onPlayNote(note)}
-                  ariaLabel={`Play note ${note.getNameFor(currentKey.keySignature)}`}
-                  className="w-full"
-                >
-                  {note.getNameFor(currentKey.keySignature)}
-                </PlayButton>
-              </TableCell>
-            ))}
-          </TableRow>
         </TableBody>
       </Table>
     );

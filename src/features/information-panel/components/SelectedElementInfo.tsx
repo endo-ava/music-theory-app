@@ -7,7 +7,6 @@ import { PlayButton } from './shared/PlayButton';
 import { ChordDetailsTable } from './ChordDetailsTable';
 import { useSelectedChordInfo } from '../hooks/useSelectedChordInfo';
 import { useAudioPlayback } from '../hooks/useAudioPlayback';
-import { BUTTON_STYLES } from '../utils';
 
 /**
  * 選択要素情報コンポーネント
@@ -41,25 +40,25 @@ export const SelectedElementInfo: React.FC<ClassNameProps> = ({ className }) => 
   };
 
   return (
-    <div className={twMerge('bg-card p-4 text-xs', className)} aria-label="Selected Chord">
+    <div
+      className={twMerge('flex min-h-[120px] flex-col justify-center space-y-6', className)}
+      aria-label="Selected Chord"
+    >
       {hasSelection && selectedChordInfo ? (
         <>
           {/* 上段：選択コード */}
-          <div className="border-border mb-2 flex items-center justify-between">
-            <div className="text-secondary-foreground text-xs">Selected Chord</div>
-            <div className="text-center">
-              <PlayButton
-                onClick={handlePlaySelectedChord}
-                ariaLabel={`Play ${selectedChordInfo.chord.getNameForCircleOfFifth()} chord`}
-                className={BUTTON_STYLES.header}
-              >
-                {selectedChordInfo.chord.getNameForCircleOfFifth()}
-              </PlayButton>
-            </div>
-            {/* スペーサー */}
-            <div className="text-xs text-transparent" aria-hidden="true">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center py-1">
+            <span className="text-muted-foreground text-left text-[10px] font-medium tracking-wider uppercase">
               Selected Chord
-            </div>
+            </span>
+            <PlayButton
+              onClick={handlePlaySelectedChord}
+              ariaLabel={`Play ${selectedChordInfo.chord.getNameForCircleOfFifth()} chord`}
+              variant="header"
+            >
+              {selectedChordInfo.chord.getNameForCircleOfFifth()}
+            </PlayButton>
+            <div /> {/* Spacer for centering */}
           </div>
 
           {/* 下段：テーブル形式での情報表示 */}
@@ -67,8 +66,12 @@ export const SelectedElementInfo: React.FC<ClassNameProps> = ({ className }) => 
         </>
       ) : (
         // 非選択時のプレースホルダー表示
-        <div className="text-muted-foreground py-8 text-center">
-          <p>サークル上のエリアをクリックすると、詳細情報が表示されます</p>
+        <div className="text-muted-foreground animate-in fade-in py-8 text-center text-sm duration-500">
+          <p>
+            Click an area on the circle
+            <br />
+            to view details
+          </p>
         </div>
       )}
     </div>

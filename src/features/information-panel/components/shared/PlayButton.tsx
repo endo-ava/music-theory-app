@@ -3,6 +3,15 @@ import { twMerge } from 'tailwind-merge';
 import type { PlayButtonProps } from '../../types';
 
 /**
+ * PlayButtonのバリアントスタイル定数
+ */
+const PLAY_BUTTON_VARIANTS = {
+  header:
+    'text-xl font-bold text-primary hover:text-primary/80 active:scale-95 hover:bg-selected active:bg-selected',
+  cell: 'w-full py-2 hover:bg-primary/10 hover:text-primary text-foreground font-medium active:bg-primary/20',
+} as const;
+
+/**
  * 統一された再生ボタンコンポーネント
  *
  * information-panel全体で使用される音声再生ボタンの標準化されたUI。
@@ -15,6 +24,7 @@ import type { PlayButtonProps } from '../../types';
  * @param props.onClick - ボタンがクリックされた時のハンドラー関数
  * @param props.ariaLabel - アクセシビリティ用のラベル（スクリーンリーダー対応）
  * @param props.className - 追加のCSSクラス名（オプション）
+ * @param props.variant - ボタンのバリアント（'header' | 'cell'）
  *
  * @returns 再生ボタンのReactコンポーネント
  *
@@ -24,18 +34,17 @@ export const PlayButton: React.FC<PlayButtonProps> = ({
   onClick,
   ariaLabel,
   className,
+  variant,
 }) => {
   return (
     <button
       className={twMerge(
         // ベーススタイル
         'rounded px-2 py-1 transition-all duration-150 ease-out',
-        // ホバー（デスクトップ）
-        'hover:bg-selected',
-        // アクティブ（タップ時）
-        'active:bg-selected active:scale-95',
         // フォーカス（キーボードナビゲーション）
         'focus-visible:ring-2 focus-visible:outline-none',
+        // バリアントスタイル
+        PLAY_BUTTON_VARIANTS[variant],
         className
       )}
       onClick={onClick}

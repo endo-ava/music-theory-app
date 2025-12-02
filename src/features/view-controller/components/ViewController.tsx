@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { ScanEye } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useViewController } from '../hooks/useViewController';
 import { HubRadioGroup } from './HubRadioGroup';
@@ -36,7 +37,10 @@ export const ViewController: React.FC<ViewControllerProps> = ({ className, title
       )}
     >
       {/* Component Title - モバイルでは非表示、md以上で表示 */}
-      <h2 className="text-foreground hidden text-lg font-semibold md:block">{title}</h2>
+      <div className="hidden items-center gap-2 md:flex">
+        <ScanEye className="text-muted-foreground h-4 w-4" />
+        <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">{title}</h2>
+      </div>
 
       {/* Hub ラジオグループ - 子コンポーネントに分離 */}
       <HubRadioGroup

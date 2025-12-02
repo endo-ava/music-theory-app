@@ -55,6 +55,7 @@ export interface PlayButtonProps {
   onClick: () => void;
   ariaLabel: string;
   className?: string;
+  variant: 'header' | 'cell';
 }
 
 /**

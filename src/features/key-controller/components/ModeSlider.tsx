@@ -64,35 +64,53 @@ export const ModeSlider: React.FC<ModeSliderProps> = ({ value, onValueChange, cl
   // 全モード名リスト（ラベル表示用）
   const modeLabels = ScalePattern.MAJOR_MODES_BY_BRIGHTNESS.map(pattern => pattern.name);
 
+  // モードごとの色定義（明るい順）
+  const modeColors = [
+    'var(--color-mode-lydian)',
+    'var(--color-mode-ionian)',
+    'var(--color-mode-mixolydian)',
+    'var(--color-mode-dorian)',
+    'var(--color-mode-aeolian)',
+    'var(--color-mode-phrygian)',
+    'var(--color-mode-locrian)',
+  ];
+
+  const currentColor = modeColors[value] || 'var(--color-primary)';
+
   return (
     <TooltipProvider delayDuration={0}>
       <div className={className}>
         {/* スライダー本体 */}
         <div
           ref={sliderRef}
-          className="relative cursor-pointer"
+          className="relative cursor-pointer py-2"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          style={
+            {
+              '--current-mode-color': currentColor,
+            } as React.CSSProperties
+          }
         >
           {/* グラデーション背景トラック */}
           <div
-            className="pointer-events-none absolute inset-x-0 h-2 rounded-full opacity-40"
+            className="pointer-events-none absolute inset-x-0 h-3 rounded-full opacity-30 blur-[2px] transition-opacity duration-300 hover:opacity-50"
             style={{
               background:
-                'linear-gradient(to right, var(--color-mode-ionian) 0%, var(--color-mode-dorian) 17%, var(--color-mode-phrygian) 33%, var(--color-mode-lydian) 50%, var(--color-mode-mixolydian) 67%, var(--color-mode-aeolian) 83%, var(--color-mode-locrian) 100%)',
+                'linear-gradient(to right, var(--color-mode-lydian) 0%, var(--color-mode-ionian) 16.6%, var(--color-mode-mixolydian) 33.3%, var(--color-mode-dorian) 50%, var(--color-mode-aeolian) 66.6%, var(--color-mode-phrygian) 83.3%, var(--color-mode-locrian) 100%)',
               top: '50%',
               transform: 'translateY(-50%)',
             }}
           />
 
-          {/* Sliderコンポーネント - Thumbサイズ拡大 */}
+          {/* Sliderコンポーネント - Thumbサイズ拡大 & 光彩エフェクト */}
           <Slider
             value={[value]}
             onValueChange={handleValueChange}
             min={0}
             max={6}
             step={1}
-            className="relative [&_[data-slot=slider-thumb]]:size-4 [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:shadow-lg [&_[data-slot=slider-thumb]]:hover:ring-2 [&_[data-slot=slider-thumb]]:focus-visible:ring-2 [&_[data-slot=slider-track]]:h-2 [&_[data-slot=slider-track]]:bg-transparent"
+            className="[&_[data-slot=slider-thumb]]:bg-background relative [&_[data-slot=slider-thumb]]:size-5 [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:border-[var(--current-mode-color)] [&_[data-slot=slider-thumb]]:shadow-[0_0_15px_-2px_var(--current-mode-color)] [&_[data-slot=slider-thumb]]:transition-all [&_[data-slot=slider-thumb]]:hover:scale-110 [&_[data-slot=slider-track]]:h-3 [&_[data-slot=slider-track]]:bg-transparent"
           />
 
           {/* ホバー時のツールチップ */}

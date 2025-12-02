@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Music2 } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import type { ClassNameProps } from '@/shared/types';
 import { useKeyController } from '../hooks/useKeyController';
@@ -17,6 +18,9 @@ export interface KeyControllerProps extends ClassNameProps {
   /** コンポーネントのタイトル */
   title?: string;
 }
+
+const TOGGLE_ITEM_CLASS =
+  'data-[state=on]:bg-primary data-[state=on]:text-primary-foreground text-xs text-muted-foreground hover:text-foreground';
 
 /**
  * Key Controller (C-2) コンポーネント - トグルUI版
@@ -70,75 +74,86 @@ export const KeyController: React.FC<KeyControllerProps> = ({
       )}
     >
       {/* Component Title とトグルUI - モバイルでは非表示、md以上で表示 */}
-      <div className="hidden items-center justify-between md:flex">
-        <h2 className="text-lg font-semibold">{title}</h2>
-
-        {/* トグルUI: Parallel / Relative */}
-        <ToggleGroup
-          type="single"
-          value={selectionMode}
-          onValueChange={value => value && setSelectionMode(value as 'parallel' | 'relative')}
-          size="sm"
-          className="justify-start"
-        >
-          <ToggleGroupItem value="parallel" aria-label="Parallel Mode" className="text-xs">
-            Parallel
-          </ToggleGroupItem>
-          <ToggleGroupItem value="relative" aria-label="Relative Mode" className="text-xs">
-            Relative
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-
-      {/* Parallel Mode (同主調) */}
-      {selectionMode === 'parallel' && (
-        <div className="space-y-4">
-          {/* Root Selector */}
-          <div className="space-y-2">
-            <h3 className="text-secondary-foreground text-sm font-medium">Root</h3>
-            <RootSelector value={currentTonic} onValueChange={handleRootChange} className="w-30" />
+      <div className="hidden flex-col gap-4 md:flex">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Music2 className="text-muted-foreground h-4 w-4" />
+            <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">
+              {title}
+            </h2>
           </div>
+          {/* Current Key Badge */}
+          <div className="bg-primary/10 text-primary border-primary/20 flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium shadow-[0_0_10px_-3px_var(--color-primary)]">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
+            {currentKey.contextName}
+          </div>
+        </div>
 
-          {/* Mode Slider */}
-          <div className="space-y-2">
-            <h3 className="text-secondary-foreground text-sm font-medium">Mode</h3>
+        {/* Controls Row: Toggle + Selector */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          {/* トグルUI: Parallel / Relative */}
+          <ToggleGroup
+            type="single"
+            value={selectionMode}
+            onValueChange={value => value && setSelectionMode(value as 'parallel' | 'relative')}
+            size="sm"
+          >
+            <ToggleGroupItem
+              value="parallel"
+              aria-label="Parallel Mode"
+              className={TOGGLE_ITEM_CLASS}
+            >
+              Parallel
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="relative"
+              aria-label="Relative Mode"
+              className={TOGGLE_ITEM_CLASS}
+            >
+              Relative
+            </ToggleGroupItem>
+          </ToggleGroup>
+
+          {/* Selector (Root or Major Key) */}
+          <div className="flex items-center gap-3">
+            <span className="text-muted-foreground text-[10px] font-medium tracking-wider uppercase">
+              {selectionMode === 'parallel' ? 'Root' : 'Key'}
+            </span>
+            {selectionMode === 'parallel' ? (
+              <RootSelector
+                value={currentTonic}
+                onValueChange={handleRootChange}
+                className="w-28"
+              />
+            ) : (
+              <MajorKeySelector
+                value={parentMajorKey}
+                onValueChange={handleMajorKeyChange}
+                className="w-32"
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Mode Slider Area */}
+        <div className="space-y-2 pt-1">
+          <h3 className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+            Mode
+          </h3>
+          {selectionMode === 'parallel' ? (
             <ModeSlider
               value={currentModeIndex}
               onValueChange={handleModeChange}
-              className="w-full"
+              className="animate-in fade-in slide-in-from-left-1 w-full duration-300"
             />
-          </div>
-        </div>
-      )}
-
-      {/* Relative Mode (平行調) */}
-      {selectionMode === 'relative' && (
-        <div className="space-y-4">
-          {/* Major Key Selector */}
-          <div className="space-y-2">
-            <h3 className="text-secondary-foreground text-sm font-medium">Major Key</h3>
-            <MajorKeySelector
-              value={parentMajorKey}
-              onValueChange={handleMajorKeyChange}
-              className="w-42"
-            />
-          </div>
-
-          {/* Relative Mode Slider */}
-          <div className="space-y-2">
-            <h3 className="text-secondary-foreground text-sm font-medium">Mode</h3>
+          ) : (
             <RelativeModeSlider
               value={relativeModeIndex}
               onValueChange={handleRelativeModeChange}
-              className="w-full"
+              className="animate-in fade-in slide-in-from-right-1 w-full duration-300"
             />
-          </div>
+          )}
         </div>
-      )}
-
-      {/* Current Key Display */}
-      <div className="text-secondary-foreground text-right text-sm">
-        Current: <span className="text-foreground font-medium">{currentKey.contextName}</span>
       </div>
     </div>
   );

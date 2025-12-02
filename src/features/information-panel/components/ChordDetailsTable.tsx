@@ -31,6 +31,8 @@ import type { ChordDetailsTableProps } from '../types';
  * @returns 選択されたコードの詳細情報を表示するテーブルコンポーネント
  *
  */
+const CENTERED_HEADER = 'text-secondary-foreground flex items-center justify-center';
+
 export const ChordDetailsTable: React.FC<ChordDetailsTableProps> = React.memo(
   ({ selectedChordInfo, className }) => {
     return (
@@ -42,16 +44,18 @@ export const ChordDetailsTable: React.FC<ChordDetailsTableProps> = React.memo(
       >
         <TableHeader>
           <TableRow>
-            <TableHead className="flex items-center justify-center">chord tones</TableHead>
-            <TableHead className="flex items-center justify-center">degree name</TableHead>
-            <TableHead className="flex items-center justify-center">function</TableHead>
+            <TableHead className={CENTERED_HEADER}>chord tones</TableHead>
+            <TableHead className={CENTERED_HEADER}>degree name</TableHead>
+            <TableHead className={CENTERED_HEADER}>function</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell>{selectedChordInfo.constituentNotes.join(', ')}</TableCell>
-            <TableCell>{selectedChordInfo.degreeName}</TableCell>
-            <TableCell>{selectedChordInfo.function}</TableCell>
+            <TableCell className="p-2 font-medium">
+              {selectedChordInfo.constituentNotes.join(', ')}
+            </TableCell>
+            <TableCell className="p-2 font-medium">{selectedChordInfo.degreeName}</TableCell>
+            <TableCell className="p-2 font-medium">{selectedChordInfo.function}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

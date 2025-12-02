@@ -49,8 +49,8 @@ describe('useViewController', () => {
 
       expect(result.current.selectedOption).toEqual({
         value: 'circle-of-fifths',
-        label: '五度圏',
-        description: '五度関係で配置された調の輪',
+        label: 'Circle of Fifths',
+        description: 'Keys arranged by fifths',
       });
     });
 
@@ -92,8 +92,8 @@ describe('useViewController', () => {
       // selectedOptionの更新を確認
       expect(result.current.selectedOption).toEqual({
         value: 'chromatic-circle',
-        label: 'クロマチック',
-        description: '半音階で配置された音の輪',
+        label: 'Chromatic Circle',
+        description: 'Notes arranged chromatically',
       });
     });
   });
