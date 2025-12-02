@@ -3,6 +3,7 @@ import { Info } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 import { SelectedElementInfo, CurrentKeyInfo } from '@/features/information-panel';
+import { Divider } from '@/shared/components/Divider';
 import { ClassNameProps } from '@/shared/types';
 
 /**
@@ -12,8 +13,6 @@ import { ClassNameProps } from '@/shared/types';
  * 将来的な学習進捗・履歴等を格納
  */
 export const InformationPanel: React.FC<ClassNameProps> = ({ className }) => {
-  const divider = <div className="h-px w-full bg-white/10" />;
-
   return (
     <aside
       className={twMerge(
@@ -29,12 +28,12 @@ export const InformationPanel: React.FC<ClassNameProps> = ({ className }) => {
         <h2 className="text-foreground text-lg font-semibold tracking-tight">Information</h2>
       </div>
 
-      {divider}
+      <Divider />
 
       {/* C-1-1: 選択要素情報エリア (上段) */}
       <SelectedElementInfo />
 
-      {divider}
+      <Divider />
 
       {/* C-1-2: 現在のキー情報エリア (下段) */}
       <CurrentKeyInfo />

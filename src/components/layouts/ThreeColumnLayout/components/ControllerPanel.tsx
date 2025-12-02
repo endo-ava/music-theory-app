@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { ViewController } from '@/features/view-controller';
 import { KeyController } from '@/features/key-controller';
 import { LayerController } from '@/features/layer-controller';
+import { Divider } from '@/shared/components/Divider';
 import { ClassNameProps } from '@/shared/types';
 
 /**
@@ -13,7 +14,6 @@ import { ClassNameProps } from '@/shared/types';
  */
 export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
   const sectionClassName = 'bg-transparent border-none shadow-none p-0';
-  const divider = <div className="h-px w-full bg-white/10" />;
 
   return (
     <aside
@@ -43,17 +43,17 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
         <h2 className="text-foreground text-lg font-semibold tracking-tight">Controller</h2>
       </div>
 
-      {divider}
+      <Divider />
 
       {/* C-1: View Controller（ビュー・コントローラー） */}
       <ViewController className={sectionClassName} />
 
-      {divider}
+      <Divider />
 
       {/* C-2: Key Controller（キー・コントローラー） */}
       <KeyController className={sectionClassName} />
 
-      {divider}
+      <Divider />
 
       {/* C-3: Layer Controller（レイヤー・コントローラー） */}
       <LayerController className={sectionClassName} />
