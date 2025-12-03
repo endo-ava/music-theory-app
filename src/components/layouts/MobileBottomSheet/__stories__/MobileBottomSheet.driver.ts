@@ -16,7 +16,7 @@ export class MobileBottomSheetDriver {
   }
 
   private getSnapPointDisplay(value: string) {
-    return this.canvas.getByText((_content, element) => {
+    return this.canvas.getByText((_content: string, element: Element | null) => {
       // Exact match to avoid multiple elements
       return element?.textContent === `現在のスナップポイント: ${value}`;
     });

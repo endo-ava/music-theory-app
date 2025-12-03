@@ -104,9 +104,12 @@ export class ChromaticCircleDriver {
   async expectTonicEmphasis() {
     expect(this.highlightPaths.length).toBeGreaterThanOrEqual(7);
 
-    const thickPaths = Array.from(this.highlightPaths).filter(
-      path => path.getAttribute('stroke-width') === '1.2px' || path.getAttribute('filter') !== null
-    );
+    const thickPaths = Array.from(this.highlightPaths).filter((path): path is Element => {
+      return (
+        path instanceof Element &&
+        (path.getAttribute('stroke-width') === '1.2px' || path.getAttribute('filter') !== null)
+      );
+    });
 
     expect(thickPaths.length).toBeGreaterThanOrEqual(1);
   }
