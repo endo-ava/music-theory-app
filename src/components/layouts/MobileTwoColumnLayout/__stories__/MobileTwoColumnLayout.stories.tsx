@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect } from 'storybook/test';
 import { MobileTwoColumnLayout } from '../index';
 import { withStores } from '../../__stories__/decorators/withStores';
+import { MobileTwoColumnLayoutDriver } from './MobileTwoColumnLayout.driver';
 
 const meta: Meta<typeof MobileTwoColumnLayout> = {
   title: 'Components/Layouts/MobileTwoColumnLayout',
@@ -81,26 +81,13 @@ export const InteractiveTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // レイアウトコンテナ、Canvas、InformationPanelが正しく表示されることを確認
+    const driver = new MobileTwoColumnLayoutDriver(canvasElement);
 
-    // レイアウトコンテナの存在確認
-    const layoutContainer = canvas.getByLabelText('モバイル2分割レイアウト');
-    expect(layoutContainer).toBeInTheDocument();
-    expect(layoutContainer).toHaveAttribute('aria-label', 'モバイル2分割レイアウト');
-
-    // Canvasの表示確認（min-h-[300px]クラスを持つdiv要素）
-    const canvasArea = layoutContainer.querySelector('.min-h-\\[300px\\]');
-    expect(canvasArea).toBeInTheDocument();
-
-    // CircleOfFifthsの表示確認（SVG要素として、hidden要素も含めて検索）
-    const circleOfFifths = canvas.getByRole('img', { name: 'Circle of Fifths', hidden: true });
-    expect(circleOfFifths).toBeInTheDocument();
-    expect(circleOfFifths).toHaveAttribute('aria-label', 'Circle of Fifths');
-
-    // InformationPanelの表示確認（InformationPanelコンテンツ）
-    // 具体的なテキストではなく、パネル領域の存在確認
-    const infoArea = layoutContainer.querySelector('.overflow-y-visible');
-    expect(infoArea).toBeInTheDocument();
+    await driver.expectLayoutContainerVisible();
+    await driver.expectCanvasAreaVisible();
+    await driver.expectCircleOfFifthsVisible();
+    await driver.expectInformationPanelVisible();
   },
 };
 
@@ -118,27 +105,10 @@ export const AccessibilityTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // ARIA属性とアクセシビリティ要件が適切に設定されていることを確認
+    const driver = new MobileTwoColumnLayoutDriver(canvasElement);
 
-    // レイアウトコンテナのARIA属性確認
-    const layoutContainer = canvas.getByLabelText('モバイル2分割レイアウト');
-    expect(layoutContainer).toBeInTheDocument();
-    expect(layoutContainer).toHaveAttribute('aria-label', 'モバイル2分割レイアウト');
-
-    // Canvas領域の確認（min-h-[300px]クラスを持つdiv要素）
-    const canvasArea = layoutContainer.querySelector('.min-h-\\[300px\\]');
-    expect(canvasArea).toBeInTheDocument();
-
-    // 見出しの階層構造確認（存在する場合のみ）
-    const heading = canvas.queryByRole('heading', { level: 2 });
-    if (heading) {
-      expect(heading).toBeInTheDocument();
-    }
-
-    // SVG要素の代替テキスト確認（hidden要素も含めて検索）
-    const svg = canvas.getByRole('img', { name: 'Circle of Fifths', hidden: true });
-    expect(svg).toBeInTheDocument();
-    expect(svg).toHaveAttribute('aria-label', 'Circle of Fifths');
+    await driver.expectAccessibilityAttributes();
   },
 };
 
@@ -172,22 +142,10 @@ export const ResponsiveTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // モバイル端末での縦型レイアウトが正しく動作することを確認
+    const driver = new MobileTwoColumnLayoutDriver(canvasElement);
 
-    // モバイルレイアウトの基本確認
-    const layoutContainer = canvas.getByLabelText('モバイル2分割レイアウト');
-    expect(layoutContainer).toBeInTheDocument();
-
-    // 縦型フレックスレイアウト確認
-    expect(layoutContainer).toHaveClass('flex', 'flex-col');
-
-    // Canvas領域の最小高さ確認
-    const canvasArea = layoutContainer.querySelector('.min-h-\\[300px\\]');
-    expect(canvasArea).toBeInTheDocument();
-
-    // InformationPanel領域のスクロール対応確認
-    const infoArea = layoutContainer.querySelector('.overflow-y-visible');
-    expect(infoArea).toBeInTheDocument();
+    await driver.expectResponsiveLayout();
   },
 };
 
@@ -205,21 +163,11 @@ export const BottomSheetIntegrationTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // BottomSheetがモバイルで適切に表示されることを確認
+    const driver = new MobileTwoColumnLayoutDriver(canvasElement);
 
-    // レイアウトコンテナの確認
-    const layoutContainer = canvas.getByLabelText('モバイル2分割レイアウト');
-    expect(layoutContainer).toBeInTheDocument();
-
-    // BottomSheetがモバイルでのみ表示されることを確認
-    const mobileBottomSheetElement = canvasElement.querySelector('.md\\:hidden');
-    expect(mobileBottomSheetElement).toBeInTheDocument();
-
-    // View Controller（Hub切り替え）の存在確認
-    // モバイルではBottomSheet内に表示されるため、直接は見えない可能性がある
-    // BottomSheetの存在を確認
-    const integrationBottomSheetElement = canvasElement.querySelector('.md\\:hidden');
-    expect(integrationBottomSheetElement).toBeInTheDocument();
+    await driver.expectLayoutContainerVisible();
+    await driver.expectBottomSheetVisible();
   },
 };
 
@@ -237,25 +185,10 @@ export const ComponentBoundaryTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // Server ComponentとClient Componentの境界が適切に分離されていることを確認
+    const driver = new MobileTwoColumnLayoutDriver(canvasElement);
 
-    // Client Component（Provider）の確認
-    const layoutProvider = canvas.getByLabelText('モバイル2分割レイアウト');
-    expect(layoutProvider).toBeInTheDocument();
-
-    // Server Componentで提供されるコンテンツの確認（Canvas領域）
-    const canvasArea = layoutProvider.querySelector('.min-h-\\[300px\\]');
-    expect(canvasArea).toBeInTheDocument();
-
-    // InformationPanelのコンテンツ確認
-    // 具体的なコンテンツではなく、パネル領域の存在確認
-    const infoArea = layoutProvider.querySelector('.overflow-y-visible');
-    expect(infoArea).toBeInTheDocument();
-
-    // プロバイダーが適切にコンテンツをラップしていることを確認
-    if (canvasArea) {
-      expect(layoutProvider).toContainElement(canvasArea as HTMLElement);
-    }
+    await driver.expectComponentBoundary();
   },
 };
 
@@ -275,15 +208,10 @@ export const CustomStyle: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // カスタムスタイルが正しく適用されることを確認
+    const driver = new MobileTwoColumnLayoutDriver(canvasElement);
 
-    // カスタムスタイルが適用されたレイアウトコンテナの確認
-    const layoutContainer = canvas.getByLabelText('モバイル2分割レイアウト');
-    expect(layoutContainer).toBeInTheDocument();
-
-    // twMergeによるクラス名統合の確認
-    expect(layoutContainer).toHaveClass('bg-blue-950');
-    expect(layoutContainer).toHaveClass('border');
-    expect(layoutContainer).toHaveClass('border-blue-400');
+    await driver.expectLayoutContainerVisible();
+    await driver.expectCustomStyles(['bg-blue-950', 'border', 'border-blue-400']);
   },
 };

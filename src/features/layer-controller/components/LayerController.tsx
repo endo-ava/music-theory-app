@@ -1,5 +1,4 @@
 import React from 'react';
-import { Layers } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { ClassNameProps } from '@/shared/types';
 
@@ -19,10 +18,7 @@ export const LayerController: React.FC<ClassNameProps> = ({ className }) => {
         className
       )}
     >
-      <div className="hidden items-center gap-2 md:flex">
-        <Layers className="text-muted-foreground h-4 w-4" />
-        <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">Layer</h2>
-      </div>
+      <h2 className="text-foreground hidden text-lg font-semibold md:block">Layer</h2>
 
       {/* アコーディオン2: コードレイヤー */}
       <ChordLayerAccordion />

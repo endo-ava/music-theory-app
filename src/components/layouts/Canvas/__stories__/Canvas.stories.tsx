@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect } from 'storybook/test';
 import { Canvas } from '../components/Canvas';
+import { CanvasDriver } from './Canvas.driver';
 
 const meta: Meta<typeof Canvas> = {
   title: 'Components/Layouts/Canvas',
@@ -75,16 +75,11 @@ export const InteractiveTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // メイン表示エリアとCircleOfFifthsが正しく表示されることを確認
+    const driver = new CanvasDriver(canvasElement);
 
-    // メイン表示エリアの存在確認
-    const mainArea = canvas.getByLabelText('メイン表示エリア');
-    expect(mainArea).toBeInTheDocument();
-    expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
-
-    // CircleOfFifthsの表示確認
-    const circleOfFifths = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    expect(circleOfFifths).toBeInTheDocument();
+    await driver.expectMainAreaVisible();
+    await driver.expectCircleOfFifthsVisible();
   },
 };
 
@@ -102,21 +97,10 @@ export const AccessibilityTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // アクセシビリティ属性（ARIA、見出し構造、代替テキスト）が正しく設定されていることを確認
+    const driver = new CanvasDriver(canvasElement);
 
-    // メイン表示エリアのセマンティクス確認
-    const mainArea = canvas.getByLabelText('メイン表示エリア');
-    expect(mainArea).toBeInTheDocument();
-    expect(mainArea).toHaveAttribute('aria-label', 'メイン表示エリア');
-
-    // 見出しの階層構造確認（CurrentKeyDisplayはh2要素を使用）
-    const heading = canvas.getByRole('heading', { level: 2 });
-    expect(heading).toBeInTheDocument();
-
-    // SVG要素の代替テキスト確認
-    const svg = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    expect(svg).toBeInTheDocument();
-    expect(svg).toHaveAttribute('aria-label', 'Circle of Fifths');
+    await driver.expectAccessibilityAttributes();
   },
 };
 
@@ -150,18 +134,10 @@ export const ResponsiveTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // レスポンシブレイアウト（クラス、パディング、フレックス）が正しく適用されていることを確認
+    const driver = new CanvasDriver(canvasElement);
 
-    // レスポンシブレイアウトの基本確認
-    const mainArea = canvas.getByLabelText('メイン表示エリア');
-    expect(mainArea).toBeInTheDocument();
-    expect(mainArea).toHaveClass('w-full', 'h-full');
-
-    // パディング設定確認
-    expect(mainArea).toHaveClass('p-6');
-
-    // フレックスレイアウト確認
-    expect(mainArea).toHaveClass('flex', 'flex-col');
+    await driver.expectResponsiveLayout();
   },
 };
 

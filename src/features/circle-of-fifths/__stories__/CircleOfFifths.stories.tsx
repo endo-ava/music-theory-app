@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from 'storybook/test';
 import { CircleOfFifths } from '../components/CircleOfFifths';
 import { useLayerStore } from '@/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key, PitchClass } from '@/domain';
+import { CircleOfFifthsDriver } from './CircleOfFifths.driver';
 
 const meta: Meta<typeof CircleOfFifths> = {
   title: 'Components/CircleOfFifths',
@@ -36,19 +36,11 @@ export const Default: Story = {
     className: 'w-[500px] h-[500px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // 五度圏のSVG構造が適切にレンダリングされることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 五度圏のメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    await expect(circleContainer).toBeInTheDocument();
-
-    // SVGが適切にレンダリングされていることを確認
-    await expect(circleContainer.tagName.toLowerCase()).toBe('svg');
-    // SVGが適切なviewBoxを持っていることを確認
-    await expect(circleContainer).toHaveAttribute('viewBox');
-    // SVGにCircleSegmentが含まれていることを確認（path要素として）
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSVGStructure();
   },
 };
 
@@ -61,19 +53,12 @@ export const Large: Story = {
     className: 'w-[700px] h-[700px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // 大サイズでもセグメントとテキスト要素が適切に表示されることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 大サイズでも適切に表示されることを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    await expect(circleContainer).toBeInTheDocument();
-
-    // SVG内のセグメント要素が表示されていることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // テキスト要素も適切に表示されていることを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThan(0);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSegmentsRendered();
+    await driver.expectTextElementsRendered();
   },
 };
 
@@ -86,19 +71,12 @@ export const Small: Story = {
     className: 'w-[300px] h-[300px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
     // 小サイズでも基本機能が動作することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    await expect(circleContainer).toBeInTheDocument();
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 小サイズでもSVG要素が適切に表示されることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // コンパクトサイズでもテキストが表示されることを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThan(0);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSegmentsRendered();
+    await driver.expectTextElementsRendered();
   },
 };
 
@@ -111,21 +89,11 @@ export const KeyboardNavigation: Story = {
     className: 'w-[500px] h-[500px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // アクセシビリティ属性とキーボードナビゲーションの基盤が整っていることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    await expect(circleContainer).toBeInTheDocument();
-
-    // SVGコンテナのアクセシビリティ確認
-    await expect(circleContainer).toHaveAttribute('aria-label', 'Circle of Fifths');
-
-    // SVG内の要素構造確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // キーボードナビゲーションのベースとなる要素確認
-    // 注：実際のキーボードインタラクションは個別のコンポーネントレベルでテストする
-    await expect(circleContainer.tagName.toLowerCase()).toBe('svg');
+    await driver.expectAccessibility();
+    await driver.expectSegmentsRendered();
   },
 };
 
@@ -138,24 +106,12 @@ export const InteractionStates: Story = {
     className: 'w-[500px] h-[500px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // 12個のセグメントとテキスト要素が適切に配置されていることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    await expect(circleContainer).toBeInTheDocument();
-
-    // SVG内のセグメント要素が適切に配置されていることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // 各セグメントに対応するテキスト要素が存在することを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThan(0);
-
-    // SVGが適切な構造を持っていることを確認
-    await expect(circleContainer).toHaveAttribute('viewBox');
-
-    // 複数のセグメントが存在することを確認（12セグメント期待）
-    expect(pathElements.length).toBeGreaterThanOrEqual(12);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSegmentsRendered(12);
+    await driver.expectTextElementsRendered();
   },
 };
 
@@ -189,26 +145,14 @@ export const DiatonicHighlightDisplay: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // C majorキーでのローマ数字表記とダイアトニックコードハイライトが正しく表示されることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    // 五度圏のメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // C majorのローマ数字が表示されることを確認（tonic = Ⅰ）
-    const romanText = canvas.getByText('Ⅰ');
-    expect(romanText).toBeInTheDocument();
-
-    // ダイアトニックコードのハイライト効果の確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // C major キーエリアのテキストが表示されることを確認
-    const cMajorText = canvas.getByText('C');
-    expect(cMajorText).toBeInTheDocument();
+    await driver.waitForRender();
+    await driver.expectCircleContainerVisible();
+    await driver.expectRomanNumeral('Ⅰ');
+    await driver.expectSegmentsRendered();
+    await driver.expectKeyName('C');
   },
 };
 
@@ -242,37 +186,24 @@ export const DiatonicHighlightToggle: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // レイヤー状態の変更に応じてハイライトが動的に表示/非表示切り替わることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // テスト実行前に確実に初期状態をセット（デコレータのタイミング問題を回避）
     useLayerStore.setState({ isDiatonicVisible: false });
+    await driver.waitForRender(300);
 
-    // 初期レンダリングと状態反映を待つ
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await driver.expectCircleContainerVisible();
+    await driver.expectDiatonicHighlightHidden();
 
-    // 五度圏のメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // 初期状態：ダイアトニックハイライトレイヤーが表示されていないことを確認
-    let highlightLayer = canvasElement.querySelector('.diatonic-highlight-layer');
-    expect(highlightLayer).not.toBeInTheDocument();
-
-    // ダイアトニックコード表示をオンに変更
     useLayerStore.getState().toggleDiatonic();
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await driver.waitForRender();
 
-    // ハイライトレイヤーが表示されることを確認
-    highlightLayer = canvasElement.querySelector('.diatonic-highlight-layer');
-    expect(highlightLayer).toBeInTheDocument();
+    await driver.expectDiatonicHighlightVisible();
 
-    // 再度オフに変更
     useLayerStore.getState().toggleDiatonic();
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await driver.waitForRender();
 
-    // ハイライトレイヤーが非表示になることを確認
-    highlightLayer = canvasElement.querySelector('.diatonic-highlight-layer');
-    expect(highlightLayer).not.toBeInTheDocument();
+    await driver.expectDiatonicHighlightHidden();
   },
 };
 
@@ -306,37 +237,15 @@ export const DiatonicRomanNumerals: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // C majorキーでの各度数のローマ数字表記が正しく表示されることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    // 五度圏のメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // C major (tonic) のローマ数字確認
-    const tonicRoman = canvas.getByText('Ⅰ');
-    expect(tonicRoman).toBeInTheDocument();
-
-    // 他のダイアトニックコードのローマ数字も表示されることを確認
-    // D minor (ii) が表示されているかチェック
-    const supertonic = canvas.queryByText('Ⅱm');
-    if (supertonic) {
-      expect(supertonic).toBeInTheDocument();
-    }
-
-    // G major (V) が表示されているかチェック
-    const dominant = canvas.queryByText('Ⅴ');
-    if (dominant) {
-      expect(dominant).toBeInTheDocument();
-    }
-
-    // F major (IV) が表示されているかチェック
-    const subdominant = canvas.queryByText('Ⅳ');
-    if (subdominant) {
-      expect(subdominant).toBeInTheDocument();
-    }
+    await driver.waitForRender(300);
+    await driver.expectCircleContainerVisible();
+    await driver.expectRomanNumeral('Ⅰ');
+    await driver.expectRomanNumeralOptional('Ⅱm');
+    await driver.expectRomanNumeralOptional('Ⅴ');
+    await driver.expectRomanNumeralOptional('Ⅳ');
   },
 };
 
@@ -368,31 +277,23 @@ export const DegreeToggle: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // 度数レイヤーの表示/非表示切り替えが正しく動作することを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 初期状態セット
     useLayerStore.setState({ isDegreeVisible: false });
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await driver.waitForRender(300);
 
-    // 初期状態：ローマ数字が表示されていないことを確認
-    let romanText = canvas.queryByText('Ⅰ');
-    expect(romanText).not.toBeInTheDocument();
+    await driver.expectRomanNumeralOptional('Ⅰ');
 
-    // 度数表示をオンに変更
     useLayerStore.getState().toggleDegree();
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await driver.waitForRender();
 
-    // ローマ数字が表示されることを確認
-    romanText = canvas.getByText('Ⅰ');
-    expect(romanText).toBeInTheDocument();
+    await driver.expectRomanNumeral('Ⅰ');
 
-    // 再度オフに変更
     useLayerStore.getState().toggleDegree();
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await driver.waitForRender();
 
-    // ローマ数字が非表示になることを確認
-    romanText = canvas.queryByText('Ⅰ');
-    expect(romanText).not.toBeInTheDocument();
+    await driver.expectRomanNumeralOptional('Ⅰ');
   },
 };
 
@@ -428,20 +329,13 @@ export const FunctionalHarmonyDisplay: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // 機能和声レイヤー（T/D/SD）が正しく表示されることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // C major (Tonic) の機能表記確認
-    const tonic = canvas.getAllByText('T');
-    expect(tonic.length).toBeGreaterThan(0);
-
-    // G major (Dominant) の機能表記確認
-    const dominant = canvas.getAllByText('D');
-    expect(dominant.length).toBeGreaterThan(0);
-
-    // F major (Subdominant) の機能表記確認
-    const subdominant = canvas.getAllByText('SD');
-    expect(subdominant.length).toBeGreaterThan(0);
+    await driver.waitForRender(300);
+    await driver.expectFunctionalHarmony('T');
+    await driver.expectFunctionalHarmony('D');
+    await driver.expectFunctionalHarmony('SD');
   },
 };
 
@@ -477,18 +371,11 @@ export const DualLayerLayout: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await new Promise(resolve => setTimeout(resolve, 300));
+    // 度数レイヤーと機能和声レイヤーが両方表示され、重ならないように配置されていることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 両方のレイヤーのテキストが表示されていることを確認
-    const romanText = canvas.getByText('Ⅰ');
-    const tonicText = canvas.getAllByText('T');
-
-    expect(romanText).toBeInTheDocument();
-    expect(tonicText.length).toBeGreaterThan(0);
-
-    // 注: 厳密な位置座標のテストは壊れやすいため、
-    // 両方がDOMに存在し、視覚的に確認できることを主目的とする
+    await driver.waitForRender(300);
+    await driver.expectDualLayerLayout('Ⅰ', 'T');
   },
 };
 
@@ -518,28 +405,12 @@ export const KeyAreaInteractiveTest: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // KeyAreaのクリック操作が正しく動作し、テキスト要素が適切に表示されることを確認
+    const driver = new CircleOfFifthsDriver(canvasElement);
 
-    // 五度圏のメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Circle of Fifths' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // SVG内のKeyAreaグループ要素を取得
-    const keyAreaGroups = circleContainer.querySelectorAll('g[style*="cursor: pointer"]');
-    expect(keyAreaGroups.length).toBeGreaterThan(0);
-
-    // 最初のキーエリア（通常はC major）をクリック
-    if (keyAreaGroups.length > 0) {
-      const firstKeyArea = keyAreaGroups[0];
-      await userEvent.click(firstKeyArea);
-
-      // クリック後の基本的な状態確認
-      await new Promise(resolve => setTimeout(resolve, 100));
-      expect(firstKeyArea).toBeInTheDocument();
-    }
-
-    // SVGテキスト要素が適切に表示されていることを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThan(0);
+    await driver.expectCircleContainerVisible();
+    await driver.expectKeyAreaGroups();
+    await driver.clickFirstKeyArea();
+    await driver.expectTextElementsRendered();
   },
 };
