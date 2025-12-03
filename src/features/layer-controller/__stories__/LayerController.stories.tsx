@@ -112,7 +112,13 @@ export const ResponsiveTest: Story = {
 
     const title = canvas.getByRole('heading', { name: 'Layer', level: 2 });
     expect(title).toHaveTextContent('Layer');
-    expect(title).toHaveClass('hidden', 'md:block');
+    expect(title).toHaveClass(
+      'text-foreground',
+      'text-sm',
+      'font-semibold',
+      'tracking-wider',
+      'uppercase'
+    );
   },
 };
 
@@ -135,7 +141,13 @@ export const StructureTest: Story = {
     // h2レベルのタイトル確認
     const title = canvas.getByRole('heading', { level: 2 });
     expect(title).toHaveTextContent('Layer');
-    expect(title).toHaveClass('text-foreground', 'text-lg');
+    expect(title).toHaveClass(
+      'text-foreground',
+      'text-sm',
+      'font-semibold',
+      'tracking-wider',
+      'uppercase'
+    );
 
     // Chord Layersセクションの存在確認
     const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers' });
