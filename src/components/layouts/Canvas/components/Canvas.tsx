@@ -16,7 +16,7 @@ import { ChromaticCircle } from '@/features/chromatic-circle';
  */
 export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
   return (
-    <div
+    <main
       className={twMerge(
         'md:border-border flex h-full min-h-[400px] w-full flex-col overflow-auto rounded-lg p-6 md:border',
         className
@@ -43,6 +43,6 @@ export const Canvas: React.FC<ClassNameProps> = ({ className }) => {
         {/* Hubのコントローラー: CSSのカスタムクラスで切替 */}
         <HubTypeController />
       </div>
-    </div>
+    </main>
   );
 };

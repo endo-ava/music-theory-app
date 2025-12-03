@@ -80,7 +80,6 @@ export const ModeChangeTest: Story = {
     const canvas = within(canvasElement);
 
     // 初期状態: C Majorであることを確認
-    // Current Keyバッジを確認
     expect(canvas.getByText('C Major')).toBeInTheDocument();
 
     // Dorianラベル（"Dor"）をクリック
@@ -102,7 +101,6 @@ export const BrightnessRangeTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Current Keyバッジを確認
 
     // Lydian（最も明るい）に変更
     const lydianLabel = canvas.getByRole('button', { name: /Lyd/i });
@@ -130,7 +128,6 @@ export const IntegrationTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Current Keyバッジを確認
 
     // 初期状態確認
     expect(canvas.getByText('C Major')).toBeInTheDocument();
@@ -165,7 +162,6 @@ export const MajorMinorToggleTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Current Keyバッジを確認
 
     // 初期状態: C Major
     expect(canvas.getByText('C Major')).toBeInTheDocument();
@@ -196,7 +192,6 @@ export const AllModesVisualCheck: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Current Keyバッジを確認
 
     // テスト用のモード名とラベル
     const modes = [
@@ -228,7 +223,6 @@ export const SharpKeyTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Current Keyバッジを確認
 
     // G Majorを設定
     const rootSelector = canvas.getByRole('combobox');
@@ -252,7 +246,6 @@ export const FlatKeyTest: Story = {
   args: {},
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // Current Keyバッジを確認
 
     // F Majorを設定
     const rootSelector = canvas.getByRole('combobox');

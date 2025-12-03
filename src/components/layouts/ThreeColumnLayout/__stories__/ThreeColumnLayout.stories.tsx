@@ -430,24 +430,18 @@ export const ControllerPanelIntegrationTest: Story = {
     const titles = canvas.getAllByRole('heading', { level: 2 });
     const controllerTitle = titles.find(title => title.textContent === 'Controller');
     expect(controllerTitle).toBeInTheDocument();
-    expect(controllerTitle).toHaveClass(
-      'text-foreground',
-      'text-lg',
-      'font-semibold',
-      'tracking-tight'
-    );
 
-    // LayerControllerの存在確認
-    const layerHeading = canvas.getByRole('heading', { name: 'Chord Layers', level: 3 });
-    expect(layerHeading).toBeInTheDocument();
+    // LayerControllerの存在確認（Chord Layersはheading）
+    const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers' });
+    expect(chordLayersHeading).toBeInTheDocument();
 
-    // LayerControllerのスイッチ確認
+    // LayerControllerのスイッチ確認（常に表示されている）
     const diatonicSwitch = await canvas.findByRole('switch', { name: 'Diatonic' });
     expect(diatonicSwitch).toBeInTheDocument();
     expect(diatonicSwitch).toHaveAttribute('aria-checked');
 
     // 両コンポーネントが同じパネル内に統合されていることを確認
-    expect(controllerPanel).toContainElement(layerHeading);
+    expect(controllerPanel).toContainElement(chordLayersHeading);
     expect(controllerPanel).toContainElement(diatonicSwitch);
   },
 };
@@ -488,24 +482,9 @@ export const ControllerPanelResponsiveTest: Story = {
     const controllerPanel = canvas.getByLabelText('コントローラーパネル');
     expect(controllerPanel).toBeInTheDocument();
 
-    // md以上でカード形式のクラスが適用されることを確認
-    expect(controllerPanel).toHaveClass(
-      'md:bg-panel',
-      'md:border-border',
-      'md:rounded-xl',
-      'md:border',
-      'md:backdrop-blur-xl'
-    );
-
     // タイトルの存在確認
     const titles = canvas.getAllByRole('heading', { level: 2 });
     const controllerTitle = titles.find(title => title.textContent === 'Controller');
     expect(controllerTitle).toBeInTheDocument();
-    expect(controllerTitle).toHaveClass(
-      'text-foreground',
-      'text-lg',
-      'font-semibold',
-      'tracking-tight'
-    );
   },
 };

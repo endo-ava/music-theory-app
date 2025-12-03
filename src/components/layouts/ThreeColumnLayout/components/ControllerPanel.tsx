@@ -34,6 +34,7 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             className="h-4 w-4"
+            aria-hidden="true"
           >
             <path d="M12 2v20" />
             <path d="M2 12h20" />

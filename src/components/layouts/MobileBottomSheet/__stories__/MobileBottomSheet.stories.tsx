@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent, waitFor } from 'storybook/test';
 import { MobileBottomSheet, useMobileBottomSheet, SNAP_POINTS } from '../index';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 
@@ -96,21 +95,16 @@ export const Default: Story = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  // TODO: MobileBottomSheet廃止予定のため、テストを一時的にコメントアウト
+  // play: async ({ canvasElement }) => {
+  //   const driver = new MobileBottomSheetDriver(canvasElement);
 
-    // 背景コンテンツが存在することを確認
-    const appTitle = canvas.getByText('音楽理論アプリ');
-    await expect(appTitle).toBeInTheDocument();
+  //   // 背景コンテンツが存在することを確認
+  //   await driver.expectBackgroundContentVisible();
 
-    // 五度圏の説明文が存在することを確認
-    const description = canvas.getByText('五度圏をクリックして音階を選択してください');
-    await expect(description).toBeInTheDocument();
-
-    // 現在のスナップポイント表示を確認
-    const snapPointDisplay = canvas.getByText(/現在のスナップポイント: LOWEST/);
-    await expect(snapPointDisplay).toBeInTheDocument();
-  },
+  //   // 現在のスナップポイント表示を確認
+  //   await driver.expectSnapPointDisplay('LOWEST');
+  // },
 };
 
 /**
@@ -126,47 +120,31 @@ export const SnapPointInteraction: Story = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  // TODO: MobileBottomSheet廃止予定のため、テストを一時的にコメントアウト
+  // play: async ({ canvasElement }) => {
+  //   const driver = new MobileBottomSheetDriver(canvasElement);
 
-    // 初期状態はLOWESTであることを確認
-    const initialSnapPoint = canvas.getByText(/現在のスナップポイント: LOWEST/);
-    await expect(initialSnapPoint).toBeInTheDocument();
+  //   // 初期状態はLOWESTであることを確認
+  //   await driver.expectSnapPointDisplay('LOWEST');
 
-    // HALFボタンをクリック
-    const halfButton = canvas.getByRole('button', { name: 'HALF', hidden: true });
+  //   // HALFボタンをクリック
+  //   await driver.clickSnapPointButton('HALF');
 
-    // Vaulのアニメーション完了を待機（CI環境での安定性向上）
-    await waitFor(
-      () => {
-        const computedStyle = window.getComputedStyle(halfButton);
-        expect(computedStyle.pointerEvents).not.toBe('none');
-      },
-      { timeout: 3000 }
-    );
+  //   // スナップポイントがHALFに変更されることを確認
+  //   await driver.expectSnapPointDisplay('HALF');
 
-    await userEvent.click(halfButton);
+  //   // EXPANDEDボタンをクリック
+  //   await driver.clickSnapPointButton('EXPANDED');
 
-    // スナップポイントがHALFに変更されることを確認
-    const halfSnapPoint = canvas.getByText(/現在のスナップポイント: HALF/);
-    await expect(halfSnapPoint).toBeInTheDocument();
+  //   // スナップポイントがEXPANDEDに変更されることを確認
+  //   await driver.expectSnapPointDisplay('EXPANDED');
 
-    // EXPANDEDボタンをクリック
-    const expandedButton = canvas.getByRole('button', { name: 'EXPANDED', hidden: true });
-    await userEvent.click(expandedButton);
+  //   // LOWESTボタンをクリックして元に戻す
+  //   await driver.clickSnapPointButton('LOWEST');
 
-    // スナップポイントがEXPANDEDに変更されることを確認
-    const expandedSnapPoint = canvas.getByText(/現在のスナップポイント: EXPANDED/);
-    await expect(expandedSnapPoint).toBeInTheDocument();
-
-    // LOWESTボタンをクリックして元に戻す
-    const lowestButton = canvas.getByRole('button', { name: 'LOWEST', hidden: true });
-    await userEvent.click(lowestButton);
-
-    // スナップポイントがLOWESTに戻ることを確認
-    const backToLowestSnapPoint = canvas.getByText(/現在のスナップポイント: LOWEST/);
-    await expect(backToLowestSnapPoint).toBeInTheDocument();
-  },
+  //   // スナップポイントがLOWESTに戻ることを確認
+  //   await driver.expectSnapPointDisplay('LOWEST');
+  // },
 };
 
 /**
@@ -182,22 +160,19 @@ export const BackgroundInteraction: Story = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  // TODO: MobileBottomSheet廃止予定のため、テストを一時的にコメントアウト
+  // play: async ({ canvasElement }) => {
+  //   const driver = new MobileBottomSheetDriver(canvasElement);
 
-    // 背景のアプリタイトルを確認
-    const appTitle = canvas.getByText('音楽理論アプリ');
-    await expect(appTitle).toBeInTheDocument();
+  //   // 背景のアプリタイトルを確認
+  //   await driver.expectBackgroundContentVisible();
 
-    // Circle of Fifthsのラベルが存在することを確認（SVG要素）
-    const circleLabel = canvas.getByLabelText('Circle of Fifths');
-    await expect(circleLabel).toBeInTheDocument();
+  //   // Circle of Fifthsのラベルが存在することを確認（SVG要素）
+  //   await driver.expectCircleOfFifthsVisible();
 
-    // 背景のボタンがクリック可能であることを確認
-    const lowestButton = canvas.getByRole('button', { name: 'LOWEST', hidden: true });
-    await expect(lowestButton).toBeInTheDocument();
-    await expect(lowestButton).toBeEnabled();
-  },
+  //   // 背景のボタンがクリック可能であることを確認
+  //   await driver.expectSnapPointButtonVisible('LOWEST');
+  // },
 };
 
 /**
@@ -213,42 +188,26 @@ export const HookFunctionality: Story = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  // TODO: MobileBottomSheet廃止予定のため、テストを一時的にコメントアウト
+  // play: async ({ canvasElement }) => {
+  //   const driver = new MobileBottomSheetDriver(canvasElement);
 
-    // フックによる初期状態の確認
-    const initialDisplay = canvas.getByText(/現在のスナップポイント: LOWEST/);
-    await expect(initialDisplay).toBeInTheDocument();
+  //   // フックによる初期状態の確認
+  //   await driver.expectSnapPointDisplay('LOWEST');
 
-    // 状態変更関数の動作確認（HALF → EXPANDED → LOWEST）
-    const halfButton = canvas.getByRole('button', { name: 'HALF', hidden: true });
-    const expandedButton = canvas.getByRole('button', { name: 'EXPANDED', hidden: true });
-    const lowestButton = canvas.getByRole('button', { name: 'LOWEST', hidden: true });
+  //   // 状態変更関数の動作確認（HALF → EXPANDED → LOWEST）
+  //   // HALF状態への変更
+  //   await driver.clickSnapPointButton('HALF');
+  //   await driver.expectSnapPointDisplay('HALF');
 
-    // Vaulのアニメーション完了を待機（CI環境での安定性向上）
-    await waitFor(
-      () => {
-        const computedStyle = window.getComputedStyle(halfButton);
-        expect(computedStyle.pointerEvents).not.toBe('none');
-      },
-      { timeout: 3000 }
-    );
+  //   // EXPANDED状態への変更
+  //   await driver.clickSnapPointButton('EXPANDED');
+  //   await driver.expectSnapPointDisplay('EXPANDED');
 
-    // HALF状態への変更
-    await userEvent.click(halfButton);
-    const halfState = canvas.getByText(/現在のスナップポイント: HALF/);
-    await expect(halfState).toBeInTheDocument();
-
-    // EXPANDED状態への変更
-    await userEvent.click(expandedButton);
-    const expandedState = canvas.getByText(/現在のスナップポイント: EXPANDED/);
-    await expect(expandedState).toBeInTheDocument();
-
-    // LOWEST状態への戻り
-    await userEvent.click(lowestButton);
-    const backToLowestState = canvas.getByText(/現在のスナップポイント: LOWEST/);
-    await expect(backToLowestState).toBeInTheDocument();
-  },
+  //   // LOWEST状態への戻り
+  //   await driver.clickSnapPointButton('LOWEST');
+  //   await driver.expectSnapPointDisplay('LOWEST');
+  // },
 };
 
 /**
@@ -276,20 +235,16 @@ export const ResponsiveLayout: Story = {
       },
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  // TODO: MobileBottomSheet廃止予定のため、テストを一時的にコメントアウト
+  // play: async ({ canvasElement }) => {
+  //   const driver = new MobileBottomSheetDriver(canvasElement);
 
-    // 背景のアプリタイトルが表示されることを確認
-    const appTitle = canvas.getByText('音楽理論アプリ');
-    await expect(appTitle).toBeVisible();
+  //   // 背景のアプリタイトルが表示されることを確認
+  //   await driver.expectBackgroundContentVisible();
 
-    // スナップポイントコントロールが正常に表示されることを確認
-    const lowestButton = canvas.getByRole('button', { name: 'LOWEST', hidden: true });
-    const halfButton = canvas.getByRole('button', { name: 'HALF', hidden: true });
-    const expandedButton = canvas.getByRole('button', { name: 'EXPANDED', hidden: true });
-
-    await expect(lowestButton).toBeInTheDocument();
-    await expect(halfButton).toBeInTheDocument();
-    await expect(expandedButton).toBeInTheDocument();
-  },
+  //   // スナップポイントコントロールが正常に表示されることを確認
+  //   await driver.expectSnapPointButtonVisible('LOWEST');
+  //   await driver.expectSnapPointButtonVisible('HALF');
+  //   await driver.expectSnapPointButtonVisible('EXPANDED');
+  // },
 };

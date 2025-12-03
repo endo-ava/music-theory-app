@@ -109,7 +109,11 @@ export const InteractiveTest: Story = {
     expect(chromaticButton).toHaveAttribute('aria-checked', 'false');
 
     // 共通データ構造から取得された説明テキストの確認
-    expect(canvas.getByText('Keys arranged by fifths')).toBeInTheDocument();
+    expect(
+      canvas.getByText((_content, element) => {
+        return element?.textContent === 'Circle of Fifths: Keys arranged by fifths';
+      })
+    ).toBeInTheDocument();
   },
 };
 
@@ -147,7 +151,11 @@ export const HubTypeSwitchTest: Story = {
     expect(chromaticButton).toHaveAttribute('aria-checked', 'true');
 
     // 共通データ構造からの説明文が切り替わったことを確認
-    expect(canvas.getByText('Notes arranged chromatically')).toBeInTheDocument();
+    expect(
+      canvas.getByText((_content, element) => {
+        return element?.textContent === 'Chromatic Circle: Notes arranged chromatically';
+      })
+    ).toBeInTheDocument();
 
     // 五度圏ボタンをクリックして戻す
     await userEvent.click(circleButton);
@@ -155,7 +163,11 @@ export const HubTypeSwitchTest: Story = {
     // 元の状態に戻ったことを確認
     expect(circleButton).toHaveAttribute('aria-checked', 'true');
     expect(chromaticButton).toHaveAttribute('aria-checked', 'false');
-    expect(canvas.getByText('Keys arranged by fifths')).toBeInTheDocument();
+    expect(
+      canvas.getByText((_content, element) => {
+        return element?.textContent === 'Circle of Fifths: Keys arranged by fifths';
+      })
+    ).toBeInTheDocument();
   },
 };
 
