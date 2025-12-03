@@ -23,7 +23,7 @@ export const InformationPanel: React.FC<ClassNameProps> = ({ className }) => {
     >
       <div className="hidden items-center gap-2 md:flex">
         <div className="bg-primary/20 text-primary flex h-6 w-6 items-center justify-center rounded-md">
-          <Info className="h-4 w-4" />
+          <Info className="h-4 w-4" aria-hidden="true" />
         </div>
         <h2 className="text-foreground text-lg font-semibold tracking-tight">Information</h2>
       </div>

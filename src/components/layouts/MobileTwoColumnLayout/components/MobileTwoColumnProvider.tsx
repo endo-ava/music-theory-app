@@ -40,11 +40,18 @@ export const MobileTwoColumnProvider: React.FC<MobileTwoColumnProviderProps> = (
         aria-label="モバイル2分割レイアウト"
       >
         {/* Top: Canvas - メインコンテンツ表示（SSR） */}
-        <div className="min-h-[300px]">{topPanel}</div>
+        <div className="min-h-[300px]" data-testid="mobile-canvas-area">
+          {topPanel}
+        </div>
 
         {/* Bottom: Information Panel - スクロール可能（SSR） */}
         {/* overflow-y-visible: Prevents individual scrolling conflicts with MobileBottomSheet scroll behavior */}
-        <div className="min-h-[200px] flex-1 overflow-y-visible px-4">{bottomPanel}</div>
+        <div
+          className="min-h-[200px] flex-1 overflow-y-visible px-4"
+          data-testid="mobile-info-area"
+        >
+          {bottomPanel}
+        </div>
       </div>
 
       {/* モバイル専用ボトムシート*/}

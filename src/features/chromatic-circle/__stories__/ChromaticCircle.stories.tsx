@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { within, expect, userEvent } from 'storybook/test';
 import { ChromaticCircle } from '../components/ChromaticCircle';
 import { useLayerStore } from '@/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain';
 import { PitchClass } from '@/domain/common';
+import { ChromaticCircleDriver } from './ChromaticCircle.driver';
 
 const meta: Meta<typeof ChromaticCircle> = {
   title: 'Components/ChromaticCircle',
@@ -37,23 +37,12 @@ export const Default: Story = {
     className: 'w-[500px] h-[500px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // クロマチックサークルのSVG構造と12個のピッチクラスが正しく表示されることを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // クロマチックサークルのメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    await expect(circleContainer).toBeInTheDocument();
-
-    // SVGが適切にレンダリングされていることを確認
-    await expect(circleContainer.tagName.toLowerCase()).toBe('svg');
-    // SVGが適切なviewBoxを持っていることを確認
-    await expect(circleContainer).toHaveAttribute('viewBox');
-    // SVGにセグメントが含まれていることを確認（path要素として）
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // 12個のピッチクラスに対応するテキスト要素が存在することを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThanOrEqual(12);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSVGStructure();
+    await driver.expectTwelvePitchClasses();
   },
 };
 
@@ -66,19 +55,12 @@ export const Large: Story = {
     className: 'w-[700px] h-[700px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
     // 大サイズでも適切に表示されることを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    await expect(circleContainer).toBeInTheDocument();
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // SVG内のセグメント要素が表示されていることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // テキスト要素も適切に表示されていることを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThanOrEqual(12);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSegmentsRendered();
+    await driver.expectTwelvePitchClasses();
   },
 };
 
@@ -91,19 +73,12 @@ export const Small: Story = {
     className: 'w-[300px] h-[300px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
     // 小サイズでも基本機能が動作することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    await expect(circleContainer).toBeInTheDocument();
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // 小サイズでもSVG要素が適切に表示されることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // コンパクトサイズでもテキストが表示されることを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThanOrEqual(12);
+    await driver.expectCircleContainerVisible();
+    await driver.expectSegmentsRendered();
+    await driver.expectTwelvePitchClasses();
   },
 };
 
@@ -116,24 +91,13 @@ export const InteractionStates: Story = {
     className: 'w-[500px] h-[500px]',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // セグメント要素が適切に配置され、12個のセグメントが存在することを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    await expect(circleContainer).toBeInTheDocument();
-
-    // SVG内のセグメント要素が適切に配置されていることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThan(0);
-
-    // 各セグメントに対応するテキスト要素が存在することを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThanOrEqual(12);
-
-    // SVGが適切な構造を持っていることを確認
-    await expect(circleContainer).toHaveAttribute('viewBox');
-
-    // 12個のセグメントが存在することを確認
-    expect(pathElements.length).toBeGreaterThanOrEqual(24); // 各セグメント2層（pitch + signature）= 24
+    await driver.expectCircleContainerVisible();
+    await driver.expectSegmentsRendered();
+    await driver.expectTwelvePitchClasses();
+    await driver.expectSegmentsRendered(24);
   },
 };
 
@@ -153,35 +117,14 @@ export const SegmentInteractiveTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // セグメントのクリック操作とピッチクラス名の表示を確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // クロマチックサークルのメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // SVG内のセグメントグループ要素を取得
-    const segmentGroups = circleContainer.querySelectorAll('g[style*="cursor: pointer"]');
-    expect(segmentGroups.length).toBe(12); // 12個のピッチクラス
-
-    // 最初のセグメント（通常はC）をクリック
-    if (segmentGroups.length > 0) {
-      const firstSegment = segmentGroups[0];
-      await userEvent.click(firstSegment);
-
-      // クリック後の基本的な状態確認
-      await new Promise(resolve => setTimeout(resolve, 100));
-      expect(firstSegment).toBeInTheDocument();
-    }
-
-    // SVGテキスト要素が適切に表示されていることを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThanOrEqual(12);
-
-    // ピッチクラス名が表示されていることを確認（例: C）
-    const cPitchText = canvas.queryByText('C');
-    if (cPitchText) {
-      expect(cPitchText).toBeInTheDocument();
-    }
+    await driver.expectCircleContainerVisible();
+    await driver.expectTwelveSegments();
+    await driver.clickFirstSegment();
+    await driver.expectTwelvePitchClasses();
+    await driver.expectPitchClassDisplayed('C');
   },
 };
 
@@ -201,33 +144,13 @@ export const SegmentHoverTest: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // セグメントのホバーインタラクションが正しく動作することを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // クロマチックサークルのメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // セグメントグループ要素を取得
-    const segmentGroups = circleContainer.querySelectorAll('g[style*="cursor: pointer"]');
-    expect(segmentGroups.length).toBe(12);
-
-    // 最初のセグメントにホバー
-    if (segmentGroups.length > 0) {
-      const firstSegment = segmentGroups[0];
-      await userEvent.hover(firstSegment);
-
-      // ホバー後の状態確認
-      await new Promise(resolve => setTimeout(resolve, 100));
-      expect(firstSegment).toBeInTheDocument();
-
-      // ホバー解除
-      await userEvent.unhover(firstSegment);
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-
-    // 複数のセグメントが適切に配置されていることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThanOrEqual(24);
+    await driver.expectCircleContainerVisible();
+    await driver.expectTwelveSegments();
+    await driver.hoverFirstSegment();
+    await driver.expectSegmentsRendered(24);
   },
 };
 
@@ -247,28 +170,14 @@ export const PitchClassDisplay: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // 12個のピッチクラスが正しく表示され、セグメントが適切に配置されていることを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    // クロマチックサークルのメイン要素が存在することを確認
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // いくつかの主要なピッチクラスが表示されていることを確認
-    const cPitch = canvas.queryByText('C');
-    if (cPitch) {
-      expect(cPitch).toBeInTheDocument();
-    }
-
-    // テキスト要素が12個以上存在することを確認
-    const textElements = circleContainer.querySelectorAll('text');
-    expect(textElements.length).toBeGreaterThanOrEqual(12);
-
-    // すべてのセグメントが適切に表示されていることを確認
-    const pathElements = circleContainer.querySelectorAll('path');
-    expect(pathElements.length).toBeGreaterThanOrEqual(24); // 12セグメント × 2層
+    await driver.waitForRender();
+    await driver.expectCircleContainerVisible();
+    await driver.expectPitchClassDisplayed('C');
+    await driver.expectTwelvePitchClasses();
+    await driver.expectSegmentsRendered(24);
   },
 };
 
@@ -298,27 +207,12 @@ export const DiatonicHighlightDisplay: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // DiatonicHighlightLayerが表示され、ハイライトパスと内側の円周が存在することを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // ハイライトパス要素が存在することを確認 (g.diatonic-highlight-layer内)
-    const highlightLayers = circleContainer.querySelectorAll('.diatonic-highlight-layer');
-    expect(highlightLayers.length).toBeGreaterThanOrEqual(1);
-
-    // ハイライトパスが存在することを確認
-    const highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
-    expect(highlightPaths.length).toBeGreaterThanOrEqual(7); // Cメジャーの7つのダイアトニックコード
-
-    // 内側の円周ハイライトも存在することを確認
-    const innerCircleHighlights = circleContainer.querySelectorAll(
-      '.diatonic-highlight-layer circle'
-    );
-    expect(innerCircleHighlights.length).toBeGreaterThanOrEqual(1);
+    await driver.waitForRender();
+    await driver.expectCircleContainerVisible();
+    await driver.expectDiatonicHighlightVisible();
   },
 };
 
@@ -346,23 +240,12 @@ export const DiatonicHighlightHidden: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // ダイアトニックハイライトが非表示になることを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // ハイライトパス要素が存在しないことを確認
-    const highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
-    expect(highlightPaths.length).toBe(0);
-
-    // 内側の円周ハイライトも存在しないことを確認
-    const innerCircleHighlights = circleContainer.querySelectorAll(
-      '.diatonic-highlight-layer circle'
-    );
-    expect(innerCircleHighlights.length).toBe(0);
+    await driver.waitForRender();
+    await driver.expectCircleContainerVisible();
+    await driver.expectDiatonicHighlightHidden();
   },
 };
 
@@ -392,25 +275,12 @@ export const TonicEmphasis: Story = {
     },
   ],
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // トニック位置のハイライトが太線で強調表示されることを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
-
-    // ハイライトパス要素が存在することを確認
-    const highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
-    expect(highlightPaths.length).toBeGreaterThanOrEqual(7); // Gメジャーの7つのダイアトニックコード
-
-    // トニック位置（G、index=7）のハイライトを特定（太線になっているか確認）
-    // ストローク幅が1.2pxのパスがトニック（太線）、0.8pxが通常のダイアトニック音
-    const thickPaths = Array.from(highlightPaths).filter(
-      path => path.getAttribute('stroke-width') === '1.2px' || path.getAttribute('filter') !== null // トニックはシャドウ効果がある
-    );
-
-    expect(thickPaths.length).toBeGreaterThanOrEqual(1); // トニックが強調表示されている
+    await driver.waitForRender();
+    await driver.expectCircleContainerVisible();
+    await driver.expectTonicEmphasis();
   },
 };
 
@@ -431,37 +301,22 @@ export const DiatonicHighlightToggle: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+    // ストア状態の変更に応じてハイライトが表示/非表示に切り替わることを確認
+    const driver = new ChromaticCircleDriver(canvasElement);
 
-    // 初期レンダリング完了を待つ
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await driver.waitForRender();
+    await driver.expectCircleContainerVisible();
 
-    const circleContainer = canvas.getByRole('img', { name: 'Chromatic Circle' });
-    expect(circleContainer).toBeInTheDocument();
+    await driver.expectHighlightToggle();
 
-    // 初期状態：ハイライトが表示されているか確認（デフォルト値による）
-    let highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
-    const initialHighlightCount = highlightPaths.length;
-
-    // ダイアトニックコードハイライトを無効化
     useLayerStore.setState({ isDiatonicVisible: false });
+    await driver.waitForRender();
 
-    // 再レンダリング待ち
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await driver.expectDiatonicHighlightHidden();
 
-    // ハイライトが消えていることを確認
-    highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
-    expect(highlightPaths.length).toBeLessThan(initialHighlightCount);
-    expect(highlightPaths.length).toBe(0);
-
-    // 再度有効化
     useLayerStore.setState({ isDiatonicVisible: true });
+    await driver.waitForRender();
 
-    // 再レンダリング待ち
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    // ハイライトが再表示されることを確認
-    highlightPaths = circleContainer.querySelectorAll('.diatonic-highlight-layer path');
-    expect(highlightPaths.length).toBeGreaterThanOrEqual(7); // Cメジャーの7つのダイアトニックコード
+    await driver.expectDiatonicHighlightVisible();
   },
 };

@@ -48,7 +48,7 @@ export const RootSelector: React.FC<RootSelectorProps> = ({ value, onValueChange
 
   return (
     <Select value={value.sharpName} onValueChange={handleValueChange}>
-      <SelectTrigger className={className}>
+      <SelectTrigger className={className} aria-label="Select Root">
         <SelectValue placeholder="Select a root..." />
       </SelectTrigger>
       <SelectContent className="shadow-lg">

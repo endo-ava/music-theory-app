@@ -55,7 +55,7 @@ export const MajorKeySelector: React.FC<MajorKeySelectorProps> = ({
 
   return (
     <Select value={currentTonicName} onValueChange={handleValueChange}>
-      <SelectTrigger className={className}>
+      <SelectTrigger className={className} aria-label="Select Major Key">
         <SelectValue placeholder="Select a major key..." />
       </SelectTrigger>
       <SelectContent className="shadow-lg">

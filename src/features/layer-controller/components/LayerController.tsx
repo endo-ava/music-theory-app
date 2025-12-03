@@ -1,9 +1,9 @@
 import React from 'react';
-import { Layers } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { ClassNameProps } from '@/shared/types';
 
 import { ChordLayerAccordion } from './ChordLayerAccordion';
+import { Layers } from 'lucide-react';
 
 /**
  * レイヤーコントローラーのメインコンポーネント
