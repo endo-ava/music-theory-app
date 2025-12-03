@@ -31,11 +31,7 @@ export class GlobalHeaderDriver {
   }
 
   private get navigation() {
-    try {
-      return this.canvas.getByRole('navigation');
-    } catch {
-      return null;
-    }
+    return this.canvas.queryByRole('navigation');
   }
 
   private get mobileMenuButton() {

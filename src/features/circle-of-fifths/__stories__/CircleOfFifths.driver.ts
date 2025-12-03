@@ -4,12 +4,10 @@ type Canvas = ReturnType<typeof within>;
 
 export class CircleOfFifthsDriver {
   private canvas: Canvas;
-  private element: HTMLElement;
   private user = userEvent.setup();
 
   constructor(canvasElement: HTMLElement) {
     this.canvas = within(canvasElement);
-    this.element = canvasElement;
   }
 
   private get circleContainer() {
@@ -29,7 +27,7 @@ export class CircleOfFifthsDriver {
   }
 
   private get highlightLayer() {
-    return this.element.querySelector('.diatonic-highlight-layer');
+    return this.circleContainer.querySelector('.diatonic-highlight-layer');
   }
 
   async expectCircleContainerVisible() {

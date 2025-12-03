@@ -113,6 +113,7 @@ export const RelativeModeSlider: React.FC<RelativeModeSliderProps> = ({
             min={0}
             max={6}
             step={1}
+            aria-label="Select Relative Mode"
             className="[&_[data-slot=slider-thumb]]:bg-background relative [&_[data-slot=slider-thumb]]:size-5 [&_[data-slot=slider-thumb]]:border-2 [&_[data-slot=slider-thumb]]:border-[var(--current-mode-color)] [&_[data-slot=slider-thumb]]:shadow-[0_0_15px_-2px_var(--current-mode-color)] [&_[data-slot=slider-thumb]]:transition-all [&_[data-slot=slider-thumb]]:hover:scale-110 [&_[data-slot=slider-track]]:h-3 [&_[data-slot=slider-track]]:bg-transparent"
           />
 

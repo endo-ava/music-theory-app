@@ -5,6 +5,9 @@ import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key, PitchClass } from '@/domain';
 import { CircleOfFifthsDriver } from './CircleOfFifths.driver';
 
+const RENDER_WAIT_MS = 200;
+const ANIMATION_WAIT_MS = 300;
+
 const meta: Meta<typeof CircleOfFifths> = {
   title: 'Components/CircleOfFifths',
   component: CircleOfFifths,
@@ -148,7 +151,7 @@ export const DiatonicHighlightDisplay: Story = {
     // C majorキーでのローマ数字表記とダイアトニックコードハイライトが正しく表示されることを確認
     const driver = new CircleOfFifthsDriver(canvasElement);
 
-    await driver.waitForRender();
+    await driver.waitForRender(RENDER_WAIT_MS);
     await driver.expectCircleContainerVisible();
     await driver.expectRomanNumeral('Ⅰ');
     await driver.expectSegmentsRendered();
@@ -190,18 +193,18 @@ export const DiatonicHighlightToggle: Story = {
     const driver = new CircleOfFifthsDriver(canvasElement);
 
     useLayerStore.setState({ isDiatonicVisible: false });
-    await driver.waitForRender(300);
+    await driver.waitForRender(ANIMATION_WAIT_MS);
 
     await driver.expectCircleContainerVisible();
     await driver.expectDiatonicHighlightHidden();
 
     useLayerStore.getState().toggleDiatonic();
-    await driver.waitForRender();
+    await driver.waitForRender(RENDER_WAIT_MS);
 
     await driver.expectDiatonicHighlightVisible();
 
     useLayerStore.getState().toggleDiatonic();
-    await driver.waitForRender();
+    await driver.waitForRender(RENDER_WAIT_MS);
 
     await driver.expectDiatonicHighlightHidden();
   },
@@ -240,7 +243,7 @@ export const DiatonicRomanNumerals: Story = {
     // C majorキーでの各度数のローマ数字表記が正しく表示されることを確認
     const driver = new CircleOfFifthsDriver(canvasElement);
 
-    await driver.waitForRender(300);
+    await driver.waitForRender(ANIMATION_WAIT_MS);
     await driver.expectCircleContainerVisible();
     await driver.expectRomanNumeral('Ⅰ');
     await driver.expectRomanNumeralOptional('Ⅱm');
@@ -281,17 +284,17 @@ export const DegreeToggle: Story = {
     const driver = new CircleOfFifthsDriver(canvasElement);
 
     useLayerStore.setState({ isDegreeVisible: false });
-    await driver.waitForRender(300);
+    await driver.waitForRender(ANIMATION_WAIT_MS);
 
     await driver.expectRomanNumeralOptional('Ⅰ');
 
     useLayerStore.getState().toggleDegree();
-    await driver.waitForRender();
+    await driver.waitForRender(RENDER_WAIT_MS);
 
     await driver.expectRomanNumeral('Ⅰ');
 
     useLayerStore.getState().toggleDegree();
-    await driver.waitForRender();
+    await driver.waitForRender(RENDER_WAIT_MS);
 
     await driver.expectRomanNumeralOptional('Ⅰ');
   },
@@ -332,7 +335,7 @@ export const FunctionalHarmonyDisplay: Story = {
     // 機能和声レイヤー（T/D/SD）が正しく表示されることを確認
     const driver = new CircleOfFifthsDriver(canvasElement);
 
-    await driver.waitForRender(300);
+    await driver.waitForRender(ANIMATION_WAIT_MS);
     await driver.expectFunctionalHarmony('T');
     await driver.expectFunctionalHarmony('D');
     await driver.expectFunctionalHarmony('SD');
@@ -374,7 +377,7 @@ export const DualLayerLayout: Story = {
     // 度数レイヤーと機能和声レイヤーが両方表示され、重ならないように配置されていることを確認
     const driver = new CircleOfFifthsDriver(canvasElement);
 
-    await driver.waitForRender(300);
+    await driver.waitForRender(ANIMATION_WAIT_MS);
     await driver.expectDualLayerLayout('Ⅰ', 'T');
   },
 };

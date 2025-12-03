@@ -4,11 +4,9 @@ type Canvas = ReturnType<typeof within>;
 
 export class ThreeColumnLayoutDriver {
   private canvas: Canvas;
-  private element: HTMLElement;
 
   constructor(canvasElement: HTMLElement) {
     this.canvas = within(canvasElement);
-    this.element = canvasElement;
   }
 
   private get layoutContainer() {
@@ -33,15 +31,15 @@ export class ThreeColumnLayoutDriver {
   }
 
   private get panelGroup() {
-    return this.element.querySelector('[data-panel-group]');
+    return this.layoutContainer.querySelector('[data-panel-group]');
   }
 
   private get panels() {
-    return this.element.querySelectorAll('[data-panel]');
+    return this.layoutContainer.querySelectorAll('[data-panel]');
   }
 
   private get resizeHandles() {
-    return this.element.querySelectorAll('[data-panel-resize-handle-enabled]');
+    return this.layoutContainer.querySelectorAll('[data-panel-resize-handle-enabled]');
   }
 
   private get resetButton() {
@@ -86,7 +84,7 @@ export class ThreeColumnLayoutDriver {
     );
     await expect(this.canvasArea).toHaveAttribute('aria-label', 'メイン表示エリア');
 
-    this.resizeHandles.forEach(handle => {
+    this.resizeHandles.forEach((handle: Element) => {
       expect(handle).toHaveAttribute('role', 'separator');
     });
   }

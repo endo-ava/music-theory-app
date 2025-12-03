@@ -28,7 +28,7 @@ export class LayerControllerDriver {
   async expectStructureVisible() {
     await expect(this.container).toBeInTheDocument();
     await expect(this.title).toBeInTheDocument();
-    expect(this.switchButtons.length).toBeGreaterThan(0);
+    await expect(this.switchButtons.length).toBeGreaterThan(0);
   }
 
   async expectResponsiveClasses() {
@@ -58,9 +58,9 @@ export class LayerControllerDriver {
 
   async expectSwitchAccessibility() {
     const switches = this.switchButtons;
-    switches.forEach((switchButton: HTMLElement) => {
-      expect(switchButton).toHaveAttribute('role', 'switch');
-      expect(switchButton).toHaveAttribute('aria-label');
+    switches.forEach(async (switchButton: HTMLElement) => {
+      await expect(switchButton).toHaveAttribute('role', 'switch');
+      await expect(switchButton).toHaveAttribute('aria-label');
     });
   }
 }

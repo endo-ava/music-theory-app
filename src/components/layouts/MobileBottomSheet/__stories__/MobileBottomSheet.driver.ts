@@ -4,11 +4,9 @@ type Canvas = ReturnType<typeof within>;
 
 export class MobileBottomSheetDriver {
   private canvas: Canvas;
-  private element: HTMLElement;
 
   constructor(canvasElement: HTMLElement) {
     this.canvas = within(canvasElement);
-    this.element = canvasElement;
   }
 
   private get backgroundContent() {

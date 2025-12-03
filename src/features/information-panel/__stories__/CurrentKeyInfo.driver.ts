@@ -103,8 +103,11 @@ export class CurrentKeyInfoDriver {
     const buttons = this.allButtons;
     buttons.forEach((button: HTMLElement) => {
       const hasAriaLabel = button.getAttribute('aria-label');
-      const hasText = button.textContent;
-      expect(hasAriaLabel || hasText).toBeTruthy();
+      const hasTextContent = button.textContent?.trim();
+      expect(hasAriaLabel || hasTextContent).toBeTruthy();
+      if (!hasAriaLabel && hasTextContent) {
+        expect(hasTextContent.length).toBeGreaterThan(0);
+      }
     });
   }
 

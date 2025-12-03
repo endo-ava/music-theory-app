@@ -4,11 +4,9 @@ type Canvas = ReturnType<typeof within>;
 
 export class MobileTwoColumnLayoutDriver {
   private canvas: Canvas;
-  private element: HTMLElement;
 
   constructor(canvasElement: HTMLElement) {
     this.canvas = within(canvasElement);
-    this.element = canvasElement;
   }
 
   private get layoutContainer() {
@@ -16,7 +14,7 @@ export class MobileTwoColumnLayoutDriver {
   }
 
   private get canvasArea() {
-    return this.layoutContainer.querySelector('.min-h-\\[300px\\]');
+    return this.canvas.getByTestId('mobile-canvas-area');
   }
 
   private get circleOfFifths() {
@@ -24,11 +22,11 @@ export class MobileTwoColumnLayoutDriver {
   }
 
   private get infoArea() {
-    return this.layoutContainer.querySelector('.overflow-y-visible');
+    return this.canvas.getByTestId('mobile-info-area');
   }
 
   private get mobileBottomSheetElement() {
-    return this.element.querySelector('.md\\:hidden');
+    return document.querySelector('.md\\:hidden');
   }
 
   async expectLayoutContainerVisible() {
