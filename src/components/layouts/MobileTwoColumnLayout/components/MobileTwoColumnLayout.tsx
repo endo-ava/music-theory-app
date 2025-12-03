@@ -8,6 +8,8 @@ import { MobileTwoColumnProvider } from './MobileTwoColumnProvider';
 /**
  * モバイル用2分割レイアウトコンポーネント
  *
+ * @deprecated MobileTabLayoutへの移行に伴い非推奨。
+ *
  * MobileTwoColumnProviderを使用してBottomSheet機能を提供：
  * - 上部: Canvas（メイン表示エリア）
  * - 下部: InformationPanel（詳細情報）

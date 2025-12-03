@@ -43,7 +43,7 @@ export const ControllerPanel: React.FC<ClassNameProps> = ({ className }) => {
         <h2 className="text-foreground text-lg font-semibold tracking-tight">Controller</h2>
       </div>
 
-      <Divider />
+      <Divider className="hidden md:block" />
 
       {/* C-1: View Controller（ビュー・コントローラー） */}
       <ViewController className={sectionClassName} />

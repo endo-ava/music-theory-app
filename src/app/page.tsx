@@ -1,5 +1,5 @@
 import { ThreeColumnLayout } from '@/components/layouts/ThreeColumnLayout';
-import { MobileTwoColumnLayout } from '@/components/layouts/MobileTwoColumnLayout';
+import { MobileTabLayout } from '@/components/layouts/MobileTabLayout';
 
 /**
  * ホームページコンポーネント
@@ -7,7 +7,7 @@ import { MobileTwoColumnLayout } from '@/components/layouts/MobileTwoColumnLayou
  * Circle画面のメインレイアウトを提供する。
  * レスポンシブ対応：
  * - デスクトップ：3分割レイアウト（Canvas中央 + Controller左 + Information右）
- * - モバイル：2分割レイアウト（Canvas上 + Information下） + BottomSheet（Controller）
+ * - モバイル：タブ切り替えレイアウト（Canvas上 + Controller/Information切り替え）
  *
  * レイアウト設計：
  * - ヘッダー高さを除いた残り全領域を3カラムで使用
@@ -23,8 +23,8 @@ export default function Home() {
       {/* デスクトップ：3分割レイアウト */}
       <ThreeColumnLayout className="hidden h-[var(--content-height-full)] p-6 md:flex" />
 
-      {/* モバイル： 2分割レイアウト */}
-      <MobileTwoColumnLayout className="h-dvh md:hidden" />
+      {/* モバイル： タブ切り替えレイアウト */}
+      <MobileTabLayout className="h-dvh md:hidden" />
     </>
   );
 }

@@ -19,7 +19,7 @@ export const LayerController: React.FC<ClassNameProps> = ({ className }) => {
         className
       )}
     >
-      <div className="hidden items-center gap-2 md:flex">
+      <div className="flex items-center gap-2">
         <Layers className="text-muted-foreground h-4 w-4" />
         <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">Layer</h2>
       </div>

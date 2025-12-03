@@ -28,7 +28,7 @@ export const InformationPanel: React.FC<ClassNameProps> = ({ className }) => {
         <h2 className="text-foreground text-lg font-semibold tracking-tight">Information</h2>
       </div>
 
-      <Divider />
+      <Divider className="hidden md:block" />
 
       {/* C-1-1: 選択要素情報エリア (上段) */}
       <SelectedElementInfo />

@@ -73,8 +73,8 @@ export const KeyController: React.FC<KeyControllerProps> = ({
         className
       )}
     >
-      {/* Component Title とトグルUI - モバイルでは非表示、md以上で表示 */}
-      <div className="hidden flex-col gap-4 md:flex">
+      {/* Component Title とトグルUI */}
+      <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Music2 className="text-muted-foreground h-4 w-4" />
