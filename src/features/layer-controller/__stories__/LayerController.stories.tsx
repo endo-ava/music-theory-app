@@ -110,8 +110,7 @@ export const ResponsiveTest: Story = {
     const chordLayersHeading = canvas.getByRole('heading', { name: 'Chord Layers' });
     expect(chordLayersHeading).toBeInTheDocument();
 
-    // h2タイトルの存在確認（レスポンシブクラスは実際のブラウザで動作）
-    const title = canvas.getByRole('heading', { level: 2 });
+    const title = canvas.getByRole('heading', { name: 'Layer', level: 2 });
     expect(title).toHaveTextContent('Layer');
     expect(title).toHaveClass('hidden', 'md:block');
   },
