@@ -57,6 +57,7 @@ export const MobileBottomSheet: React.FC<MobileBottomSheetProps> = ({
         <VaulDrawer.Overlay
           className="fixed inset-0 z-50 h-dvh w-full bg-black/40"
           onClick={() => setActiveSnapPoint(SNAP_POINTS.LOWEST)}
+          aria-hidden="true"
         />
         <VaulDrawer.Content
           className={cn(
