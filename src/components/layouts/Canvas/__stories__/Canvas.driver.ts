@@ -40,7 +40,7 @@ export class CanvasDriver {
 
   async expectResponsiveLayout() {
     await expect(this.mainArea).toHaveClass('w-full', 'h-full');
-    await expect(this.mainArea).toHaveClass('p-4');
+    await expect(this.mainArea).toHaveClass('p-6');
     await expect(this.mainArea).toHaveClass('flex', 'flex-col');
   }
 }
