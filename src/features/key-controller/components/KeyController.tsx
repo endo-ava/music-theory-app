@@ -20,7 +20,7 @@ export interface KeyControllerProps extends ClassNameProps {
 }
 
 const TOGGLE_ITEM_CLASS =
-  'data-[state=on]:bg-primary data-[state=on]:text-primary-foreground text-xs text-foreground/70 hover:text-foreground transition-colors';
+  'data-[state=on]:bg-primary data-[state=on]:text-primary-foreground text-xs text-muted-foreground hover:text-foreground';
 
 /**
  * Key Controller (C-2) コンポーネント - トグルUI版
@@ -83,7 +83,7 @@ export const KeyController: React.FC<KeyControllerProps> = ({
             </h2>
           </div>
           {/* Current Key Badge */}
-          <div className="bg-primary/20 text-primary border-primary/20 flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium shadow-[0_0_10px_-3px_var(--color-primary)]">
+          <div className="bg-primary/10 text-primary border-primary/20 flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium shadow-[0_0_10px_-3px_var(--color-primary)]">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
             {currentKey.contextName}
           </div>
