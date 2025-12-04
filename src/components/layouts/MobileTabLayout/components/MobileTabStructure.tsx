@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ClassNameProps } from '@/shared/types';
 import { MobileTabBar } from './MobileTabBar';
 import { cn } from '@/lib/utils';
@@ -31,6 +31,19 @@ export const MobileTabStructure: React.FC<MobileTabStructureProps> = ({
   information,
 }) => {
   const [activeTab, setActiveTab] = useState<'controller' | 'information'>('controller');
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * タブ変更ハンドラー
+   * タブを切り替え、新しく表示されたパネルにフォーカスを移動
+   */
+  const handleTabChange = (tab: 'controller' | 'information') => {
+    setActiveTab(tab);
+    // レンダリング後にパネルにフォーカスを移動（アクセシビリティのため）
+    setTimeout(() => {
+      panelRef.current?.focus();
+    }, 0);
+  };
 
   return (
     <div className={cn('flex h-dvh flex-col', className)}>
@@ -43,27 +56,29 @@ export const MobileTabStructure: React.FC<MobileTabStructureProps> = ({
       <div className="flex-1 overflow-y-auto">
         {/* Middle: Content Area */}
         <div
+          ref={activeTab === 'controller' ? panelRef : undefined}
           className={cn(activeTab === 'controller' ? 'block' : 'hidden')}
           role="tabpanel"
           id="tabpanel-controller"
           aria-labelledby="tab-controller"
-          tabIndex={0}
+          tabIndex={-1}
         >
           {controller}
         </div>
         <div
+          ref={activeTab === 'information' ? panelRef : undefined}
           className={cn(activeTab === 'information' ? 'block' : 'hidden')}
           role="tabpanel"
           id="tabpanel-information"
           aria-labelledby="tab-information"
-          tabIndex={0}
+          tabIndex={-1}
         >
           {information}
         </div>
       </div>
 
       {/* Bottom: Tab Bar */}
-      <MobileTabBar activeTab={activeTab} onTabChange={setActiveTab} />
+      <MobileTabBar activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   );
 };

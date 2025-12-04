@@ -22,6 +22,8 @@ interface HubRadioGroupProps {
   onHubChange: (hubType: HubType) => void;
   /** キーボードイベントハンドラー */
   onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  /** Ref for the radio group container (React 19 pattern) */
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 /**
@@ -39,7 +41,7 @@ export const HubRadioGroup = ({
   onHubChange,
   onKeyDown,
   ref,
-}: HubRadioGroupProps & { ref?: React.Ref<HTMLDivElement> }) => {
+}: HubRadioGroupProps) => {
   return (
     <div
       ref={ref}
