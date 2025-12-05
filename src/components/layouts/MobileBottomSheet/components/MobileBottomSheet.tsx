@@ -19,6 +19,8 @@ interface MobileBottomSheetProps extends ClassNameProps {
 /**
  * モバイル用ボトムシートコンポーネント
  *
+ * @deprecated MobileTabLayoutへの移行に伴い非推奨。
+ *
  * @description
  * Vaulライブラリを使用したドラッグ可能なボトムシート。
  * Controller機能専用に最適化され、3段階のスナップポイント（最小・中央・展開）を提供。

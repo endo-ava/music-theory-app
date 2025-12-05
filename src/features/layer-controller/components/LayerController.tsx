@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import { ClassNameProps } from '@/shared/types';
 
 import { ChordLayerAccordion } from './ChordLayerAccordion';
+import { Layers } from 'lucide-react';
 
 /**
  * レイヤーコントローラーのメインコンポーネント
@@ -18,7 +19,10 @@ export const LayerController: React.FC<ClassNameProps> = ({ className }) => {
         className
       )}
     >
-      <h2 className="text-foreground hidden text-lg font-semibold md:block">Layer</h2>
+      <div className="flex items-center gap-2">
+        <Layers className="text-muted-foreground h-4 w-4" />
+        <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">Layer</h2>
+      </div>
 
       {/* アコーディオン2: コードレイヤー */}
       <ChordLayerAccordion />

@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { HubOptionButton } from './HubOptionButton';
 import type { HubType } from '@/shared/types';
 
@@ -23,6 +22,8 @@ interface HubRadioGroupProps {
   onHubChange: (hubType: HubType) => void;
   /** キーボードイベントハンドラー */
   onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  /** Ref for the radio group container (React 19 pattern) */
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 /**
@@ -34,34 +35,36 @@ interface HubRadioGroupProps {
  * - roving tabindex パターンの実装
  * - アクセシビリティベストプラクティス準拠
  */
-export const HubRadioGroup = forwardRef<HTMLDivElement, HubRadioGroupProps>(
-  ({ hubOptions, selectedHub, onHubChange, onKeyDown }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className="flex rounded-lg p-1"
-        role="radiogroup"
-        aria-label="Hub種類の選択"
-        onKeyDown={onKeyDown}
-      >
-        {hubOptions.map(option => {
-          const isSelected = selectedHub === option.value;
+export const HubRadioGroup = ({
+  hubOptions,
+  selectedHub,
+  onHubChange,
+  onKeyDown,
+  ref,
+}: HubRadioGroupProps) => {
+  return (
+    <div
+      ref={ref}
+      className="flex rounded-lg p-1"
+      role="radiogroup"
+      aria-label="Hub種類の選択"
+      onKeyDown={onKeyDown}
+    >
+      {hubOptions.map(option => {
+        const isSelected = selectedHub === option.value;
 
-          return (
-            <HubOptionButton
-              key={option.value}
-              value={option.value}
-              label={option.label}
-              isSelected={isSelected}
-              onClick={onHubChange}
-              describedById={`${option.value}-description`}
-              tabIndex={isSelected ? 0 : -1} // roving tabindex パターン
-            />
-          );
-        })}
-      </div>
-    );
-  }
-);
-
-HubRadioGroup.displayName = 'HubRadioGroup';
+        return (
+          <HubOptionButton
+            key={option.value}
+            value={option.value}
+            label={option.label}
+            isSelected={isSelected}
+            onClick={onHubChange}
+            describedById={`${option.value}-description`}
+            tabIndex={isSelected ? 0 : -1} // roving tabindex パターン
+          />
+        );
+      })}
+    </div>
+  );
+};

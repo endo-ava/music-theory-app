@@ -36,8 +36,8 @@ export const ViewController: React.FC<ViewControllerProps> = ({ className, title
         className
       )}
     >
-      {/* Component Title - モバイルでは非表示、md以上で表示 */}
-      <div className="hidden items-center gap-2 md:flex">
+      {/* Component Title */}
+      <div className="flex items-center gap-2">
         <ScanEye className="text-muted-foreground h-4 w-4" />
         <h2 className="text-foreground text-sm font-semibold tracking-wider uppercase">{title}</h2>
       </div>
