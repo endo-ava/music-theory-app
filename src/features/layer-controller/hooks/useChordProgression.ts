@@ -3,38 +3,11 @@ import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { useAnimationStore } from '@/stores/animationStore';
 import { useAudio } from '@/features/circle-of-fifths/hooks/useAudio';
 import { Key } from '@/domain/key';
-import type { KeyDTO } from '@/domain/common/IMusicalContext';
+import { Interval } from '@/domain/common';
 
 // タイミング定数
 const ANIMATION_START_DELAY = 200; // アニメーション開始までの遅延（ms）
 const CHORD_PLAY_DELAY = 800; // 解決先コード再生までの遅延（ms）: 200ms (アニメ開始) + 600ms (シーケンス)
-
-// 進行の視覚的オフセット定数
-const MINOR_KEY_VISUAL_OFFSET = -3; // マイナーキーは平行調のメジャーキーの位置に表示（例: Am -> C の位置）
-const FIFTH_PROGRESSION_OFFSET = -1; // 五度進行: 反時計回りに1つ（例: C -> F）
-const TRITONE_SUBSTITUTION_OFFSET = 6; // 裏コード: 対角の位置（半周、例: C -> F#）
-
-/**
- * 視覚的位置（0-11）からKeyDTOを生成
- *
- * 五度圏の視覚的な位置は、メジャーキーの場合はfifthsIndexと直接対応します。
- * マイナーキーの場合は、視覚的には平行調のメジャーキーの位置に表示されるため、
- * +3の調整を行ってfifthsIndexを復元します。
- *
- * @param visualPosition - 円上の視覚的位置（0-11）
- * @param isMajor - メジャーキーかマイナーキーか
- * @returns 対応するKeyDTO
- */
-const createKeyDTOFromVisualPosition = (visualPosition: number, isMajor: boolean): KeyDTO => {
-  // マイナーキーの視覚的オフセットを逆変換
-  const fifthsIndex = isMajor
-    ? visualPosition
-    : (visualPosition - MINOR_KEY_VISUAL_OFFSET + 12) % 12;
-
-  // ドメインモデルを使用して正確なキー情報を生成
-  const key = Key.fromCircleOfFifths(fifthsIndex, isMajor);
-  return key.toJSON();
-};
 
 /**
  * useChordProgressionの戻り値の型
@@ -76,42 +49,44 @@ export const useChordProgression = (): UseChordProgressionResult => {
    * コード進行の再生とアニメーション表示を行う共通ロジック
    *
    * @param type - アニメーションの種類（'fifth' または 'tritone'）
-   * @param targetOffsetCalculator - ターゲット位置を計算する関数
+   * @param targetKeyCalculator - 現在のキーからターゲットキーを計算する関数
    */
   const handlePlayProgression = useCallback(
-    async (
-      type: 'fifth' | 'tritone',
-      targetOffsetCalculator: (visualPosition: number) => number
-    ) => {
+    async (type: 'fifth' | 'tritone', targetKeyCalculator: (currentKey: Key) => Key) => {
       if (!selectedKey) return;
 
-      const keyIndex = selectedKey.fifthsIndex;
-      const isMajor = selectedKey.isMajor;
-      // マイナーキーの場合は、表示上の位置（平行調のメジャーキーの位置）に変換する
-      const visualPosition = isMajor ? keyIndex : (keyIndex + MINOR_KEY_VISUAL_OFFSET + 12) % 12;
-      const targetVisualPosition = targetOffsetCalculator(visualPosition);
+      // 1. ドメインオブジェクトの生成
+      const currentKey = Key.fromCircleOfFifths(selectedKey.fifthsIndex, selectedKey.isMajor);
 
-      // 1. 起点のコードを再生（即時）
-      playChordAtPosition(visualPosition, isMajor);
+      // 2. 視覚的位置の計算
+      // メジャーキーの場合はそのまま、マイナーキーの場合は平行調メジャーの位置を使用
+      // (例: Am -> Cの位置 = 0)
+      const visualPosition = currentKey.getRelativeMajorTonic().fifthsIndex;
 
-      // 2. アニメーションを開始（少し遅延）
+      // 3. ターゲットキーの計算（ドメインロジック）
+      const targetKey = targetKeyCalculator(currentKey);
+      const targetVisualPosition = targetKey.getRelativeMajorTonic().fifthsIndex;
+
+      // 4. 起点のコードを再生（即時）
+      playChordAtPosition(visualPosition, selectedKey.isMajor);
+
+      // 5. アニメーションを開始（少し遅延）
       setTimeout(() => {
         startAnimation({
           type,
           from: visualPosition,
           to: targetVisualPosition,
-          isMajor,
+          isMajor: selectedKey.isMajor,
           duration: 2000,
         });
       }, ANIMATION_START_DELAY);
 
-      // 3. 解決先のコードを再生し、選択状態を更新（さらに遅延）
+      // 6. 解決先のコードを再生し、選択状態を更新（さらに遅延）
       setTimeout(async () => {
-        await playChordAtPosition(targetVisualPosition, isMajor);
+        await playChordAtPosition(targetVisualPosition, targetKey.isMajor);
 
         // 解決先のコードを選択状態にする
-        const targetKeyDTO = createKeyDTOFromVisualPosition(targetVisualPosition, isMajor);
-        setSelectedKey(targetKeyDTO);
+        setSelectedKey(targetKey.toJSON());
       }, CHORD_PLAY_DELAY);
     },
     [selectedKey, startAnimation, playChordAtPosition, setSelectedKey]
@@ -119,11 +94,18 @@ export const useChordProgression = (): UseChordProgressionResult => {
 
   // 公開API関数
   const playFifthProgression = useCallback(() => {
-    handlePlayProgression('fifth', pos => (pos + FIFTH_PROGRESSION_OFFSET + 12) % 12);
+    // 五度進行: Subdominant方向へ進む (反時計回り)
+    // Note: ドメインモデル上の「SubdominantKey」は反時計回りの隣接キーを指す
+    handlePlayProgression('fifth', key => key.getSubdominantKey());
   }, [handlePlayProgression]);
 
   const playTritoneSubstitution = useCallback(() => {
-    handlePlayProgression('tritone', pos => (pos + TRITONE_SUBSTITUTION_OFFSET) % 12);
+    // 裏コード: 増四度（減五度）上へ
+    handlePlayProgression('tritone', key => {
+      // Tritone離れた同じ品質のキー
+      const targetCenter = key.centerPitch.transposeBy(Interval.Tritone);
+      return key.isMajor ? Key.major(targetCenter) : Key.minor(targetCenter);
+    });
   }, [handlePlayProgression]);
 
   return {

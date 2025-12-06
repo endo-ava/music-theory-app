@@ -33,6 +33,9 @@ interface AnimationActions {
   removeAnimation: (id: string) => void;
 }
 
+// タイムアウトIDを管理するマップ
+const timeoutMap = new Map<string, NodeJS.Timeout>();
+
 /**
  * アニメーション状態を管理するZustandストア
  *
@@ -49,18 +52,37 @@ export const useAnimationStore = create<AnimationState & AnimationActions>(set =
       activeAnimations: [...state.activeAnimations, newAnimation],
     }));
 
+    // 既存のタイマーがあればクリア（ID衝突対策）
+    if (timeoutMap.has(id)) {
+      clearTimeout(timeoutMap.get(id));
+    }
+
     // duration後に自動削除
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       set(state => ({
         activeAnimations: state.activeAnimations.filter(a => a.id !== id),
       }));
+      timeoutMap.delete(id);
     }, animation.duration);
+
+    timeoutMap.set(id, timeoutId);
   },
 
-  clearAnimations: () => set({ activeAnimations: [] }),
+  clearAnimations: () => {
+    // 全てのタイマーをクリア
+    timeoutMap.forEach(timeoutId => clearTimeout(timeoutId));
+    timeoutMap.clear();
+    set({ activeAnimations: [] });
+  },
 
-  removeAnimation: id =>
+  removeAnimation: id => {
+    // タイマーをクリア
+    if (timeoutMap.has(id)) {
+      clearTimeout(timeoutMap.get(id));
+      timeoutMap.delete(id);
+    }
     set(state => ({
       activeAnimations: state.activeAnimations.filter(a => a.id !== id),
-    })),
+    }));
+  },
 }));
