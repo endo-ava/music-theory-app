@@ -3,6 +3,7 @@ import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
 import { DegreeLayer } from './DegreeLayer';
 import { FunctionalHarmonyLayer } from './FunctionalHarmonyLayer';
 import { RippleLayer } from './RippleLayer';
+import { ProgressionLayer } from './ProgressionLayer';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 import { ClassNameProps } from '@/shared/types';
 
@@ -48,6 +49,9 @@ export const CircleOfFifths: React.FC<ClassNameProps> = ({ className }) => {
 
         {/* 機能和声レイヤー（T/D/SD文字表示） */}
         <FunctionalHarmonyLayer />
+
+        {/* 進行（プログレッション）レイヤー（矢印アニメーション） */}
+        <ProgressionLayer />
 
         {/* リップルレイヤー（最前面に描画） */}
         <RippleLayer />
