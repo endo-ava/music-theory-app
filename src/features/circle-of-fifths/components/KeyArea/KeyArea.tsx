@@ -9,7 +9,7 @@ import { useKeyAreaPresentation } from '../../hooks/useKeyAreaPresentation';
 import { KeyAreaContent } from './KeyAreaContent';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 
-import type { Point } from '@/shared/types/graphics';
+import type { Point } from '@/types/graphics';
 import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { KeyDTO } from '@/domain';
 

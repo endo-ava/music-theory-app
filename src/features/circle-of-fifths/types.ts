@@ -6,7 +6,7 @@
  */
 
 // 共通型定義はsharedから再エクスポート
-export type { Point } from '@/shared/types/graphics';
+export type { Point } from '@/types/graphics';
 
 /**
  * SVGパス情報（3分割セグメント用）

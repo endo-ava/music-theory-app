@@ -3,7 +3,7 @@
 import React from 'react';
 import { MobileBottomSheet } from '@/components/layouts/MobileBottomSheet/components/MobileBottomSheet';
 import { useMobileBottomSheet } from '@/components/layouts/MobileBottomSheet/hooks/useMobileBottomSheet';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { twMerge } from 'tailwind-merge';
 
 interface MobileTwoColumnProviderProps extends ClassNameProps {

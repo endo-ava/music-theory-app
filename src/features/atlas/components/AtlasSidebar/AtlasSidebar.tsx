@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { cn } from '@/lib/utils';
 
 export const AtlasSidebar: React.FC<ClassNameProps> = ({ className }) => {

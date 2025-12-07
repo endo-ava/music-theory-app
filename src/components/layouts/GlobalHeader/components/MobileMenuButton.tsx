@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import React from 'react';
-import { CloseIcon, HamburgerIcon } from '@/shared/components/icons';
+import { CloseIcon, HamburgerIcon } from '@/components/common/icons';
 
 /**
  * MobileMenuButtonコンポーネントのProps

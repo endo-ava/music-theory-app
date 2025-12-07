@@ -2,7 +2,7 @@
  * Canvas コンポーネントの型定義
  */
 
-import type { HubType } from '@/shared/types';
+import type { HubType } from '@/types';
 
 /**
  * Canvas の設定（将来の拡張用）

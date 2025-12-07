@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAnimationStore } from '@/stores/animationStore';
+import { useAnimationStore } from '@/features/circle-of-fifths/stores/animationStore';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 
 /**

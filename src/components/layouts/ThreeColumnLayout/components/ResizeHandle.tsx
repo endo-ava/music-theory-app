@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { PanelResizeHandle } from 'react-resizable-panels';
 import { twMerge } from 'tailwind-merge';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 
 interface ResizeHandleProps extends ClassNameProps {
   /** リサイザーの識別用ID */

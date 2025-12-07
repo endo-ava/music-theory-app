@@ -9,6 +9,6 @@ export { Canvas } from './components/Canvas';
 export { CurrentKeyDisplay } from './components/CurrentKeyDisplay';
 
 export type { CanvasConfig } from './types';
-export type { HubType } from '@/shared/types';
-export { useHubStore } from '@/stores/hubStore';
-export type { HubState } from '@/stores/hubStore';
+export type { HubType } from '@/types';
+export { useHubStore } from '@/features/view-controller/stores/hubStore';
+export type { HubState } from '@/features/view-controller/stores/hubStore';

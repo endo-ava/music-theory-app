@@ -5,7 +5,7 @@ import { FunctionalHarmonyLayer } from './FunctionalHarmonyLayer';
 import { RippleLayer } from './RippleLayer';
 import { ProgressionLayer } from './ProgressionLayer';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 
 /**
  * 五度圏表示コンポーネント

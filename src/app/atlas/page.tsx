@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { AtlasLayout } from '@/features/atlas';
+import { AtlasLayout } from '@/components/layouts';
 
 export const metadata: Metadata = {
   title: 'Atlas | Harmonic Orbit',

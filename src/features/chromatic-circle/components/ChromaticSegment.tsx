@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useMemo } from 'react';
 import { motion } from 'motion/react';
-import { useChromaticCircleStore } from '@/stores/chromaticCircleStore';
+import { useChromaticCircleStore } from '@/features/chromatic-circle/stores/chromaticCircleStore';
 import { useAudio } from '../hooks/useAudio';
 import type { Point, ChromaticSegmentDTO, ChromaticSegmentPaths } from '../types';
 import { ANIMATION } from '../constants';

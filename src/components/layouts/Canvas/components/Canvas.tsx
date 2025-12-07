@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge';
 import { CircleOfFifths } from '@/features/circle-of-fifths';
 import { CurrentKeyDisplay } from './CurrentKeyDisplay';
 import { HubTypeController } from './HubTypeController';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { ChromaticCircle } from '@/features/chromatic-circle';
 
 /**

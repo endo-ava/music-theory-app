@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Canvas } from '@/components/layouts/Canvas';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 
 import { ControllerPanel } from './ControllerPanel';
 import { InformationPanel } from './InformationPanel';

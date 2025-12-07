@@ -2,11 +2,11 @@
  * クロマチックサークル専用の型定義
  */
 
-import type { Point as GraphicsPoint } from '@/shared/types/graphics';
+import type { Point as GraphicsPoint } from '@/types/graphics';
 import type { ChromaticSegmentDTO as DomainDTO } from '@/domain/services/ChromaticCircle';
 
 // 共通型定義はsharedから再エクスポート
-export type { Point } from '@/shared/types/graphics';
+export type { Point } from '@/types/graphics';
 
 // Domain層のDTOを再エクスポート
 export type { ChromaticSegmentDTO } from '@/domain/services/ChromaticCircle';

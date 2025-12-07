@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { IMusicalContext } from '@/domain';
 
 /**

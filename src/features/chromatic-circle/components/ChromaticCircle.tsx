@@ -1,7 +1,7 @@
 import { ChromaticSegment } from './ChromaticSegment';
 import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
 import { getChromaticCircleData } from '../utils/chromaticCircleData';
-import type { ClassNameProps } from '@/shared/types';
+import type { ClassNameProps } from '@/types';
 
 /**
  * クロマチックサークル表示コンポーネント

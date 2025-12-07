@@ -8,7 +8,7 @@
  */
 
 import { calculateAngle, normalizeAngle, polarToCartesian } from './geometry';
-import { SEGMENT_COUNT } from '@/shared/constants/circle';
+import { SEGMENT_COUNT } from '@/constants/circle';
 
 /**
  * ピザ型セグメントのSVGパスを生成する汎用関数

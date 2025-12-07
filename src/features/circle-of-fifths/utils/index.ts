@@ -5,7 +5,7 @@
  * すべてのユーティリティ関数が含まれています。
  *
  * 注: 円形レイアウトの幾何学的計算（calculateAngle, calculateTextPosition等）は
- * @/shared/utils/geometry に移動されました。
+ * @/utils/geometry に移動されました。
  */
 
 // カテゴリ別エクスポート（推奨）

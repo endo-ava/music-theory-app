@@ -2,7 +2,7 @@
  * 音楽カラーシステムを使用したスタイリングフック
  */
 import React, { useMemo } from 'react';
-import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
+import { getMusicColorVariable } from '@/utils/musicColorSystem';
 import type { Key, KeyDTO, IMusicalContext } from '@/domain';
 
 /**
