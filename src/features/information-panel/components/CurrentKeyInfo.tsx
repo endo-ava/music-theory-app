@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { twMerge } from 'tailwind-merge';
 import { PlayButton } from './shared/PlayButton';
 import { DiatonicTable } from './DiatonicTable';

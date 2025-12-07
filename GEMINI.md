@@ -46,16 +46,31 @@
 ```
 src/
 ├── app/              # ルーティング・ページ構成
-├── components/       # 共通UI（ui/, layouts/）
-├── features/         # 機能単位（components/, hooks/, store/, index.ts）
+├── components/       # 共通UI
+│   ├── ui/           # shadcn/ui プリミティブ
+│   ├── common/       # 汎用共通コンポーネント (Divider, icons等)
+│   └── layouts/      # レイアウトコンポーネント
+├── features/         # 機能単位（components/, hooks/, stores/, index.ts）
+│   ├── circle-of-fifths/
+│   │   └── stores/   # 五度圏専用状態 (circleOfFifthsStore, rippleStore, animationStore)
+│   ├── chromatic-circle/
+│   │   └── stores/   # クロマチック専用状態 (chromaticCircleStore)
+│   ├── layer-controller/
+│   │   └── stores/   # レイヤー専用状態 (layerStore)
+│   └── view-controller/
+│       └── stores/   # ビュー切り替え専用状態 (hubStore)
 ├── domain/           # 音楽理論ロジック（DDD戦術的パターン）
 │   ├── common/       # 値オブジェクト（PitchClass, Note, Interval等）
 │   ├── scale/        # Scale集約
 │   ├── chord/        # Chord集約
 │   ├── key/          # Key集約
 │   └── services/     # ドメインサービス（AudioEngine, ChordAnalyzer等）
-├── shared/           # 全体で共有（型定義、定数、ユーティリティ）
-└── stores/           # グローバル状態管理
+├── hooks/            # 汎用カスタムフック
+├── utils/            # 汎用ユーティリティ関数
+├── constants/        # アプリ全体の定数
+├── types/            # 全体で共有する型定義
+├── lib/              # 外部ライブラリ設定 (Shadcn utils等)
+└── stores/           # グローバル状態管理（複数feature横断のみ: currentKeyStore）
 ```
 
 # ドキュメント駆動開発

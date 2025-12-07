@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Canvas } from '@/components/layouts/Canvas';
 import { InformationPanel } from '@/components/layouts/ThreeColumnLayout/components/InformationPanel';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { MobileTwoColumnProvider } from './MobileTwoColumnProvider';
 
 /**

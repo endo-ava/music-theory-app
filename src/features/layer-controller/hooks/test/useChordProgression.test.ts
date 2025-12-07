@@ -4,14 +4,14 @@ import { renderHook, act } from '@testing-library/react';
 import { useChordProgression } from '../useChordProgression';
 
 // モック
-vi.mock('@/stores/circleOfFifthsStore');
-vi.mock('@/stores/animationStore');
+vi.mock('@/features/circle-of-fifths/stores/circleOfFifthsStore');
+vi.mock('@/features/circle-of-fifths/stores/animationStore');
 vi.mock('@/features/circle-of-fifths/hooks/useAudio');
 // Keyクラスはモックせず、実際のドメインロジックを使用する
 
 // モックインポート
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
-import { useAnimationStore } from '@/stores/animationStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
+import { useAnimationStore } from '@/features/circle-of-fifths/stores/animationStore';
 import { useAudio } from '@/features/circle-of-fifths/hooks/useAudio';
 
 describe('useChordProgression', () => {

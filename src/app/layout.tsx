@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { GlobalHeader } from '@/components/layouts/GlobalHeader';
-import { generateMusicColorTheme } from '@/shared/utils/musicColorSystem';
+import { generateMusicColorTheme } from '@/utils/musicColorSystem';
 
 export const metadata: Metadata = {
   title: 'Harmonic Orbit',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 
 import { ChordLayerAccordion } from './ChordLayerAccordion';
 import { Layers } from 'lucide-react';

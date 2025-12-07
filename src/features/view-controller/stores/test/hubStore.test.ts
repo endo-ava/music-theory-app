@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useHubStore } from '../hubStore';
-import type { HubType } from '../../shared/types';
+import type { HubType } from '@/types';
 
 describe('hubStore', () => {
   // テスト前にストアを初期状態にリセット

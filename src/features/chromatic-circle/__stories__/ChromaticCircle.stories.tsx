@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ChromaticCircle } from '../components/ChromaticCircle';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain';
 import { PitchClass } from '@/domain/common';

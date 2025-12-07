@@ -1,8 +1,8 @@
 'use client';
 
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { ClassNameProps } from '@/shared/types';
-import { ResponsiveHelpIcon } from '@/shared/components/ResponsiveHelpIcon';
+import { ClassNameProps } from '@/types';
+import { ResponsiveHelpIcon } from '@/components/common/ResponsiveHelpIcon';
 import { twMerge } from 'tailwind-merge';
 
 /**

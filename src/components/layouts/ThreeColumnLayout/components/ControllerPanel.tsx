@@ -4,8 +4,8 @@ import { twMerge } from 'tailwind-merge';
 import { ViewController } from '@/features/view-controller';
 import { KeyController } from '@/features/key-controller';
 import { LayerController } from '@/features/layer-controller';
-import { Divider } from '@/shared/components/Divider';
-import { ClassNameProps } from '@/shared/types';
+import { Divider } from '@/components/common/Divider';
+import { ClassNameProps } from '@/types';
 
 /**
  * コントローラーパネル（左パネル）

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { HubType } from '@/shared/types';
+import type { HubType } from '@/types';
 
 /**
  * Hub 状態管理ストアの型定義

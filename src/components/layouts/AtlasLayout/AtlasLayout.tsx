@@ -4,10 +4,14 @@ import React from 'react';
 import { Panel, PanelGroup } from 'react-resizable-panels';
 import { ResizeHandle } from '@/components/layouts/ThreeColumnLayout/components/ResizeHandle';
 import { MobileBottomSheet, SNAP_POINTS } from '@/components/layouts/MobileBottomSheet';
-import { AtlasSidebar } from './AtlasSidebar/AtlasSidebar';
-import { AtlasCanvas } from './AtlasCanvas/AtlasCanvas';
-import { AtlasDetailPanel } from './AtlasDetailPanel/AtlasDetailPanel';
+import { AtlasSidebar, AtlasCanvas, AtlasDetailPanel } from '@/features/atlas';
 
+/**
+ * Atlas画面のレイアウトコンポーネント
+ *
+ * PC: 3カラムのリサイザブルレイアウト（Sidebar / Canvas / Detail）
+ * Mobile: Canvas + BottomSheetによる詳細パネル
+ */
 export const AtlasLayout: React.FC = () => {
   const [activeSnapPoint, setActiveSnapPoint] = React.useState<number | string | null>(
     SNAP_POINTS.LOWEST

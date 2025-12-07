@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { ReactFlow, Background, Controls, MiniMap, NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { cn } from '@/lib/utils';
 import { generateAtlasDataset } from '../../data/AtlasDataGenerator';
 import { useAtlasFlow } from './hooks/useAtlasFlow';

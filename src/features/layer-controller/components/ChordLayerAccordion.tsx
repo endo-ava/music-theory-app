@@ -4,9 +4,9 @@ import React from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { useLayerStore } from '../../../stores/layerStore';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
-import { useCurrentKeyStore } from '../../../stores/currentKeyStore';
+import { useLayerStore } from '../stores/layerStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { useChordProgression } from '../hooks/useChordProgression';
 
 /**

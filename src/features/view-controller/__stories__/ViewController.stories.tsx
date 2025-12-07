@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { within, expect, userEvent } from 'storybook/test';
 import { ViewController } from '../components/ViewController';
-import { useHubStore } from '@/stores/hubStore';
+import { useHubStore } from '@/features/view-controller/stores/hubStore';
 
 const meta: Meta<typeof ViewController> = {
   title: 'Components/ViewController',

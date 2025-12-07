@@ -3,7 +3,7 @@
 import React from 'react';
 import { Panel, PanelGroup } from 'react-resizable-panels';
 
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 
 import { ResizeHandle } from './ResizeHandle';
 

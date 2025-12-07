@@ -2,10 +2,10 @@
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useDiatonicChordHighlight } from '../hooks/useDiatonicChordHighlight';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
-import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
+import { getMusicColorVariable } from '@/utils/musicColorSystem';
 import { ANIMATION } from '../constants';
 
 /** ハイライトパスのプロパティ */

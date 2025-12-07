@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useHubStore } from '@/stores/hubStore';
+import { useHubStore } from '@/features/view-controller/stores/hubStore';
 
 /**
  * HubType表示制御コンポーネント

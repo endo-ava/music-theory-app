@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
-import { useAnimationStore } from '@/stores/animationStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
+import { useAnimationStore } from '@/features/circle-of-fifths/stores/animationStore';
 import { useAudio } from '@/features/circle-of-fifths/hooks/useAudio';
 import { Key } from '@/domain/key';
 import { Interval } from '@/domain/common';

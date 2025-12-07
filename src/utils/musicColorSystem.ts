@@ -1,6 +1,6 @@
 import { PitchClass } from '@/domain/common/PitchClass';
 import type { IMusicalContext, KeyDTO } from '@/domain';
-import { AbstractMusicalContext } from '../../domain/common/AbstractMusicalContext';
+import { AbstractMusicalContext } from '@/domain/common/AbstractMusicalContext';
 import { Key } from '@/domain/key';
 
 /**

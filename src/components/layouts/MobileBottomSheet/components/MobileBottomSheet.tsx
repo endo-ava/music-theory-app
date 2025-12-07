@@ -4,8 +4,8 @@ import React from 'react';
 import { Drawer as VaulDrawer } from 'vaul';
 import { SNAP_POINTS } from '../constants';
 import { cn } from '@/lib/utils';
-import type { ClassNameProps } from '@/shared/types';
-import { CloseIcon, HandleIcon } from '../../../../shared/components/icons';
+import type { ClassNameProps } from '@/types';
+import { CloseIcon, HandleIcon } from '@/components/common/icons';
 import { ControllerPanel } from '../../ThreeColumnLayout';
 import { RemoveScroll } from 'react-remove-scroll';
 

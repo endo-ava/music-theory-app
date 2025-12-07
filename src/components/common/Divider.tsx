@@ -1,7 +1,7 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import type { ClassNameProps } from '@/shared/types';
+import type { ClassNameProps } from '@/types';
 
 /**
  * 視覚的な区切り線コンポーネント

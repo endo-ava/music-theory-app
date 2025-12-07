@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import type { Decorator } from '@storybook/react';
 import { Key } from '@/domain/key';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 
 /**

@@ -1,9 +1,5 @@
-import type { Point } from '@/shared/types/graphics';
-import {
-  ANGLE_PER_SEGMENT,
-  ANGLE_OFFSET,
-  HALF_ANGLE_PER_SEGMENT_RAD,
-} from '@/shared/constants/circle';
+import type { Point } from '@/types/graphics';
+import { ANGLE_PER_SEGMENT, ANGLE_OFFSET, HALF_ANGLE_PER_SEGMENT_RAD } from '@/constants/circle';
 
 /**
  * 極座標から直交座標に変換

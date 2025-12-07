@@ -1,9 +1,9 @@
 'use client';
 
 import { useMemo, useCallback, useRef } from 'react';
-import { useHubStore } from '@/stores/hubStore';
-import { getHubOptions } from '@/shared/constants/hubs';
-import type { HubType } from '@/shared/types';
+import { useHubStore } from '@/features/view-controller/stores/hubStore';
+import { getHubOptions } from '@/constants/hubs';
+import type { HubType } from '@/types';
 
 /**
  * ViewController のビジネスロジックを管理するカスタムフック

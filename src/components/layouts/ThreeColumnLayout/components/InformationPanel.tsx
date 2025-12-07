@@ -3,8 +3,8 @@ import { Info } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
 import { SelectedElementInfo, CurrentKeyInfo } from '@/features/information-panel';
-import { Divider } from '@/shared/components/Divider';
-import { ClassNameProps } from '@/shared/types';
+import { Divider } from '@/components/common/Divider';
+import { ClassNameProps } from '@/types';
 
 /**
  * 情報パネル（右パネル）

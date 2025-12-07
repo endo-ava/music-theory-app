@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { within, expect } from 'storybook/test';
 import { SelectedElementInfo } from '../components/SelectedElementInfo';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key } from '@/domain/key';
 import type { KeyDTO } from '@/domain/common/IMusicalContext';
