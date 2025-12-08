@@ -14,6 +14,12 @@ interface AtlasNodeReactFlowData extends Record<string, unknown> {
 // Custom Node Type
 type AtlasNodeComponentType = Node<AtlasNodeReactFlowData, 'atlasNode'>;
 
+/**
+ * ノードの種類とデータタイプに基づいて色クラスを取得する
+ * @param type ノードの種類（foundation, pattern, instance, context）
+ * @param dataType データの種類（scale, chord, function, etc）
+ * @returns Tailwind CSSのクラス名文字列
+ */
 const getNodeColor = (type: AtlasNodeType, dataType: AtlasDataType) => {
   switch (type) {
     case 'foundation':
@@ -33,6 +39,12 @@ const getNodeColor = (type: AtlasNodeType, dataType: AtlasDataType) => {
   }
 };
 
+/**
+ * ノードの種類とデータタイプに基づいてサイズクラスを取得する
+ * @param type ノードの種類
+ * @param dataType データの種類
+ * @returns Tailwind CSSのクラス名文字列
+ */
 const getNodeSize = (type: AtlasNodeType, dataType: AtlasDataType) => {
   if (dataType === 'function') return 'w-16 h-16 text-sm'; // Concept/Root
   switch (type) {
@@ -49,6 +61,14 @@ const getNodeSize = (type: AtlasNodeType, dataType: AtlasDataType) => {
   }
 };
 
+/**
+ * Atlas Node Component
+ *
+ * Atlas Canvas上で描画されるカスタムノードコンポーネント。
+ * React Flowのカスタムノードとして登録され、データの種類に応じた視覚表現（色、サイズ）を提供します。
+ *
+ * @param {NodeProps<AtlasNodeComponentType>} props React Flowから渡されるProps
+ */
 export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentType>) => {
   const { label, type, dataType, isExpanded } = data;
   const colorClass = getNodeColor(type, dataType);
@@ -72,9 +92,7 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
       >
         {/* Label (Center for large nodes, hidden/tooltip for small) */}
         {type !== 'instance' && (
-          <span className="pointer-events-none px-1 text-center font-bold text-black select-none">
-            {label}
-          </span>
+          <span className="px-1 text-center font-bold text-black select-none">{label}</span>
         )}
       </div>
 
