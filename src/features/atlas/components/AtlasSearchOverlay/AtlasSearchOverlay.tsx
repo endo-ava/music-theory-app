@@ -15,19 +15,31 @@ import { ClassNameProps } from '@/types';
 export const AtlasSearchOverlay: React.FC<ClassNameProps> = ({ className }) => {
   return (
     <div
+      role="search"
       className={cn(
         'bg-muted border-border absolute top-4 left-4 z-10 flex w-80 items-center gap-2 rounded-full border px-4 py-2 shadow-lg backdrop-blur-md transition-all sm:top-6 sm:left-6',
         className
       )}
     >
-      <Search className="text-muted-foreground h-4 w-4 shrink-0" />
+      <Search className="text-muted-foreground h-4 w-4 shrink-0" aria-hidden="true" />
+      <label htmlFor="atlas-search" className="sr-only">
+        Search Atlas concepts
+      </label>
       <input
+        id="atlas-search"
         type="text"
         placeholder="Search..."
-        className="placeholder:text-muted-foreground flex-1 border-none bg-transparent text-sm outline-none focus:ring-0"
+        aria-label="Search Atlas concepts"
+        className="placeholder:text-muted-foreground flex-1 border-none bg-transparent text-sm outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-0"
       />
-      <div className="bg-border h-4 w-[1px]" />
-      <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-transparent">
+      <div className="bg-border h-4 w-[1px]" aria-hidden="true" />
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        aria-label="Open filters"
+        className="h-6 w-6 rounded-full hover:bg-transparent"
+      >
         <SlidersHorizontal className="text-muted-foreground hover:text-foreground h-4 w-4 transition-colors" />
       </Button>
     </div>

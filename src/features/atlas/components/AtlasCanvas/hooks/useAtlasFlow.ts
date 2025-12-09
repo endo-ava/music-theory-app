@@ -105,13 +105,23 @@ const computeVisibleElements = (
   const visibleEdges: Edge[] = [];
   const visibleNodeIds = new Set<string>();
 
+  // 子ノードを持つノードIDのセットを事前計算
+  const nodesWithChildren = new Set<string>();
+  dataset.nodes.forEach(node => {
+    if (node.parentId) {
+      nodesWithChildren.add(node.parentId);
+    }
+  });
+
   // 1. ノードのフィルタリング
   dataset.nodes.forEach(node => {
+    const hasChildren = nodesWithChildren.has(node.id);
+
     // ルートノードは常に表示
     if (node.id === ROOT_NODE_ID) {
       visibleNodeIds.add(node.id);
       const isSelected = node.id === selectedNodeId;
-      visibleNodes.push(mapAtlasNodeToFlow(node, true, isSelected));
+      visibleNodes.push(mapAtlasNodeToFlow(node, true, isSelected, hasChildren));
       return;
     }
 
@@ -120,7 +130,7 @@ const computeVisibleElements = (
       visibleNodeIds.add(node.id);
       const isExpanded = expandedNodeIds.has(node.id);
       const isSelected = node.id === selectedNodeId;
-      visibleNodes.push(mapAtlasNodeToFlow(node, isExpanded, isSelected));
+      visibleNodes.push(mapAtlasNodeToFlow(node, isExpanded, isSelected, hasChildren));
     }
   });
 
@@ -147,11 +157,13 @@ const computeVisibleElements = (
  * @param node Atlasのノードデータ
  * @param isExpanded 展開されているかどうか
  * @param isSelected 選択されているかどうか
+ * @param hasChildren 子ノードを持つかどうか
  */
 const mapAtlasNodeToFlow = (
   node: AtlasNodeData,
   isExpanded: boolean,
-  isSelected: boolean
+  isSelected: boolean,
+  hasChildren: boolean
 ): Node => {
   return {
     id: node.id,
@@ -163,6 +175,7 @@ const mapAtlasNodeToFlow = (
       type: node.type,
       dataType: node.dataType,
       isExpanded,
+      hasChildren,
       originalData: node.data,
     },
   };

@@ -4,10 +4,13 @@ import { X } from 'lucide-react';
 import { ClassNameProps } from '@/types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { AtlasDataset } from '../../types';
 
 interface AtlasDetailPanelProps extends ClassNameProps {
   isOpen?: boolean;
   onClose?: () => void;
+  nodeId?: string | null;
+  dataset?: AtlasDataset;
 }
 
 /**
@@ -20,12 +23,19 @@ interface AtlasDetailPanelProps extends ClassNameProps {
  * @param {AtlasDetailPanelProps} props
  * @param {boolean} [props.isOpen=false] - パネルの表示状態
  * @param {() => void} [props.onClose] - 閉じるボタンが押された時のコールバック
+ * @param {string | null} [props.nodeId] - 選択されたノードのID
+ * @param {AtlasDataset} [props.dataset] - ノード情報を取得するためのデータセット
  */
 export const AtlasDetailPanel: React.FC<AtlasDetailPanelProps> = ({
   className,
   // isOpen, // removed unused destructuring
   onClose,
+  nodeId,
+  dataset,
 }) => {
+  // 選択されたノードの情報を取得
+  const selectedNode = nodeId && dataset ? dataset.nodes.find(n => n.id === nodeId) : null;
+
   return (
     <motion.aside
       initial={{ x: '100%', opacity: 0 }}
@@ -38,11 +48,12 @@ export const AtlasDetailPanel: React.FC<AtlasDetailPanelProps> = ({
       )}
     >
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Details</h2>
+        <h2 className="text-lg font-semibold">{selectedNode?.label ?? 'Details'}</h2>
         <Button
           variant="ghost"
           size="icon"
           onClick={onClose}
+          aria-label="Close detail panel"
           className="hover:bg-background/50 h-8 w-8 rounded-full"
         >
           <X className="h-4 w-4" />
@@ -54,10 +65,30 @@ export const AtlasDetailPanel: React.FC<AtlasDetailPanelProps> = ({
         </div>
         <div>
           <h3 className="text-foreground mb-1 font-medium">Description</h3>
-          <p>
-            This is a placeholder for the detail content. When a node is selected in the Atlas
-            Canvas, detailed information will appear here.
-          </p>
+          {selectedNode ? (
+            <div className="space-y-2">
+              <p>
+                <span className="text-muted-foreground/70">Type:</span> {selectedNode.type}
+              </p>
+              <p>
+                <span className="text-muted-foreground/70">Data Type:</span> {selectedNode.dataType}
+              </p>
+              {selectedNode.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {selectedNode.tags.map(tag => (
+                    <span key={tag} className="bg-muted rounded px-2 py-0.5 text-xs">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <p>
+              This is a placeholder for the detail content. When a node is selected in the Atlas
+              Canvas, detailed information will appear here.
+            </p>
+          )}
         </div>
         <div>
           <h3 className="text-foreground mb-1 font-medium">Related Concepts</h3>

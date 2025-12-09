@@ -21,13 +21,16 @@ interface AtlasInteractiveLayoutProps {
  */
 export const AtlasInteractiveLayout: React.FC<AtlasInteractiveLayoutProps> = ({ dataset }) => {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-  const handleNodeClick = () => {
+  const handleNodeClick = (nodeId: string) => {
+    setSelectedNodeId(nodeId);
     setIsDetailOpen(true);
   };
 
   const handleBackgroundClick = () => {
     setIsDetailOpen(false);
+    setSelectedNodeId(null);
   };
 
   return (
@@ -51,6 +54,8 @@ export const AtlasInteractiveLayout: React.FC<AtlasInteractiveLayoutProps> = ({ 
           <AtlasDetailPanel
             isOpen={isDetailOpen}
             onClose={() => setIsDetailOpen(false)}
+            nodeId={selectedNodeId}
+            dataset={dataset}
             className="z-20"
           />
         )}

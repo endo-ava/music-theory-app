@@ -1,6 +1,7 @@
 import React from 'react';
 import { generateAtlasDataset } from '@/features/atlas/data/AtlasDataGenerator';
 import { AtlasInteractiveLayout } from './AtlasInteractiveLayout';
+import type { AtlasDataset } from '@/features/atlas/types';
 
 /**
  * Atlas画面のレイアウトコンポーネント (Server Component)
@@ -15,7 +16,7 @@ export const AtlasLayout: React.FC = () => {
   const rawDataset = generateAtlasDataset();
 
   // Serialize to plain object (removes class instances/methods)
-  const dataset = JSON.parse(JSON.stringify(rawDataset));
+  const dataset = JSON.parse(JSON.stringify(rawDataset)) as AtlasDataset;
 
   return <AtlasInteractiveLayout dataset={dataset} />;
 };

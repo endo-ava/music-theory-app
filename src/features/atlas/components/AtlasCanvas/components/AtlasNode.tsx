@@ -9,6 +9,7 @@ interface AtlasNodeReactFlowData extends Record<string, unknown> {
   type: AtlasNodeType;
   dataType: AtlasDataType;
   isExpanded: boolean;
+  hasChildren: boolean;
 }
 
 // Custom Node Type
@@ -70,15 +71,25 @@ const getNodeSize = (type: AtlasNodeType, dataType: AtlasDataType) => {
  * @param {NodeProps<AtlasNodeComponentType>} props React Flowから渡されるProps
  */
 export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentType>) => {
-  const { label, type, dataType, isExpanded } = data;
+  const { label, type, dataType, isExpanded, hasChildren } = data;
   const colorClass = getNodeColor(type, dataType);
   const sizeClass = getNodeSize(type, dataType);
 
+  // 展開可能なノードかどうか
+  const isExpandable = hasChildren;
+
   return (
-    <div className="relative flex items-center justify-center">
+    <div
+      className="relative flex items-center justify-center"
+      role="button"
+      aria-label={`${type} node: ${label}`}
+      aria-expanded={isExpandable ? isExpanded : undefined}
+      aria-selected={selected}
+      tabIndex={0}
+    >
       {/* Handles for connections (Hidden but necessary for edges) */}
-      <Handle type="target" position={Position.Top} className="opacity-0" />
-      <Handle type="source" position={Position.Bottom} className="opacity-0" />
+      <Handle type="target" position={Position.Top} className="opacity-0" aria-hidden="true" />
+      <Handle type="source" position={Position.Bottom} className="opacity-0" aria-hidden="true" />
 
       {/* Node Visual */}
       <div
@@ -98,16 +109,21 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
 
       {/* Label for small nodes (Outside) */}
       {type === 'instance' && selected && (
-        <div className="absolute top-full mt-1 rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white">
+        <div
+          role="tooltip"
+          className="absolute top-full mt-1 rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white"
+        >
           {label}
         </div>
       )}
 
-      {/* Expand Indicator */}
-      {/* If we knew it had children, we could show a plus. 
-          For now, we assume Concept/Pattern nodes might have children. */}
-      {(type === 'foundation' || type === 'pattern' || type === 'context') && !isExpanded && (
-        <div className="absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black shadow-sm">
+      {/* Expand Indicator - Only show if node has children and is not expanded */}
+      {hasChildren && !isExpanded && (
+        <div
+          className="absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black shadow-sm"
+          aria-label="Expandable"
+          aria-hidden="true"
+        >
           +
         </div>
       )}

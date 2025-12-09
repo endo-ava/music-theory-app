@@ -1,4 +1,4 @@
-import { within, userEvent, expect, waitFor, fireEvent } from 'storybook/test';
+import { within, userEvent, expect, waitFor } from 'storybook/test';
 
 type Canvas = ReturnType<typeof within>;
 
@@ -22,7 +22,7 @@ export class AtlasCanvasDriver {
 
   async clickNode(label: string) {
     const node = this.getNodeElement(label);
-    await fireEvent.click(node);
+    await this.user.click(node);
   }
 
   async expectNodeVisible(label: string) {

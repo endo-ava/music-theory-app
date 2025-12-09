@@ -14,7 +14,7 @@ const nodeTypes: NodeTypes = {
 };
 
 interface AtlasCanvasProps extends ClassNameProps {
-  onClick?: () => void;
+  onClick?: (nodeId: string) => void;
   onBackgroundClick?: () => void;
   dataset: AtlasDataset;
 }
@@ -52,7 +52,7 @@ export const AtlasCanvas: React.FC<AtlasCanvasProps> = ({
         nodeTypes={nodeTypes}
         onNodeClick={(_, node) => {
           handleNodeClick(node.id);
-          onClick?.();
+          onClick?.(node.id);
         }}
         onPaneClick={onBackgroundClick}
         fitView
