@@ -86,7 +86,7 @@ describe('useDragRotation', () => {
       result.current.handlers.onPointerDown(mockPointerEvent(300, 300));
     });
 
-    // Move 3 pixels (below 5px threshold)
+    // Move 3 pixels (below 4px threshold)
     act(() => {
       result.current.handlers.onPointerMove(mockPointerEvent(303, 300));
     });
@@ -109,7 +109,7 @@ describe('useDragRotation', () => {
       result.current.handlers.onPointerDown(mockPointerEvent(300, 300));
     });
 
-    // Move 10 pixels (exceeds 5px threshold)
+    // Move 10 pixels (exceeds 4px threshold)
     act(() => {
       result.current.handlers.onPointerMove(mockPointerEvent(310, 300));
     });

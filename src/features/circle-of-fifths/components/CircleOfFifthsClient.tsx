@@ -58,6 +58,16 @@ export const CircleOfFifthsClient: React.FC<CircleOfFifthsClientProps> = memo(
       rotation.set(targetAngle);
     }, [targetAngle, rotation]);
 
+    // 初期値を設定（マウント時のみ）
+    useEffect(() => {
+      const initialRotation = smoothRotation.get();
+      if (groupRef.current) {
+        groupRef.current.setAttribute('transform', `rotate(${initialRotation})`);
+      }
+      setCurrentTextRotation(-initialRotation);
+      // マウント時のみ実行するため、依存配列は意図的に空
+    }, []);
+
     // スプリング値の変化を購読してSVGのtransform属性を直接更新
     // 同時にテキストの回転角度も更新（円の回転を打ち消す）
     useEffect(() => {
@@ -69,13 +79,6 @@ export const CircleOfFifthsClient: React.FC<CircleOfFifthsClientProps> = memo(
         // テキストの回転角度を円の回転の逆に設定（円の回転を打ち消してテキストを垂直に保つ）
         setCurrentTextRotation(-value);
       });
-
-      // 初期値を設定
-      if (groupRef.current) {
-        groupRef.current.setAttribute('transform', `rotate(${smoothRotation.get()})`);
-      }
-      // 初期テキスト回転も同じ計算式を使用（円の回転を打ち消してテキストを垂直に保つ）
-      setCurrentTextRotation(-smoothRotation.get());
 
       return unsubscribe;
     }, [smoothRotation]);

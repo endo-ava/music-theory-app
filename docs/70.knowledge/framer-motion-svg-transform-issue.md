@@ -232,7 +232,7 @@ Playwright でのテスト結果：
 
 - `docs/20.development/2003.frontend-design.md` - フロントエンド設計規約
 - `docs/20.development/2004.architecture.md` - アーキテクチャ設計
-- `src/features/circle-of-fifths/components/RotatingCircleGroup.tsx` - 実装コード
+- `src/features/circle-of-fifths/components/CircleOfFifthsClient.tsx` - 実装コード
 
 ### 外部リソース
 
