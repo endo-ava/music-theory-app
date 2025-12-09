@@ -70,11 +70,11 @@ export const KeyAreaContent: React.FC<KeyAreaContentProps> = ({
       {/* プライマリテキスト（キー名）描画 */}
       <motion.text
         className={`fill-foreground ${textClassName}`}
-        x={textPosition.x}
-        y={layout.primaryTextY}
+        x={0}
+        y={0}
         textAnchor="middle"
         dominantBaseline="middle"
-        transform={`rotate(${textRotation} ${textPosition.x} ${textPosition.y})`}
+        transform={`translate(${textPosition.x}, ${layout.primaryTextY}) rotate(${textRotation})`}
         initial={{ opacity: 1 }}
         style={{ userSelect: 'none' }}
       >

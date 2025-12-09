@@ -6,6 +6,25 @@ import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useFunctionalHarmonyData } from '../hooks/useFunctionalHarmonyData';
 import { ANIMATION, LAYOUT_OFFSETS } from '../constants';
 
+interface FunctionalHarmonyLayerProps {
+  /** テキストの回転角度（CircleOfFifthsClientから渡される） */
+  textRotation: number;
+}
+
+/**
+ * Hydration error対策として座標を丸める
+ * 10桁精度（1e10）: SVG座標系において視覚的影響なく精度の問題を解決
+ */
+const COORDINATE_PRECISION = 1e10;
+
+/**
+ * 座標値を丸める（hydrationエラー対策）
+ * 浮動小数点の精度問題を回避するため、小数点以下10桁に丸める
+ */
+const roundCoordinate = (value: number): number => {
+  return Math.round(value * COORDINATE_PRECISION) / COORDINATE_PRECISION;
+};
+
 /**
  * 機能和声レイヤー
  *
@@ -21,58 +40,67 @@ import { ANIMATION, LAYOUT_OFFSETS } from '../constants';
  *
  * データ計算ロジックはuseFunctionalHarmonyDataに集約されています。
  */
-export const FunctionalHarmonyLayer: React.FC = memo(() => {
-  const { currentKey } = useCurrentKeyStore();
-  const functionalHarmonyData = useFunctionalHarmonyData(currentKey);
-  const { isDegreeVisible, isFunctionalHarmonyVisible } = useLayerStore();
+export const FunctionalHarmonyLayer: React.FC<FunctionalHarmonyLayerProps> = memo(
+  ({ textRotation }) => {
+    const { currentKey } = useCurrentKeyStore();
+    const functionalHarmonyData = useFunctionalHarmonyData(currentKey);
+    const { isDegreeVisible, isFunctionalHarmonyVisible } = useLayerStore();
 
-  if (!isFunctionalHarmonyVisible || functionalHarmonyData.length === 0) {
-    return null;
+    if (!isFunctionalHarmonyVisible || functionalHarmonyData.length === 0) {
+      return null;
+    }
+
+    // 度数レイヤーと機能和声レイヤーの両方がONの場合、機能記号を右にオフセット
+    const bothLayersVisible = isDegreeVisible && isFunctionalHarmonyVisible;
+
+    return (
+      <g className="functional-harmony-layer" style={{ pointerEvents: 'none' }}>
+        <AnimatePresence>
+          {functionalHarmonyData.map(
+            ({ abbreviation, color, textPosition, isMajor, fifthsIndex }) => {
+              const key = `${currentKey.shortName}-${fifthsIndex}-${isMajor ? 'major' : 'minor'}`;
+
+              // 度数レイヤーと機能和声レイヤーの両方がONの場合、機能記号を右にオフセット
+              const functionalX = bothLayersVisible
+                ? textPosition.x + LAYOUT_OFFSETS.DUAL_LAYER_X_OFFSET
+                : textPosition.x;
+
+              const functionalY = textPosition.y + LAYOUT_OFFSETS.ROMAN_Y_OFFSET;
+
+              // 座標値を丸める（hydrationエラー対策）
+              const roundedX = roundCoordinate(functionalX);
+              const roundedY = roundCoordinate(functionalY);
+
+              return (
+                <motion.text
+                  key={key}
+                  x={0}
+                  y={0}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  transform={`translate(${roundedX}, ${roundedY}) rotate(${textRotation})`}
+                  className="fill-foreground text-key-layer font-semibold"
+                  style={{
+                    fill: color,
+                    userSelect: 'none',
+                    textShadow: `0 0 4px ${color}, 0 0 8px ${color}`,
+                  }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: ANIMATION.FADE_DURATION,
+                  }}
+                >
+                  {abbreviation}
+                </motion.text>
+              );
+            }
+          )}
+        </AnimatePresence>
+      </g>
+    );
   }
-
-  // 度数レイヤーと機能和声レイヤーの両方がONの場合、機能記号を右にオフセット
-  const bothLayersVisible = isDegreeVisible && isFunctionalHarmonyVisible;
-
-  return (
-    <g className="functional-harmony-layer" style={{ pointerEvents: 'none' }}>
-      <AnimatePresence>
-        {functionalHarmonyData.map(
-          ({ abbreviation, color, textPosition, isMajor, fifthsIndex }) => {
-            const key = `${currentKey.shortName}-${fifthsIndex}-${isMajor ? 'major' : 'minor'}`;
-
-            // 度数レイヤーと機能和声レイヤーの両方がONの場合、機能記号を右にオフセット
-            const functionalX = bothLayersVisible
-              ? textPosition.x + LAYOUT_OFFSETS.DUAL_LAYER_X_OFFSET
-              : textPosition.x;
-
-            return (
-              <motion.text
-                key={key}
-                x={functionalX}
-                y={textPosition.y + LAYOUT_OFFSETS.ROMAN_Y_OFFSET}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className="fill-foreground text-key-layer font-semibold"
-                style={{
-                  fill: color,
-                  userSelect: 'none',
-                  textShadow: `0 0 4px ${color}, 0 0 8px ${color}`,
-                }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{
-                  duration: ANIMATION.FADE_DURATION,
-                }}
-              >
-                {abbreviation}
-              </motion.text>
-            );
-          }
-        )}
-      </AnimatePresence>
-    </g>
-  );
-});
+);
 
 FunctionalHarmonyLayer.displayName = 'FunctionalHarmonyLayer';

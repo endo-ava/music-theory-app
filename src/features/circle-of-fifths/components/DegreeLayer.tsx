@@ -47,25 +47,24 @@ const DegreeText: React.FC<DegreeTextProps> = memo(
     const offsetX = isFunctionalHarmonyVisible ? x - LAYOUT_OFFSETS.DUAL_LAYER_X_OFFSET : x;
 
     // 座標値を丸める（hydrationエラー対策）
-    const roundedX = roundCoordinate(x);
     const roundedY = roundCoordinate(y);
     const roundedOffsetX = roundCoordinate(offsetX);
 
     return (
       <motion.text
         className="fill-foreground text-key-layer font-semibold"
-        x={roundedOffsetX}
-        y={roundedY}
+        x={0}
+        y={0}
         textAnchor="middle"
         dominantBaseline="middle"
-        transform={`rotate(${rotation} ${roundedX} ${roundedY})`}
+        transform={`translate(${roundedOffsetX}, ${roundedY}) rotate(${rotation})`}
         style={{
           userSelect: 'none',
           fill: color,
         }}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         transition={{
           duration: ANIMATION.FADE_DURATION * 0.8,
         }}
@@ -78,17 +77,22 @@ const DegreeText: React.FC<DegreeTextProps> = memo(
 
 DegreeText.displayName = 'DegreeText';
 
+interface DegreeLayerProps {
+  /** テキストの回転角度（CircleOfFifthsClientから渡される） */
+  textRotation: number;
+}
+
 /**
  * 度数（ローマ数字）表記レイヤー
  *
  * ダイアトニックコードの度数をローマ数字で表示するレイヤー。
  * ダイアトニックボーダーハイライトとは独立して制御可能。
  */
-export const DegreeLayer: React.FC = memo(() => {
+export const DegreeLayer: React.FC<DegreeLayerProps> = memo(({ textRotation }) => {
   const { currentKey } = useCurrentKeyStore();
   const { isDegreeVisible, isFunctionalHarmonyVisible } = useLayerStore();
   const { getHighlightInfo } = useDiatonicChordHighlight(currentKey);
-  const { segments, textRotation } = getCircleOfFifthsData();
+  const { segments } = getCircleOfFifthsData();
 
   // レイヤーが非表示の場合は何も描画しない
   if (!isDegreeVisible) {
