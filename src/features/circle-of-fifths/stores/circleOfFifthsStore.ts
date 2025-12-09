@@ -4,7 +4,7 @@ import { KeyDTO, PitchClass } from '@/domain';
 /**
  * 五度圏の状態のZustandストア型定義
  *
- * アプリケーション全体で共有される状態
+ * 五度圏に閉じた状態管理を提供
  */
 export interface CircleOfFifthsStore {
   /** 現在選択されているキー */

@@ -6,10 +6,7 @@
  * 座標計算ロジックを提供する。
  */
 
-import {
-  polarToCartesian as polarToCartesianBase,
-  degreesToRadians,
-} from '@/shared/utils/geometry';
+import { polarToCartesian as polarToCartesianBase, degreesToRadians } from '@/utils/geometry';
 
 /**
  * 2次元座標

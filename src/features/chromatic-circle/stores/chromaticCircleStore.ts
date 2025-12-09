@@ -4,7 +4,7 @@ import type { ChromaticSegmentDTO } from '@/domain/services/ChromaticCircle';
 /**
  * クロマチックサークルの状態のZustandストア型定義
  *
- * アプリケーション全体で共有される状態
+ * クロマチックサークルに閉じた状態管理を提供
  */
 export interface ChromaticCircleStore {
   /** 現在選択されているピッチクラス */

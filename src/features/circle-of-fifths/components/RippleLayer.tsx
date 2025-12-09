@@ -2,7 +2,7 @@
 
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useRippleStore } from '@/stores/rippleStore';
+import { useRippleStore } from '@/features/circle-of-fifths/stores/rippleStore';
 
 /** リップル効果の最大半径（SVG単位） */
 const DEFAULT_MAX_RADIUS = 120;

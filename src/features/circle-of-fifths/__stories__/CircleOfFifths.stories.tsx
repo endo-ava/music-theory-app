@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { CircleOfFifths } from '../components/CircleOfFifths';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key, PitchClass } from '@/domain';
 import { CircleOfFifthsDriver } from './CircleOfFifths.driver';

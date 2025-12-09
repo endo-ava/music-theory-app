@@ -1,10 +1,10 @@
 import { describe, test, expect, vi } from 'vitest';
 import { generateTwoLayerPaths } from '../pathGeneration';
 import { CIRCLE_LAYOUT } from '../../constants';
-import * as circlePathGeneration from '@/shared/utils/circlePathGeneration';
+import * as circlePathGeneration from '@/utils/circlePathGeneration';
 
 // generateMultiLayerPathsをモック化
-vi.mock('@/shared/utils/circlePathGeneration', () => ({
+vi.mock('@/utils/circlePathGeneration', () => ({
   generateMultiLayerPaths: vi.fn((position: number, radii: number[]) => {
     return [`path-layer-0-pos-${position}`, `path-layer-1-pos-${position}`];
   }),

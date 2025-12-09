@@ -2,7 +2,7 @@
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useFunctionalHarmonyData } from '../hooks/useFunctionalHarmonyData';
 import { ANIMATION, LAYOUT_OFFSETS } from '../constants';
 

@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge';
-import type { HubType } from '@/shared/types';
-import { useMusicColorAccent } from '../../../shared/hooks/useMusicColorStyles';
-import { useCurrentKeyStore } from '../../../stores/currentKeyStore';
+import type { HubType } from '@/types';
+import { useMusicColorAccent } from '@/hooks/useMusicColorStyles';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 
 /**
  * Hub オプションボタンのProps

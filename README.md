@@ -93,15 +93,20 @@ harmonic-orbit/
 │   ├── app/                      # Next.js App Router: ページとルーティング
 │   ├── components/               # 共通UIコンポーネント
 │   │   ├── ui/                   # shadcn/ui由来のプリミティブコンポーネント
+│   │   ├── common/               # 汎用共通コンポーネント (Divider, icons等)
 │   │   └── layouts/              # レイアウトコンポーネント
-│   ├── features/                 # 機能単位のモジュール
+│   ├── features/                 # 機能単位のモジュール（各々がstores/を持つ）
 │   │   ├── circle-of-fifths/     # 五度圏表示機能
+│   │   │   └── stores/           # 五度圏専用状態管理
 │   │   ├── chromatic-circle/     # クロマチックサークル機能
+│   │   │   └── stores/           # クロマチック専用状態管理
 │   │   ├── key-controller/       # キー選択コントローラー
 │   │   ├── layer-controller/     # レイヤー制御機能
+│   │   │   └── stores/           # レイヤー専用状態管理
 │   │   ├── information-panel/    # 情報パネル
-│   │   └── view-controller/      # ビュー切り替え機能
-│   │   ├── atlas/                # Atlas機能 (旧 Library)
+│   │   ├── view-controller/      # ビュー切り替え機能
+│   │   │   └── stores/           # ビュー切り替え専用状態管理
+│   │   └── atlas/                # Atlas機能 (旧 Library)
 │   ├── domain/                   # ドメイン層: 音楽理論ロジック
 │   │   ├── common/               # 値オブジェクト (PitchClass, Note, Interval等)
 │   │   ├── scale/                # Scale集約
@@ -109,8 +114,12 @@ harmonic-orbit/
 │   │   ├── key/                  # Key集約
 │   │   ├── modal-context/        # ModalContext集約
 │   │   └── services/             # ドメインサービス (AudioEngine, ChordAnalyzer等)
-│   ├── shared/                   # 共通ユーティリティ・型定義
-│   └── stores/                   # グローバル状態管理
+│   ├── hooks/                    # 汎用カスタムフック
+│   ├── utils/                    # 汎用ユーティリティ関数
+│   ├── constants/                # アプリ全体の定数
+│   ├── types/                    # 全体で共有する型定義
+│   ├── lib/                      # 外部ライブラリ設定 (Shadcn utils等)
+│   └── stores/                   # グローバル状態管理（複数feature横断のみ）
 ├── docs/                         # プロジェクトドキュメント
 │   ├── 00.project/               # プロジェクト基本情報・要件定義
 │   ├── 10.domain/                # ドメイン知識・音楽理論ガイド
@@ -126,7 +135,7 @@ harmonic-orbit/
 
 ### アーキテクチャ (Architecture)
 
-本プロジェクトは**クリーンアーキテクチャ**の原則に基づき、**DDD（ドメイン駆動設計）の戦術的パターン**と**Feature Sliced Design**を組み合わせた構成を採用しています：
+本プロジェクトは**クリーンアーキテクチャ**の原則に基づき、**DDD（ドメイン駆動設計）の戦術的パターン**と**Co-located Feature-Sliced Design**を組み合わせた構成を採用しています：
 
 ```
 [Presentation] app/, components/, features/
@@ -135,13 +144,14 @@ harmonic-orbit/
         ↓
 [Domain] domain/ (音楽理論ロジック)
         ↓
-[Shared] shared/
+[Infrastructure] hooks/, utils/, constants/, types/, lib/
 ```
 
 **特徴**:
 
 - 明確な責務分離（各層が独立してテスト可能）
 - 依存性の一方向性（外側 → 内側）
+- **Colocation**: 機能に閉じた状態管理は各feature内に配置
 - DDD戦術的パターン（値オブジェクト、集約、ドメインサービス）による複雑なドメインモデルの実装
 
 ---

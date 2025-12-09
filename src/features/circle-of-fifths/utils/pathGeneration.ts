@@ -5,7 +5,7 @@
  * セグメントパスを生成する。
  */
 
-import { generateMultiLayerPaths } from '@/shared/utils/circlePathGeneration';
+import { generateMultiLayerPaths } from '@/utils/circlePathGeneration';
 import { CIRCLE_LAYOUT } from '../constants/index';
 import type { SegmentPaths } from '../types';
 

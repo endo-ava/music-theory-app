@@ -1,5 +1,5 @@
 import { HubOptionButton } from './HubOptionButton';
-import type { HubType } from '@/shared/types';
+import type { HubType } from '@/types';
 
 /**
  * Hub オプション情報

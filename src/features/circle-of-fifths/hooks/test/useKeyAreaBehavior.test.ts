@@ -3,15 +3,15 @@ import { renderHook } from '@testing-library/react';
 import { useKeyAreaBehavior, type UseKeyAreaBehaviorProps } from '../useKeyAreaBehavior';
 import type { KeyDTO } from '@/domain/common/IMusicalContext';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
 import { useAudio } from '../useAudio';
 import { useKeyState } from '../useKeyState';
 import { useKeyInteraction } from '../useKeyInteraction';
-import { useRippleStore } from '@/stores/rippleStore';
+import { useRippleStore } from '@/features/circle-of-fifths/stores/rippleStore';
 
 // 依存関係のモック
-vi.mock('@/stores/circleOfFifthsStore');
-vi.mock('@/stores/rippleStore');
+vi.mock('@/features/circle-of-fifths/stores/circleOfFifthsStore');
+vi.mock('@/features/circle-of-fifths/stores/rippleStore');
 vi.mock('../useAudio');
 vi.mock('../useKeyState');
 vi.mock('../useKeyInteraction');

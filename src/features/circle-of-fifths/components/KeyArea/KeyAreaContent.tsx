@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import type { Point } from '@/shared/types/graphics';
+import type { Point } from '@/types/graphics';
 import type { KeyAreaStates } from '../../hooks/useKeyState';
 import type { KeyAreaPresentationInfo } from '../../hooks/useKeyAreaPresentation';
 

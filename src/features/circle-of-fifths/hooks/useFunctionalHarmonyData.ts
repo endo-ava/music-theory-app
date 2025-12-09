@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import type { IMusicalContext, Function } from '@/domain';
-import type { Point } from '@/shared/types/graphics';
+import type { Point } from '@/types/graphics';
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
 
 /**

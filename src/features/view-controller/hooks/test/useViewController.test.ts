@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useViewController } from '../useViewController';
-import { useHubStore } from '../../../../stores/hubStore';
-import { getHubOptions } from '../../../../shared/constants/hubs';
+import { useHubStore } from '../../stores/hubStore';
+import { getHubOptions } from '@/constants/hubs';
 
 // getHubOptionsの戻り値をモック用に事前取得
 const mockHubOptions = getHubOptions();

@@ -1,5 +1,5 @@
 import { getCircleOfFifthsData } from '../utils/circleOfFifthsData';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { CircleOfFifthsClient } from './CircleOfFifthsClient';
 import { RotationControls } from './RotationControls';
 import { twMerge } from 'tailwind-merge';

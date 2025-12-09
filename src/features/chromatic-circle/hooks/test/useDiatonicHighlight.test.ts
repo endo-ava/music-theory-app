@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useDiatonicHighlight } from '../useDiatonicHighlight';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { IMusicalContext } from '@/domain';
 import { PitchClass } from '@/domain/common';
 import { Scale, KeySignature, Chord } from '@/domain';
 
 // Mock the stores
-vi.mock('@/stores/layerStore', () => ({
+vi.mock('@/features/layer-controller/stores/layerStore', () => ({
   useLayerStore: vi.fn(),
 }));
 

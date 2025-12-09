@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { useDiatonicHighlight } from '../hooks/useDiatonicHighlight';
 import { getChromaticCircleData } from '../utils/chromaticCircleData';
-import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
+import { getMusicColorVariable } from '@/utils/musicColorSystem';
 import { CIRCLE_LAYOUT, ANIMATION } from '../constants';
 
 /** ハイライトパスのプロパティ */

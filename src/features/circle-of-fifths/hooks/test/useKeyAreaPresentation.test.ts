@@ -1,18 +1,18 @@
 import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import {
   useKeyAreaPresentation,
   type UseKeyAreaPresentationProps,
 } from '../useKeyAreaPresentation';
 import { useDiatonicChordHighlight } from '../useDiatonicChordHighlight';
-import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
+import { getMusicColorVariable } from '@/utils/musicColorSystem';
 import { Key, KeyDTO, PitchClass } from '@/domain';
-import type { Point } from '@/shared/types/graphics';
+import type { Point } from '@/types/graphics';
 
 // 依存関係のモック
 vi.mock('../useDiatonicChordHighlight');
-vi.mock('@/shared/utils/musicColorSystem');
+vi.mock('@/utils/musicColorSystem');
 
 // モック関数の定義
 const mockGetHighlightInfo = vi.fn();

@@ -3,7 +3,7 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
+import { useCircleOfFifthsStore } from '../stores';
 
 /**
  * 五度圏回転コントローラー

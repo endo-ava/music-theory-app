@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { LAYOUT_OFFSETS } from '../constants';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useDiatonicChordHighlight } from './useDiatonicChordHighlight';
 import { useFunctionalHarmonyData } from './useFunctionalHarmonyData';
-import { getMusicColorVariable } from '@/shared/utils/musicColorSystem';
-import type { Point } from '@/shared/types/graphics';
+import { getMusicColorVariable } from '@/utils/musicColorSystem';
+import type { Point } from '@/types/graphics';
 import type { IMusicalContext, KeyDTO } from '@/domain';
 
 /**

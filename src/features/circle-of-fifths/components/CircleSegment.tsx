@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { KeyArea } from './KeyArea';
-import type { Point } from '@/shared/types/graphics';
+import type { Point } from '@/types/graphics';
 import type { SegmentPaths } from '../types';
 import { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 

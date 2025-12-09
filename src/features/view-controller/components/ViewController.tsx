@@ -5,7 +5,7 @@ import { ScanEye } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useViewController } from '../hooks/useViewController';
 import { HubRadioGroup } from './HubRadioGroup';
-import type { ClassNameProps } from '@/shared/types';
+import type { ClassNameProps } from '@/types';
 
 /**
  * ViewControllerコンポーネントのProps

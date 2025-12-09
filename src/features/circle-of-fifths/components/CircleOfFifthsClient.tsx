@@ -2,7 +2,6 @@
 
 import { memo, useEffect, useRef, useState } from 'react';
 import { useMotionValue, useSpring } from 'motion/react';
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
 import { useDragRotation } from '../hooks/useDragRotation';
 import { CircleSegment } from './CircleSegment';
 import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
@@ -10,6 +9,7 @@ import { DegreeLayer } from './DegreeLayer';
 import { FunctionalHarmonyLayer } from './FunctionalHarmonyLayer';
 import { RippleLayer } from './RippleLayer';
 import { SegmentData } from '../utils/circleOfFifthsData';
+import { useCircleOfFifthsStore } from '../stores';
 
 interface CircleOfFifthsClientProps {
   viewBox: string;

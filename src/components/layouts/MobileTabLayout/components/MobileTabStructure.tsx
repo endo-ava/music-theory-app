@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { ClassNameProps } from '@/shared/types';
+import { ClassNameProps } from '@/types';
 import { MobileTabBar } from './MobileTabBar';
 import { cn } from '@/lib/utils';
-import { Divider } from '../../../../shared/components/Divider';
+import { Divider } from '@/components/common/Divider';
 
 interface MobileTabStructureProps extends ClassNameProps {
   /** 上部に表示するCanvasコンテンツ */

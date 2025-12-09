@@ -8,7 +8,7 @@ export {
   ANGLE_OFFSET,
   ANGLE_PER_SEGMENT,
   HALF_ANGLE_PER_SEGMENT_RAD,
-} from '@/shared/constants/circle';
+} from '@/constants/circle';
 
 /**
  * クロマチックサークルのレイアウト定数

@@ -1,7 +1,7 @@
 import { CIRCLE_LAYOUT, TEXT_RADIUS } from '../constants';
-import type { Point } from '@/shared/types/graphics';
+import type { Point } from '@/types/graphics';
 import type { SegmentPaths } from '../types';
-import { calculateTextPosition } from '@/shared/utils/geometry';
+import { calculateTextPosition } from '@/utils/geometry';
 import { generateThreeSegmentPaths } from '../utils/pathGeneration';
 import { CircleOfFifthsService, CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 

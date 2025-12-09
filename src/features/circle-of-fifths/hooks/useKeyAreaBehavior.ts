@@ -6,13 +6,13 @@
  * 表示関連の処理は useKeyAreaPresentation に分離している。
  */
 
-import { useCircleOfFifthsStore } from '@/stores/circleOfFifthsStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
 import type { KeyDTO } from '@/domain/common/IMusicalContext';
 import type { CircleSegmentDTO } from '@/domain/services/CircleOfFifths';
 import { useAudio } from './useAudio';
 import { useKeyState, type KeyAreaStates } from './useKeyState';
 import { useKeyInteraction, type KeyAreaHandlers } from './useKeyInteraction';
-import { useRippleStore } from '@/stores/rippleStore';
+import { useRippleStore } from '@/features/circle-of-fifths/stores/rippleStore';
 
 /**
  * useKeyAreaBehaviorフックの引数型

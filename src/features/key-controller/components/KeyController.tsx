@@ -3,7 +3,7 @@
 import React from 'react';
 import { Music2 } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
-import type { ClassNameProps } from '@/shared/types';
+import type { ClassNameProps } from '@/types';
 import { useKeyController } from '../hooks/useKeyController';
 import { RootSelector } from './RootSelector';
 import { ModeSlider } from './ModeSlider';

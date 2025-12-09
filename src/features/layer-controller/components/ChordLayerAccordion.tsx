@@ -3,8 +3,11 @@
 import React from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { useLayerStore } from '../../../stores/layerStore';
-import { useCurrentKeyStore } from '../../../stores/currentKeyStore';
+import { Button } from '@/components/ui/button';
+import { useLayerStore } from '../stores/layerStore';
+import { useCircleOfFifthsStore } from '@/features/circle-of-fifths/stores/circleOfFifthsStore';
+import { useCurrentKeyStore } from '@/stores/currentKeyStore';
+import { useChordProgression } from '../hooks/useChordProgression';
 
 /**
  * コードレイヤー用アコーディオンコンポーネント
@@ -22,6 +25,8 @@ export const ChordLayerAccordion: React.FC = () => {
     toggleFunctionalHarmony,
   } = useLayerStore();
   const { currentKey } = useCurrentKeyStore();
+  const { selectedKey } = useCircleOfFifthsStore();
+  const { playFifthProgression, playTritoneSubstitution } = useChordProgression();
 
   // メジャー/マイナーキーかどうかをチェック（モードではなくキーであること）
   const keyData = currentKey.toJSON();
@@ -60,6 +65,37 @@ export const ChordLayerAccordion: React.FC = () => {
               checked={isFunctionalHarmonyVisible}
               onCheckedChange={toggleFunctionalHarmony}
             />
+          </div>
+        )}
+
+        {/* 進行ボタン（キーが選択されている時のみ表示） */}
+        {selectedKey && (
+          <div className="animate-in fade-in slide-in-from-top-1 space-y-3 duration-300">
+            {/* 五度進行（ドミナントモーション） */}
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-normal">5th Progression</Label>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={playFifthProgression}
+                className="h-7 text-xs"
+              >
+                Play
+              </Button>
+            </div>
+
+            {/* 裏コード（Tritone Substitution） */}
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-normal">Tritone Substitution</Label>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={playTritoneSubstitution}
+                className="h-7 text-xs"
+              >
+                Play
+              </Button>
+            </div>
           </div>
         )}
       </div>

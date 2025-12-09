@@ -1,13 +1,13 @@
 import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import { useFunctionalHarmonyData } from '../useFunctionalHarmonyData';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { getCircleOfFifthsData } from '../../utils/circleOfFifthsData';
 import { Key, PitchClass } from '@/domain';
 import type { IAnalysisResultWithFunction } from '@/domain';
 
 // モックの定義
-vi.mock('@/stores/layerStore');
+vi.mock('@/features/layer-controller/stores/layerStore');
 vi.mock('../../utils/circleOfFifthsData');
 
 describe('useFunctionalHarmonyData', () => {

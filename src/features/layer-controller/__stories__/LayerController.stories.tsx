@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { within, expect, userEvent } from 'storybook/test';
 import { LayerController } from '../components/LayerController';
-import { useLayerStore } from '@/stores/layerStore';
+import { useLayerStore } from '@/features/layer-controller/stores/layerStore';
 import { useCurrentKeyStore } from '@/stores/currentKeyStore';
 import { Key, PitchClass } from '@/domain';
 
