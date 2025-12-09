@@ -60,19 +60,19 @@ export const CircleSegment = memo<CircleSegmentProps>(
 
         {/* 調号テキスト */}
         <text
-          className="fill-foreground text-key-signature font-key-signature stroke-border border"
-          x={textPositions.signatureTextPos.x}
-          y={textPositions.signatureTextPos.y}
+          className="fill-foreground/30 text-key-signature font-key-signature"
+          x={0}
+          y={0}
           textAnchor="middle"
           dominantBaseline="middle"
-          transform={`rotate(${textRotation} ${textPositions.signatureTextPos.x} ${textPositions.signatureTextPos.y})`}
+          transform={`translate(${textPositions.signatureTextPos.x}, ${textPositions.signatureTextPos.y}) rotate(${textRotation})`}
           style={{ pointerEvents: 'none' }}
         >
           {/* keySignatureの文字列を'\n'で分割して、各行を<tspan>で描画する */}
           {keySignature.split('\n').map((line, index) => (
             <tspan
               key={index}
-              x={textPositions.signatureTextPos.x} // 各行のx座標をリセット
+              x={0} // 各行のx座標をリセット（translate基準）
               dy={index === 0 ? 0 : '1.2em'} // 2行目以降はdyで下にずらす
             >
               {line}
