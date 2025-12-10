@@ -28,7 +28,7 @@ interface AtlasCanvasProps extends ClassNameProps {
  *
  * @param {AtlasCanvasProps} props
  * @param {AtlasDataset} props.dataset - 表示するノードとエッジのデータセット
- * @param {() => void} [props.onClick] - ノードがクリックされた時のコールバック
+ * @param {(nodeId: string) => void} [props.onClick] - ノードがクリックされた時のコールバック（ノードIDを受け取る）
  * @param {() => void} [props.onBackgroundClick] - キャンバス背景がクリックされた時のコールバック
  */
 export const AtlasCanvas: React.FC<AtlasCanvasProps> = ({
@@ -37,8 +37,6 @@ export const AtlasCanvas: React.FC<AtlasCanvasProps> = ({
   onBackgroundClick,
   dataset,
 }) => {
-  // Use Custom Hook for Logic
-
   // Use Custom Hook for Logic
   const { nodes, edges, onNodesChange, onEdgesChange, handleNodeClick } = useAtlasFlow({ dataset });
 

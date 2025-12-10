@@ -77,14 +77,18 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
 
   // 展開可能なノードかどうか
   const isExpandable = hasChildren;
+  // ツールチップのIDを生成（instance型のノードのみ）
+  const tooltipId = type === 'instance' ? `tooltip-${label}` : undefined;
 
   return (
     <div
+      data-testid={`atlas-node-${label}`}
       className="relative flex items-center justify-center"
       role="button"
       aria-label={`${type} node: ${label}`}
       aria-expanded={isExpandable ? isExpanded : undefined}
       aria-selected={selected}
+      aria-describedby={selected && tooltipId ? tooltipId : undefined}
       tabIndex={0}
     >
       {/* Handles for connections (Hidden but necessary for edges) */}
@@ -110,6 +114,7 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
       {/* Label for small nodes (Outside) */}
       {type === 'instance' && selected && (
         <div
+          id={tooltipId}
           role="tooltip"
           className="absolute top-full mt-1 rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white"
         >

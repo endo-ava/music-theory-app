@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { AtlasDataset } from '../../types';
 
 interface AtlasDetailPanelProps extends ClassNameProps {
-  isOpen?: boolean;
   onClose?: () => void;
   nodeId?: string | null;
   dataset?: AtlasDataset;
@@ -21,20 +20,31 @@ interface AtlasDetailPanelProps extends ClassNameProps {
  * Framer Motionによるアニメーション効果を含みます。
  *
  * @param {AtlasDetailPanelProps} props
- * @param {boolean} [props.isOpen=false] - パネルの表示状態
  * @param {() => void} [props.onClose] - 閉じるボタンが押された時のコールバック
  * @param {string | null} [props.nodeId] - 選択されたノードのID
  * @param {AtlasDataset} [props.dataset] - ノード情報を取得するためのデータセット
  */
 export const AtlasDetailPanel: React.FC<AtlasDetailPanelProps> = ({
   className,
-  // isOpen, // removed unused destructuring
   onClose,
   nodeId,
   dataset,
 }) => {
   // 選択されたノードの情報を取得
   const selectedNode = nodeId && dataset ? dataset.nodes.find(n => n.id === nodeId) : null;
+
+  // 選択されたノードの関連ノードを取得
+  const relatedNodes = React.useMemo(() => {
+    if (!nodeId || !dataset) return [];
+
+    return dataset.edges
+      .filter(edge => edge.source === nodeId || edge.target === nodeId)
+      .map(edge => {
+        const relatedNodeId = edge.source === nodeId ? edge.target : edge.source;
+        return dataset.nodes.find(n => n.id === relatedNodeId);
+      })
+      .filter((node): node is NonNullable<typeof node> => node !== undefined);
+  }, [nodeId, dataset]);
 
   return (
     <motion.aside
@@ -92,10 +102,15 @@ export const AtlasDetailPanel: React.FC<AtlasDetailPanelProps> = ({
         </div>
         <div>
           <h3 className="text-foreground mb-1 font-medium">Related Concepts</h3>
-          <ul className="list-inside list-disc space-y-1">
-            <li>Related Item 1</li>
-            <li>Related Item 2</li>
-          </ul>
+          {relatedNodes.length > 0 ? (
+            <ul className="list-inside list-disc space-y-1">
+              {relatedNodes.map(node => (
+                <li key={node.id}>{node.label}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-muted-foreground/70">関連する概念はありません</p>
+          )}
         </div>
       </div>
     </motion.aside>

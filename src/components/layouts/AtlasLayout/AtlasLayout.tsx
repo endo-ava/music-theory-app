@@ -1,7 +1,6 @@
 import React from 'react';
 import { generateAtlasDataset } from '@/features/atlas/data/AtlasDataGenerator';
 import { AtlasInteractiveLayout } from './AtlasInteractiveLayout';
-import type { AtlasDataset } from '@/features/atlas/types';
 
 /**
  * Atlas画面のレイアウトコンポーネント (Server Component)
@@ -15,8 +14,8 @@ export const AtlasLayout: React.FC = () => {
   // Generate Data on Server
   const rawDataset = generateAtlasDataset();
 
-  // Serialize to plain object (removes class instances/methods)
-  const dataset = JSON.parse(JSON.stringify(rawDataset)) as AtlasDataset;
+  // Deep clone using structuredClone (preserves types without lossy JSON serialization)
+  const dataset = structuredClone(rawDataset);
 
   return <AtlasInteractiveLayout dataset={dataset} />;
 };

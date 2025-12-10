@@ -52,7 +52,6 @@ export const AtlasInteractiveLayout: React.FC<AtlasInteractiveLayoutProps> = ({ 
       <AnimatePresence>
         {isDetailOpen && (
           <AtlasDetailPanel
-            isOpen={isDetailOpen}
             onClose={() => setIsDetailOpen(false)}
             nodeId={selectedNodeId}
             dataset={dataset}

@@ -11,9 +11,8 @@ export class AtlasCanvasDriver {
   }
 
   private getNodeElement(label: string) {
-    // In React Flow, nodes might be tricky to find by text if they are complex.
-    // But our AtlasNode renders label in a span or div.
-    return this.canvas.getByText(label);
+    // Use data-testid for more robust node selection
+    return this.canvas.getByTestId(`atlas-node-${label}`);
   }
 
   private get searchInput() {
@@ -26,18 +25,14 @@ export class AtlasCanvasDriver {
   }
 
   async expectNodeVisible(label: string) {
-    const node = await this.canvas.findByText(label);
+    const node = await this.canvas.findByTestId(`atlas-node-${label}`);
     await expect(node).toBeInTheDocument();
   }
 
   async expectNodeNotVisible(label: string) {
     await waitFor(() => {
-      const node = this.canvas.queryByText(label);
-      if (node) {
-        expect(node).not.toBeVisible();
-      } else {
-        expect(node).toBeNull();
-      }
+      const node = this.canvas.queryByTestId(`atlas-node-${label}`);
+      expect(node).not.toBeInTheDocument();
     });
   }
 
