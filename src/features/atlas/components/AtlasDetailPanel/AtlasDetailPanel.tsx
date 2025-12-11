@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { X } from 'lucide-react';
 import { ClassNameProps } from '@/types';
 import { cn } from '@/lib/utils';

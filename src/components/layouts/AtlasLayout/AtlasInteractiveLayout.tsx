@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'motion/react';
 import { AtlasCanvas, AtlasDetailPanel, AtlasSearchOverlay } from '@/features/atlas';
 import { AtlasDataset } from '@/features/atlas/types';
 

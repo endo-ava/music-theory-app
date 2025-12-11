@@ -80,6 +80,18 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
   // ツールチップのIDを生成（instance型のノードのみ）
   const tooltipId = type === 'instance' ? `tooltip-${label}` : undefined;
 
+  /**
+   * キーボード操作のハンドラー
+   * EnterキーまたはSpaceキーが押された時にノードクリックをシミュレート
+   */
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // ノードクリックイベントを親に伝播させるため、クリックイベントを発火
+      event.currentTarget.click();
+    }
+  };
+
   return (
     <div
       data-testid={`atlas-node-${label}`}
@@ -90,6 +102,7 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
       aria-selected={selected}
       aria-describedby={selected && tooltipId ? tooltipId : undefined}
       tabIndex={0}
+      onKeyDown={handleKeyDown}
     >
       {/* Handles for connections (Hidden but necessary for edges) */}
       <Handle type="target" position={Position.Top} className="opacity-0" aria-hidden="true" />
@@ -126,7 +139,6 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
       {hasChildren && !isExpanded && (
         <div
           className="absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black shadow-sm"
-          aria-label="Expandable"
           aria-hidden="true"
         >
           +
