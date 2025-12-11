@@ -1,24 +1,42 @@
-'use client';
-
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ReactFlow, Background, Controls, MiniMap, NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import { ClassNameProps } from '@/types';
 import { cn } from '@/lib/utils';
-import { generateAtlasDataset } from '../../data/AtlasDataGenerator';
 import { useAtlasFlow } from './hooks/useAtlasFlow';
 import { AtlasNode } from './components/AtlasNode';
+import { AtlasDataset } from '../../types';
 
 // Custom Node Types Registration
 const nodeTypes: NodeTypes = {
   atlasNode: AtlasNode,
 };
 
-export const AtlasCanvas: React.FC<ClassNameProps> = ({ className }) => {
-  // Generate Data (Memoized)
-  const dataset = useMemo(() => generateAtlasDataset(), []);
+interface AtlasCanvasProps extends ClassNameProps {
+  onClick?: (nodeId: string) => void;
+  onBackgroundClick?: () => void;
+  dataset: AtlasDataset;
+}
 
+/**
+ * Atlas Canvas (Presentation Component)
+ *
+ * React Flowを使用してAtlasのネットワーク図を描画するコンポーネントです。
+ * Server Componentから受け取ったデータセットを描画し、
+ * ノードクリックや背景クリックのイベントを親コンポーネントに通知します。
+ *
+ * @param {AtlasCanvasProps} props
+ * @param {AtlasDataset} props.dataset - 表示するノードとエッジのデータセット
+ * @param {(nodeId: string) => void} [props.onClick] - ノードがクリックされた時のコールバック（ノードIDを受け取る）
+ * @param {() => void} [props.onBackgroundClick] - キャンバス背景がクリックされた時のコールバック
+ */
+export const AtlasCanvas: React.FC<AtlasCanvasProps> = ({
+  className,
+  onClick,
+  onBackgroundClick,
+  dataset,
+}) => {
   // Use Custom Hook for Logic
   const { nodes, edges, onNodesChange, onEdgesChange, handleNodeClick } = useAtlasFlow({ dataset });
 
@@ -30,7 +48,11 @@ export const AtlasCanvas: React.FC<ClassNameProps> = ({ className }) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
-        onNodeClick={(_, node) => handleNodeClick(node.id)}
+        onNodeClick={(_, node) => {
+          handleNodeClick(node.id);
+          onClick?.(node.id);
+        }}
+        onPaneClick={onBackgroundClick}
         fitView
         minZoom={0.1}
         maxZoom={4}

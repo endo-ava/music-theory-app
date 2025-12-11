@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Node,
   Edge,
@@ -15,9 +15,21 @@ interface UseAtlasFlowProps {
   dataset: AtlasDataset;
 }
 
+const ROOT_NODE_ID = 'root-theory';
+
+/**
+ * useAtlasFlow Hook
+ *
+ * Atlas Canvasの表示ロジックを管理するカスタムフック。
+ * 階層構造（ノードの展開・折りたたみ）に基づいて、
+ * 表示すべきノードとエッジをフィルタリングしてReact Flowの状態に反映します。
+ *
+ * @param {UseAtlasFlowProps} props
+ * @param {AtlasDataset} props.dataset - 全データのセット
+ */
 export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
   // 展開されているノードのIDセット
-  const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set(['root-theory']));
+  const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set([ROOT_NODE_ID]));
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // React Flow State
@@ -41,49 +53,32 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
     });
   }, []);
 
-  // データセットと展開状態に基づいて、表示すべきノードとエッジを計算
+  // 表示すべき要素の計算（純粋関数的なロジック）
+  const { visibleNodes, visibleEdges } = useMemo(() => {
+    return computeVisibleElements(dataset, expandedNodeIds, selectedNodeId);
+  }, [dataset, expandedNodeIds, selectedNodeId]);
+
+  // データセットと展開状態に基づいて、React Flowの状態を更新
+  //
+  // ⚠️ 既知の制限事項: ノード位置の保持について
+  // 現在の実装では、展開/折りたたみ操作時にノードの位置が初期位置にリセットされます。
+  // これは、useEffect内で visibleNodes を直接 setNodes に渡しているためです。
+  //
+  // この動作は以下の理由により現時点では許容しています：
+  // 1. 階層構造の変化により、レイアウト全体の再計算が必要
+  // 2. 自動レイアウトアルゴリズムの適用を想定している
+  // 3. ユーザーがドラッグで調整する前提のUIではない（探索重視）
+  //
+  // 将来の改善案：
+  // - ユーザーが手動調整した座標を別途保持し、マージするロジックを追加
+  // - react-flowの`useStoreApi`を使用して、現在のノード位置を保持
+  // - 展開時は新規ノードのみ追加し、既存ノードの位置は維持
+  //
+  // 関連Issue: (今後作成予定)
   useEffect(() => {
-    const visibleNodes: Node[] = [];
-    const visibleEdges: Edge[] = [];
-    const visibleNodeIds = new Set<string>();
-
-    // 1. ノードのフィルタリング
-    dataset.nodes.forEach(node => {
-      // ルートノードは常に表示
-      if (node.id === 'root-theory') {
-        visibleNodeIds.add(node.id);
-        const isSelected = node.id === selectedNodeId;
-        visibleNodes.push(mapAtlasNodeToFlow(node, true, isSelected)); // Root is always expanded effectively
-        return;
-      }
-
-      // 親が展開されている場合のみ表示
-      if (node.parentId && expandedNodeIds.has(node.parentId)) {
-        visibleNodeIds.add(node.id);
-        const isExpanded = expandedNodeIds.has(node.id);
-        const isSelected = node.id === selectedNodeId;
-        visibleNodes.push(mapAtlasNodeToFlow(node, isExpanded, isSelected));
-      }
-    });
-
-    // 2. エッジのフィルタリング
-    dataset.edges.forEach(edge => {
-      // 両端のノードが表示されている場合のみエッジを表示
-      if (visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)) {
-        visibleEdges.push({
-          id: edge.id,
-          source: edge.source,
-          target: edge.target,
-          type: 'default', // Custom edge type can be used here
-          animated: edge.type === 'structure', // Example: Structure edges are animated
-          style: { stroke: '#ffffff50' },
-        });
-      }
-    });
-
     setNodes(visibleNodes);
     setEdges(visibleEdges);
-  }, [dataset, expandedNodeIds, selectedNodeId, setNodes, setEdges]);
+  }, [visibleNodes, visibleEdges, setNodes, setEdges]);
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes(nds => applyNodeChanges(changes, nds)),
@@ -106,15 +101,86 @@ export const useAtlasFlow = ({ dataset }: UseAtlasFlowProps) => {
   };
 };
 
-// Helper: AtlasNodeData -> React Flow Node conversion
+/**
+ * 現在の状態に基づいて表示すべきノードとエッジを計算するヘルパー関数
+ *
+ * @param dataset 全データセット
+ * @param expandedNodeIds 展開済みノードIDのセット
+ * @param selectedNodeId 現在選択中のノードID
+ * @returns 表示すべきノードとエッジの配列
+ */
+const computeVisibleElements = (
+  dataset: AtlasDataset,
+  expandedNodeIds: Set<string>,
+  selectedNodeId: string | null
+) => {
+  const visibleNodes: Node[] = [];
+  const visibleEdges: Edge[] = [];
+  const visibleNodeIds = new Set<string>();
+
+  // 子ノードを持つノードIDのセットを事前計算
+  const nodesWithChildren = new Set<string>();
+  dataset.nodes.forEach(node => {
+    if (node.parentId) {
+      nodesWithChildren.add(node.parentId);
+    }
+  });
+
+  // 1. ノードのフィルタリング
+  dataset.nodes.forEach(node => {
+    const hasChildren = nodesWithChildren.has(node.id);
+
+    // ルートノードは常に表示
+    if (node.id === ROOT_NODE_ID) {
+      visibleNodeIds.add(node.id);
+      const isSelected = node.id === selectedNodeId;
+      visibleNodes.push(mapAtlasNodeToFlow(node, true, isSelected, hasChildren));
+      return;
+    }
+
+    // 親が展開されている場合のみ表示
+    if (node.parentId && expandedNodeIds.has(node.parentId)) {
+      visibleNodeIds.add(node.id);
+      const isExpanded = expandedNodeIds.has(node.id);
+      const isSelected = node.id === selectedNodeId;
+      visibleNodes.push(mapAtlasNodeToFlow(node, isExpanded, isSelected, hasChildren));
+    }
+  });
+
+  // 2. エッジのフィルタリング
+  dataset.edges.forEach(edge => {
+    // 両端のノードが表示されている場合のみエッジを表示
+    if (visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)) {
+      visibleEdges.push({
+        id: edge.id,
+        source: edge.source,
+        target: edge.target,
+        type: 'default', // Custom edge type can be used here
+        animated: edge.type === 'structure', // Example: Structure edges are animated
+        style: { stroke: '#ffffff50' },
+      });
+    }
+  });
+
+  return { visibleNodes, visibleEdges };
+};
+
+/**
+ * AtlasNodeDataをReact FlowのNodeオブジェクトに変換するヘルパー関数
+ * @param node Atlasのノードデータ
+ * @param isExpanded 展開されているかどうか
+ * @param isSelected 選択されているかどうか
+ * @param hasChildren 子ノードを持つかどうか
+ */
 const mapAtlasNodeToFlow = (
   node: AtlasNodeData,
   isExpanded: boolean,
-  isSelected: boolean
+  isSelected: boolean,
+  hasChildren: boolean
 ): Node => {
   return {
     id: node.id,
-    type: 'atlasNode', // Custom node type
+    type: 'atlasNode',
     position: { x: node.x || 0, y: node.y || 0 },
     selected: isSelected,
     data: {
@@ -122,6 +188,7 @@ const mapAtlasNodeToFlow = (
       type: node.type,
       dataType: node.dataType,
       isExpanded,
+      hasChildren,
       originalData: node.data,
     },
   };

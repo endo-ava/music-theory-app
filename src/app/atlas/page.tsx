@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function AtlasPage() {
   return (
     <div className="bg-background flex min-h-dvh flex-col">
-      <main className="flex-1 overflow-hidden">
+      <main className="relative flex-1 overflow-hidden">
         <AtlasLayout />
       </main>
     </div>

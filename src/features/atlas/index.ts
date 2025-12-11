@@ -6,9 +6,9 @@
  */
 
 // Feature Components
-export { AtlasSidebar } from './components/AtlasSidebar/AtlasSidebar';
 export { AtlasCanvas } from './components/AtlasCanvas/AtlasCanvas';
 export { AtlasDetailPanel } from './components/AtlasDetailPanel/AtlasDetailPanel';
+export { AtlasSearchOverlay } from './components/AtlasSearchOverlay';
 
 // Types
 export * from './types';

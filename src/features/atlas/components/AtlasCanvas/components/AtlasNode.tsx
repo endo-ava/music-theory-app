@@ -9,11 +9,18 @@ interface AtlasNodeReactFlowData extends Record<string, unknown> {
   type: AtlasNodeType;
   dataType: AtlasDataType;
   isExpanded: boolean;
+  hasChildren: boolean;
 }
 
 // Custom Node Type
 type AtlasNodeComponentType = Node<AtlasNodeReactFlowData, 'atlasNode'>;
 
+/**
+ * ノードの種類とデータタイプに基づいて色クラスを取得する
+ * @param type ノードの種類（foundation, pattern, instance, context）
+ * @param dataType データの種類（scale, chord, function, etc）
+ * @returns Tailwind CSSのクラス名文字列
+ */
 const getNodeColor = (type: AtlasNodeType, dataType: AtlasDataType) => {
   switch (type) {
     case 'foundation':
@@ -33,6 +40,12 @@ const getNodeColor = (type: AtlasNodeType, dataType: AtlasDataType) => {
   }
 };
 
+/**
+ * ノードの種類とデータタイプに基づいてサイズクラスを取得する
+ * @param type ノードの種類
+ * @param dataType データの種類
+ * @returns Tailwind CSSのクラス名文字列
+ */
 const getNodeSize = (type: AtlasNodeType, dataType: AtlasDataType) => {
   if (dataType === 'function') return 'w-16 h-16 text-sm'; // Concept/Root
   switch (type) {
@@ -49,16 +62,51 @@ const getNodeSize = (type: AtlasNodeType, dataType: AtlasDataType) => {
   }
 };
 
+/**
+ * Atlas Node Component
+ *
+ * Atlas Canvas上で描画されるカスタムノードコンポーネント。
+ * React Flowのカスタムノードとして登録され、データの種類に応じた視覚表現（色、サイズ）を提供します。
+ *
+ * @param {NodeProps<AtlasNodeComponentType>} props React Flowから渡されるProps
+ */
 export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentType>) => {
-  const { label, type, dataType, isExpanded } = data;
+  const { label, type, dataType, isExpanded, hasChildren } = data;
   const colorClass = getNodeColor(type, dataType);
   const sizeClass = getNodeSize(type, dataType);
 
+  // 展開可能なノードかどうか
+  const isExpandable = hasChildren;
+  // ツールチップのIDを生成（instance型のノードのみ）
+  const tooltipId = type === 'instance' ? `tooltip-${label}` : undefined;
+
+  /**
+   * キーボード操作のハンドラー
+   * EnterキーまたはSpaceキーが押された時にノードクリックをシミュレート
+   */
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      // ノードクリックイベントを親に伝播させるため、クリックイベントを発火
+      event.currentTarget.click();
+    }
+  };
+
   return (
-    <div className="relative flex items-center justify-center">
+    <div
+      data-testid={`atlas-node-${label}`}
+      className="relative flex items-center justify-center"
+      role="button"
+      aria-label={`${type} node: ${label}`}
+      aria-expanded={isExpandable ? isExpanded : undefined}
+      aria-selected={selected}
+      aria-describedby={selected && tooltipId ? tooltipId : undefined}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
       {/* Handles for connections (Hidden but necessary for edges) */}
-      <Handle type="target" position={Position.Top} className="opacity-0" />
-      <Handle type="source" position={Position.Bottom} className="opacity-0" />
+      <Handle type="target" position={Position.Top} className="opacity-0" aria-hidden="true" />
+      <Handle type="source" position={Position.Bottom} className="opacity-0" aria-hidden="true" />
 
       {/* Node Visual */}
       <div
@@ -72,24 +120,27 @@ export const AtlasNode = memo(({ data, selected }: NodeProps<AtlasNodeComponentT
       >
         {/* Label (Center for large nodes, hidden/tooltip for small) */}
         {type !== 'instance' && (
-          <span className="pointer-events-none px-1 text-center font-bold text-black select-none">
-            {label}
-          </span>
+          <span className="px-1 text-center font-bold text-black select-none">{label}</span>
         )}
       </div>
 
       {/* Label for small nodes (Outside) */}
       {type === 'instance' && selected && (
-        <div className="absolute top-full mt-1 rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white">
+        <div
+          id={tooltipId}
+          role="tooltip"
+          className="absolute top-full mt-1 rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white"
+        >
           {label}
         </div>
       )}
 
-      {/* Expand Indicator */}
-      {/* If we knew it had children, we could show a plus. 
-          For now, we assume Concept/Pattern nodes might have children. */}
-      {(type === 'foundation' || type === 'pattern' || type === 'context') && !isExpanded && (
-        <div className="absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black shadow-sm">
+      {/* Expand Indicator - Only show if node has children and is not expanded */}
+      {hasChildren && !isExpanded && (
+        <div
+          className="absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black shadow-sm"
+          aria-hidden="true"
+        >
           +
         </div>
       )}
