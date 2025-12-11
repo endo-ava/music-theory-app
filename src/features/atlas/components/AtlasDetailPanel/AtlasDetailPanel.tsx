@@ -109,7 +109,7 @@ export const AtlasDetailPanel: React.FC<AtlasDetailPanelProps> = ({
               ))}
             </ul>
           ) : (
-            <p className="text-muted-foreground/70">関連する概念はありません</p>
+            <p className="text-muted-foreground/70">No related concepts</p>
           )}
         </div>
       </div>
