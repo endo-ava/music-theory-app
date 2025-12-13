@@ -7,6 +7,7 @@ import { CircleSegment } from './CircleSegment';
 import { DiatonicHighlightLayer } from './DiatonicHighlightLayer';
 import { DegreeLayer } from './DegreeLayer';
 import { FunctionalHarmonyLayer } from './FunctionalHarmonyLayer';
+import { ProgressionLayer } from './ProgressionLayer';
 import { RippleLayer } from './RippleLayer';
 import { SegmentData } from '../utils/circleOfFifthsData';
 import { useCircleOfFifthsStore } from '../stores';
@@ -15,6 +16,13 @@ interface CircleOfFifthsClientProps {
   viewBox: string;
   segments: SegmentData[];
 }
+
+// 360度ラップ込みで現在角度に最も近い目標角度を計算
+const getNearestWrappedAngle = (target: number, current: number) => {
+  const delta = target - current;
+  const wrappedDelta = ((((delta + 180) % 360) + 360) % 360) - 180;
+  return current + wrappedDelta;
+};
 
 /**
  * 五度圏のクライアントコンポーネント（Client Component）
@@ -55,7 +63,9 @@ export const CircleOfFifthsClient: React.FC<CircleOfFifthsClientProps> = memo(
 
     // rotationIndexが変わったら回転角度を更新
     useEffect(() => {
-      rotation.set(targetAngle);
+      const currentAngle = rotation.get();
+      const nearestTarget = getNearestWrappedAngle(targetAngle, currentAngle);
+      rotation.set(nearestTarget);
     }, [targetAngle, rotation]);
 
     // 初期値を設定（マウント時のみ）
@@ -126,6 +136,9 @@ export const CircleOfFifthsClient: React.FC<CircleOfFifthsClientProps> = memo(
 
           {/* 機能和声レイヤー（T/D/SD文字表示） */}
           <FunctionalHarmonyLayer textRotation={currentTextRotation} />
+
+          {/* コード進行アニメーションレイヤー */}
+          <ProgressionLayer />
 
           {/* リップルレイヤー（最前面に描画） */}
           <RippleLayer />
